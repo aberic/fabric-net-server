@@ -7,6 +7,10 @@
   <groupId>cn.aberic</groupId>
   <artifactId>Fabric</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>sdk-advance</module>
+      <module>sdk-advance-api</module>
+  </modules>
   <packaging>pom</packaging>
 
   <name>Fabric Maven Webapp</name>
