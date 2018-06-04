@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * 描述：
+ * 描述：区块链网络服务管理器
  *
  * @author : Aberic 【2018/5/4 16:43】
  */

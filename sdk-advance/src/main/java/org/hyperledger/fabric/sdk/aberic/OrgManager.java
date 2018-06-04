@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 描述：
+ * 描述：组织生成器
  *
  * @author : Aberic 【2018/5/4 15:59】
  */

@@ -1,7 +1,7 @@
 package org.hyperledger.fabric.sdk.aberic;
 
 /**
- * 描述：
+ * 描述：中继Orderer排序服务对象
  *
  * @author : Aberic 【2018/5/4 15:30】
  */
