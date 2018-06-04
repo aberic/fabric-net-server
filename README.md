@@ -43,7 +43,36 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 <br><br>
 ## simple
 simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。
-<br><br><br>
+<br><br>
+### simple-demo
+调用示例：<br>
+```java
+OrgManager orgManager = new OrgManager();
+orgManager
+    .init("Org1")
+    .setUser("Admin", getCryptoConfigPath("aberic"), getChannleArtifactsPath("aberic"))
+    .setCA("ca", "http://118.89.243.236:7054")
+    .setPeers("Org1MSP", "org1.example.com")
+    .addPeer("peer0.org1.example.com", "peer0.org1.example.com", "grpc://118.89.243.236:7051", "grpc://118.89.243.236:7053", true)
+    .setOrderers("example.com")
+    .addOrderer("orderer.example.com", "grpc://118.89.243.236:7050")
+    .setChannel("mychannel")
+    .setChainCode("test2cc", "/code", "chaincode/chaincode_example02", "1.2", 90000, 120)
+    .openTLS(true)
+    .openCATLS(false)
+    .setBlockListener(map -> {
+            logger.debug(map.get("code"));
+            logger.debug(map.get("data"));
+        })
+    .add();
+    FabricManager fabricManager = orgManager.use("Org1");
+    fabricManager.install();
+    fabricManager.instantiate(argArray);
+    fabricManager.upgrade(argArray);
+    fabricManager…
+```
+
+<br><br>
 欢迎与我多多交流：<br>
 我的博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
 HyperLedger/Fabric**微信交流群**，扫微信订阅号加入：<br>
