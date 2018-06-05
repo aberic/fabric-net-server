@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * 描述：
  *
@@ -29,8 +31,14 @@ public interface SimpleMapper {
     @Insert("insert into orderer (org_id,name,location) values (#{o.orgId},#{o.name},#{o.location})")
     int addOrderer(@Param("o") OrdererDTO orderer);
 
+    @Select("select id,org_id,name,location from orderer where org_id=#{orgId}")
+    List<OrdererDTO> getOrdererByOrgId(@Param("orgId") int orgId);
+
     @Insert("insert into peer (org_id,peer_name,peer_event_hub_name,peer_location,peer_event_hub_location,event_listener) " +
             "values (#{p.orgId},#{p.peerName},#{p.peerEventHubName},#{p.peerLocation},#{p.peerEventHubLocation},#{p.isEventListener})")
     int addPeer(@Param("p") PeerDTO peer);
+
+    @Select("select id,org_id,peer_name,peer_event_hub_name,peer_location,peer_event_hub_location,event_listener from peer where org_id=#{orgId}")
+    List<PeerDTO> getPeerByOrgId(@Param("orgId") int orgId);
 
 }
