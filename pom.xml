@@ -9,7 +9,7 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>sdk-advance</module>
-      <module>sdk-advance-api</module>
+    <module>simple</module>
   </modules>
   <packaging>pom</packaging>
 
