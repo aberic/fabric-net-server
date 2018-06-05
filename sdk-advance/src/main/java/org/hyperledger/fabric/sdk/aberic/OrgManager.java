@@ -26,16 +26,20 @@ public class OrgManager {
     /**
      * 初始化组织名称，该对象的必须首次调用方法
      *
-     * @param orgName 组织名称
+     * @param orgName   组织名称
+     * @param openTLS   设置是否开启TLS
+     * @param openCATLS 设置是否开启CA TLS
      * @return self
      */
-    public OrgManager init(String orgName) {
+    public OrgManager init(String orgName, boolean openTLS, boolean openCATLS) {
         this.orgName = orgName;
         if (orgMap.get(orgName) != null) {
             throw new RuntimeException(String.format("OrgManager had the same name of %s", orgName));
         } else {
             orgMap.put(orgName, new IntermediateOrg());
         }
+        orgMap.get(orgName).openTLS(openTLS);
+        orgMap.get(orgName).openCATLS(openCATLS);
         return this;
     }
 
@@ -142,26 +146,6 @@ public class OrgManager {
         IntermediateChannel channel = new IntermediateChannel();
         channel.setChannelName(channelName);
         orgMap.get(orgName).setChannel(channel);
-        return this;
-    }
-
-    /**
-     * 设置是否开启TLS
-     *
-     * @param openTLS 是否
-     */
-    public OrgManager openTLS(boolean openTLS) {
-        orgMap.get(orgName).openTLS(openTLS);
-        return this;
-    }
-
-    /**
-     * 设置是否开启CATLS
-     *
-     * @param openCATLS 是否
-     */
-    public OrgManager openCATLS(boolean openCATLS) {
-        orgMap.get(orgName).openCATLS(openCATLS);
         return this;
     }
 
