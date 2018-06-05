@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.aberic.simple.module.mapper.OrdererDao">
+    <!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->
+    <resultMap id="BaseResultMap" type="cn.aberic.simple.module.dto.OrdererDTO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="org_id" property="orgId" jdbcType="CHAR"/>
+        <result column="name" property="name" jdbcType="CHAR"/>
+        <result column="location" property="location" jdbcType="CHAR"/>
+    </resultMap>
+    <!-- 插入一条Orderer记录 -->
+    <insert id="addOrderer" parameterType="cn.aberic.simple.module.dto.OrdererDTO" useGeneratedKeys="true"
+            keyProperty="userId">
+        insert into orderer (org_id, name, location) values (#{orgId}, #{name}, #{location})
+    </insert>
+</mapper>

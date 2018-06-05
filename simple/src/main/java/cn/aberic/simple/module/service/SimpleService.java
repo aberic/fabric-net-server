@@ -26,4 +26,28 @@ public interface SimpleService extends BaseService {
      */
     String trace(JSONObject json);
 
+    /**
+     * 新增组织
+     *
+     * @param json 组织JSON
+     * @return 请求返回
+     */
+    String addOrg(JSONObject json);
+
+    /**
+     * 新增排序服务
+     *
+     * @param json 排序服务JSON
+     * @return 请求返回
+     */
+    String addOrderer(JSONObject json);
+
+    /**
+     * 新增节点服务
+     *
+     * @param json 节点服务JSON
+     * @return 请求返回
+     */
+    String addPeer(JSONObject json);
+
 }

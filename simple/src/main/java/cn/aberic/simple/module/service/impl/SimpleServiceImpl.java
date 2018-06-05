@@ -1,13 +1,20 @@
 package cn.aberic.simple.module.service.impl;
 
+import cn.aberic.simple.module.dto.OrdererDTO;
+import cn.aberic.simple.module.dto.OrgDTO;
+import cn.aberic.simple.module.dto.PeerDTO;
 import cn.aberic.simple.module.manager.SimpleManager;
+import cn.aberic.simple.module.mapper.OrdererDao;
 import cn.aberic.simple.module.service.SimpleService;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import org.apache.commons.codec.binary.Hex;
 import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -17,6 +24,9 @@ import java.util.Map;
  */
 @Service("simpleService")
 public class SimpleServiceImpl implements SimpleService {
+
+    @Resource
+    private OrdererDao ordererDao;
 
     @Override
     public String chainCode(JSONObject json) {
@@ -89,5 +99,24 @@ public class SimpleServiceImpl implements SimpleService {
             e.printStackTrace();
             return responseFail(String.format("请求失败： %s", e.getMessage()));
         }
+    }
+
+    @Override
+    public String addOrg(JSONObject json) {
+        OrgDTO org = JSON.parseObject(json.toJSONString(), new TypeReference<OrgDTO>(){});
+        return responseSuccess(org.toString());
+    }
+
+    @Override
+    public String addOrderer(JSONObject json) {
+        OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>(){});
+        ordererDao.addOrderer(orderer);
+        return responseSuccess(orderer.toString());
+    }
+
+    @Override
+    public String addPeer(JSONObject json) {
+        PeerDTO peer = JSON.parseObject(json.toJSONString(), new TypeReference<PeerDTO>(){});
+        return responseSuccess(peer.toString());
     }
 }
