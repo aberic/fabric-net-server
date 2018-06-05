@@ -15,6 +15,7 @@ import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -111,6 +112,8 @@ public class SimpleServiceImpl implements SimpleService {
     public String addOrderer(JSONObject json) {
         OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>() {});
         if (simpleMapper.addOrderer(orderer) > 0) {
+            List<OrdererDTO> orderers = simpleMapper.getOrdererByOrgId(1000);
+            logger.debug("size = " + orderers.size());
             return responseSuccess(orderer.toString());
         }
         return responseFail("新增排序服务失败");
