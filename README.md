@@ -81,17 +81,17 @@ orgManager
     fabricManager…
 ```
 <br><br>
-### 
+### api
 请求示例：<br>
 请求接口：http://localhost:8080/simple/trace<br>
-请求JSON：<br>
+请求JSON：
 ```JSON
 {
    "fcn": "queryBlockByNumber",
    "traceId": "21"
 }
 ```
-返回JSON：<br>
+返回JSON：
 ```JSON
 {
     "data": {
@@ -197,6 +197,8 @@ orgManager
     "status": 200
 }
 ```
+
+
 <br><br>
 欢迎与我多多交流：<br>
 我的博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
