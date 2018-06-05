@@ -3,6 +3,12 @@
 <br><br>
 该项目没有对原JAVA-SDK做修改，主要是结合HyperLedger Fabric与fabric-sdk-java中的交互方式做了个人感觉更为清晰的描述，希望能够帮助更多的人尽快熟悉fabric-sdk-java的操作流程和方式。
 <br><br>
+## 开发环境
+* IntelliJ IDEA
+* Maven
+* JDK-1.8
+* spring-boot
+<br><br>
 ## sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
 <br><br>
