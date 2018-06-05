@@ -4,7 +4,7 @@ import cn.aberic.simple.module.dto.OrdererDTO;
 import cn.aberic.simple.module.dto.OrgDTO;
 import cn.aberic.simple.module.dto.PeerDTO;
 import cn.aberic.simple.module.manager.SimpleManager;
-import cn.aberic.simple.module.mapper.OrdererDao;
+import cn.aberic.simple.module.mapper.SimpleMapper;
 import cn.aberic.simple.module.service.SimpleService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class SimpleServiceImpl implements SimpleService {
 
     @Resource
-    private OrdererDao ordererDao;
+    private SimpleMapper simpleMapper;
 
     @Override
     public String chainCode(JSONObject json) {
@@ -103,20 +103,22 @@ public class SimpleServiceImpl implements SimpleService {
 
     @Override
     public String addOrg(JSONObject json) {
-        OrgDTO org = JSON.parseObject(json.toJSONString(), new TypeReference<OrgDTO>(){});
+        OrgDTO org = JSON.parseObject(json.toJSONString(), new TypeReference<OrgDTO>() {});
         return responseSuccess(org.toString());
     }
 
     @Override
     public String addOrderer(JSONObject json) {
-        OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>(){});
-        ordererDao.addOrderer(orderer);
-        return responseSuccess(orderer.toString());
+        OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>() {});
+        if (simpleMapper.addOrderer(orderer) > 0) {
+            return responseSuccess(orderer.toString());
+        }
+        return responseFail("新增排序服务失败");
     }
 
     @Override
     public String addPeer(JSONObject json) {
-        PeerDTO peer = JSON.parseObject(json.toJSONString(), new TypeReference<PeerDTO>(){});
+        PeerDTO peer = JSON.parseObject(json.toJSONString(), new TypeReference<PeerDTO>() {});
         return responseSuccess(peer.toString());
     }
 }
