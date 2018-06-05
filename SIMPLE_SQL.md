@@ -65,3 +65,5 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin
 COMMENT = '节点服务器表';
 ```
+
+
