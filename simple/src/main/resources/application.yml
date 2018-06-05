@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  address: localhost
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/fabric?serverTimezone=UTC&useSSL=false
+    username: root
+    password: 11111
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+
