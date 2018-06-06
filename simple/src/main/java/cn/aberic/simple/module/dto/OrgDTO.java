@@ -44,9 +44,9 @@ public class OrgDTO extends BaseDTO {
     /** 智能合约版本 */
     private String chaincodeVersion;
     /** 单个提案请求的超时时间以毫秒为单位 */
-    private String proposalWaitTime;
+    private int proposalWaitTime;
     /** 事务等待时间以秒为单位 */
-    private String invokeWaitTime;
+    private int invokeWaitTime;
 
     public int getId() {
         return id;
@@ -184,19 +184,19 @@ public class OrgDTO extends BaseDTO {
         this.chaincodeVersion = chaincodeVersion;
     }
 
-    public String getProposalWaitTime() {
+    public int getProposalWaitTime() {
         return proposalWaitTime;
     }
 
-    public void setProposalWaitTime(String proposalWaitTime) {
+    public void setProposalWaitTime(int proposalWaitTime) {
         this.proposalWaitTime = proposalWaitTime;
     }
 
-    public String getInvokeWaitTime() {
+    public int getInvokeWaitTime() {
         return invokeWaitTime;
     }
 
-    public void setInvokeWaitTime(String invokeWaitTime) {
+    public void setInvokeWaitTime(int invokeWaitTime) {
         this.invokeWaitTime = invokeWaitTime;
     }
 
