@@ -15,7 +15,6 @@ import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +40,7 @@ public class SimpleServiceImpl implements SimpleService {
             argArray[i] = arrayJson.getString(i);
         }
         try {
-            FabricManager manager = SimpleManager.obtain().getFabricManager();
+            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.getIntValue("orgId"));
             switch (type) {
                 case "install":
                     resultMap = manager.install();
@@ -78,7 +77,7 @@ public class SimpleServiceImpl implements SimpleService {
         String traceId = json.getString("traceId");
         Map<String, String> resultMap;
         try {
-            FabricManager manager = SimpleManager.obtain().getFabricManager();
+            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.getIntValue("orgId"));
             switch (fcn) {
                 case "queryBlockByTransactionID":
                     resultMap = manager.queryBlockByTransactionID(traceId);
@@ -105,15 +104,16 @@ public class SimpleServiceImpl implements SimpleService {
     @Override
     public String addOrg(JSONObject json) {
         OrgDTO org = JSON.parseObject(json.toJSONString(), new TypeReference<OrgDTO>() {});
-        return responseSuccess(org.toString());
+        if (simpleMapper.addOrg(org) > 0) {
+            return responseSuccess(org.toString());
+        }
+        return responseFail("新增排序服务失败");
     }
 
     @Override
     public String addOrderer(JSONObject json) {
         OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>() {});
         if (simpleMapper.addOrderer(orderer) > 0) {
-            List<OrdererDTO> orderers = simpleMapper.getOrdererByOrgId(1000);
-            logger.debug("size = " + orderers.size());
             return responseSuccess(orderer.toString());
         }
         return responseFail("新增排序服务失败");
@@ -122,6 +122,9 @@ public class SimpleServiceImpl implements SimpleService {
     @Override
     public String addPeer(JSONObject json) {
         PeerDTO peer = JSON.parseObject(json.toJSONString(), new TypeReference<PeerDTO>() {});
-        return responseSuccess(peer.toString());
+        if (simpleMapper.addPeer(peer) > 0) {
+            return responseSuccess(peer.toString());
+        }
+        return responseFail("新增节点服务失败");
     }
 }
