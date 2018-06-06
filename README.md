@@ -8,11 +8,13 @@
 * Maven
 * JDK-1.8
 * spring-boot
+* MySQL
+* Mybatis
 <br><br>
 ## 版本说明
 [v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.1)：无数据库版，适合轻量级的Fabric平台应用。
 <br>
-v0.2：含关系型数据库版，适合单服务管理多Fabric网络。
+[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
 <br><br>
 ## sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
@@ -56,27 +58,29 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。1`我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。`
 <br><br>
 ### simple-demo
+v0.2的具体使用方法与v0.1的区别仅在于传入数据的方式变为动态，也可根据v0.1的方案自行完善。<br>
 调用示例：<br>
 ```java
-OrgManager orgManager = new OrgManager();
 orgManager
-    .init("Org1")
-    .setUser("Admin", getCryptoConfigPath("aberic"), getChannleArtifactsPath("aberic"))
-    .setCA("ca", "http://118.89.243.236:7054")
-    .setPeers("Org1MSP", "org1.example.com")
-    .addPeer("peer0.org1.example.com", "peer0.org1.example.com", "grpc://118.89.243.236:7051", "grpc://118.89.243.236:7053", true)
-    .setOrderers("example.com")
-    .addOrderer("orderer.example.com", "grpc://118.89.243.236:7050")
-    .setChannel("mychannel")
-    .setChainCode("test2cc", "/code", "chaincode/chaincode_example02", "1.2", 90000, 120)
-    .openTLS(true)
-    .openCATLS(false)
-    .setBlockListener(map -> {
-            logger.debug(map.get("code"));
-            logger.debug(map.get("data"));
-        })
-    .add();
-    FabricManager fabricManager = orgManager.use("Org1");
+       .init(org.getId(), org.isTls(), org.isCaTls())
+       .setUser(org.getUsername(), getCryptoConfigPath(org.getCryptoConfigDir()), getChannleArtifactsPath(org.getChannelArtifactsDir()))
+       .setCA(org.getCaName(), org.getCaLocation())
+       .setPeers(org.getOrgName(), org.getOrgMSPID(), org.getOrgDomainName())
+       .setOrderers(org.getOrdererDomainName())
+       .setChannel(org.getChannelName())
+       .setChainCode(org.getChaincodeName(), org.getChaincodeSource(), org.getChaincodePath(), org.getChaincodeVersion(), org.getProposalWaitTime(), org.getInvokeWaitTime())
+       .setBlockListener(map -> {
+          logger.debug(map.get("code"));
+          logger.debug(map.get("data"));
+    });
+    for (OrdererDTO orderer : orderers) {
+        orgManager.addOrderer(orderer.getName(), orderer.getLocation());
+    }
+    for (PeerDTO peer : peers) {
+        orgManager.addPeer(peer.getPeerName(), peer.getPeerEventHubName(), peer.getPeerLocation(), peer.getPeerEventHubLocation(), peer.isEventListener());
+    }
+    orgManager.add();
+    FabricManager fabricManager = orgManager.use(org.getId());
     fabricManager.install();
     fabricManager.instantiate(argArray);
     fabricManager.upgrade(argArray);
