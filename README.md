@@ -10,6 +10,7 @@
 * spring-boot
 * MySQL
 * Mybatis
+* protobuf
 <br><br>
 ## 版本说明
 [v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.1)：无数据库版，适合轻量级的Fabric平台应用。
