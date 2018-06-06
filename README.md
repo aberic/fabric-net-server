@@ -17,7 +17,7 @@
 <br>
 [v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
 <br>
-v0.3：以v0.2为基础，接口与服务之间采用protobuf协议传输数据。
+v0.3：以v0.2为基础，提供Docker容器服务，方便SDK快速部署。
 <br><br>
 ## sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
