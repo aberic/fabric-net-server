@@ -4,13 +4,11 @@ import cn.aberic.simple.base.BaseManager;
 import cn.aberic.simple.module.dto.OrdererDTO;
 import cn.aberic.simple.module.dto.OrgDTO;
 import cn.aberic.simple.module.dto.PeerDTO;
-import cn.aberic.simple.module.mapper.SimpleMapper;
 import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.hyperledger.fabric.sdk.aberic.OrgManager;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 描述：
@@ -21,7 +19,10 @@ public class SimpleManager extends BaseManager {
 
     private static SimpleManager instance;
 
-    private final Map<Integer, FabricManager> fabricManagerMap;
+    private OrgDTO org;
+    private List<OrdererDTO> orderers;
+    private List<PeerDTO> peers;
+    private FabricManager fabricManager;
 
     public static SimpleManager obtain() {
         if (null == instance) {
@@ -34,20 +35,27 @@ public class SimpleManager extends BaseManager {
         return instance;
     }
 
-    private SimpleManager() {
-        fabricManagerMap = new HashMap<>();
+    public void setOrg(OrgDTO org) {
+        this.org = org;
     }
 
-    public FabricManager get(SimpleMapper simpleMapper, int orgId) throws Exception {
-        // 尝试从缓存中获取fabricManager
-        FabricManager fabricManager = fabricManagerMap.get(orgId);
+    public void addOrderer(OrdererDTO orderer) {
+        orderers.add(orderer);
+    }
+
+    public void addPeer(PeerDTO peer) {
+        peers.add(peer);
+    }
+
+    private SimpleManager() {
+        orderers = new ArrayList<>();
+        peers = new ArrayList<>();
+    }
+
+    public FabricManager get() throws Exception {
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
-            synchronized (fabricManagerMap) {
-                OrgDTO org = simpleMapper.getOrgById(orgId);
-                if (null != org) {
-                    fabricManager = createFabricManager(org, simpleMapper.getOrdererByOrgId(orgId), simpleMapper.getPeerByOrgId(orgId));
-                    fabricManagerMap.put(orgId, fabricManager);
-                }
+            synchronized (SimpleManager.class) {
+                fabricManager = createFabricManager(org, orderers, peers);
             }
         }
         return fabricManager;

@@ -32,7 +32,7 @@ public interface SimpleService extends BaseService {
      * @param json 组织JSON
      * @return 请求返回
      */
-    String addOrg(JSONObject json);
+    int addOrg(JSONObject json);
 
     /**
      * 新增排序服务
@@ -40,7 +40,7 @@ public interface SimpleService extends BaseService {
      * @param json 排序服务JSON
      * @return 请求返回
      */
-    String addOrderer(JSONObject json);
+    int addOrderer(JSONObject json);
 
     /**
      * 新增节点服务
@@ -48,6 +48,6 @@ public interface SimpleService extends BaseService {
      * @param json 节点服务JSON
      * @return 请求返回
      */
-    String addPeer(JSONObject json);
+    int addPeer(JSONObject json);
 
 }

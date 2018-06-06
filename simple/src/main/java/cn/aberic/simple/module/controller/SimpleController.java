@@ -37,19 +37,19 @@ public class SimpleController {
 
     @RequestMapping(value = "/org/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String addOrg(@RequestBody Map<String, Object> map) {
+    public int addOrg(@RequestBody Map<String, Object> map) {
         return simpleService.addOrg(new JSONObject(map));
     }
 
     @RequestMapping(value = "/orderer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String addOrderer(@RequestBody Map<String, Object> map) {
+    public int addOrderer(@RequestBody Map<String, Object> map) {
         return simpleService.addOrderer(new JSONObject(map));
     }
 
     @RequestMapping(value = "/peer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String addPeer(@RequestBody Map<String, Object> map) {
+    public int addPeer(@RequestBody Map<String, Object> map) {
         return simpleService.addPeer(new JSONObject(map));
     }
 

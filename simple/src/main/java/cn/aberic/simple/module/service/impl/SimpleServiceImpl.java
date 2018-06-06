@@ -40,7 +40,7 @@ public class SimpleServiceImpl implements SimpleService {
             argArray[i] = arrayJson.getString(i);
         }
         try {
-            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.getIntValue("orgId"));
+            FabricManager manager = SimpleManager.obtain().get();
             switch (type) {
                 case "install":
                     resultMap = manager.install();
@@ -77,7 +77,7 @@ public class SimpleServiceImpl implements SimpleService {
         String traceId = json.getString("traceId");
         Map<String, String> resultMap;
         try {
-            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.getIntValue("orgId"));
+            FabricManager manager = SimpleManager.obtain().get();
             switch (fcn) {
                 case "queryBlockByTransactionID":
                     resultMap = manager.queryBlockByTransactionID(traceId);
@@ -102,29 +102,23 @@ public class SimpleServiceImpl implements SimpleService {
     }
 
     @Override
-    public String addOrg(JSONObject json) {
+    public int addOrg(JSONObject json) {
         OrgDTO org = JSON.parseObject(json.toJSONString(), new TypeReference<OrgDTO>() {});
-        if (simpleMapper.addOrg(org) > 0) {
-            return responseSuccess(org.toString());
-        }
-        return responseFail("新增排序服务失败");
+        SimpleManager.obtain().setOrg(org);
+        return 0;
     }
 
     @Override
-    public String addOrderer(JSONObject json) {
+    public int addOrderer(JSONObject json) {
         OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>() {});
-        if (simpleMapper.addOrderer(orderer) > 0) {
-            return responseSuccess(orderer.toString());
-        }
-        return responseFail("新增排序服务失败");
+        SimpleManager.obtain().addOrderer(orderer);
+        return 0;
     }
 
     @Override
-    public String addPeer(JSONObject json) {
+    public int addPeer(JSONObject json) {
         PeerDTO peer = JSON.parseObject(json.toJSONString(), new TypeReference<PeerDTO>() {});
-        if (simpleMapper.addPeer(peer) > 0) {
-            return responseSuccess(peer.toString());
-        }
-        return responseFail("新增节点服务失败");
+        SimpleManager.obtain().addPeer(peer);
+        return 0;
     }
 }
