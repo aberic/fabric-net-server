@@ -9,6 +9,3 @@ spring:
     password: 11111
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-mybatis:
-  mapper-locations: classpath:mapping/*.xml
-
