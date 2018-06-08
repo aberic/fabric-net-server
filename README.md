@@ -13,7 +13,16 @@
 * Docker
 <br><br>
 ## 版本说明
-以v0.2为基础，提供Docker容器服务，方便SDK快速部署。
+0.x系列的版本主要是非Docker应用方面的项目，即相互交流的源码层项目。<br>
+1.x及以上系列的版本均Docker项目，帮助开发人员快速部署SDK应用，减少开发环节，从而实现业务的快速落地。
+<br><br>
+目前主要版本如下列表所示：<br>
+[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.1)：无数据库版，适合轻量级的Fabric平台应用。
+<br>
+[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
+<br>
+[v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
+<br><br>
 <br><br>
 ## sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
@@ -56,153 +65,6 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 ## simple
 simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。1`我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。`
 <br><br>
-### simple-demo
-v0.2的具体使用方法与v0.1的区别仅在于传入数据的方式变为动态，也可根据v0.1的方案自行完善。<br>
-调用示例：<br>
-```java
-orgManager
-       .init(org.getId(), org.isTls(), org.isCaTls())
-       .setUser(org.getUsername(), getCryptoConfigPath(org.getCryptoConfigDir()), getChannleArtifactsPath(org.getChannelArtifactsDir()))
-       .setCA(org.getCaName(), org.getCaLocation())
-       .setPeers(org.getOrgName(), org.getOrgMSPID(), org.getOrgDomainName())
-       .setOrderers(org.getOrdererDomainName())
-       .setChannel(org.getChannelName())
-       .setChainCode(org.getChaincodeName(), org.getChaincodeSource(), org.getChaincodePath(), org.getChaincodeVersion(), org.getProposalWaitTime(), org.getInvokeWaitTime())
-       .setBlockListener(map -> {
-          logger.debug(map.get("code"));
-          logger.debug(map.get("data"));
-    });
-    for (OrdererDTO orderer : orderers) {
-        orgManager.addOrderer(orderer.getName(), orderer.getLocation());
-    }
-    for (PeerDTO peer : peers) {
-        orgManager.addPeer(peer.getPeerName(), peer.getPeerEventHubName(), peer.getPeerLocation(), peer.getPeerEventHubLocation(), peer.isEventListener());
-    }
-    orgManager.add();
-    FabricManager fabricManager = orgManager.use(org.getId());
-    fabricManager.install();
-    fabricManager.instantiate(argArray);
-    fabricManager.upgrade(argArray);
-    fabricManager…
-```
-<br><br>
-### api
-请求示例：<br>
-请求接口：http://localhost:8080/simple/trace<br>
-请求JSON：
-```JSON
-{
-   "fcn": "queryBlockByNumber",
-   "traceId": "21"
-}
-```
-返回JSON：
-```JSON
-{
-    "data": {
-        "dataHash": "5660b39a622b07c11913750f09d6a9926f2440bc974873c99c80863acc0de93b",
-        "blockNumber": 21,
-        "calculatedBlockHash": "6cf6e766c1a91a6648067d311a124477eca75431fe925308a6773adc624bec6f",
-        "envelopeCount": 1,
-        "envelopes": [
-            {
-                "transactionEnvelopeInfo": {
-                    "transactionActionInfoArray": [
-                        {
-                            "chaincodeInputArgsCount": 4,
-                            "endorserInfoArray": [
-                                {
-                                    "mspId": "Org1MSP",
-                                    "signature": "30440220713f1b2ad3cdee4b299a2f341d5325b2d8deb32a8f9ae4a7371850fbe72bdcf102206e803cc428b72fb9c8b4fa03bf99210a82efb6d06c217d1bc938d3eaaa7df3ee",
-                                    "id": "-----BEGIN CERTIFICATE-----\nMIICGDCCAb+gAwIBAgIQEsKBEKwwwpp/z/Xn5gLApDAKBggqhkjOPQQDAjBzMQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UEAxMTY2Eu\nb3JnMS5leGFtcGxlLmNvbTAeFw0xODA0MTEwMzU0MTZaFw0yODA0MDgwMzU0MTZa\nMFsxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T\nYW4gRnJhbmNpc2NvMR8wHQYDVQQDExZwZWVyMC5vcmcxLmV4YW1wbGUuY29tMFkw\nEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECpresx/Xv/LbmL7P0hPrngE603IoYKOj\n2E22NnW7tVdr0XtQJSXMOaBLHoPU7P0mBv8xcqBirmjBp463axjYAKNNMEswDgYD\nVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwKwYDVR0jBCQwIoAgq33KXl9rHMJM\nICN2TFs00feNhhTSoR50F40tVQm9O+gwCgYIKoZIzj0EAwIDRwAwRAIgLpvW805T\n5IpTQlYSLTs+T7eFPm37rzVu2llABopwOWECIE4clYkh7ILEmxytYE2Vvtun4P4D\naGUb2JbPjKHxUnnL\n-----END CERTIFICATE-----\n"
-                                }
-                            ],
-                            "payload": "",
-                            "argArray": [
-                                "invoke",
-                                "A",
-                                "B",
-                                "1"
-                            ],
-                            "endorsementsCount": 1,
-                            "rwsetInfo": {
-                                "nsRwsetInfoArray": [
-                                    {
-                                        "writeSet": [],
-                                        "readSet": [
-                                            {
-                                                "readSetIndex": 0,
-                                                "readVersionTxNum": 0,
-                                                "readVersionBlockNum": 20,
-                                                "namespace": "lscc",
-                                                "version": "[20 : 0]",
-                                                "key": "test2cc"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "writeSet": [
-                                            {
-                                                "writeSetIndex": 0,
-                                                "namespace": "test2cc",
-                                                "value": "9",
-                                                "key": "A"
-                                            },
-                                            {
-                                                "writeSetIndex": 1,
-                                                "namespace": "test2cc",
-                                                "value": "11",
-                                                "key": "B"
-                                            }
-                                        ],
-                                        "readSet": [
-                                            {
-                                                "readSetIndex": 0,
-                                                "readVersionTxNum": 0,
-                                                "readVersionBlockNum": 20,
-                                                "namespace": "test2cc",
-                                                "version": "[20 : 0]",
-                                                "key": "A"
-                                            },
-                                            {
-                                                "readSetIndex": 1,
-                                                "readVersionTxNum": 0,
-                                                "readVersionBlockNum": 20,
-                                                "namespace": "test2cc",
-                                                "version": "[20 : 0]",
-                                                "key": "B"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "nsRWsetCount": 2
-                            },
-                            "responseStatus": 200,
-                            "responseMessageString": "",
-                            "status": 200
-                        }
-                    ],
-                    "txCount": 1,
-                    "isValid": true,
-                    "validationCode": 0
-                },
-                "createId": "-----BEGIN CERTIFICATE-----\nMIICGDCCAb+gAwIBAgIQVdYyRCqqRvPari/r4GRUmTAKBggqhkjOPQQDAjBzMQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEcMBoGA1UEAxMTY2Eu\nb3JnMS5leGFtcGxlLmNvbTAeFw0xODA0MTEwMzU0MTZaFw0yODA0MDgwMzU0MTZa\nMFsxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T\nYW4gRnJhbmNpc2NvMR8wHQYDVQQDDBZBZG1pbkBvcmcxLmV4YW1wbGUuY29tMFkw\nEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEHaegt0vA9oJvcCSHdZltBz5pRCsXr4x3\nly8vZzt/79gqjCqw4ChL9m93KIng7cHTChuoXQtmsjGmGj+icDIvR6NNMEswDgYD\nVR0PAQH/BAQDAgeAMAwGA1UdEwEB/wQCMAAwKwYDVR0jBCQwIoAgq33KXl9rHMJM\nICN2TFs00feNhhTSoR50F40tVQm9O+gwCgYIKoZIzj0EAwIDRwAwRAIgKMghfQYW\n68PWLs5N/t/RFJ7bfW8ThQHcsm7F26uPoDQCIApRyVSJD41G56b9+ekgSd5uaYzw\niXqcbALvpywjQZgO\n-----END CERTIFICATE-----\n",
-                "isValid": true,
-                "validationCode": 0,
-                "type": "TRANSACTION_ENVELOPE",
-                "nonce": "670ba2cc3ee2f2294ee0c822475c671011d9e53bf4860f72",
-                "channelId": "mychannel",
-                "transactionID": "08b5db91c7723cb61651a4af1034633a2833031a1cdb4415df0d8f6727020a4f",
-                "createMSPID": "Org1MSP",
-                "timestamp": "2018/05/18 18:14:52"
-            }
-        ],
-        "previousHashID": "8f63d99744752a89a49fcee560a43c271b7f12e37dfaa3489da028b610943595"
-    },
-    "status": 200
-}
-```
-
 
 <br><br>
 欢迎与我多多交流：<br>
