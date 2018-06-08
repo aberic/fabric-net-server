@@ -34,4 +34,29 @@ public class SimpleController {
     public String trace(@RequestBody Map<String, Object> map) {
         return simpleService.trace(new JSONObject(map));
     }
+
+    @RequestMapping(value = "/init", method = RequestMethod.GET)
+    @ResponseBody
+    public int init() {
+        return simpleService.init();
+    }
+
+    @RequestMapping(value = "/org/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public int setOrg(@RequestBody Map<String, Object> map) {
+        return simpleService.setOrg(new JSONObject(map));
+    }
+
+    @RequestMapping(value = "/orderer/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public int setOrderer(@RequestBody Map<String, Object> map) {
+        return simpleService.setOrderer(new JSONObject(map));
+    }
+
+    @RequestMapping(value = "/peer/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public int setPeer(@RequestBody Map<String, Object> map) {
+        return simpleService.setPeer(new JSONObject(map));
+    }
+
 }

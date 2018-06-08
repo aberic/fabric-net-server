@@ -1,6 +1,8 @@
 package cn.aberic.simple.base;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * 业务层基类
@@ -8,6 +10,8 @@ import com.alibaba.fastjson.JSONObject;
  * @author 杨毅 【2017年10月24日 - 20:58:52】
  */
 public interface BaseService {
+
+	Logger logger = LogManager.getLogger(BaseService.class);
 
 	int SUCCESS = 200;
 	int FAIL = 40029;

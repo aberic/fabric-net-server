@@ -16,8 +16,8 @@ import java.util.Set;
  */
 public class OrgManager {
 
-    private Map<String, IntermediateOrg> orgMap;
-    private String orgName;
+    private Map<Integer, IntermediateOrg> orgMap;
+    private int orgId;
 
     public OrgManager() {
         orgMap = new LinkedHashMap<>();
@@ -26,20 +26,20 @@ public class OrgManager {
     /**
      * 初始化组织名称，该对象的必须首次调用方法
      *
-     * @param orgName   组织名称
+     * @param orgId     组织名称
      * @param openTLS   设置是否开启TLS
      * @param openCATLS 设置是否开启CA TLS
      * @return self
      */
-    public OrgManager init(String orgName, boolean openTLS, boolean openCATLS) {
-        this.orgName = orgName;
-        if (orgMap.get(orgName) != null) {
-            throw new RuntimeException(String.format("OrgManager had the same name of %s", orgName));
+    public OrgManager init(int orgId, boolean openTLS, boolean openCATLS) {
+        this.orgId = orgId;
+        if (orgMap.get(orgId) != null) {
+            throw new RuntimeException(String.format("OrgManager had the same id of %s", orgId));
         } else {
-            orgMap.put(orgName, new IntermediateOrg());
+            orgMap.put(orgId, new IntermediateOrg());
         }
-        orgMap.get(orgName).openTLS(openTLS);
-        orgMap.get(orgName).openCATLS(openCATLS);
+        orgMap.get(orgId).openTLS(openTLS);
+        orgMap.get(orgId).openCATLS(openCATLS);
         return this;
     }
 
@@ -51,8 +51,8 @@ public class OrgManager {
      * @return self
      */
     public OrgManager setCA(String caName, String caLocation) {
-        orgMap.get(orgName).setCaName(caName);
-        orgMap.get(orgName).setCALocation(caLocation);
+        orgMap.get(orgId).setCaName(caName);
+        orgMap.get(orgId).setCALocation(caLocation);
         return this;
     }
 
@@ -66,9 +66,9 @@ public class OrgManager {
      * @return self
      */
     public OrgManager setUser(@Nonnull String username, @Nonnull String cryptoConfigPath, String channelArtifactsPath) {
-        orgMap.get(orgName).setUsername(username);
-        orgMap.get(orgName).setCryptoConfigPath(cryptoConfigPath);
-        orgMap.get(orgName).setChannelArtifactsPath(channelArtifactsPath);
+        orgMap.get(orgId).setUsername(username);
+        orgMap.get(orgId).setCryptoConfigPath(cryptoConfigPath);
+        orgMap.get(orgId).setChannelArtifactsPath(channelArtifactsPath);
         return this;
     }
 
@@ -83,33 +83,33 @@ public class OrgManager {
      * @return self
      */
     public OrgManager setUser(@Nonnull String username, @Nonnull String password, String affiliation, Set<String> roles, @Nonnull String cryptoConfigPath) {
-        orgMap.get(orgName).setUsername(username);
-        orgMap.get(orgName).setPassword(password);
-        orgMap.get(orgName).setAffiliation(affiliation);
-        orgMap.get(orgName).setRoles(roles);
-        orgMap.get(orgName).setCryptoConfigPath(cryptoConfigPath);
+        orgMap.get(orgId).setUsername(username);
+        orgMap.get(orgId).setPassword(password);
+        orgMap.get(orgId).setAffiliation(affiliation);
+        orgMap.get(orgId).setRoles(roles);
+        orgMap.get(orgId).setCryptoConfigPath(cryptoConfigPath);
         return this;
     }
 
     public OrgManager setOrderers(String ordererDomainName) {
-        orgMap.get(orgName).setOrdererDomainName(ordererDomainName);
+        orgMap.get(orgId).setOrdererDomainName(ordererDomainName);
         return this;
     }
 
     public OrgManager addOrderer(String name, String location) {
-        orgMap.get(orgName).addOrderer(name, location);
+        orgMap.get(orgId).addOrderer(name, location);
         return this;
     }
 
-    public OrgManager setPeers(String orgMSPID, String orgDomainName) {
-        orgMap.get(orgName).setOrgName(orgName);
-        orgMap.get(orgName).setOrgMSPID(orgMSPID);
-        orgMap.get(orgName).setOrgDomainName(orgDomainName);
+    public OrgManager setPeers(String orgName, String orgMSPID, String orgDomainName) {
+        orgMap.get(orgId).setOrgName(orgName);
+        orgMap.get(orgId).setOrgMSPID(orgMSPID);
+        orgMap.get(orgId).setOrgDomainName(orgDomainName);
         return this;
     }
 
     public OrgManager addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener) {
-        orgMap.get(orgName).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener);
+        orgMap.get(orgId).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener);
         return this;
     }
 
@@ -132,7 +132,7 @@ public class OrgManager {
         chaincode.setChaincodeVersion(chaincodeVersion);
         chaincode.setProposalWaitTime(proposalWaitTime);
         chaincode.setTransactionWaitTime(invokeWaitTime);
-        orgMap.get(orgName).setChainCode(chaincode);
+        orgMap.get(orgId).setChainCode(chaincode);
         return this;
     }
 
@@ -145,7 +145,7 @@ public class OrgManager {
     public OrgManager setChannel(String channelName) {
         IntermediateChannel channel = new IntermediateChannel();
         channel.setChannelName(channelName);
-        orgMap.get(orgName).setChannel(channel);
+        orgMap.get(orgId).setChannel(channel);
         return this;
     }
 
@@ -155,38 +155,38 @@ public class OrgManager {
      * @param blockListener BlockListener
      */
     public OrgManager setBlockListener(BlockListener blockListener) {
-        orgMap.get(orgName).setBlockListener(blockListener);
+        orgMap.get(orgId).setBlockListener(blockListener);
         return this;
     }
 
     public void add() {
-        if (orgMap.get(orgName).getPeers().size() == 0) {
+        if (orgMap.get(orgId).getPeers().size() == 0) {
             throw new RuntimeException("peers is null or peers size is 0");
         }
-        if (orgMap.get(orgName).getOrderers().size() == 0) {
+        if (orgMap.get(orgId).getOrderers().size() == 0) {
             throw new RuntimeException("orderers is null or orderers size is 0");
         }
-        if (orgMap.get(orgName).getChainCode() == null) {
+        if (orgMap.get(orgId).getChainCode() == null) {
             throw new RuntimeException("chaincode must be instantiated");
         }
 
         // 根据TLS开启状态循环确认Peer节点各服务的请求grpc协议
-        for (int i = 0; i < orgMap.get(orgName).getPeers().size(); i++) {
-            orgMap.get(orgName).getPeers().get(i).setPeerLocation(grpcTLSify(orgMap.get(orgName).openTLS(), orgMap.get(orgName).getPeers().get(i).getPeerLocation()));
-            orgMap.get(orgName).getPeers().get(i).setPeerEventHubLocation(grpcTLSify(orgMap.get(orgName).openTLS(), orgMap.get(orgName).getPeers().get(i).getPeerEventHubLocation()));
+        for (int i = 0; i < orgMap.get(orgId).getPeers().size(); i++) {
+            orgMap.get(orgId).getPeers().get(i).setPeerLocation(grpcTLSify(orgMap.get(orgId).openTLS(), orgMap.get(orgId).getPeers().get(i).getPeerLocation()));
+            orgMap.get(orgId).getPeers().get(i).setPeerEventHubLocation(grpcTLSify(orgMap.get(orgId).openTLS(), orgMap.get(orgId).getPeers().get(i).getPeerEventHubLocation()));
         }
         // 根据TLS开启状态循环确认Orderer节点各服务的请求grpc协议
-        for (int i = 0; i < orgMap.get(orgName).getOrderers().size(); i++) {
-            orgMap.get(orgName).getOrderers().get(i).setOrdererLocation(grpcTLSify(orgMap.get(orgName).openTLS(), orgMap.get(orgName).getOrderers().get(i).getOrdererLocation()));
+        for (int i = 0; i < orgMap.get(orgId).getOrderers().size(); i++) {
+            orgMap.get(orgId).getOrderers().get(i).setOrdererLocation(grpcTLSify(orgMap.get(orgId).openTLS(), orgMap.get(orgId).getOrderers().get(i).getOrdererLocation()));
         }
         // 根据CATLS开启状态循环确认CA服务的请求http协议
-        orgMap.get(orgName).setCALocation(httpTLSify(orgMap.get(orgName).openCATLS(), orgMap.get(orgName).getCALocation()));
+        orgMap.get(orgId).setCALocation(httpTLSify(orgMap.get(orgId).openCATLS(), orgMap.get(orgId).getCALocation()));
     }
 
-    public FabricManager use(String orgName) throws Exception {
-        IntermediateOrg org = orgMap.get(orgName);
+    public FabricManager use(int orgId) throws Exception {
+        IntermediateOrg org = orgMap.get(orgId);
         // java.io.tmpdir : C:\Users\aberic\AppData\Local\Temp\
-        File storeFile = new File(System.getProperty("java.io.tmpdir") + "/HFCStore" + orgName + ".properties");
+        File storeFile = new File(String.format("%s/HFCStore%s.properties", System.getProperty("java.io.tmpdir"), orgId));
         FabricStore fabricStore = new FabricStore(storeFile);
         org.init(fabricStore);
         org.setClient(HFClient.createNewInstance());

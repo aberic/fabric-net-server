@@ -1,6 +1,10 @@
 package cn.aberic.simple.module.manager;
 
-import cn.aberic.simple.base.BaseManager;
+import cn.aberic.simple.module.dto.OrdererDTO;
+import cn.aberic.simple.module.dto.OrgDTO;
+import cn.aberic.simple.module.dto.PeerDTO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.hyperledger.fabric.sdk.aberic.OrgManager;
 
@@ -9,13 +13,18 @@ import org.hyperledger.fabric.sdk.aberic.OrgManager;
  *
  * @author : Aberic 【2018/6/4 10:46】
  */
-public class SimpleManager extends BaseManager {
+public class SimpleManager {
+
+    private Logger logger = LogManager.getLogger(SimpleManager.class);
 
     private static SimpleManager instance;
 
+    private OrgDTO org;
+    private OrdererDTO orderer;
+    private PeerDTO peer;
     private FabricManager fabricManager;
 
-    public static SimpleManager obtain() throws Exception {
+    public static SimpleManager obtain() {
         if (null == instance) {
             synchronized (SimpleManager.class) {
                 if (null == instance) {
@@ -26,33 +35,51 @@ public class SimpleManager extends BaseManager {
         return instance;
     }
 
-    private SimpleManager() throws Exception {
-        fabricManager = obtainFabricManager();
+    public void setOrg(OrgDTO org) {
+        this.org = org;
+        fabricManager = null;
     }
 
-    public FabricManager getFabricManager() {
+    public void setOrderer(OrdererDTO orderer) {
+        this.orderer = orderer;
+        fabricManager = null;
+    }
+
+    public void setPeer(PeerDTO peer) {
+        this.peer = peer;
+        fabricManager = null;
+    }
+
+    private SimpleManager() {
+    }
+
+    public FabricManager get() throws Exception {
+        if (null == fabricManager) {
+            synchronized (SimpleManager.class) {
+                fabricManager = createFabricManager(org, orderer, peer);
+            }
+        }
         return fabricManager;
     }
 
-    private FabricManager obtainFabricManager() throws Exception {
+    private FabricManager createFabricManager(OrgDTO org, OrdererDTO orderer, PeerDTO peer) throws Exception {
         OrgManager orgManager = new OrgManager();
         orgManager
-                .init("Org1", true, false)
-                .setUser("Admin", getCryptoConfigPath("aberic"), getChannleArtifactsPath("aberic"))
-//                .setUser("haha", "mAtBqOymDtBI", "org1.department1", new HashSet<>(Arrays.asList("hf.Revoker", "hf.GenCRL", "admin")), getCryptoConfigPath("aberic"))
-                .setCA("ca", "http://118.89.243.236:7054")
-                .setPeers("Org1MSP", "org1.example.com")
-                .addPeer("peer0.org1.example.com", "peer0.org1.example.com", "grpc://118.89.243.236:7051", "grpc://118.89.243.236:7053", true)
-                .setOrderers("example.com")
-                .addOrderer("orderer.example.com", "grpc://118.89.243.236:7050")
-                .setChannel("mychannel")
-                .setChainCode("test2cc", "/code", "chaincode/chaincode_example02", "1.2", 90000, 120)
+                .init(org.getId(), org.isTls(), org.isCaTls())
+                .setUser(org.getUsername(), org.getCryptoConfigDir(), org.getChannelArtifactsDir())
+                .setCA(org.getCaName(), org.getCaLocation())
+                .setPeers(org.getOrgName(), org.getOrgMSPID(), org.getOrgDomainName())
+                .setOrderers(org.getOrdererDomainName())
+                .setChannel(org.getChannelName())
+                .setChainCode(org.getChaincodeName(), org.getChaincodeSource(), org.getChaincodePath(), org.getChaincodeVersion(), org.getProposalWaitTime(), org.getInvokeWaitTime())
                 .setBlockListener(map -> {
                     logger.debug(map.get("code"));
                     logger.debug(map.get("data"));
-                })
-                .add();
-        return orgManager.use("Org1");
+                });
+        orgManager.addOrderer(orderer.getName(), orderer.getLocation());
+        orgManager.addPeer(peer.getPeerName(), peer.getPeerEventHubName(), peer.getPeerLocation(), peer.getPeerEventHubLocation(), peer.isEventListener());
+        orgManager.add();
+        return orgManager.use(org.getId());
     }
 
 }

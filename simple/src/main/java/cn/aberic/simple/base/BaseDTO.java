@@ -8,6 +8,6 @@ import java.io.Serializable;
  * @author 杨毅 【2017年10月24日 - 20:58:23】
  */
 @SuppressWarnings("serial")
-public class BaseBean implements Serializable {
+public class BaseDTO implements Serializable {
 
 }
