@@ -17,7 +17,7 @@ import java.util.Map;
  * @author : Aberic 【2018/6/4 15:01】
  */
 @Controller
-@RequestMapping("/simple")
+@RequestMapping("/sdk")
 public class SimpleController {
 
     @Resource

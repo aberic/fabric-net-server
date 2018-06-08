@@ -25,27 +25,22 @@ public class SimpleServiceImpl implements SimpleService {
 
     @Override
     public String chainCode(JSONObject json) {
-        String type = json.getString("type");
-        String fcn = json.getString("fcn");
+        String intent = json.getString("intent");
         JSONArray arrayJson = json.getJSONArray("array");
-        Map<String, String> resultMap;
         int length = arrayJson.size();
-        String[] argArray = new String[length];
+        String fcn = null;
+        String[] argArray = new String[length - 1];
         for (int i = 0; i < length; i++) {
-            argArray[i] = arrayJson.getString(i);
+            if (i == 0) {
+                fcn = arrayJson.getString(i);
+            } else {
+                argArray[i - 1] = arrayJson.getString(i);
+            }
         }
+        Map<String, String> resultMap;
         try {
             FabricManager manager = SimpleManager.obtain().get();
-            switch (type) {
-                case "install":
-                    resultMap = manager.install();
-                    break;
-                case "instantiate":
-                    resultMap = manager.instantiate(argArray);
-                    break;
-                case "upgrade":
-                    resultMap = manager.upgrade(argArray);
-                    break;
+            switch (intent) {
                 case "invoke":
                     resultMap = manager.invoke(fcn, argArray);
                     break;
@@ -53,7 +48,7 @@ public class SimpleServiceImpl implements SimpleService {
                     resultMap = manager.query(fcn, argArray);
                     break;
                 default:
-                    throw new RuntimeException(String.format("no type was found with name %s", type));
+                    throw new RuntimeException(String.format("no type was found with name %s", intent));
             }
             if (resultMap.get("code").equals("error")) {
                 return responseFail(resultMap.get("data"));
@@ -68,12 +63,12 @@ public class SimpleServiceImpl implements SimpleService {
 
     @Override
     public String trace(JSONObject json) {
-        String fcn = json.getString("fcn");
+        String intent = json.getString("intent");
         String traceId = json.getString("traceId");
         Map<String, String> resultMap;
         try {
             FabricManager manager = SimpleManager.obtain().get();
-            switch (fcn) {
+            switch (intent) {
                 case "queryBlockByTransactionID":
                     resultMap = manager.queryBlockByTransactionID(traceId);
                     break;

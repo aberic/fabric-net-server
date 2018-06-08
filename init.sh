@@ -7,7 +7,7 @@ echo " ___) |   | |    / ___ \  |  _ <    | |   "
 echo "|____/    |_|   /_/   \_\ |_| \_\   |_|   "
 echo
 
-initUrl=http://localhost:8080/simple/init
+initUrl=http://localhost:8080/sdk/init
 
 ## 启动SDK
 startSDK () {
