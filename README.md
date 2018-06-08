@@ -64,29 +64,32 @@ simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManag
 ### simple-demo
 调用示例：<br>
 ```java
-OrgManager orgManager = new OrgManager();
-orgManager
-    .init("Org1")
-    .setUser("Admin", getCryptoConfigPath("aberic"), getChannleArtifactsPath("aberic"))
-    .setCA("ca", "http://118.89.243.236:7054")
-    .setPeers("Org1MSP", "org1.example.com")
-    .addPeer("peer0.org1.example.com", "peer0.org1.example.com", "grpc://118.89.243.236:7051", "grpc://118.89.243.236:7053", true)
-    .setOrderers("example.com")
-    .addOrderer("orderer.example.com", "grpc://118.89.243.236:7050")
-    .setChannel("mychannel")
-    .setChainCode("test2cc", "/code", "chaincode/chaincode_example02", "1.2", 90000, 120)
-    .openTLS(true)
-    .openCATLS(false)
-    .setBlockListener(map -> {
-            logger.debug(map.get("code"));
-            logger.debug(map.get("data"));
-        })
-    .add();
-    FabricManager fabricManager = orgManager.use("Org1");
-    fabricManager.install();
-    fabricManager.instantiate(argArray);
-    fabricManager.upgrade(argArray);
-    fabricManager…
+public class SimpleManager extends BaseManager {
+
+    private FabricManager obtainFabricManager() throws Exception {
+        OrgManager orgManager = new OrgManager();
+        orgManager
+                .init("Org1")
+                .setUser("Admin", getCryptoConfigPath("aberic"), getChannleArtifactsPath("aberic"))
+                .setCA("ca", "http://118.89.243.236:7054")
+                .setPeers("Org1MSP", "org1.example.com")
+                .addPeer("peer0.org1.example.com", "peer0.org1.example.com", "grpc://118.89.243.236:7051", "grpc://118.89.243.236:7053", true)
+                .setOrderers("example.com")
+                .addOrderer("orderer.example.com", "grpc://118.89.243.236:7050")
+                .setChannel("mychannel")
+                .setChainCode("test2cc", "/code", "chaincode/chaincode_example02", "1.2", 90000, 120)
+                .openTLS(true)
+                .openCATLS(false)
+                .setBlockListener(map -> {
+                    logger.debug(map.get("code"));
+                    logger.debug(map.get("data"));
+                })
+                .add();
+        logger.debug("openCATLS = true");
+        return orgManager.use("Org1");
+    }
+
+}
 ```
 <br><br>
 ### api
