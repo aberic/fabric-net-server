@@ -41,15 +41,6 @@ public class SimpleServiceImpl implements SimpleService {
         try {
             FabricManager manager = SimpleManager.obtain().get();
             switch (intent) {
-                case "install":
-                    resultMap = manager.install();
-                    break;
-                case "instantiate":
-                    resultMap = manager.instantiate(argArray);
-                    break;
-                case "upgrade":
-                    resultMap = manager.upgrade(argArray);
-                    break;
                 case "invoke":
                     resultMap = manager.invoke(fcn, argArray);
                     break;
