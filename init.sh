@@ -7,24 +7,41 @@ echo " ___) |   | |    / ___ \  |  _ <    | |   "
 echo "|____/    |_|   /_/   \_\ |_| \_\   |_|   "
 echo
 
-orgAddUrl=http://localhost:8080/simple/org/add
-orderAddUrl=http://localhost:8080/simple/orderer/add
-peerAddUrl=http://localhost:8080/simple/peer/add
-testNetUrl=http://localhost:8080/simple/trace
+initUrl=http://localhost:8080/simple/init
 
-orgJson=`jo -p id=1 orgName=ORG_NAME tls@ORG_TLS caTls@ORG_CA_TLS username=ORG_USERNAME cryptoConfigDir=ORG_CRYPTO_CONFIG_DIR channelArtifactsDir=ORG_CHANNEL_ARTIFACTS_DIR caName=ORG_CA_NAME caLocation=ORG_CA_LOCATION orgMSPID=ORG_MSP_ID orgDomainName=ORG_DOMAIN_NAME ordererDomainName=ORG_ORDERER_DOMAIN_NAME channelName=ORG_CHANNEL_NAME chaincodeName=ORG_CHAINCODE_NAME chaincodeSource=ORG_CHAINCODE_SOURCE chaincodePath=ORG_CHAINCODE_PATH chaincodeVersion=ORG_CHAINCODE_VERSION proposalWaitTime=ORG_PROPOSAL_WAIT_TIME invokeWaitTime=ORG_INVOKE_WAIT_TIME`
-orderJson=`jo -p id=1 orgId=1 peerName=ORDERER_PEER_NAME peerEventHubName=ORDERER_PEER_EVENT_HUB_NAME peerLocation=ORDERER_PEER_LOCATION peerEventHubLocation=ORDERER_PEER_EVENT_HUB_LOCATION isEventListener@ORDERER_IS_EVENT_LISTENER`
-peerJson=`jo -p id=1 orgId=1 name=PEER_NAME location=PEER_LOCATION`
-testJson=`jo -p fcn=queryBlockByNumber traceId="0"`
+## 启动SDK
+startSDK () {
+    ## 启动spring-boot服务
+    nohup java -jar /home/jar/simple-1.0-alpha.jar > /home/jar/simple-1.0-alpha.nohup 2>&1 &
 
-rm -f tpid
-nohup java -jar /home/jar/myapp.jar > /dev/null 2>&1 &
-echo $! > tpid
-echo Start Success!
+    # 日志总行数
+    line=0
+    # 当前读取行数
+    index=0
+    today=`date +%Y-%m-%d`
+    hour=`date +%H`
+    while [ -f /home/jar/simple-1.0-alpha.nohup ]
+    do
+        line=`awk '{print NR}' /home/jar/simple-1.0-alpha.nohup|tail -n1`
+        result=`grep "$today $hour" /home/jar/simple-1.0-alpha.nohup | grep "Started"`
+        if [[ "$result" != "" ]]
+        then
+            head -n -0 /home/jar/simple-1.0-alpha.nohup |tail -n +${index}
+            break
+        elif [[ ${line} -gt ${index} ]]
+        then head -n -0 /home/jar/simple-1.0-alpha.nohup |tail -n +${index}
+        index=${line}
+        else
+            sleep 0.1s
+        fi
+    done
+    echo "spring-boot Started..........."
+}
 
-## 检查添加组织信息是否成功
-addOrg () {
-	result=`curl -H "Content-type: application/json" -X POST -d ${orgJson} ${orgAddUrl}`
+# 初始化环境变量数据
+init () {
+    result=`curl ${initUrl}`
+    echo "result = "${result}
 	if [ ${result} -eq 0 ]; then
 	    echo "===================== org add success ===================== "
 	    echo
@@ -35,48 +52,14 @@ addOrg () {
 	fi
 }
 
-## 检查添加排序服务信息是否成功
-addOrder () {
-	result=`curl -H "Content-type: application/json" -X POST -d ${orderJson} ${orderAddUrl}`
-	if [ ${result} -eq 0 ]; then
-	    echo "===================== order add success ===================== "
-	    echo
-	else
-	    echo "===================== order add failed ===================== "
-	    echo
-	    exit 1
-	fi
-}
+echo "start sdk..."
+startSDK
 
-## 检查添加节点服务信息是否成功
-addPeer () {
-	result=`curl -H "Content-type: application/json" -X POST -d ${peerJson} ${peerAddUrl}`
-	if [ ${result} -eq 0 ]; then
-	    echo "===================== peer add success ===================== "
-	    echo
-	else
-	    echo "===================== peer add failed ===================== "
-	    echo
-	    exit 1
-	fi
-}
-
-testNet () {
-	result=`curl -H "Content-type: application/json" -X POST -d ${testJson} ${testNetUrl}`
-	echo ${result}
-}
-
-echo "add Org..."
-addOrg
-
-echo "add Order..."
-addOrder
-
-echo "add Peer..."
-addPeer
+echo "sdk init..."
+init
 
 echo
-echo "===================== All GOOD, start java sdk completed ===================== "
+echo "===================== All GOOD, start sdk completed ===================== "
 echo
 
 echo
@@ -86,3 +69,9 @@ echo "|  _|   |  \| | | | | |  "
 echo "| |___  | |\  | | |_| |  "
 echo "|_____| |_| \_| |____/   "
 echo
+
+echo
+echo "===================== read sdk logs ===================== "
+echo
+
+tail -f logs /home/jar/simple-1.0-alpha.nohup
