@@ -35,12 +35,6 @@ POST   | /simple/org/set     | 设置组织信息
 POST   | /simple/orderer/set | 设置排序服务器信息
 POST   | /simple/peer/set    | 设置节点服务器信息
 <br><br>
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-<br><br>
 ## 代码简要说明
 ### sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
