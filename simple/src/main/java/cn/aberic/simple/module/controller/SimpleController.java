@@ -35,22 +35,28 @@ public class SimpleController {
         return simpleService.trace(new JSONObject(map));
     }
 
-    @RequestMapping(value = "/org/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/init", method = RequestMethod.GET)
     @ResponseBody
-    public int addOrg(@RequestBody Map<String, Object> map) {
-        return simpleService.addOrg(new JSONObject(map));
+    public int init() {
+        return simpleService.init();
     }
 
-    @RequestMapping(value = "/orderer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/org/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public int addOrderer(@RequestBody Map<String, Object> map) {
-        return simpleService.addOrderer(new JSONObject(map));
+    public int setOrg(@RequestBody Map<String, Object> map) {
+        return simpleService.setOrg(new JSONObject(map));
     }
 
-    @RequestMapping(value = "/peer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/orderer/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public int addPeer(@RequestBody Map<String, Object> map) {
-        return simpleService.addPeer(new JSONObject(map));
+    public int setOrderer(@RequestBody Map<String, Object> map) {
+        return simpleService.setOrderer(new JSONObject(map));
+    }
+
+    @RequestMapping(value = "/peer/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public int setPeer(@RequestBody Map<String, Object> map) {
+        return simpleService.setPeer(new JSONObject(map));
     }
 
 }
