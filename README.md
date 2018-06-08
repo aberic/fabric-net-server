@@ -25,18 +25,119 @@
 <br>
 [v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
 <br><br>
-**API简要文档**
+**API入口文档**
+
+| Method | REST API         | Description                                                                                                                                                                               |
+| :--:   | :--              | :--                                                                                                                                                                                       |
+| POST   | /sdk/chaincode   | 执行、查询                                                                                                                                                                                |
+| POST   | /sdk/trace       | 在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块、在指定频道内根据区块高度查询区块以及查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash |
+| POST   | /sdk/org/set     | 设置组织信息                                                                                                                                                                              |
+| POST   | /sdk/orderer/set | 设置排序服务器信息                                                                                                                                                                        |
+| POST   | /sdk/peer/set    | 设置节点服务器信息                                                                                                                                                                        |
+
+该版本目前为即上即用的版本，仅提供单排序服务及单节点服务，因此API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有PAAS服务的需要，可以自行参考v0.2中的方案来解决。
 <br>
-v1.0-alpha系列:<br>
-
-| Method | REST API            | Description                                                                                                                                                                               |
-| :--:   | :--                 | :--                                                                                                                                                                                       |
-| POST   | /simple/chaincode   | 安装、实例化、升级、执行、查询                                                                                                                                                            |
-| POST   | /simple/trace       | 在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块、在指定频道内根据区块高度查询区块以及查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash |
-| POST   | /simple/org/set     | 设置组织信息                                                                                                                                                                              |
-| POST   | /simple/orderer/set | 设置排序服务器信息                                                                                                                                                                        |
-| POST   | /simple/peer/set    | 设置节点服务器信息                                                                                                                                                                        |
-
+### API方法示例
+#### /sdk/chaincode
+##### 执行合约
+```json
+{
+    "intent": "invoke",
+    "array": [
+        "set",
+        "A",
+        "0"
+    ]
+}
+```
+##### 查询合约
+```json
+{
+    "intent": "query",
+    "array": [
+        "get"
+    ]
+}
+```
+intent是指对智能合约进行操作的意图。
+<br>
+array是调用合约传入的参数，在用go编写智能合约的时候，智能合约所接收的参数为一个字符串数组，其中字符串数组的第一个参数是智能合约的方法名。这里的array所传入的参数就是智能合约所接收的数组参数。
+#### /sdk/trace
+##### 在指定频道内根据transactionID查询区块
+```json
+{
+   "intent": "queryBlockByTransactionID",
+   "traceId": "08b5db91c7723cb61651a4af1034633a2833031a1cdb4415df0d8f6727020a4f"
+}
+```
+##### 在指定频道内根据hash查询区块
+```json
+{
+   "intent": "queryBlockByHash",
+   "traceId": "8f63d99744752a89a49fcee560a43c271b7f12e37dfaa3489da028b610943595"
+}
+```
+##### 在指定频道内根据区块高度查询区块
+```json
+{
+   "intent": "queryBlockByNumber",
+   "traceId": "9"
+}
+```
+##### 查询当前频道的链信息（包括链长度、当前最新区块hash以及当前最新区块的上一区块hash）
+```json
+{
+   "intent": "queryBlockchainInfo"
+}
+```
+#### /sdk/org/set
+```json
+{
+    "id": 1,
+    "caLocation": "http://118.89.243.236:7054",
+    "caName": "ca",
+    "caTls": false,
+    "chaincodeName": "test2cc",
+    "chaincodePath": "chaincode/chaincode_example02",
+    "chaincodeSource": "/code",
+    "chaincodeVersion": "1.2",
+    "channelArtifactsDir": "/home/jar/channel-artifacts",
+    "channelName": "mychannel",
+    "cryptoConfigDir": "/home/jar/crypto-config",
+    "invokeWaitTime": 120,
+    "ordererDomainName": "example.com",
+    "orgDomainName": "org1.example.com",
+    "orgMSPID": "Org1MSP",
+    "orgName": "Org1",
+    "proposalWaitTime": 90000,
+    "tls": true,
+    "username": "Admin"
+}
+```
+该方法是在sdk容器启动后根据实际需求进行调用，如YAML中配置的变量写错，可以通过该方法重新设置组织信息
+#### /sdk/orderer/set
+```json
+{
+    "id": 1,
+    "orgId": 1,
+    "name": "orderer.example.com",
+    "location": "grpc://118.89.243.236:7050"
+}
+```
+该方法是在sdk容器启动后根据实际需求进行调用，如YAML中配置的变量写错，可以通过该方法重新设置排序服务信息
+#### /sdk/peer/set
+```json
+{
+    "id": 1,
+    "orgId": 1,
+    "peerName": "peer0.org1.example.com",
+    "peerEventHubName": "peer0.org1.example.com",
+    "peerLocation": "grpc://118.89.243.236:7051",
+    "peerEventHubLocation": "grpc://118.89.243.236:7053",
+    "isEventListener": true
+}
+```
+该方法是在sdk容器启动后根据实际需求进行调用，如YAML中配置的变量写错，可以通过该方法重新设置节点服务信息
 ## 代码简要说明
 ### sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
@@ -80,10 +181,7 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。<br>
 **我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。**
 <br><br>
-#### simple-demo
-调用示例请参考各release版本README。
-<br><br>
 欢迎与我多多交流：<br>
-我的博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
+技术博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
 HyperLedger/Fabric**微信交流群**，扫微信订阅号加入：<br>
 ![HLFStudy](https://images2017.cnblogs.com/blog/1240530/201802/1240530-20180201103733812-1730907548.jpg "HLFStudy 微信订阅号")
