@@ -20,9 +20,9 @@
 0.x系列的版本主要是非Docker应用方面的项目，即相互交流的源码层项目。<br>
 1.x及以上系列的版本均Docker项目，帮助开发人员快速部署SDK应用，减少开发环节，从而实现业务的快速落地。<br><br>
 目前主要版本如下列表所示：<br>
-[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.1)：无数据库版，适合轻量级的Fabric平台应用。
+[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)：无数据库版，适合轻量级的Fabric平台应用。
 <br>
-[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
+[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
 <br>
 [v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/v1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
 <br><br>
