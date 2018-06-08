@@ -1,4 +1,6 @@
 # HyperLedger/Fabric SDK Docker Image
+![HLFStudy](https://github.com/aberic/fabric-sdk-container/tree/master/images/docker-build.svg "HLFStudy 微信订阅号")
+<br>
 这是一个基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)的项目，该项目的主要目的是简化HyperLedger/Fabric开发人员在SDK应用层上的工作流程，使得开发和部署更加简单。
 <br><br>
 该项目使用方便，只需要你的服务器上部署有Docker及docker compose环境即可，通过docker-compose的启动命令启动YAML编排文件即可快速上手使用。
