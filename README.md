@@ -1,21 +1,23 @@
-# HyperLedger/Fabric JAVA-SDK with 1.1
-该项目介绍如何使用fabric-sdk-java框架，基于fabric-sdk-java v1.1正式版开发，可向下兼容1.0版本。
+# HyperLedger/Fabric SDK Docker Image
+[![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/fabric-sdk/)
+<br>
+这是一个基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)的项目，该项目的主要目的是简化HyperLedger/Fabric开发人员在SDK应用层上的工作流程，使得开发和部署更加简单。
 <br><br>
-该项目没有对原JAVA-SDK做修改，主要是结合HyperLedger Fabric与fabric-sdk-java中的交互方式做了个人感觉更为清晰的描述，希望能够帮助更多的人尽快熟悉fabric-sdk-java的操作流程和方式。
+该项目使用方便，只需要你的服务器上部署有Docker及docker compose环境即可，通过docker-compose的启动命令启动YAML编排文件即可快速上手使用。
+<br><br>
+由于日志管理和性能调试方面的工作还未完成，目前该项目仅为1.0-alpha版本，后续的开发中将会着重处理日志及可配置性能方面的内容，如果这能让你感兴趣，欢迎star。
 <br><br>
 ## 开发环境
 * IntelliJ IDEA
 * Maven
 * JDK-1.8
 * spring-boot
-* MySQL
-* Mybatis
 * Docker
+* docker compose
 <br><br>
 ## 版本说明
 0.x系列的版本主要是非Docker应用方面的项目，即相互交流的源码层项目。<br>
-1.x及以上系列的版本均Docker项目，帮助开发人员快速部署SDK应用，减少开发环节，从而实现业务的快速落地。
-<br><br>
+1.x及以上系列的版本均Docker项目，帮助开发人员快速部署SDK应用，减少开发环节，从而实现业务的快速落地。<br><br>
 目前主要版本如下列表所示：<br>
 [v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.1)：无数据库版，适合轻量级的Fabric平台应用。
 <br>
@@ -23,13 +25,25 @@
 <br>
 [v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
 <br><br>
-<br><br>
-## sdk-advance
+**API简要文档**
+<br>
+v1.0-alpha系列:<br>
+
+| Method | REST API            | Description                                                                                                                                                                               |
+| :--:   | :--                 | :--                                                                                                                                                                                       |
+| POST   | /simple/chaincode   | 安装、实例化、升级、执行、查询                                                                                                                                                            |
+| POST   | /simple/trace       | 在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块、在指定频道内根据区块高度查询区块以及查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash |
+| POST   | /simple/org/set     | 设置组织信息                                                                                                                                                                              |
+| POST   | /simple/orderer/set | 设置排序服务器信息                                                                                                                                                                        |
+| POST   | /simple/peer/set    | 设置节点服务器信息                                                                                                                                                                        |
+
+## 代码简要说明
+### sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
 <br><br>
 该项目仅作为学习分享的形式提交维护，关于生产部署方面，sdk-advance与app的交互可自行选择采用thrift或protobuf等数据传输协议实现，这里并没有提供该方案的具体实现，需要自己动手解决。
 <br><br>
-### sdk-advance-intermediate
+#### sdk-advance-intermediate
 intermediate系列对象是该项目的主要封装对象，间接屏蔽了真实应用层与fabric-sdk-java之间的直接交互。
 * [IntermediateOrderer](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediateOrderer.java)<br>
 对于Orderer，我们需要知道所选组织名称，同时还需要知道Orderer的服务器域名及真实访问地址。这里的服务器域名是指由crypto-config.yaml中进行指定。<br>
@@ -54,7 +68,7 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 上述无论是排序服务、节点服务或是通道、合约等内容，都应该被同一个组织所拥有，这里的同一个是指单体组织，而不是只为一个组织服务，整个基于Fabric的区块链网络至少应该为一个组织提供服务。<br>
 在IntermediateOrg中集合了已有的对象信息，并从中生成了组织用户以便调用Fabric网络中的接口数据。案例中的方案并非最优方案，关于Fabric CA的实践还没有完成（按照官方的Demo实现无法跑通，如果有能够实现的朋友，欢迎提交代码）。
 <br><br>
-### sdk-advance-manager
+#### sdk-advance-manager
 * [OrgManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/OrgManager.java)<br>
 组织生成器，该对象已经完全暴露给APP所使用，可以通过[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象查看其主要用法。通过OrgManager对外暴露的服务生成系列Intermediate对象，并最终使用use方法确定调用的组织具体对象来生成真正提供Fabric区块链网络服务的[FabricManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/FabricManager.java)。<br>
 在使用OrgManager的时候，如果有进一步开发SAAS或更深层BAAS服务的想法，建议不要直接使用[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)中的方案，而是结合关系型数据库如MySQL等解决方案，将组织中的相关数据持久化，以便后台可以直接获取并调用。
@@ -62,10 +76,12 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 * [FabricManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/FabricManager.java)<br>
 区块链网络服务管理器FabricManager，作为APP直接调用Fabric区块链网络的入口对象，该对象提供了Channel和ChaincodeID相关的所有接口。
 <br><br>
-## simple
-simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。1`我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。`
+### simple
+simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。<br>
+**我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。**
 <br><br>
-
+#### simple-demo
+调用示例请参考各release版本README。
 <br><br>
 欢迎与我多多交流：<br>
 我的博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
