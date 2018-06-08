@@ -181,10 +181,7 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。<br>
 **我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。**
 <br><br>
-#### simple-demo
-调用示例请参考各release版本README。
-<br><br>
 欢迎与我多多交流：<br>
-我的博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
+技术博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
 HyperLedger/Fabric**微信交流群**，扫微信订阅号加入：<br>
 ![HLFStudy](https://images2017.cnblogs.com/blog/1240530/201802/1240530-20180201103733812-1730907548.jpg "HLFStudy 微信订阅号")
