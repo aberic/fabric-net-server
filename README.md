@@ -21,7 +21,7 @@
 <br>
 [v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
 <br>
-v1.0-alpha：提供Docker容器服务，方便SDK快速部署。
+[v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
 <br><br>
 **API简要文档**
 <br>
@@ -75,7 +75,8 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 区块链网络服务管理器FabricManager，作为APP直接调用Fabric区块链网络的入口对象，该对象提供了Channel和ChaincodeID相关的所有接口。
 <br><br>
 ### simple
-simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。1`我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。`
+simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用，该对象的使用建议根据自身业务的实际需求重新包装上线，但直接基于此项目应用也没什么大问题。<br>
+**我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。**
 <br><br>
 #### simple-demo
 调用示例请参考各release版本README。
