@@ -9,7 +9,7 @@ services:
 
   sdk:
     container_name: sdk
-    image: aberic/fabric-sdk:1.0
+    image: aberic/fabric-sdk
     environment:
       # 组织相关配置
       - ORG_NAME=Org1
