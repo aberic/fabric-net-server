@@ -27,13 +27,13 @@ v1.0-alpha：提供Docker容器服务，方便SDK快速部署。
 <br>
 v1.0-alpha系列:
 <br>
-| Method | REST API            | Description                                                                                                                                                                               |
-| :--:   | :--                 | :--                                                                                                                                                                                       |
-| POST   | /simple/chaincode   | 安装、实例化、升级、执行、查询                                                                                                                                                            |
-| POST   | /simple/trace       | 在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块、在指定频道内根据区块高度查询区块以及查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash |
-| POST   | /simple/org/set     | 设置组织信息                                                                                                                                                                              |
-| POST   | /simple/orderer/set | 设置排序服务器信息                                                                                                                                                                        |
-| POST   | /simple/peer/set    | 设置节点服务器信息                                                                                                                                                                        |
+Method | REST API            | Description
+----   | ------------------- | -----------
+POST   | /simple/chaincode   | 安装、实例化、升级、执行、查询
+POST   | /simple/trace       | 在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块、在指定频道内根据区块高度查询区块以及查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash
+POST   | /simple/org/set     | 设置组织信息
+POST   | /simple/orderer/set | 设置排序服务器信息
+POST   | /simple/peer/set    | 设置节点服务器信息
 <br><br>
 ## 代码简要说明
 ### sdk-advance
