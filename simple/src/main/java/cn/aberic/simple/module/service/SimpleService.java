@@ -27,12 +27,18 @@ public interface SimpleService extends BaseService {
     String trace(JSONObject json);
 
     /**
+     * 通过环境变量来初始化SDK
+     * @return 请求返回
+     */
+    int init();
+
+    /**
      * 新增组织
      *
      * @param json 组织JSON
      * @return 请求返回
      */
-    int addOrg(JSONObject json);
+    int setOrg(JSONObject json);
 
     /**
      * 新增排序服务
@@ -40,7 +46,7 @@ public interface SimpleService extends BaseService {
      * @param json 排序服务JSON
      * @return 请求返回
      */
-    int addOrderer(JSONObject json);
+    int setOrderer(JSONObject json);
 
     /**
      * 新增节点服务
@@ -48,6 +54,6 @@ public interface SimpleService extends BaseService {
      * @param json 节点服务JSON
      * @return 请求返回
      */
-    int addPeer(JSONObject json);
+    int setPeer(JSONObject json);
 
 }
