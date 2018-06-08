@@ -62,6 +62,82 @@
 intent是指对智能合约进行操作的意图。
 <br>
 array是调用合约传入的参数，在用go编写智能合约的时候，智能合约所接收的参数为一个字符串数组，其中字符串数组的第一个参数是智能合约的方法名。这里的array所传入的参数就是智能合约所接收的数组参数。
+#### /sdk/trace
+##### 在指定频道内根据transactionID查询区块
+```json
+{
+   "intent": "queryBlockByTransactionID",
+   "traceId": "08b5db91c7723cb61651a4af1034633a2833031a1cdb4415df0d8f6727020a4f"
+}
+```
+##### 在指定频道内根据hash查询区块
+```json
+{
+   "intent": "queryBlockByHash",
+   "traceId": "8f63d99744752a89a49fcee560a43c271b7f12e37dfaa3489da028b610943595"
+}
+```
+##### 在指定频道内根据区块高度查询区块
+```json
+{
+   "intent": "queryBlockByNumber",
+   "traceId": "9"
+}
+```
+##### 查询当前频道的链信息（包括链长度、当前最新区块hash以及当前最新区块的上一区块hash）
+```json
+{
+   "intent": "queryBlockchainInfo"
+}
+```
+#### /sdk/org/set
+```json
+{
+    "id": 1,
+    "caLocation": "http://118.89.243.236:7054",
+    "caName": "ca",
+    "caTls": false,
+    "chaincodeName": "test2cc",
+    "chaincodePath": "chaincode/chaincode_example02",
+    "chaincodeSource": "/code",
+    "chaincodeVersion": "1.2",
+    "channelArtifactsDir": "/home/jar/channel-artifacts",
+    "channelName": "mychannel",
+    "cryptoConfigDir": "/home/jar/crypto-config",
+    "invokeWaitTime": 120,
+    "ordererDomainName": "example.com",
+    "orgDomainName": "org1.example.com",
+    "orgMSPID": "Org1MSP",
+    "orgName": "Org1",
+    "proposalWaitTime": 90000,
+    "tls": true,
+    "username": "Admin"
+}
+```
+该方法是在sdk容器启动后根据实际需求进行调用，如YAML中配置的变量写错，可以通过该方法重新设置组织信息
+#### /sdk/orderer/set
+```json
+{
+    "id": 1,
+    "orgId": 1,
+    "name": "orderer.example.com",
+    "location": "grpc://118.89.243.236:7050"
+}
+```
+该方法是在sdk容器启动后根据实际需求进行调用，如YAML中配置的变量写错，可以通过该方法重新设置排序服务信息
+#### /sdk/peer/set
+```json
+{
+    "id": 1,
+    "orgId": 1,
+    "peerName": "peer0.org1.example.com",
+    "peerEventHubName": "peer0.org1.example.com",
+    "peerLocation": "grpc://118.89.243.236:7051",
+    "peerEventHubLocation": "grpc://118.89.243.236:7053",
+    "isEventListener": true
+}
+```
+该方法是在sdk容器启动后根据实际需求进行调用，如YAML中配置的变量写错，可以通过该方法重新设置节点服务信息
 ## 代码简要说明
 ### sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
