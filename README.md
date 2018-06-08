@@ -1,5 +1,6 @@
 # HyperLedger/Fabric SDK Docker Image
 [![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/fabric-sdk/)
+[![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
 <br>
 这是一个基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)的项目，该项目的主要目的是简化HyperLedger/Fabric开发人员在SDK应用层上的工作流程，使得开发和部署更加简单。
 <br><br>
