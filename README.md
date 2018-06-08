@@ -20,7 +20,7 @@
 <br>
 [v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/v0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
 <br>
-[v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
+[v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/v1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
 <br><br>
 <br><br>
 ## sdk-advance
