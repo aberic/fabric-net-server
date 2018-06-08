@@ -26,6 +26,19 @@
 <br>
 [v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/v1.0-alpha)：提供Docker容器服务，方便SDK快速部署。
 <br><br>
+## 使用sdk-container
+1、确定Linux内核在`3.10`及以上。
+<br>
+2、在待部署SDK服务器上安装最新版`Docker`及`docker compose`环境。
+<br>
+3、执行`docker pull aberic/fabric-sdk`下载镜像。
+<br>
+4、在`docker-sdk.yaml`文件中配置好Fabric网络中所期望连接的排序服务及节点服务参数，这两类服务各允许设置一台，后续的版本中会增加使用SDK多服务网络方案。
+<br>
+5、执行`docker-compose -f docker-sdk.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
+<br>
+6、服务启动完成后，参考下面的API介绍以便更快投入使用。
+<br><br>
 **API入口文档**
 
 | Method | REST API         | Description                                                                                                                                                                               |
