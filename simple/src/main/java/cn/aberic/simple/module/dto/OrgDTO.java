@@ -9,14 +9,14 @@ import cn.aberic.simple.base.BaseDTO;
  */
 public class OrgDTO extends BaseDTO {
 
-    /** 组织ID */
-    private int id;
+    /** 组织hash */
+    private String hash;
     /** 组织名称 */
     private String orgName;
-    /** 是否开启TLS */
-    private boolean tls;
-    /** 是否开启CA TLS */
-    private boolean caTls;
+    /** 是否开启TLS，0=false，1=true */
+    private int tls;
+    /** 是否开启CA TLS，0=false，1=true */
+    private int caTls;
     /** 设置默认用户 */
     private String username;
     /** CryptoConfig所在目录的目录名称 */
@@ -48,12 +48,12 @@ public class OrgDTO extends BaseDTO {
     /** 事务等待时间以秒为单位 */
     private int invokeWaitTime;
 
-    public int getId() {
-        return id;
+    public String getHash() {
+        return hash;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public String getOrgName() {
@@ -64,19 +64,19 @@ public class OrgDTO extends BaseDTO {
         this.orgName = orgName;
     }
 
-    public boolean isTls() {
+    public int isTls() {
         return tls;
     }
 
-    public void setTls(boolean tls) {
+    public void setTls(int tls) {
         this.tls = tls;
     }
 
-    public boolean isCaTls() {
+    public int isCaTls() {
         return caTls;
     }
 
-    public void setCaTls(boolean caTls) {
+    public void setCaTls(int caTls) {
         this.caTls = caTls;
     }
 
@@ -203,7 +203,7 @@ public class OrgDTO extends BaseDTO {
     @Override
     public String toString() {
         return "OrgDTO{" +
-                "id=" + id +
+                "hash=" + hash +
                 ", orgName='" + orgName + '\'' +
                 ", tls=" + tls +
                 ", caTls=" + caTls +

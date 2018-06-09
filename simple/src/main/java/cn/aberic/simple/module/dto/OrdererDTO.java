@@ -9,29 +9,19 @@ import cn.aberic.simple.base.BaseDTO;
  */
 public class OrdererDTO extends BaseDTO {
 
-    /** 排序服务器ID */
-    private int id;
-    /** 排序服务器所属组织ID */
-    private int orgId;
+    /** 组织hash */
+    private String hash;
     /** 排序服务器名称 */
     private String name;
     /** 排序服务器地址 */
     private String location;
 
-    public int getId() {
-        return id;
+    public String getHash() {
+        return hash;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(int orgId) {
-        this.orgId = orgId;
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public String getName() {
@@ -53,8 +43,7 @@ public class OrdererDTO extends BaseDTO {
     @Override
     public String toString() {
         return "OrdererDTO{" +
-                "id=" + id +
-                ", orgId=" + orgId +
+                "hash=" + hash +
                 ", name='" + name + '\'' +
                 ", location='" + location + '\'' +
                 '}';

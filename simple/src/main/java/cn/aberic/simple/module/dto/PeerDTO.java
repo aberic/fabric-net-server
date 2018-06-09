@@ -9,10 +9,8 @@ import cn.aberic.simple.base.BaseDTO;
  */
 public class PeerDTO extends BaseDTO {
 
-    /** 节点服务器ID */
-    private int id;
-    /** 节点服务器所属组织ID */
-    private int orgId;
+    /** 组织hash */
+    private String hash;
     /** 当前指定的组织节点域名 */
     private String peerName;
     /** 当前指定的组织节点事件域名 */
@@ -21,23 +19,15 @@ public class PeerDTO extends BaseDTO {
     private String peerLocation;
     /** 当前指定的组织节点事件监听访问地址 */
     private String peerEventHubLocation;
-    /** 当前peer是否增加Event事件处理 */
-    private boolean isEventListener;
+    /** 当前peer是否增加Event事件处理，0=false，1=true */
+    private int isEventListener;
 
-    public int getId() {
-        return id;
+    public String getHash() {
+        return hash;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(int orgId) {
-        this.orgId = orgId;
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public String getPeerName() {
@@ -72,19 +62,18 @@ public class PeerDTO extends BaseDTO {
         this.peerEventHubLocation = peerEventHubLocation;
     }
 
-    public boolean isEventListener() {
+    public int isEventListener() {
         return isEventListener;
     }
 
-    public void setEventListener(boolean eventListener) {
+    public void setEventListener(int eventListener) {
         isEventListener = eventListener;
     }
 
     @Override
     public String toString() {
         return "PeerDTO{" +
-                "id=" + id +
-                ", orgId=" + orgId +
+                "hash=" + hash +
                 ", peerName='" + peerName + '\'' +
                 ", peerEventHubName='" + peerEventHubName + '\'' +
                 ", peerLocation='" + peerLocation + '\'' +
