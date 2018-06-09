@@ -17,7 +17,7 @@ CREATE TABLE `org` (
   `ca_tls` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否开启CA TLS，0不开启，1开启',
   `username` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '设置默认用户',
   `crypto_config_dir` varchar(45) COLLATE utf8_bin NOT NULL COMMENT 'CryptoConfig所在目录的目录名称，该目录这里设为统一存放目录。也可以用更灵活的方式，通过上传进行配置',
-  `channle_artifacts_dir` varchar(45) COLLATE utf8_bin NOT NULL COMMENT 'ChannleArtifacts所在目录的目录名称，该目录这里设为统一存放目录。也可以用更灵活的方式，通过上传进行配置',
+  `channel_artifacts_dir` varchar(45) COLLATE utf8_bin NOT NULL COMMENT 'ChannleArtifacts所在目录的目录名称，该目录这里设为统一存放目录。也可以用更灵活的方式，通过上传进行配置',
   `ca_name` varchar(45) COLLATE utf8_bin NOT NULL COMMENT 'CA名称',
   `ca_location` varchar(45) COLLATE utf8_bin NOT NULL COMMENT 'CA请求URL',
   `org_msp_id` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '组织唯一标识符',
