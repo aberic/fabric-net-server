@@ -3,10 +3,7 @@ package cn.aberic.simple.module.controller;
 import cn.aberic.simple.module.service.SimpleService;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -35,28 +32,40 @@ public class SimpleController {
         return simpleService.trace(new JSONObject(map));
     }
 
-    @RequestMapping(value = "/init", method = RequestMethod.GET)
+    @RequestMapping(value = "/org/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public int init() {
-        return simpleService.init();
+    public String setOrg(@RequestBody Map<String, Object> map) {
+        return simpleService.addOrg(new JSONObject(map));
     }
 
-    @RequestMapping(value = "/org/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/org/list", method = RequestMethod.GET)
     @ResponseBody
-    public int setOrg(@RequestBody Map<String, Object> map) {
-        return simpleService.setOrg(new JSONObject(map));
+    public String orgList() {
+        return simpleService.getOrgList();
     }
 
-    @RequestMapping(value = "/orderer/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/orderer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public int setOrderer(@RequestBody Map<String, Object> map) {
-        return simpleService.setOrderer(new JSONObject(map));
+    public String setOrderer(@RequestBody Map<String, Object> map) {
+        return simpleService.addOrderer(new JSONObject(map));
     }
 
-    @RequestMapping(value = "/peer/set", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/orderer/list/{hash}", method = RequestMethod.GET)
     @ResponseBody
-    public int setPeer(@RequestBody Map<String, Object> map) {
-        return simpleService.setPeer(new JSONObject(map));
+    public String ordererList(@PathVariable("hash") String hash) {
+        return simpleService.getOrdererListByOrgHash(hash);
+    }
+
+    @RequestMapping(value = "/peer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public String setPeer(@RequestBody Map<String, Object> map) {
+        return simpleService.addPeer(new JSONObject(map));
+    }
+
+    @RequestMapping(value = "/peer/list/{hash}", method = RequestMethod.GET)
+    @ResponseBody
+    public String peerList(@PathVariable("hash") String hash) {
+        return simpleService.getPeerListByOrgHash(hash);
     }
 
 }
