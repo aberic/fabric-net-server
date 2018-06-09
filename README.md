@@ -4,9 +4,7 @@
 <br>
 这是一个基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)的项目，该项目的主要目的是简化HyperLedger/Fabric开发人员在SDK应用层上的工作流程，使得开发和部署更加简单。
 <br><br>
-该项目使用方便，只需要你的服务器上部署有Docker及docker compose环境即可，通过docker-compose的启动命令启动YAML编排文件即可快速上手使用。
-<br><br>
-由于日志管理和性能调试方面的工作还未完成，目前该项目仅为1.0-alpha版本，后续的开发中将会着重处理日志及可配置性能方面的内容，如果这能让你感兴趣，欢迎star。
+该项目使用方便，只需要部署有Docker及docker compose环境即可轻松调用Fabric网络接口，包括执行、查询智能合约，以及trace相关的溯源接口。
 <br><br>
 ## 开发环境
 * IntelliJ IDEA
