@@ -4,8 +4,8 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/fabric?serverTimezone=UTC&useSSL=false
-    username: root
-    password: 11111
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:sqlite:/Users/Aberic/Documents/code/github/fabric.sqlite
+    username:
+    password:
+    driver-class-name: org.sqlite.JDBC
 
