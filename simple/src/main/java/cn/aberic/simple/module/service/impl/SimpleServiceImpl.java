@@ -4,7 +4,9 @@ import cn.aberic.simple.module.dto.OrdererDTO;
 import cn.aberic.simple.module.dto.OrgDTO;
 import cn.aberic.simple.module.dto.PeerDTO;
 import cn.aberic.simple.module.manager.SimpleManager;
+import cn.aberic.simple.module.mapper.SimpleMapper;
 import cn.aberic.simple.module.service.SimpleService;
+import cn.aberic.simple.utils.MD5Helper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -13,6 +15,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -22,6 +25,9 @@ import java.util.Map;
  */
 @Service("simpleService")
 public class SimpleServiceImpl implements SimpleService {
+
+    @Resource
+    private SimpleMapper simpleMapper;
 
     @Override
     public String chainCode(JSONObject json) {
@@ -39,7 +45,7 @@ public class SimpleServiceImpl implements SimpleService {
         }
         Map<String, String> resultMap;
         try {
-            FabricManager manager = SimpleManager.obtain().get();
+            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.getString("orgHash"));
             switch (intent) {
                 case "invoke":
                     resultMap = manager.invoke(fcn, argArray);
@@ -67,7 +73,7 @@ public class SimpleServiceImpl implements SimpleService {
         String traceId = json.getString("traceId");
         Map<String, String> resultMap;
         try {
-            FabricManager manager = SimpleManager.obtain().get();
+            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.getString("orgHash"));
             switch (intent) {
                 case "queryBlockByTransactionID":
                     resultMap = manager.queryBlockByTransactionID(traceId);
@@ -92,67 +98,46 @@ public class SimpleServiceImpl implements SimpleService {
     }
 
     @Override
-    public int init() {
-        OrgDTO org = new OrgDTO();
-        org.setId(1);
-        org.setOrgName(System.getenv("ORG_NAME"));
-        org.setTls(System.getenv("ORG_TLS").equals("true"));
-        org.setCaTls(System.getenv("ORG_CA_TLS").equals("true"));
-        org.setUsername(System.getenv("ORG_USERNAME"));
-        org.setCryptoConfigDir(System.getenv("ORG_CRYPTO_CONFIG_DIR"));
-        org.setChannelArtifactsDir(System.getenv("ORG_CHANNEL_ARTIFACTS_DIR"));
-        org.setCaName(System.getenv("ORG_CA_NAME"));
-        org.setCaLocation(System.getenv("ORG_CA_LOCATION"));
-        org.setOrgMSPID(System.getenv("ORG_MSP_ID"));
-        org.setOrgDomainName(System.getenv("ORG_DOMAIN_NAME"));
-        org.setOrdererDomainName(System.getenv("ORG_ORDERER_DOMAIN_NAME"));
-        org.setChannelName(System.getenv("ORG_CHANNEL_NAME"));
-        org.setChaincodeName(System.getenv("ORG_CHAINCODE_NAME"));
-        org.setChaincodeSource(System.getenv("ORG_CHAINCODE_SOURCE"));
-        org.setChaincodePath(System.getenv("ORG_CHAINCODE_PATH"));
-        org.setChaincodeVersion(System.getenv("ORG_CHAINCODE_VERSION"));
-        org.setProposalWaitTime(Integer.valueOf(System.getenv("ORG_PROPOSAL_WAIT_TIME")));
-        org.setInvokeWaitTime(Integer.valueOf(System.getenv("ORG_INVOKE_WAIT_TIME")));
-        SimpleManager.obtain().setOrg(org);
-
-        OrdererDTO orderer = new OrdererDTO();
-        orderer.setId(1);
-        orderer.setOrgId(1);
-        orderer.setName(System.getenv("ORDERER_NAME"));
-        orderer.setLocation(System.getenv("ORDERER_LOCATION"));
-        SimpleManager.obtain().setOrderer(orderer);
-
-        PeerDTO peer = new PeerDTO();
-        peer.setId(1);
-        peer.setOrgId(1);
-        peer.setPeerName(System.getenv("PEER_NAME"));
-        peer.setPeerEventHubName(System.getenv("PEER_EVENT_HUB_NAME"));
-        peer.setPeerLocation(System.getenv("PEER_LOCATION"));
-        peer.setPeerEventHubLocation(System.getenv("PEER_EVENT_HUB_LOCATION"));
-        peer.setEventListener(System.getenv("PEER_IS_EVENT_LISTENER").equals("true"));
-        SimpleManager.obtain().setPeer(peer);
-
-        return 0;
-    }
-
-    @Override
-    public int setOrg(JSONObject json) {
+    public String addOrg(JSONObject json) {
         OrgDTO org = JSON.parseObject(json.toJSONString(), new TypeReference<OrgDTO>() {});
-        SimpleManager.obtain().setOrg(org);
-        return 0;
+        String hash = MD5Helper.obtain().md532(org.getOrgName() + org.getChaincodeName());
+        org.setHash(hash);
+        if (simpleMapper.addOrg(org) > 0) {
+            return responseSuccess(org.toString());
+        }
+        return responseFail("新增排序服务失败");
     }
 
     @Override
-    public int setOrderer(JSONObject json) {
+    public String addOrderer(JSONObject json) {
         OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>() {});
-        SimpleManager.obtain().setOrderer(orderer);
-        return 0;
+        if (simpleMapper.addOrderer(orderer) > 0) {
+            return responseSuccess(orderer.toString());
+        }
+        return responseFail("新增排序服务失败");
     }
 
     @Override
-    public int setPeer(JSONObject json) {
+    public String addPeer(JSONObject json) {
         PeerDTO peer = JSON.parseObject(json.toJSONString(), new TypeReference<PeerDTO>() {});
-        SimpleManager.obtain().setPeer(peer);
-        return 0;
+        if (simpleMapper.addPeer(peer) > 0) {
+            return responseSuccess(peer.toString());
+        }
+        return responseFail("新增节点服务失败");
+    }
+
+    @Override
+    public String getOrgList() {
+        return responseSuccess(JSONArray.parseArray(JSON.toJSONString(simpleMapper.getOrgList())));
+    }
+
+    @Override
+    public String getOrdererListByOrgHash(String hash) {
+        return responseSuccess(JSONArray.parseArray(JSON.toJSONString(simpleMapper.getOrdererListByOrgHash(hash))));
+    }
+
+    @Override
+    public String getPeerListByOrgHash(String hash) {
+        return responseSuccess(JSONArray.parseArray(JSON.toJSONString(simpleMapper.getPeerListByOrgHash(hash))));
     }
 }
