@@ -31,7 +31,7 @@ v1.0-beta：提供Docker容器服务，方便SDK快速部署。此版支持多�
 <br>
 2、在待部署SDK服务器上安装最新版`Docker`及`docker compose`环境。
 <br>
-3、执行`docker pull aberic/fabric-sdk`下载镜像。
+3、执行`docker pull aberic/fabric-sdk:1.0-alpha`下载镜像。
 <br>
 4、在`docker-sdk.yaml`文件中配置好Fabric网络中所期望连接的排序服务及节点服务参数，这两类服务各允许设置一台，后续的版本中会增加使用SDK多服务网络方案。
 <br>
