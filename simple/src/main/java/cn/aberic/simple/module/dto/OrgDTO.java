@@ -16,7 +16,7 @@ public class OrgDTO extends BaseDTO {
     /** 是否开启TLS，0=false，1=true */
     private int tls;
     /** 是否开启CA TLS，0=false，1=true */
-    private int caTls;
+    private int caTls = 0;
     /** 设置默认用户 */
     private String username;
     /** CryptoConfig所在目录的目录名称 */
@@ -24,9 +24,9 @@ public class OrgDTO extends BaseDTO {
     /** ChannleArtifacts所在目录的目录名称 */
     private String channelArtifactsDir;
     /** CA名称 */
-    private String caName;
+    private String caName = "ca";
     /** CA请求URL */
-    private String caLocation;
+    private String caLocation = "http://localhost:7054";
     /** 组织唯一标识符 */
     private String orgMSPID;
     /** 组织域名 */
