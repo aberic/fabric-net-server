@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 描述：组织生成器
@@ -28,11 +27,10 @@ public class OrgManager {
      *
      * @param orgHash   组织Hash
      * @param openTLS   设置是否开启TLS
-     * @param openCATLS 设置是否开启CA TLS
      *
      * @return self
      */
-    public OrgManager init(String orgHash, boolean openTLS, boolean openCATLS) {
+    public OrgManager init(String orgHash, boolean openTLS) {
         this.orgHash = orgHash;
         if (orgMap.get(orgHash) != null) {
             throw new RuntimeException(String.format("OrgManager had the same id of %s", orgHash));
@@ -40,21 +38,6 @@ public class OrgManager {
             orgMap.put(orgHash, new IntermediateOrg());
         }
         orgMap.get(orgHash).openTLS(openTLS);
-        orgMap.get(orgHash).openCATLS(openCATLS);
-        return this;
-    }
-
-    /**
-     * 设置CA请求的Http协议URL
-     *
-     * @param caName     CA名称
-     * @param caLocation CA请求URL
-     *
-     * @return self
-     */
-    public OrgManager setCA(String caName, String caLocation) {
-        orgMap.get(orgHash).setCaName(caName);
-        orgMap.get(orgHash).setCALocation(caLocation);
         return this;
     }
 
@@ -64,33 +47,11 @@ public class OrgManager {
      *
      * @param username             用户名
      * @param cryptoConfigPath     用户/节点组织/排序服务证书文件路径
-     * @param channelArtifactsPath 联盟相关证书文件路径
      *
      * @return self
      */
-    public OrgManager setUser(@Nonnull String username, @Nonnull String cryptoConfigPath, String channelArtifactsPath) {
+    public OrgManager setUser(@Nonnull String username, @Nonnull String cryptoConfigPath) {
         orgMap.get(orgHash).setUsername(username);
-        orgMap.get(orgHash).setCryptoConfigPath(cryptoConfigPath);
-        orgMap.get(orgHash).setChannelArtifactsPath(channelArtifactsPath);
-        return this;
-    }
-
-    /**
-     * 设置已注册用户
-     *
-     * @param username         用户名
-     * @param password         密码
-     * @param affiliation      所属组织关系
-     * @param roles            角色
-     * @param cryptoConfigPath 用户/节点组织/排序服务证书文件路径
-     *
-     * @return self
-     */
-    public OrgManager setUser(@Nonnull String username, @Nonnull String password, String affiliation, Set<String> roles, @Nonnull String cryptoConfigPath) {
-        orgMap.get(orgHash).setUsername(username);
-        orgMap.get(orgHash).setPassword(password);
-        orgMap.get(orgHash).setAffiliation(affiliation);
-        orgMap.get(orgHash).setRoles(roles);
         orgMap.get(orgHash).setCryptoConfigPath(cryptoConfigPath);
         return this;
     }
@@ -121,7 +82,6 @@ public class OrgManager {
      * 设置智能合约
      *
      * @param chaincodeName    智能合约名称
-     * @param chaincodeSource  可能是包含智能合约的go环境路径
      * @param chaincodePath    智能合约路径
      * @param chaincodeVersion 智能合约版本
      * @param proposalWaitTime 单个提案请求的超时时间以毫秒为单位
@@ -129,10 +89,9 @@ public class OrgManager {
      *
      * @return Fabric
      */
-    public OrgManager setChainCode(String chaincodeName, String chaincodeSource, String chaincodePath, String chaincodeVersion, int proposalWaitTime, int invokeWaitTime) {
+    public OrgManager setChainCode(String chaincodeName, String chaincodePath, String chaincodeVersion, int proposalWaitTime, int invokeWaitTime) {
         IntermediateChaincodeID chaincode = new IntermediateChaincodeID();
         chaincode.setChaincodeName(chaincodeName);
-        chaincode.setChaincodeSource(chaincodeSource);
         chaincode.setChaincodePath(chaincodePath);
         chaincode.setChaincodeVersion(chaincodeVersion);
         chaincode.setProposalWaitTime(proposalWaitTime);
@@ -185,8 +144,6 @@ public class OrgManager {
         for (int i = 0; i < orgMap.get(orgHash).getOrderers().size(); i++) {
             orgMap.get(orgHash).getOrderers().get(i).setOrdererLocation(grpcTLSify(orgMap.get(orgHash).openTLS(), orgMap.get(orgHash).getOrderers().get(i).getOrdererLocation()));
         }
-        // 根据CATLS开启状态循环确认CA服务的请求http协议
-        orgMap.get(orgHash).setCALocation(httpTLSify(orgMap.get(orgHash).openCATLS(), orgMap.get(orgHash).getCALocation()));
     }
 
     public FabricManager use(String orgHash) throws Exception {

@@ -49,7 +49,7 @@ class IntermediateChannel {
 
     private void setChannel(HFClient client) throws InvalidArgumentException, TransactionException {
 //        client.setUserContext(org.getUser(org.getUsername()));
-        client.setUserContext(org.getUser("Admin"));
+        client.setUserContext(org.getUser());
         channel = client.newChannel(channelName);
         log.debug("Get Chain " + channelName);
 
