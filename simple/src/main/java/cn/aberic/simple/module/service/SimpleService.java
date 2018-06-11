@@ -29,6 +29,12 @@ public interface SimpleService extends BaseService {
     String trace(JSONObject json);
 
     /**
+     * 通过环境变量来初始化SDK
+     * @return 请求返回
+     */
+    int init();
+
+    /**
      * 新增组织
      *
      * @param json 组织JSON
