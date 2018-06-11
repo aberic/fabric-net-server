@@ -39,6 +39,38 @@ v1.0-beta：提供Docker容器服务，方便SDK快速部署。此版支持多�
 <br>
 6、服务启动完成后，参考下面的API介绍以便更快投入使用。
 <br><br>
+**docker-sdk.yaml说明**
+关于docker-sdk.yaml编排文件中的参数，主要来自两个地方，一是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)（点击链接自行学习二进制文件生成指定证书文件以及参考crypto-config文件配置），二是在当前Fabric网络中创建的通道以及通道中创建的智能合约信息。
+<br>
+首先参考[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)，在该文件中定义的参数与[docker-sdk.yaml](https://github.com/aberic/fabric-sdk-container/blob/master/docker-sdk.yaml)中关于排序服务以及节点服务的信息相对应。
+<br>
+相对其他配置如通道及合约的也是如上对应，具体参数释义如下表所示：
+<br>
+
+| Environment             | Description                  | map                                                          |
+| :--:                    | :--                          | :--                                                                  |
+| ORG_NAME                | 节点所属组织名称               | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> PeerOrgs-Name                                                          |
+| ORG_TLS                 | 节点是否开启TLS                | 根据自身创建网络情况选择true或false                                                                                                                                                                   |
+| ORG_USERNAME            | 节点所属组织用户名称            | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/users)目录下的两个用户，默认配置中选择的Admin                           |
+| ORG_CRYPTO_CONFIG_DIR   | 映射到容器中的crypto-config目录 | 即[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/users)目录                                                           |
+| ORG_MSP_ID              | 节点所属组织ID                 | 参见[configtx](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/configtx.yaml)文件中 -> Organizations-&Org1-Name                                                         |
+| ORG_DOMAIN_NAME         | 节点所属组织域名名称            | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> PeerOrgs-Domain                                                        |
+| ORG_ORDERER_DOMAIN_NAME | 节点所属排序服务域名名称         | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> OrdererOrgs-Domain                                                     |
+| ORG_CHANNEL_NAME        | 自行创建的通道名称              | 如：`peer channel create -o orderer.example.com:7050 -c mychannel -t 50 -f ./channel-artifacts/mychannel.tx` 命令所创建的mychannel                                                                   |
+| ORG_CHAINCODE_NAME      | 智能合约名称                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令所创建的testcc                                                            |
+| ORG_CHAINCODE_PATH      | 智能合约路径                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令中的github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 |
+| ORG_CHAINCODE_VERSION   | 智能合约版本                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令中的1.0                                                                   |
+| ORG_PROPOSAL_WAIT_TIME  | 单个提案请求超时时间以毫秒为单位  | 默认90000                                                                                                                                                                                           |
+| ORG_INVOKE_WAIT_TIME    | 事务等待时间以秒为单位           | 默认120                                                                                                                                                                                            |
+| ORDERER_NAME            | 排序服务名称                   | 参见[configtx](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/configtx.yaml)文件中 -> Orderer-Addresses                                                                 |
+| ORDERER_LOCATION        | 排序服务访问路径                | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
+| PEER_NAME               | 节点服务域名名称                | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/peers)目录下的节点域名列表                                            |
+| PEER_EVENT_HUB_NAME     | 节点服务事件域名名称            | 同上                                                                                                                                                                                                |
+| PEER_LOCATION           | 节点服务路径                   | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
+| PEER_EVENT_HUB_LOCATION | 节点服务事件路径                | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
+| PEER_IS_EVENT_LISTENER  | 节点所属组织名称                | 根据自身需求选择是否监听回调服务                                                                                                                                                                       |
+
+<br><br>
 **API入口文档**
 
 | Method | REST API         | Description                                                                                                                                                                               |
