@@ -16,7 +16,8 @@
 <br><br>
 ## 版本说明
 0.x系列的版本主要是非Docker应用方面的项目，即相互交流的源码层项目。<br>
-1.x及以上系列的版本均Docker项目，帮助开发人员快速部署SDK应用，减少开发环节，从而实现业务的快速落地。<br><br>
+1.x及以上系列的版本均Docker项目，帮助开发人员快速部署SDK应用，减少开发环节，从而实现业务的快速落地。<br>
+提供链接的为已发布版本，未提供连接的为待实现版本。<br><br>
 目前主要版本如下列表所示：<br>
 [v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)：无数据库版，适合轻量级的Fabric平台应用。
 <br>
@@ -24,7 +25,9 @@
 <br>
 [v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/v1.0-alpha)：提供Docker容器服务，方便SDK快速部署。此版本为单排序服务及单节点服务配置，符合绝大部分需求。
 <br>
-v1.0-beta：提供Docker容器服务，方便SDK快速部署。此版支持多服务节点。
+[v1.0-beta](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta)：提供Docker容器服务，方便SDK快速部署。此版支持多服务节点。
+<br>
+v1.0-RC：提供Docker容器服务，方便SDK快速部署。此版支持多服务节点，通过SDK加入通道、安装合约、实例化合约以及升级合约等功能。
 <br><br>
 ## 使用sdk-container
 1、确定Linux内核在`3.10`及以上。
