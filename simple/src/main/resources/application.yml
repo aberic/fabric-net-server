@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:sqlite:/Users/Aberic/Documents/code/github/fabric.sqlite
+    url: jdbc:sqlite:/home/fabric.db
     username:
     password:
     driver-class-name: org.sqlite.JDBC
