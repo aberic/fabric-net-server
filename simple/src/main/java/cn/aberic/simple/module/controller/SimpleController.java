@@ -32,9 +32,15 @@ public class SimpleController {
         return simpleService.trace(new JSONObject(map));
     }
 
+    @RequestMapping(value = "/init", method = RequestMethod.GET)
+    @ResponseBody
+    public int init() {
+        return simpleService.init();
+    }
+
     @RequestMapping(value = "/org/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String setOrg(@RequestBody Map<String, Object> map) {
+    public String addOrg(@RequestBody Map<String, Object> map) {
         return simpleService.addOrg(new JSONObject(map));
     }
 
@@ -46,7 +52,7 @@ public class SimpleController {
 
     @RequestMapping(value = "/orderer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String setOrderer(@RequestBody Map<String, Object> map) {
+    public String addOrderer(@RequestBody Map<String, Object> map) {
         return simpleService.addOrderer(new JSONObject(map));
     }
 
@@ -58,7 +64,7 @@ public class SimpleController {
 
     @RequestMapping(value = "/peer/add", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     @ResponseBody
-    public String setPeer(@RequestBody Map<String, Object> map) {
+    public String addPeer(@RequestBody Map<String, Object> map) {
         return simpleService.addPeer(new JSONObject(map));
     }
 
