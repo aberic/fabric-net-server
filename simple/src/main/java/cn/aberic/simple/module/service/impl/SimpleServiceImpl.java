@@ -104,16 +104,11 @@ public class SimpleServiceImpl implements SimpleService {
         org.setTls(System.getenv("ORG_TLS").equals("true") ? 1 : 0);
         org.setUsername(System.getenv("ORG_USERNAME"));
         org.setCryptoConfigDir(System.getenv("ORG_CRYPTO_CONFIG_DIR"));
-        org.setChannelArtifactsDir(System.getenv("ORG_CHANNEL_ARTIFACTS_DIR"));
-        // org.setCaTls(System.getenv("ORG_CA_TLS").equals("true") ? 1 : 0);
-        // org.setCaName(System.getenv("ORG_CA_NAME"));
-        // org.setCaLocation(System.getenv("ORG_CA_LOCATION"));
         org.setOrgMSPID(System.getenv("ORG_MSP_ID"));
         org.setOrgDomainName(System.getenv("ORG_DOMAIN_NAME"));
         org.setOrdererDomainName(System.getenv("ORG_ORDERER_DOMAIN_NAME"));
         org.setChannelName(System.getenv("ORG_CHANNEL_NAME"));
         org.setChaincodeName(System.getenv("ORG_CHAINCODE_NAME"));
-        org.setChaincodeSource(System.getenv("ORG_CHAINCODE_SOURCE"));
         org.setChaincodePath(System.getenv("ORG_CHAINCODE_PATH"));
         org.setChaincodeVersion(System.getenv("ORG_CHAINCODE_VERSION"));
         org.setProposalWaitTime(Integer.valueOf(System.getenv("ORG_PROPOSAL_WAIT_TIME")));

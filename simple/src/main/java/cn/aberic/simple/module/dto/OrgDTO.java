@@ -15,18 +15,10 @@ public class OrgDTO extends BaseDTO {
     private String orgName;
     /** 是否开启TLS，0=false，1=true */
     private int tls;
-    /** 是否开启CA TLS，0=false，1=true */
-    private int caTls = 0;
     /** 设置默认用户 */
     private String username;
     /** CryptoConfig所在目录的目录名称 */
     private String cryptoConfigDir;
-    /** ChannleArtifacts所在目录的目录名称 */
-    private String channelArtifactsDir;
-    /** CA名称 */
-    private String caName = "ca";
-    /** CA请求URL */
-    private String caLocation = "http://localhost:7054";
     /** 组织唯一标识符 */
     private String orgMSPID;
     /** 组织域名 */
@@ -37,8 +29,6 @@ public class OrgDTO extends BaseDTO {
     private String channelName;
     /** 智能合约名称 */
     private String chaincodeName;
-    /** 包含智能合约的go环境路径 */
-    private String chaincodeSource;
     /** 智能合约路径 */
     private String chaincodePath;
     /** 智能合约版本 */
@@ -72,14 +62,6 @@ public class OrgDTO extends BaseDTO {
         this.tls = tls;
     }
 
-    public int isCaTls() {
-        return caTls;
-    }
-
-    public void setCaTls(int caTls) {
-        this.caTls = caTls;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -94,30 +76,6 @@ public class OrgDTO extends BaseDTO {
 
     public void setCryptoConfigDir(String cryptoConfigDir) {
         this.cryptoConfigDir = cryptoConfigDir;
-    }
-
-    public String getChannelArtifactsDir() {
-        return channelArtifactsDir;
-    }
-
-    public void setChannelArtifactsDir(String channelArtifactsDir) {
-        this.channelArtifactsDir = channelArtifactsDir;
-    }
-
-    public String getCaName() {
-        return caName;
-    }
-
-    public void setCaName(String caName) {
-        this.caName = caName;
-    }
-
-    public String getCaLocation() {
-        return caLocation;
-    }
-
-    public void setCaLocation(String caLocation) {
-        this.caLocation = caLocation;
     }
 
     public String getOrgMSPID() {
@@ -160,14 +118,6 @@ public class OrgDTO extends BaseDTO {
         this.chaincodeName = chaincodeName;
     }
 
-    public String getChaincodeSource() {
-        return chaincodeSource;
-    }
-
-    public void setChaincodeSource(String chaincodeSource) {
-        this.chaincodeSource = chaincodeSource;
-    }
-
     public String getChaincodePath() {
         return chaincodePath;
     }
@@ -206,18 +156,13 @@ public class OrgDTO extends BaseDTO {
                 "hash=" + hash +
                 ", orgName='" + orgName + '\'' +
                 ", tls=" + tls +
-                ", caTls=" + caTls +
                 ", username='" + username + '\'' +
                 ", cryptoConfigDir='" + cryptoConfigDir + '\'' +
-                ", channelArtifactsDir='" + channelArtifactsDir + '\'' +
-                ", caName='" + caName + '\'' +
-                ", caLocation='" + caLocation + '\'' +
                 ", orgMSPID='" + orgMSPID + '\'' +
                 ", orgDomainName='" + orgDomainName + '\'' +
                 ", ordererDomainName='" + ordererDomainName + '\'' +
                 ", channelName='" + channelName + '\'' +
                 ", chaincodeName='" + chaincodeName + '\'' +
-                ", chaincodeSource='" + chaincodeSource + '\'' +
                 ", chaincodePath='" + chaincodePath + '\'' +
                 ", chaincodeVersion='" + chaincodeVersion + '\'' +
                 ", proposalWaitTime='" + proposalWaitTime + '\'' +

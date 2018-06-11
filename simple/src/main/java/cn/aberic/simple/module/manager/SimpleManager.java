@@ -71,13 +71,12 @@ public class SimpleManager {
     private FabricManager createFabricManager(OrgDTO org, List<OrdererDTO> orderers, List<PeerDTO> peers) throws Exception {
         OrgManager orgManager = new OrgManager();
         orgManager
-                .init(org.getHash(), org.isTls() == 1, org.isCaTls() == 1)
-                .setUser(org.getUsername(), org.getCryptoConfigDir(), org.getChannelArtifactsDir())
-                .setCA(org.getCaName(), org.getCaLocation())
+                .init(org.getHash(), org.isTls() == 1)
+                .setUser(org.getUsername(), org.getCryptoConfigDir())
                 .setPeers(org.getOrgName(), org.getOrgMSPID(), org.getOrgDomainName())
                 .setOrderers(org.getOrdererDomainName())
                 .setChannel(org.getChannelName())
-                .setChainCode(org.getChaincodeName(), org.getChaincodeSource(), org.getChaincodePath(), org.getChaincodeVersion(), org.getProposalWaitTime(), org.getInvokeWaitTime())
+                .setChainCode(org.getChaincodeName(), org.getChaincodePath(), org.getChaincodeVersion(), org.getProposalWaitTime(), org.getInvokeWaitTime())
                 .setBlockListener(map -> {
                     logger.debug(map.get("code"));
                     logger.debug(map.get("data"));
