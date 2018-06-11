@@ -25,9 +25,9 @@
 <br>
 [v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/v1.0-alpha)：提供Docker容器服务，方便SDK快速部署。此版本为单排序服务及单节点服务配置，符合绝大部分需求。
 <br>
-[v1.0-beta](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta)：提供Docker容器服务，方便SDK快速部署。此版支持多服务节点。
+[v1.0-beta](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta)：新增支持多服务节点。
 <br>
-v1.0-RC：提供Docker容器服务，方便SDK快速部署。此版支持多服务节点，通过SDK加入通道、安装合约、实例化合约以及升级合约等功能。
+v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能。
 <br><br>
 ## 使用sdk-container
 1、确定Linux内核在`3.10`及以上。
