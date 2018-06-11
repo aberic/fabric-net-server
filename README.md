@@ -40,10 +40,11 @@ v1.0-beta：提供Docker容器服务，方便SDK快速部署。此版支持多�
 6、服务启动完成后，参考下面的API介绍以便更快投入使用。
 <br><br>
 **docker-sdk.yaml说明**
+<br>
 关于docker-sdk.yaml编排文件中的参数，主要来自两个地方，一是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)（点击链接自行学习二进制文件生成指定证书文件以及参考crypto-config文件配置），二是在当前Fabric网络中创建的通道以及通道中创建的智能合约信息。
-<br>
+<br><br>
 首先参考[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)，在该文件中定义的参数与[docker-sdk.yaml](https://github.com/aberic/fabric-sdk-container/blob/master/docker-sdk.yaml)中关于排序服务以及节点服务的信息相对应。
-<br>
+<br><br>
 相对其他配置如通道及合约的也是如上对应，具体参数释义如下表所示：
 <br>
 
