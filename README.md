@@ -32,7 +32,7 @@ v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升�
 ## 使用sdk-container
 1、确定Linux内核在`3.10`及以上。
 <br>
-2、在待部署SDK服务器上安装最新版`Docker`及`docker compose`环境。
+2、在待部署SDK服务器上安装`Docker`及`docker compose`环境。
 <br>
 3、执行`docker pull aberic/fabric-sdk:1.0-beta`下载镜像。
 <br>
