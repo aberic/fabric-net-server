@@ -102,12 +102,12 @@ public class SimpleServiceImpl implements SimpleService {
         OrgDTO org = new OrgDTO();
         org.setOrgName(System.getenv("ORG_NAME"));
         org.setTls(System.getenv("ORG_TLS").equals("true") ? 1 : 0);
-        org.setCaTls(System.getenv("ORG_CA_TLS").equals("true") ? 1 : 0);
         org.setUsername(System.getenv("ORG_USERNAME"));
         org.setCryptoConfigDir(System.getenv("ORG_CRYPTO_CONFIG_DIR"));
         org.setChannelArtifactsDir(System.getenv("ORG_CHANNEL_ARTIFACTS_DIR"));
-        org.setCaName(System.getenv("ORG_CA_NAME"));
-        org.setCaLocation(System.getenv("ORG_CA_LOCATION"));
+        // org.setCaTls(System.getenv("ORG_CA_TLS").equals("true") ? 1 : 0);
+        // org.setCaName(System.getenv("ORG_CA_NAME"));
+        // org.setCaLocation(System.getenv("ORG_CA_LOCATION"));
         org.setOrgMSPID(System.getenv("ORG_MSP_ID"));
         org.setOrgDomainName(System.getenv("ORG_DOMAIN_NAME"));
         org.setOrdererDomainName(System.getenv("ORG_ORDERER_DOMAIN_NAME"));
