@@ -86,57 +86,57 @@ class IntermediateOrg {
             properties.setProperty("pemFile", caCert.getAbsolutePath());
             // properties.setProperty("allowAllHostNames", "true"); // 仅用于测试环境
         }
-        // CA客户端
-        if (caName != null && !caName.isEmpty()) {
-            caClient = HFCAClient.createNewInstance(caName, getCALocation(), properties);
-        } else {
-            caClient = HFCAClient.createNewInstance(getCALocation(), properties);
-        }
-        caClient.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
-        HFCAInfo info = caClient.info(); // 检查一下我们是否连接
-        Asserts.notNull(info, "caClient.info()");
-        String infoName = info.getCAName();
-        if (infoName != null && !infoName.isEmpty()) {
-            if (!caName.equals(infoName)) {
-                throw new RuntimeException("ca name is not equals");
-            } else {
-                log.debug(String.format("ca info check success with ca name: %s", caName));
-            }
-        }
-
-        if (password != null && !"".equals(password)) {
-            IntermediateUser user = fabricStore.getMember(username, orgName);
-//        if (!user.isRegistered()) {  // users need to be registered AND enrolled
-//            RegistrationRequest rr = new RegistrationRequest(user.getName(), "org1.department1");
-//            user.setEnrollmentSecret(caClient.register(rr, peerAdmin));
+//        // CA客户端
+//        if (caName != null && !caName.isEmpty()) {
+//            caClient = HFCAClient.createNewInstance(caName, getCALocation(), properties);
+//        } else {
+//            caClient = HFCAClient.createNewInstance(getCALocation(), properties);
 //        }
-            if (!user.isEnrolled()) {
-//            user.setEnrollment(caClient.enroll(user.getName(), user.getEnrollmentSecret()));
-                user.setEnrollment(caClient.enroll(username, password));
-                user.setAffiliation(affiliation);
-                user.setRoles(roles);
-                user.setMspId(orgMSPID);
-            }
-            addUser(user);
-        }
-
-//        IntermediateUser admin = fabricStore.getMember("admin", orgName);
-//        if (!admin.isEnrolled()) {
-//            admin.setEnrollment(caClient.enroll(admin.getName(), "adminpw"));
-//            admin.setMspId(orgMSPID);
+//        caClient.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
+//        HFCAInfo info = caClient.info(); // 检查一下我们是否连接
+//        Asserts.notNull(info, "caClient.info()");
+//        String infoName = info.getCAName();
+//        if (infoName != null && !infoName.isEmpty()) {
+//            if (!caName.equals(infoName)) {
+//                throw new RuntimeException("ca name is not equals");
+//            } else {
+//                log.debug(String.format("ca info check success with ca name: %s", caName));
+//            }
 //        }
-//        addUser(admin);
 //
-//        IntermediateUser user1 = fabricStore.getMember(username, orgName);
-//        if (!user1.isRegistered()) {
-//            RegistrationRequest rr = new RegistrationRequest(user1.getName(), "org1.department1");
-//            user1.setEnrollmentSecret(caClient.register(rr, admin));
+//        if (password != null && !"".equals(password)) {
+//            IntermediateUser user = fabricStore.getMember(username, orgName);
+////        if (!user.isRegistered()) {  // users need to be registered AND enrolled
+////            RegistrationRequest rr = new RegistrationRequest(user.getName(), "org1.department1");
+////            user.setEnrollmentSecret(caClient.register(rr, peerAdmin));
+////        }
+//            if (!user.isEnrolled()) {
+////            user.setEnrollment(caClient.enroll(user.getName(), user.getEnrollmentSecret()));
+//                user.setEnrollment(caClient.enroll(username, password));
+//                user.setAffiliation(affiliation);
+//                user.setRoles(roles);
+//                user.setMspId(orgMSPID);
+//            }
+//            addUser(user);
 //        }
-//        if (!user1.isEnrolled()) {
-//            user1.setEnrollment(caClient.enroll(user1.getName(), user1.getEnrollmentSecret()));
-//            user1.setMspId(orgMSPID);
-//        }
-//        addUser(user1);
+//
+////        IntermediateUser admin = fabricStore.getMember("admin", orgName);
+////        if (!admin.isEnrolled()) {
+////            admin.setEnrollment(caClient.enroll(admin.getName(), "adminpw"));
+////            admin.setMspId(orgMSPID);
+////        }
+////        addUser(admin);
+////
+////        IntermediateUser user1 = fabricStore.getMember(username, orgName);
+////        if (!user1.isRegistered()) {
+////            RegistrationRequest rr = new RegistrationRequest(user1.getName(), "org1.department1");
+////            user1.setEnrollmentSecret(caClient.register(rr, admin));
+////        }
+////        if (!user1.isEnrolled()) {
+////            user1.setEnrollment(caClient.enroll(user1.getName(), user1.getEnrollmentSecret()));
+////            user1.setMspId(orgMSPID);
+////        }
+////        addUser(user1);
 
         setPeerAdmin(fabricStore);
     }
