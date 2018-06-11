@@ -20,9 +20,8 @@ services:
       - ORG_DOMAIN_NAME=org1.example.com
       - ORG_ORDERER_DOMAIN_NAME=example.com
       - ORG_CHANNEL_NAME=mychannel
-      - ORG_CHAINCODE_NAME=test2cc
-      - ORG_CHAINCODE_SOURCE=/code
-      - ORG_CHAINCODE_PATH=chaincode/chaincode_example02
+      - ORG_CHAINCODE_NAME=testcc
+      - ORG_CHAINCODE_PATH=github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02
       - ORG_CHAINCODE_VERSION=1.2
       - ORG_PROPOSAL_WAIT_TIME=90000
       - ORG_INVOKE_WAIT_TIME=120
@@ -39,4 +38,4 @@ services:
       - /home/jar/config/:/home/config/
     command: bash /home/init.sh
     ports:
-      - 8080:8080
+      - 8090:8080
