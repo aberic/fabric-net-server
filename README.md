@@ -49,7 +49,7 @@ v1.0-beta：提供Docker容器服务，方便SDK快速部署。此版支持多�
 <br>
 
 | Environment             | Description                  | map                                                          |
-| :--:                    | :--                          | :--                                                                  |
+| :--                     | :--                          | :--                                                                  |
 | ORG_NAME                | 节点所属组织名称               | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> PeerOrgs-Name                                                          |
 | ORG_TLS                 | 节点是否开启TLS                | 根据自身创建网络情况选择true或false                                                                                                                                                                   |
 | ORG_USERNAME            | 节点所属组织用户名称            | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/users)目录下的两个用户，默认配置中选择的Admin                           |
@@ -71,6 +71,11 @@ v1.0-beta：提供Docker容器服务，方便SDK快速部署。此版支持多�
 | PEER_EVENT_HUB_LOCATION | 节点服务事件路径                | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
 | PEER_IS_EVENT_LISTENER  | 节点所属组织名称                | 根据自身需求选择是否监听回调服务                                                                                                                                                                       |
 
+docker-sdk.yaml中的`image: aberic/fabric-sdk`，可以指定其版本号，默认是latest。
+<br>
+docker-sdk.yaml中volumes的挂载与ORG_CRYPTO_CONFIG_DIR变量相关，volumes使用方法请学习compose相关知识。
+<br>
+docker-sdk.yaml中的ports，后一个为容器中端口号，不用修改，冒号前的可以指定为自身服务器未占用的端口号，最终调用sdk接口时通过冒号前指定的端口号即可。
 <br><br>
 **API入口文档**
 
@@ -78,9 +83,9 @@ v1.0-beta：提供Docker容器服务，方便SDK快速部署。此版支持多�
 | :--:   | :--              | :--                                                                                                                                                                                       |
 | POST   | /sdk/chaincode   | 执行、查询                                                                                                                                                                                |
 | POST   | /sdk/trace       | 在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块、在指定频道内根据区块高度查询区块以及查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash |
-| POST   | /sdk/org/set     | 设置组织信息                                                                                                                                                                              |
-| POST   | /sdk/orderer/set | 设置排序服务器信息                                                                                                                                                                        |
-| POST   | /sdk/peer/set    | 设置节点服务器信息                                                                                                                                                                        |
+| POST   | /sdk/org/add     | 新增组织信息                                                                                                                                                                              |
+| POST   | /sdk/orderer/add | 新增排序服务器信息                                                                                                                                                                        |
+| POST   | /sdk/peer/add    | 新增节点服务器信息                                                                                                                                                                        |
 
 该版本目前为即上即用的版本，仅提供单排序服务及单节点服务，因此API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有PAAS服务的需要，可以自行参考v0.2中的方案来解决。
 <br>
@@ -137,18 +142,12 @@ array是调用合约传入的参数，在用go编写智能合约的时候，智�
    "intent": "queryBlockchainInfo"
 }
 ```
-#### /sdk/org/set
+#### /sdk/org/add
 ```json
 {
-    "id": 1,
-    "caLocation": "http://118.89.243.236:7054",
-    "caName": "ca",
-    "caTls": false,
     "chaincodeName": "test2cc",
     "chaincodePath": "chaincode/chaincode_example02",
-    "chaincodeSource": "/code",
     "chaincodeVersion": "1.2",
-    "channelArtifactsDir": "/home/jar/channel-artifacts",
     "channelName": "mychannel",
     "cryptoConfigDir": "/home/jar/crypto-config",
     "invokeWaitTime": 120,
@@ -165,8 +164,7 @@ array是调用合约传入的参数，在用go编写智能合约的时候，智�
 #### /sdk/orderer/set
 ```json
 {
-    "id": 1,
-    "orgId": 1,
+    "hash": "241bfeb3878c8d246992b6e7c09ee2c4",
     "name": "orderer.example.com",
     "location": "grpc://118.89.243.236:7050"
 }
@@ -175,16 +173,15 @@ array是调用合约传入的参数，在用go编写智能合约的时候，智�
 #### /sdk/peer/set
 ```json
 {
-    "id": 1,
-    "orgId": 1,
+    "hash": "241bfeb3878c8d246992b6e7c09ee2c4",
     "peerName": "peer0.org1.example.com",
     "peerEventHubName": "peer0.org1.example.com",
     "peerLocation": "grpc://118.89.243.236:7051",
     "peerEventHubLocation": "grpc://118.89.243.236:7053",
-    "isEventListener": true
+    "isEventListener": 1
 }
 ```
-该方法是在sdk容器启动后根据实际需求进行调用，如YAML中配置的变量写错，可以通过该方法重新设置节点服务信息
+**注意：新增排序服务和节点服务中的hash来自新增组织的api回调结果，即必须先新增组织，然后在该组织下新增排序服务和节点服务，以此来完成一个Fabric的组网操作。**
 ## 代码简要说明
 ### sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
