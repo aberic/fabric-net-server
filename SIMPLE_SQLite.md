@@ -10,18 +10,13 @@ CREATE TABLE org (
   "hash" text(256,0) NOT NULL,
   "org_name" text(45,0) NOT NULL,
   "tls" integer(1,0) NOT NULL,
-  "ca_tls" integer(1,0) NOT NULL,
   "username" text(45,0) NOT NULL,
   "crypto_config_dir" text(500,0) NOT NULL,
-  "channel_artifacts_dir" text(500,0) NOT NULL,
-  "ca_name" text(45,0) NOT NULL,
-  "ca_location" text(128,0) NOT NULL,
   "org_msp_id" text(45,0) NOT NULL,
   "org_domain_name" text(128,0) NOT NULL,
   "orderer_domain_name" text(128,0) NOT NULL,
   "channel_name" text(45,0) NOT NULL,
   "chaincode_name" text(45,0) NOT NULL,
-  "chaincode_source" text(128,0) NOT NULL,
   "chaincode_path" text(128,0) NOT NULL,
   "chaincode_version" text(45,0) NOT NULL,
   "proposal_wait_time" integer(9,0) NOT NULL DEFAULT 90000,
@@ -38,7 +33,7 @@ CREATE TABLE orderer (
 ```
 * 创建Peer表
 ```sqlite
-CREATE TABLE "main"."peer" (
+CREATE TABLE peer (
 	 "hash" text(256,0) NOT NULL,
 	 "peer_name" text(128,0) NOT NULL,
 	 "peer_event_hub_name" text(128,0) NOT NULL,
