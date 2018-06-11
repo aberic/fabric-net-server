@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.hyperledger.fabric.sdk.aberic.OrgManager;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,9 @@ import java.util.Map;
 public class SimpleManager {
 
     private Logger logger = LogManager.getLogger(SimpleManager.class);
+
+    /** 当前正在运行的组织hash */
+    private String hash;
 
     private static SimpleManager instance;
 
@@ -41,15 +45,22 @@ public class SimpleManager {
         fabricManagerMap = new HashMap<>();
     }
 
-    public FabricManager get(SimpleMapper simpleMapper, String orgHash) throws Exception {
+    public void init(String hash) {
+        this.hash = hash;
+    }
+
+    public FabricManager get(SimpleMapper simpleMapper, String hash) throws Exception {
+        if (StringUtils.isEmpty(hash)) {
+            hash = this.hash;
+        }
         // 尝试从缓存中获取fabricManager
-        FabricManager fabricManager = fabricManagerMap.get(orgHash);
+        FabricManager fabricManager = fabricManagerMap.get(hash);
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
             synchronized (fabricManagerMap) {
-                OrgDTO org = simpleMapper.getOrgByHash(orgHash);
+                OrgDTO org = simpleMapper.getOrgByHash(hash);
                 if (null != org) {
-                    fabricManager = createFabricManager(org, simpleMapper.getOrdererListByOrgHash(orgHash), simpleMapper.getPeerListByOrgHash(orgHash));
-                    fabricManagerMap.put(orgHash, fabricManager);
+                    fabricManager = createFabricManager(org, simpleMapper.getOrdererListByOrgHash(hash), simpleMapper.getPeerListByOrgHash(hash));
+                    fabricManagerMap.put(hash, fabricManager);
                 }
             }
         }
