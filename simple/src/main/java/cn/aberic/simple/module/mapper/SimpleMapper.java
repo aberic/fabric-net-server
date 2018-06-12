@@ -20,6 +20,11 @@ public interface SimpleMapper {
             "#{o.ordererDomainName},#{o.channelName},#{o.chaincodeName},#{o.chaincodePath},#{o.chaincodeVersion},#{o.proposalWaitTime},#{o.invokeWaitTime})")
     int addOrg(@Param("o") OrgDTO org);
 
+    @Update("update org set hash=#{o.hash}, org_name=#{o.orgName}, tls=#{o.tls}, username=#{o.username}, crypto_config_dir=#{o.cryptoConfigDir}, org_msp_id=#{o.orgMSPID}" +
+            ", org_domain_name=#{o.orgDomainName}, orderer_domain_name=#{o.ordererDomainName}, channel_name=#{o.channelName}, chaincode_name=#{o.chaincodeName}, chaincode_path=#{o.chaincodePath}" +
+            ", chaincode_version=#{o.chaincodeVersion}, proposal_wait_time=#{o.proposalWaitTime}, invoke_wait_time=#{o.invokeWaitTime} where hash=#{o.hash}")
+    int updateOrgByHash(@Param("o") OrgDTO org);
+
     @Select("select hash,org_name,tls,username,crypto_config_dir,org_msp_id,org_domain_name,orderer_domain_name," +
             "channel_name,chaincode_name,chaincode_path,chaincode_version,proposal_wait_time,invoke_wait_time from org where hash=#{hash}")
     @Results({
@@ -60,30 +65,60 @@ public interface SimpleMapper {
     })
     List<OrgDTO> getOrgList();
 
-    @Insert("insert into orderer (hash,name,location) values (#{o.hash},#{o.name},#{o.location})")
+    @Insert("insert into orderer (hash,org_hash,name,location) values (#{o.hash},#{o.orgHash},#{o.name},#{o.location})")
     int addOrderer(@Param("o") OrdererDTO orderer);
 
-    @Select("select hash,name,location from orderer where hash=#{hash}")
+    @Update("update orderer set hash=#{o.hash}, org_hash=#{o.orgHash}, name=#{o.name}, location=#{o.location} where hash=#{o.hash}")
+    int updateOrdererByHash(@Param("o") OrdererDTO orderer);
+
+    @Select("select hash,org_hash,name,location from orderer where hash=#{hash}")
     @Results({
             @Result(property = "hash", column = "hash"),
+            @Result(property = "orgHash", column = "org_hash"),
             @Result(property = "name", column = "name"),
             @Result(property = "location", column = "location")
     })
-    List<OrdererDTO> getOrdererListByOrgHash(@Param("hash") String hash);
+    OrdererDTO getOrdererByHash(@Param("hash") String hash);
 
-    @Insert("insert into peer (hash,peer_name,peer_event_hub_name,peer_location,peer_event_hub_location,event_listener) " +
-            "values (#{p.hash},#{p.peerName},#{p.peerEventHubName},#{p.peerLocation},#{p.peerEventHubLocation},#{p.isEventListener})")
-    int addPeer(@Param("p") PeerDTO peer);
-
-    @Select("select hash,peer_name,peer_event_hub_name,peer_location,peer_event_hub_location,event_listener from peer where hash=#{hash}")
+    @Select("select hash,org_hash,name,location from orderer where org_hash=#{orgHash}")
     @Results({
             @Result(property = "hash", column = "hash"),
+            @Result(property = "orgHash", column = "org_hash"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "location", column = "location")
+    })
+    List<OrdererDTO> getOrdererListByOrgHash(@Param("orgHash") String orgHash);
+
+    @Insert("insert into peer (hash,org_hash,peer_name,peer_event_hub_name,peer_location,peer_event_hub_location,event_listener) " +
+            "values (#{p.hash},#{p.orgHash},#{p.peerName},#{p.peerEventHubName},#{p.peerLocation},#{p.peerEventHubLocation},#{p.isEventListener})")
+    int addPeer(@Param("p") PeerDTO peer);
+
+    @Update("update peer set hash=#{p.hash}, org_hash=#{p.orgHash}, peer_name=#{p.peerName}, peer_event_hub_name=#{p.peerEventHubName}, peer_location=#{p.peerLocation}" +
+            ", peer_event_hub_location=#{p.peerEventHubLocation}, event_listener=#{p.isEventListener} where hash=#{p.hash}")
+    int updatePeerByHash(@Param("p") PeerDTO peer);
+
+    @Select("select hash,org_hash,peer_name,peer_event_hub_name,peer_location,peer_event_hub_location,event_listener from peer where hash=#{hash}")
+    @Results({
+            @Result(property = "hash", column = "hash"),
+            @Result(property = "orgHash", column = "org_hash"),
             @Result(property = "peerName", column = "peer_name"),
             @Result(property = "peerEventHubName", column = "peer_event_hub_name"),
             @Result(property = "peerLocation", column = "peer_location"),
             @Result(property = "peerEventHubLocation", column = "peer_event_hub_location"),
             @Result(property = "isEventListener", column = "event_listener")
     })
-    List<PeerDTO> getPeerListByOrgHash(@Param("hash") String hash);
+    PeerDTO getPeerByHash(@Param("hash") String hash);
+
+    @Select("select hash,org_hash,peer_name,peer_event_hub_name,peer_location,peer_event_hub_location,event_listener from peer where org_hash=#{orgHash}")
+    @Results({
+            @Result(property = "hash", column = "hash"),
+            @Result(property = "orgHash", column = "org_hash"),
+            @Result(property = "peerName", column = "peer_name"),
+            @Result(property = "peerEventHubName", column = "peer_event_hub_name"),
+            @Result(property = "peerLocation", column = "peer_location"),
+            @Result(property = "peerEventHubLocation", column = "peer_event_hub_location"),
+            @Result(property = "isEventListener", column = "event_listener")
+    })
+    List<PeerDTO> getPeerListByOrgHash(@Param("orgHash") String orgHash);
 
 }
