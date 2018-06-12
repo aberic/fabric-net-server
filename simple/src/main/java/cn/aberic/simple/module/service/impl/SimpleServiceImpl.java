@@ -56,7 +56,7 @@ public class SimpleServiceImpl implements SimpleService {
     public int init() {
         OrgDTO org = new OrgDTO();
         org.setOrgName(System.getenv("ORG_NAME"));
-        org.setTls(System.getenv("ORG_TLS").equals("true") ? 1 : 0);
+        org.setTls(System.getenv("ORG_TLS").equals("true"));
         org.setUsername(System.getenv("ORG_USERNAME"));
         org.setCryptoConfigDir(System.getenv("ORG_CRYPTO_CONFIG_DIR"));
         org.setOrgMSPID(System.getenv("ORG_MSP_ID"));
@@ -69,27 +69,31 @@ public class SimpleServiceImpl implements SimpleService {
         org.setProposalWaitTime(Integer.valueOf(System.getenv("ORG_PROPOSAL_WAIT_TIME")));
         org.setInvokeWaitTime(Integer.valueOf(System.getenv("ORG_INVOKE_WAIT_TIME")));
 
-        String hash = MD5Helper.obtain().md532(org.getOrgName() + org.getChaincodeName());
-        org.setHash(hash);
+        String orgHash = MD5Helper.obtain().md532(org.getOrgName() + org.getChaincodeName());
+        org.setHash(orgHash);
 
         simpleMapper.addOrg(org);
 
         OrdererDTO orderer = new OrdererDTO();
-        orderer.setHash(hash);
+        orderer.setOrgHash(orgHash);
         orderer.setName(System.getenv("ORDERER_NAME"));
         orderer.setLocation(System.getenv("ORDERER_LOCATION"));
+        String ordererHash = orderer.getOrdererHash();
+        orderer.setHash(ordererHash);
         simpleMapper.addOrderer(orderer);
 
         PeerDTO peer = new PeerDTO();
-        peer.setHash(hash);
+        peer.setOrgHash(orgHash);
         peer.setPeerName(System.getenv("PEER_NAME"));
         peer.setPeerEventHubName(System.getenv("PEER_EVENT_HUB_NAME"));
         peer.setPeerLocation(System.getenv("PEER_LOCATION"));
         peer.setPeerEventHubLocation(System.getenv("PEER_EVENT_HUB_LOCATION"));
-        peer.setEventListener(System.getenv("PEER_IS_EVENT_LISTENER").equals("true") ? 1 : 0);
+        peer.setEventListener(System.getenv("PEER_IS_EVENT_LISTENER").equals("true"));
+        String peerHash = peer.getPeerHash();
+        peer.setHash(peerHash);
         simpleMapper.addPeer(peer);
 
-        SimpleManager.obtain().init(hash);
+        SimpleManager.obtain().init(orgHash);
         return 0;
     }
 
@@ -108,7 +112,7 @@ public class SimpleServiceImpl implements SimpleService {
 
     @Override
     public String addOrderer(OrdererDTO orderer) {
-        String hash = MD5Helper.obtain().md532(orderer.toString());
+        String hash = orderer.getOrdererHash();
         if (null != simpleMapper.getOrdererByHash(hash)) {
             return responseFail(String.format("Orderer already existed with hash %s, you can try updateOrdererByHash.", hash));
         }
@@ -121,7 +125,7 @@ public class SimpleServiceImpl implements SimpleService {
 
     @Override
     public String addPeer(PeerDTO peer) {
-        String hash = MD5Helper.obtain().md532(peer.toString());
+        String hash = peer.getPeerHash();
         if (null != simpleMapper.getPeerByHash(hash)) {
             return responseFail(String.format("Peer already existed with hash %s, you can try updatePeerByHash.", hash));
         }
