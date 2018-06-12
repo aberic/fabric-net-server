@@ -23,37 +23,37 @@ public class SimpleController {
     private SimpleService simpleService;
 
     @ApiOperation(value = "执行智能合约")
-    @PostMapping(value = "invoke")
+    @PostMapping(value = "chaincode/invoke")
     public String invoke(@RequestBody @ApiParam(name = "合约对象", value = "操作合约所需转接对象", required = true) ChainCodeDTO chainCode) {
         return simpleService.invoke(chainCode);
     }
 
     @ApiOperation(value = "查询智能合约")
-    @PostMapping(value = "query")
+    @PostMapping(value = "chaincode/query")
     public String query(@RequestBody @ApiParam(name = "合约对象", value = "操作合约所需转接对象", required = true) ChainCodeDTO chainCode) {
         return simpleService.query(chainCode);
     }
 
     @ApiOperation(value = "根据交易ID查询区块")
-    @PostMapping(value = "queryBlockByTransactionID")
+    @PostMapping(value = "trace/txid")
     public String queryBlockByTransactionID(@RequestBody @ApiParam(name = "溯源对象", value = "溯源操作所需转接对象", required = true) TraceDTO trace) {
         return simpleService.queryBlockByTransactionID(trace);
     }
 
     @ApiOperation(value = "根据交易hash查询区块")
-    @PostMapping(value = "queryBlockByHash")
+    @PostMapping(value = "trace/hash")
     public String queryBlockByHash(@RequestBody @ApiParam(name = "溯源对象", value = "溯源操作所需转接对象", required = true) TraceDTO trace) {
         return simpleService.queryBlockByHash(trace);
     }
 
     @ApiOperation(value = "根据交易区块高度查询区块")
-    @PostMapping(value = "queryBlockByNumber")
+    @PostMapping(value = "trace/number")
     public String queryBlockByNumber(@RequestBody @ApiParam(name = "溯源对象", value = "溯源操作所需转接对象", required = true) TraceDTO trace) {
         return simpleService.queryBlockByNumber(trace);
     }
 
     @ApiOperation(value = "查询当前链信息")
-    @GetMapping(value = "queryBlockchainInfo/{hash}")
+    @GetMapping(value = "trace/info/{hash}")
     public String queryBlockchainInfo(@ApiParam(name = "当前组织Hash", value = "Hash值", required = true) @PathVariable("hash") String hash) {
         return simpleService.queryBlockchainInfo(hash);
     }
