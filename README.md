@@ -36,7 +36,7 @@ v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升�
 <br>
 2、在待部署SDK服务器上安装`Docker`及`docker compose`环境。
 <br>
-3、执行`docker pull aberic/fabric-sdk:1.0-beta`下载镜像。
+3、执行`docker pull aberic/fabric-sdk:1.0-beta2`下载镜像。
 <br>
 4、在`docker-sdk.yaml`文件中配置好Fabric网络中所期望连接的排序服务及节点服务参数，这两类服务各允许设置一台，后续的版本中会增加使用SDK多服务网络方案。
 <br>
