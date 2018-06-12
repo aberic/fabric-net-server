@@ -1,0 +1,148 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+# 
+# 我们使用K和Z分别代表Kafka集群和ZooKeeper集群的节点个数
+# 
+# 1）K的最小值应该被设置为4（我们将会在第4步中解释，这是为了满足crash容错的最小节点数。
+#    如果有4个代理，那么可以容错一个代理崩溃，一个代理停止服务后，channel仍然可以继续读写，新的channel可以被创建）
+# 2）Z可以为3,5或是7。它的值需要是一个奇数避免脑裂（split-brain）情况，同时选择大于1的值为了避免单点故障。
+#    超过7个ZooKeeper servers会被认为overkill。
+#
+
+version: '2'
+
+services:
+
+  kafka1:
+    container_name: kafka1
+    hostname: kafka1
+    image: hyperledger/fabric-kafka
+    restart: always
+    environment:
+      # ========================================================================
+      #     Reference: https://kafka.apache.org/documentation/#configuration
+      # ========================================================================
+      #
+      # broker.id
+      - KAFKA_BROKER_ID=1
+      #
+      # min.insync.replicas
+      # Let the value of this setting be M. Data is considered committed when
+      # it is written to at least M replicas (which are then considered in-sync
+      # and belong to the in-sync replica set, or ISR). In any other case, the
+      # write operation returns an error. Then:
+      # 1. If up to M-N replicas -- out of the N (see default.replication.factor
+      # below) that the channel data is written to -- become unavailable,
+      # operations proceed normally.
+      # 2. If more replicas become unavailable, Kafka cannot maintain an ISR set
+      # of M, so it stops accepting writes. Reads work without issues. The
+      # channel becomes writeable again when M replicas get in-sync.
+      # 
+      # min.insync.replicas = M---设置一个M值（例如1<M<N，查看下面的default.replication.factor）
+      # 数据提交时会写入至少M个副本（这些数据然后会被同步并且归属到in-sync 副本集合或ISR）。
+      # 其它情况，写入操作会返回一个错误。接下来：
+      # 1）如果channel写入的数据多达N-M个副本变的不可用，操作可以正常执行。
+      # 2）如果有更多的副本不可用，Kafka不可以维护一个有M数量的ISR集合，因此Kafka停止接收写操作。Channel只有当同步M个副本后才可以重新可以写。
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      #
+      # default.replication.factor
+      # Let the value of this setting be N. A replication factor of N means that
+      # each channel will have its data replicated to N brokers. These are the
+      # candidates for the ISR set of a channel. As we noted in the
+      # min.insync.replicas section above, not all of these brokers have to be
+      # available all the time. In this sample configuration we choose a
+      # default.replication.factor of K-1 (where K is the total number of brokers in
+      # our Kafka cluster) so as to have the largest possible candidate set for
+      # a channel's ISR. We explicitly avoid setting N equal to K because
+      # channel creations cannot go forward if less than N brokers are up. If N
+      # were set equal to K, a single broker going down would mean that we would
+      # not be able to create new channels, i.e. the crash fault tolerance of
+      # the ordering service would be non-existent.
+      # 
+      # 设置一个值N，N<K。
+      # 设置replication factor参数为N代表着每个channel都保存N个副本的数据到Kafka的代理上。
+      # 这些都是一个channel的ISR集合的候选。
+      # 如同在上边min.insync.replicas section设置部分所描述的，不是所有的代理（orderer）在任何时候都是可用的。
+      # N的值必须小于K，如果少于N个代理的话，channel的创建是不能成功的。
+      # 因此，如果设置N的值为K，一个代理失效后，那么区块链网络将不能再创建新的channel---orderering service的crash容错也就不存在了。
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      #
+      # zookeper.connect
+      # Point to the set of Zookeeper nodes comprising a ZK ensemble.
+      # 指向Zookeeper节点的集合，其中包含ZK的集合。
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
+      #
+      # zookeeper.connection.timeout.ms
+      # The max time that the client waits to establish a connection to
+      # Zookeeper. If not set, the value in zookeeper.session.timeout.ms (below)
+      # is used.
+      #- KAFKA_ZOOKEEPER_CONNECTION_TIMEOUT_MS = 6000
+      #
+      # zookeeper.session.timeout.ms
+      #- KAFKA_ZOOKEEPER_SESSION_TIMEOUT_MS = 6000
+      #
+      # socket.request.max.bytes
+      # The maximum number of bytes in a socket request. ATTN: If you set this
+      # env var, make sure to update `brokerConfig.Producer.MaxMessageBytes` in
+      # `newBrokerConfig()` in `fabric/orderer/kafka/config.go` accordingly.
+      #- KAFKA_SOCKET_REQUEST_MAX_BYTES=104857600 # 100 * 1024 * 1024 B
+      #
+      # message.max.bytes
+      # The maximum size of envelope that the broker can receive.
+      # 
+      # 在configtx.yaml中会设置最大的区块大小（参考configtx.yaml中AbsoluteMaxBytes参数）。
+      # 每个区块最大有Orderer.AbsoluteMaxBytes个字节（不包括头部），假定这里设置的值为A（目前99）。
+      # message.max.bytes和replica.fetch.max.bytes应该设置一个大于A。
+      # 为header增加一些缓冲区空间---1MB已经足够大。上述不同设置值之间满足如下关系：
+      # Orderer.AbsoluteMaxBytes < replica.fetch.max.bytes <= message.max.bytes
+      # （更完整的是，message.max.bytes应该严格小于socket.request.max.bytes的值，socket.request.max.bytes的值默认被设置为100MB。
+      # 如果想要区块的大小大于100MB，需要编辑fabric/orderer/kafka/config.go文件里硬编码的值brokerConfig.Producer.MaxMessageBytes，
+      # 修改后重新编译源码得到二进制文件，这种设置是不建议的。）
+      - KAFKA_MESSAGE_MAX_BYTES=103809024 # 99 * 1024 * 1024 B
+      #
+      # replica.fetch.max.bytes
+      # The number of bytes of messages to attempt to fetch for each channel.
+      # This is not an absolute maximum, if the fetched envelope is larger than
+      # this value, the envelope will still be returned to ensure that progress
+      # can be made. The maximum message size accepted by the broker is defined
+      # via message.max.bytes above.
+      # 
+      # 试图为每个通道获取的消息的字节数。
+      # 这不是绝对最大值，如果获取的信息大于这个值，则仍然会返回信息，以确保可以取得进展。
+      # 代理所接受的最大消息大小是通过上一条message.max.bytes定义的。
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024 # 99 * 1024 * 1024 B
+      #
+      # unclean.leader.election.enable
+      # Data consistency is key in a blockchain environment. We cannot have a
+      # leader chosen outside of the in-sync replica set, or we run the risk of
+      # overwriting the offsets that the previous leader produced, and --as a
+      # result-- rewriting the blockchain that the orderers produce.
+      # 数据一致性在区块链环境中是至关重要的。
+      # 我们不能从in-sync 副本（ISR）集合之外选取channel leader，
+      # 否则我们将会面临对于之前的leader产生的offsets覆盖的风险，
+      # 这样的结果是，orderers产生的区块可能会重新写入区块链。
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      #
+      # log.retention.ms
+      # Until the ordering service in Fabric adds support for pruning of the
+      # Kafka logs, time-based retention should be disabled so as to prevent
+      # segments from expiring. (Size-based retention -- see
+      # log.retention.bytes -- is disabled by default so there is no need to set
+      # it explicitly.)
+      # 
+      # 除非orderering service对Kafka日志的修剪增加支持，
+      # 否则需要关闭基于时间的日志保留方式并且避免分段到期
+      # （基于大小的日志保留方式log.retention.bytes在写本文章时在Kafka中已经默认关闭，因此不需要再次明确设置这个配置）。
+      - KAFKA_LOG_RETENTION_MS=-1
+      - KAFKA_HEAP_OPTS=-Xmx256M -Xms128M
+    ports:
+      - "9092:9092"
+    extra_hosts:
+     - "zookeeper1:172.31.159.137"
+     - "zookeeper2:172.31.159.135"
+     - "zookeeper3:172.31.159.136"
+     - "kafka1:172.31.159.133"
+     - "kafka2:172.31.159.132"
+     - "kafka3:172.31.159.134"
+     - "kafka4:172.31.159.131"

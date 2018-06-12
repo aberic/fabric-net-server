@@ -1,0 +1,124 @@
+Profiles:
+
+    TwoOrgsOrdererGenesis:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+        Consortiums:
+            SampleConsortium:
+                Organizations:
+                    - *Org1
+                    - *Org2
+                    - *Org3
+                    - *Org4
+                    - *Org5
+    TwoOrgsChannel:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
+                - *Org2
+                - *Org3
+                - *Org4
+                - *Org5
+
+Organizations:
+
+    - &OrdererOrg
+        Name: OrdererMSP
+        ID: OrdererMSP
+        MSPDir: crypto-config/ordererOrganizations/example.com/msp
+
+    - &Org1
+        Name: Org1MSP
+        ID: Org1MSP
+
+        MSPDir: crypto-config/peerOrganizations/org1.example.com/msp
+
+        AnchorPeers:
+            - Host: peer0.org1.example.com
+              Port: 7051
+
+    - &Org2
+        Name: Org2MSP
+        ID: Org2MSP
+
+        MSPDir: crypto-config/peerOrganizations/org2.example.com/msp
+
+        AnchorPeers:
+            - Host: peer0.org2.example.com
+              Port: 7051
+
+    - &Org3
+        Name: Org3MSP
+        ID: Org3MSP
+
+        MSPDir: crypto-config/peerOrganizations/org3.example.com/msp
+
+        AnchorPeers:
+            - Host: peer0.org3.example.com
+              Port: 7051
+
+    - &Org4
+        Name: Org4MSP
+        ID: Org4MSP
+
+        MSPDir: crypto-config/peerOrganizations/org4.example.com/msp
+
+        AnchorPeers:
+            - Host: peer0.org4.example.com
+              Port: 7051
+
+    - &Org5
+        Name: Org5MSP
+        ID: Org5MSP
+
+        MSPDir: crypto-config/peerOrganizations/org5.example.com/msp
+
+        AnchorPeers:
+            - Host: peer0.org5.example.com
+              Port: 7051
+
+Orderer: &OrdererDefaults
+
+    OrdererType: kafka
+
+    Addresses:
+        - orderer0.example.com:7050
+        - orderer1.example.com:7050
+        - orderer2.example.com:7050
+
+    BatchTimeout: 2s
+
+    BatchSize:
+
+        MaxMessageCount: 10
+
+        AbsoluteMaxBytes: 98 MB
+
+        PreferredMaxBytes: 512 KB
+
+    Kafka:
+        Brokers:
+            - 172.31.159.131:9092
+            - 172.31.159.132:9092
+            - 172.31.159.133:9092
+            - 172.31.159.134:9092
+
+    Organizations:
+
+Application: &ApplicationDefaults
+
+    Organizations:
+
+Capabilities:
+    Global: &ChannelCapabilities
+        V1_1: true
+
+    Orderer: &OrdererCapabilities
+        V1_1: true
+
+    Application: &ApplicationCapabilities
+        V1_1: true

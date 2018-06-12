@@ -1,0 +1,54 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+# 
+# ZooKeeper的基本运转流程：
+# 1、选举Leader。
+# 2、同步数据。
+# 3、选举Leader过程中算法有很多，但要达到的选举标准是一致的。
+# 4、Leader要具有最高的执行ID，类似root权限。
+# 5、集群中大多数的机器得到响应并follow选出的Leader。
+#
+
+version: '2'
+
+services:
+
+  zookeeper1:
+    container_name: zookeeper1
+    hostname: zookeeper1
+    image: hyperledger/fabric-zookeeper
+    restart: always
+    environment:
+      # ========================================================================
+      #     Reference: https://zookeeper.apache.org/doc/r3.4.9/zookeeperAdmin.html#sc_configuration
+      # ========================================================================
+      #
+      # myid
+      # The ID must be unique within the ensemble and should have a value
+      # ID在集合中必须是唯一的并且应该有一个值
+      # between 1 and 255.
+      # 在1和255之间。
+      - ZOO_MY_ID=1
+      #
+      # server.x=[hostname]:nnnnn[:nnnnn]
+      # The list of servers that make up the ZK ensemble. The list that is used
+      # by the clients must match the list of ZooKeeper servers that each ZK
+      # server has. There are two port numbers `nnnnn`. The first is what
+      # followers use to connect to the leader, while the second is for leader
+      # election.
+      # 组成ZK集合的服务器列表。客户端使用的列表必须与ZooKeeper服务器列表所拥有的每一个ZK服务器相匹配。
+      # 有两个端口号 `nnnnn`。第一个是追随者用来连接领导者的东西，第二个是领导人选举。
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    extra_hosts:
+     - "zookeeper1:172.31.159.137"
+     - "zookeeper2:172.31.159.135"
+     - "zookeeper3:172.31.159.136"
+     - "kafka1:172.31.159.133"
+     - "kafka2:172.31.159.132"
+     - "kafka3:172.31.159.134"
+     - "kafka4:172.31.159.131"

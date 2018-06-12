@@ -1,0 +1,49 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: example.com
+    Specs:
+      - Hostname: orderer0
+      - Hostname: orderer1
+      - Hostname: orderer2
+
+PeerOrgs:
+  - Name: Org1
+    Domain: org1.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Org2
+    Domain: org2.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+    Specs:
+      - Hostname: foo
+        CommonName: foo27.org2.example.com
+      - Hostname: bar
+      - Hostname: baz
+
+
+  - Name: Org3
+    Domain: org3.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Org4
+    Domain: org4.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Org5
+    Domain: org5.example.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1

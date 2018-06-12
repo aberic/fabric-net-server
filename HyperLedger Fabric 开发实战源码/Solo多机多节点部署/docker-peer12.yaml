@@ -1,0 +1,109 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  couchdb:
+    container_name: couchdb
+    image: hyperledger/fabric-couchdb
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "5984:5984"
+
+  ca:
+    container_name: ca
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/638c62f6073cf84d4a897b90fa31c0d53c4c2ffaa0b0be1c3c7df233eb33a27a_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/638c62f6073cf84d4a897b90fa31c0d53c4c2ffaa0b0be1c3c7df233eb33a27a_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+
+  peer1.org2.example.com:
+    container_name: peer1.org2.example.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb:5984
+
+      - CORE_PEER_ID=peer1.org2.example.com
+      - CORE_PEER_NETWORKID=aberic
+      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer1.org2.example.com:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=aberic
+      # - CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=aberic_default
+      - CORE_PEER_GOSSIP_SKIPHANDSHAKE=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 7052:7052
+      - 7053:7053
+    depends_on:
+      - couchdb
+    networks:
+      default:
+        aliases:
+          - aberic
+    extra_hosts:
+     - "orderer.example.com:172.31.159.130"
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # - CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/aberic/chaincode/go
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - peer1.org2.example.com
+    extra_hosts:
+     - "orderer.example.com:172.31.159.130"
+     - "peer1.org2.example.com:172.31.143.21"

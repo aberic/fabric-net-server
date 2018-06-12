@@ -1,0 +1,54 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer1.example.com:
+    container_name: orderer1.example.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=aberic_default
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      # - ORDERER_GENERAL_LOGLEVEL=error
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      #- ORDERER_GENERAL_GENESISPROFILE=AntiMothOrdererGenesis
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      #- ORDERER_GENERAL_LEDGERTYPE=ram
+      #- ORDERER_GENERAL_LEDGERTYPE=file
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+
+      - ORDERER_KAFKA_RETRY_LONGINTERVAL=10s 
+      - ORDERER_KAFKA_RETRY_LONGTOTAL=100s 
+      - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
+      - ORDERER_KAFKA_RETRY_SHORTTOTAL=30s
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_KAFKA_BROKERS=[172.31.159.131:9092,172.31.159.132:9092,172.31.159.133:9092,172.31.159.134:9092]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
+    networks:
+      default:
+        aliases:
+          - aberic
+    ports:
+      - 7050:7050
+    extra_hosts:
+     - "kafka1:172.31.159.133"
+     - "kafka2:172.31.159.132"
+     - "kafka3:172.31.159.134"
+     - "kafka4:172.31.159.131"
