@@ -27,7 +27,7 @@
 <br>
 [v1.0-beta](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta)：新增支持多服务节点。
 <br>
-v1.0-beta2：修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。
+[v1.0-beta2](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta2)：修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。
 <br>
 v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能。
 <br><br>
@@ -84,13 +84,23 @@ docker-sdk.yaml中的ports，后一个为容器中端口号，不用修改，冒
 <br><br>
 **API入口文档**
 
-| Method | REST API         | Description                                                                                                                                                                               |
-| :--:   | :--              | :--                                                                                                                                                                                       |
-| POST   | /sdk/chaincode   | 执行、查询                                                                                                                                                                                |
-| POST   | /sdk/trace       | 在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块、在指定频道内根据区块高度查询区块以及查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash |
-| POST   | /sdk/org/add     | 新增组织信息                                                                                                                                                                              |
-| POST   | /sdk/orderer/add | 新增排序服务器信息                                                                                                                                                                        |
-| POST   | /sdk/peer/add    | 新增节点服务器信息                                                                                                                                                                        |
+| Method | REST API         | Description                        |
+| :--:   | :--              | :--                                |
+| POST   | /sdk/chaincode/invoke    | 执行智能合约                 |
+| POST   | /sdk/chaincode/query     | 查询智能合约                 |
+| POST   | /sdk/org/add             | 新增组织对象                 |
+| GET    | /sdk/org/list            | 获取组织对象集合              |
+| POST   | /sdk/org/update          | 更新组织对象                 |
+| POST   | /sdk/orderer/add         | 新增排序服务对象              |
+| GET    | /sdk/orderer/list/{hash} | 获取排序服务对象集合          |
+| POST   | /sdk/orderer/update      | 更新排序服务对象              |
+| POST   | /sdk/peer/add            | 新增节点服务对象              |
+| GET    | /sdk/peer/list/{hash}    | 获取节点服务对象集合          |
+| POST   | /sdk/peer/update         | 更新节点服务对象              |
+| POST   | /sdk/trace/hash          | 根据交易hash查询区块          |
+| POST   | /sdk/trace/number        | 根据交易区块高度查询区块       |
+| POST   | /sdk/trace/txid          | 根据交易ID查询区块            |
+| GET    | /sdk/trace/info/{hash}   | 根据当前组织hash查询当前链信息 |
 
 该版本目前为即上即用的版本，仅提供单排序服务及单节点服务，因此API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有PAAS服务的需要，可以自行参考v0.2中的方案来解决。
 <br>
