@@ -71,7 +71,7 @@ public class SimpleManager {
     private FabricManager createFabricManager(OrgDTO org, List<OrdererDTO> orderers, List<PeerDTO> peers) throws Exception {
         OrgManager orgManager = new OrgManager();
         orgManager
-                .init(org.getHash(), org.isTls() == 1)
+                .init(org.getHash(), org.isTls())
                 .setUser(org.getUsername(), org.getCryptoConfigDir())
                 .setPeers(org.getOrgName(), org.getOrgMSPID(), org.getOrgDomainName())
                 .setOrderers(org.getOrdererDomainName())
@@ -85,7 +85,7 @@ public class SimpleManager {
             orgManager.addOrderer(orderer.getName(), orderer.getLocation());
         }
         for (PeerDTO peer : peers) {
-            orgManager.addPeer(peer.getPeerName(), peer.getPeerEventHubName(), peer.getPeerLocation(), peer.getPeerEventHubLocation(), peer.isEventListener() == 1);
+            orgManager.addPeer(peer.getPeerName(), peer.getPeerEventHubName(), peer.getPeerLocation(), peer.getPeerEventHubLocation(), peer.isEventListener());
         }
         orgManager.add();
         return orgManager.use(org.getHash());
