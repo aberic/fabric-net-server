@@ -27,6 +27,8 @@
 <br>
 [v1.0-beta](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta)：新增支持多服务节点。
 <br>
+v1.0-beta2：修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。
+<br>
 v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能。
 <br><br>
 ## 使用sdk-container
