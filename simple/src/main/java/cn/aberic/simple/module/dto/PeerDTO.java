@@ -1,6 +1,7 @@
 package cn.aberic.simple.module.dto;
 
 import cn.aberic.simple.base.BaseDTO;
+import cn.aberic.simple.utils.MD5Helper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -31,8 +32,8 @@ public class PeerDTO extends BaseDTO {
     @ApiModelProperty(value = "当前指定的组织节点事件监听访问地址", required = true)
     private String peerEventHubLocation;
     /** 当前peer是否增加Event事件处理，0=false，1=true */
-    @ApiModelProperty(value = "当前peer是否增加Event事件处理，0=false，1=true", required = true)
-    private int isEventListener;
+    @ApiModelProperty(value = "当前peer是否增加Event事件处理", required = true)
+    private boolean isEventListener;
 
     public String getHash() {
         return hash;
@@ -82,12 +83,16 @@ public class PeerDTO extends BaseDTO {
         this.peerEventHubLocation = peerEventHubLocation;
     }
 
-    public int isEventListener() {
+    public boolean isEventListener() {
         return isEventListener;
     }
 
-    public void setEventListener(int eventListener) {
+    public void setEventListener(boolean eventListener) {
         isEventListener = eventListener;
+    }
+
+    public String getPeerHash(){
+        return MD5Helper.obtain().md532(hash + peerName + peerEventHubName + peerLocation + peerEventHubLocation);
     }
 
     @Override

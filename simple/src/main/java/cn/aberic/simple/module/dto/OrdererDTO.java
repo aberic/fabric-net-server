@@ -1,6 +1,7 @@
 package cn.aberic.simple.module.dto;
 
 import cn.aberic.simple.base.BaseDTO;
+import cn.aberic.simple.utils.MD5Helper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -55,6 +56,10 @@ public class OrdererDTO extends BaseDTO {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getOrdererHash(){
+        return MD5Helper.obtain().md532(hash + name + location);
     }
 
     @Override

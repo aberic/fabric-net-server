@@ -19,8 +19,8 @@ public class OrgDTO extends BaseDTO {
     @ApiModelProperty(value = "组织名称", required = true)
     private String orgName;
     /** 是否开启TLS，0=false，1=true */
-    @ApiModelProperty(value = "是否开启TLS，0=false，1=true", required = true)
-    private int tls;
+    @ApiModelProperty(value = "是否开启TLS", required = true)
+    private boolean tls;
     /** 设置默认用户 */
     @ApiModelProperty(value = "设置默认用户", required = true)
     private String username;
@@ -71,11 +71,11 @@ public class OrgDTO extends BaseDTO {
         this.orgName = orgName;
     }
 
-    public int isTls() {
+    public boolean isTls() {
         return tls;
     }
 
-    public void setTls(int tls) {
+    public void setTls(boolean tls) {
         this.tls = tls;
     }
 
