@@ -5,7 +5,7 @@
 
     <groupId>cn.aberic</groupId>
     <artifactId>simple</artifactId>
-    <version>1.0-beta</version>
+    <version>1.0-beta2</version>
     <packaging>jar</packaging>
 
     <name>simple</name>
