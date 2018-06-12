@@ -12,7 +12,7 @@ initUrl=http://localhost:8080/sdk/init
 ## 启动SDK
 startSDK () {
     ## 启动spring-boot服务
-    nohup java -jar /home/simple-1.0-beta.jar > /home/simple-1.0-beta.nohup 2>&1 &
+    nohup java -jar /home/simple-1.0-beta2.jar > /home/simple-1.0-beta2.nohup 2>&1 &
 
     # 日志总行数
     line=0
@@ -20,16 +20,16 @@ startSDK () {
     index=0
     today=`date +%Y-%m-%d`
     hour=`date +%H`
-    while [ -f /home/simple-1.0-beta.nohup ]
+    while [ -f /home/simple-1.0-beta2.nohup ]
     do
-        line=`awk '{print NR}' /home/simple-1.0-beta.nohup|tail -n1`
-        result=`grep "$today $hour" /home/simple-1.0-beta.nohup | grep "Started"`
+        line=`awk '{print NR}' /home/simple-1.0-beta2.nohup|tail -n1`
+        result=`grep "$today $hour" /home/simple-1.0-beta2.nohup | grep "Started"`
         if [[ "$result" != "" ]]
         then
-            head -n -0 /home/simple-1.0-beta.nohup |tail -n +${index}
+            head -n -0 /home/simple-1.0-beta2.nohup |tail -n +${index}
             break
         elif [[ ${line} -gt ${index} ]]
-        then head -n -0 /home/simple-1.0-beta.nohup |tail -n +${index}
+        then head -n -0 /home/simple-1.0-beta2.nohup |tail -n +${index}
         index=${line}
         else
             sleep 0.1s
@@ -74,4 +74,4 @@ echo
 echo "===================== read sdk logs ===================== "
 echo
 
-tail -f logs /home/simple-1.0-beta.nohup
+tail -f logs /home/simple-1.0-beta2.nohup
