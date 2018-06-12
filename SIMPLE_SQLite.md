@@ -27,6 +27,7 @@ CREATE TABLE org (
 ```sqlite
 CREATE TABLE orderer (
 	 "hash" text(256,0) NOT NULL,
+	 "org_hash" text(256,0) NOT NULL,
 	 "name" text(128,0) NOT NULL,
 	 "location" text(256,0) NOT NULL
 );
@@ -35,6 +36,7 @@ CREATE TABLE orderer (
 ```sqlite
 CREATE TABLE peer (
 	 "hash" text(256,0) NOT NULL,
+	 "org_hash" text(256,0) NOT NULL,
 	 "peer_name" text(128,0) NOT NULL,
 	 "peer_event_hub_name" text(128,0) NOT NULL,
 	 "peer_location" text(256,0) NOT NULL,
