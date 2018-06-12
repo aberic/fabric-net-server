@@ -1,22 +1,15 @@
 package cn.aberic.simple.module.service.impl;
 
-import cn.aberic.simple.module.dto.OrdererDTO;
-import cn.aberic.simple.module.dto.OrgDTO;
-import cn.aberic.simple.module.dto.PeerDTO;
+import cn.aberic.simple.module.dto.*;
 import cn.aberic.simple.module.manager.SimpleManager;
 import cn.aberic.simple.module.mapper.SimpleMapper;
 import cn.aberic.simple.module.service.SimpleService;
 import cn.aberic.simple.utils.MD5Helper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import org.apache.commons.codec.binary.Hex;
-import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 描述：
@@ -30,71 +23,33 @@ public class SimpleServiceImpl implements SimpleService {
     private SimpleMapper simpleMapper;
 
     @Override
-    public String chainCode(JSONObject json) {
-        String intent = json.getString("intent");
-        JSONArray arrayJson = json.getJSONArray("array");
-        int length = arrayJson.size();
-        String fcn = null;
-        String[] argArray = new String[length - 1];
-        for (int i = 0; i < length; i++) {
-            if (i == 0) {
-                fcn = arrayJson.getString(i);
-            } else {
-                argArray[i - 1] = arrayJson.getString(i);
-            }
-        }
-        Map<String, String> resultMap;
-        try {
-            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.containsKey("hash") ? json.getString("hash") : "");
-            switch (intent) {
-                case "invoke":
-                    resultMap = manager.invoke(fcn, argArray);
-                    break;
-                case "query":
-                    resultMap = manager.query(fcn, argArray);
-                    break;
-                default:
-                    throw new RuntimeException(String.format("no type was found with name %s", intent));
-            }
-            if (resultMap.get("code").equals("error")) {
-                return responseFail(resultMap.get("data"));
-            } else {
-                return responseSuccess(resultMap.get("data"), resultMap.get("txid"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return responseFail(String.format("请求失败： %s", e.getMessage()));
-        }
+    public String invoke(ChainCodeDTO chainCode) {
+        return chainCode(chainCode, simpleMapper, ChainCodeIntent.INVOKE);
     }
 
     @Override
-    public String trace(JSONObject json) {
-        String intent = json.getString("intent");
-        String traceId = json.getString("traceId");
-        Map<String, String> resultMap;
-        try {
-            FabricManager manager = SimpleManager.obtain().get(simpleMapper, json.containsKey("hash") ? json.getString("hash") : "");
-            switch (intent) {
-                case "queryBlockByTransactionID":
-                    resultMap = manager.queryBlockByTransactionID(traceId);
-                    break;
-                case "queryBlockByHash":
-                    resultMap = manager.queryBlockByHash(Hex.decodeHex(traceId.toCharArray()));
-                    break;
-                case "queryBlockByNumber":
-                    resultMap = manager.queryBlockByNumber(Long.valueOf(traceId));
-                    break;
-                case "queryBlockchainInfo":
-                    resultMap = manager.getBlockchainInfo();
-                    break;
-                default:
-                    return responseFail("No func found, please check and try again.");
-            }
-            return responseSuccess(JSONObject.parseObject(resultMap.get("data")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return responseFail(String.format("请求失败： %s", e.getMessage()));
-        }
+    public String query(ChainCodeDTO chainCode) {
+        return chainCode(chainCode, simpleMapper, ChainCodeIntent.QUERY);
+    }
+
+    @Override
+    public String queryBlockByTransactionID(TraceDTO trace) {
+        return trace(trace, simpleMapper, TraceIntent.TRANSACTION);
+    }
+
+    @Override
+    public String queryBlockByHash(TraceDTO trace) {
+        return trace(trace, simpleMapper, TraceIntent.HASH);
+    }
+
+    @Override
+    public String queryBlockByNumber(TraceDTO trace) {
+        return trace(trace, simpleMapper, TraceIntent.NUMBER);
+    }
+
+    @Override
+    public String queryBlockchainInfo(String hash) {
+        return queryBlockchainInfo(simpleMapper, hash);
     }
 
     @Override
@@ -139,32 +94,42 @@ public class SimpleServiceImpl implements SimpleService {
     }
 
     @Override
-    public String addOrg(JSONObject json) {
-        OrgDTO org = JSON.parseObject(json.toJSONString(), new TypeReference<OrgDTO>() {});
+    public String addOrg(OrgDTO org) {
         String hash = MD5Helper.obtain().md532(org.getOrgName() + org.getChaincodeName());
+        if (null != simpleMapper.getOrgByHash(hash)) {
+            return responseFail(String.format("Org already existed with hash %s, you can try updateOrgByHash.", hash));
+        }
         org.setHash(hash);
         if (simpleMapper.addOrg(org) > 0) {
             return responseSuccess(org.toString());
         }
-        return responseFail("新增排序服务失败");
+        return responseFail("add org fail");
     }
 
     @Override
-    public String addOrderer(JSONObject json) {
-        OrdererDTO orderer = JSON.parseObject(json.toJSONString(), new TypeReference<OrdererDTO>() {});
+    public String addOrderer(OrdererDTO orderer) {
+        String hash = MD5Helper.obtain().md532(orderer.toString());
+        if (null != simpleMapper.getOrdererByHash(hash)) {
+            return responseFail(String.format("Orderer already existed with hash %s, you can try updateOrdererByHash.", hash));
+        }
+        orderer.setHash(hash);
         if (simpleMapper.addOrderer(orderer) > 0) {
             return responseSuccess(orderer.toString());
         }
-        return responseFail("新增排序服务失败");
+        return responseFail("add orderer fail");
     }
 
     @Override
-    public String addPeer(JSONObject json) {
-        PeerDTO peer = JSON.parseObject(json.toJSONString(), new TypeReference<PeerDTO>() {});
+    public String addPeer(PeerDTO peer) {
+        String hash = MD5Helper.obtain().md532(peer.toString());
+        if (null != simpleMapper.getPeerByHash(hash)) {
+            return responseFail(String.format("Peer already existed with hash %s, you can try updatePeerByHash.", hash));
+        }
+        peer.setHash(hash);
         if (simpleMapper.addPeer(peer) > 0) {
             return responseSuccess(peer.toString());
         }
-        return responseFail("新增节点服务失败");
+        return responseFail("add peer fail");
     }
 
     @Override
@@ -180,5 +145,29 @@ public class SimpleServiceImpl implements SimpleService {
     @Override
     public String getPeerListByOrgHash(String hash) {
         return responseSuccess(JSONArray.parseArray(JSON.toJSONString(simpleMapper.getPeerListByOrgHash(hash))));
+    }
+
+    @Override
+    public String updateOrg(OrgDTO org) {
+        if (simpleMapper.updateOrgByHash(org) > 0) {
+            return responseSuccess(org.toString());
+        }
+        return responseFail("update org fail");
+    }
+
+    @Override
+    public String updateOrderer(OrdererDTO orderer) {
+        if (simpleMapper.updateOrdererByHash(orderer) > 0) {
+            return responseSuccess(orderer.toString());
+        }
+        return responseFail("update orderer fail");
+    }
+
+    @Override
+    public String updatePeer(PeerDTO peer) {
+        if (simpleMapper.updatePeerByHash(peer) > 0) {
+            return responseSuccess(peer.toString());
+        }
+        return responseFail("update peer fail");
     }
 }
