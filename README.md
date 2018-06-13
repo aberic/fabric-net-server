@@ -108,7 +108,7 @@ docker-sdk.yaml中的ports，后一个为容器中端口号，不用修改，冒
 ### API要点
 由于提供了[swagger2](https://github.com/aberic/fabric-sdk-container/blob/v1.0-beta2/swagger2.json)接口文档，在本文档中就不再赘述接口样例，可自行在[swagger-editor](http://editor.swagger.io/)进行查阅。
 <br>
-也可以通过当前部署fabric-sdk-container服务器的ip和配置文件中映射的端口号进行访问，如http://ip:port/swagger-ui.html。
+也可以通过当前部署fabric-sdk-container服务器的ip和配置文件中映射的端口号进行访问，如`http://ip:port/swagger-ui.html`。
 <br><br>
 这里有几个点需要说明一下：
 <br>
