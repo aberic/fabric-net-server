@@ -1,7 +1,7 @@
 package org.hyperledger.fabric.sdk.aberic;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.ChaincodeEndorsementPolicyParseException;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
@@ -24,7 +24,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 class IntermediateChaincodeID {
 
-    private static final Log log = LogFactory.getLog(IntermediateChaincodeID.class);
+    private Logger log = LogManager.getLogger(IntermediateChaincodeID.class);
 
     /** 智能合约名称 */
     private String chaincodeName; // mycc

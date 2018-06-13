@@ -1,8 +1,8 @@
 package org.hyperledger.fabric.sdk.aberic;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.protos.ledger.rwset.kvrwset.KvRwset;
 import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.BlockInfo.EnvelopeInfo;
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  */
 class IntermediateChannel {
 
-    private static final Log log = LogFactory.getLog(IntermediateChannel.class);
+    private Logger log = LogManager.getLogger(IntermediateChannel.class);
 
     /** 当前将要访问的智能合约所属频道名称 */
     private String channelName; // myChannel

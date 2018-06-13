@@ -1,7 +1,7 @@
 package org.hyperledger.fabric.sdk.aberic;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric.sdk.exception.CryptoException;
@@ -12,7 +12,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 描述：中继组织对象
@@ -21,7 +24,7 @@ import java.util.*;
  */
 class IntermediateOrg {
 
-    private static final Log log = LogFactory.getLog(IntermediateOrg.class);
+    private Logger log = LogManager.getLogger(IntermediateOrg.class);
 
     /** 执行SDK的Fabric用户名 */
     private String username;
