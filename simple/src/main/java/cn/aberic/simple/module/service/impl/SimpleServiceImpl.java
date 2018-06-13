@@ -70,6 +70,9 @@ public class SimpleServiceImpl implements SimpleService {
         org.setInvokeWaitTime(Integer.valueOf(System.getenv("ORG_INVOKE_WAIT_TIME")));
 
         String orgHash = MD5Helper.obtain().md532(org.getOrgName() + org.getChaincodeName());
+        if (null != simpleMapper.getOrgByHash(orgHash)) {
+            return 0;
+        }
         org.setHash(orgHash);
 
         simpleMapper.addOrg(org);
