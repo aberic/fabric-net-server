@@ -3,6 +3,8 @@
 [![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/fabric-sdk/)
 [![Swagger Validator](https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json.svg)](http://140.143.210.217:8090/swagger-ui.html)
 <br>
+本项目依赖于任意一个已经部署完成的HyperLedger Fabric网络，并对该网络提供REST API服务，包括通道、智能合约及Fabric网络中节点等管理功能。
+<br>
 这是一个基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)的项目，该项目的主要目的是简化HyperLedger/Fabric开发人员在SDK应用层上的工作流程，使得开发和部署更加简单。
 <br><br>
 该项目使用方便，只需要部署有Docker及docker compose环境即可轻松调用Fabric网络接口，包括执行、查询智能合约，以及trace相关的溯源接口。
@@ -30,6 +32,8 @@
 <br>
 [v1.0-beta2](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta2)：修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。
 <br>
+[v1.0-beta3](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta3)：删除docker-sdk.yaml环境变量配置，取消hash标识（容易被误会），细化Fabric网络及数据库结构，简化启动脚本。
+<br>
 v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能。
 <br><br>
 ## 使用sdk-container
@@ -37,9 +41,9 @@ v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升�
 <br>
 2、在待部署SDK服务器上安装`Docker`及`docker compose`环境。
 <br>
-3、执行`docker pull aberic/fabric-sdk:1.0-beta2`下载镜像。
+3、执行`docker pull aberic/fabric-sdk:1.0-beta3`下载镜像。
 <br>
-4、在`docker-sdk.yaml`文件中配置好Fabric网络中所期望连接的排序服务及节点服务参数，这两类服务各允许设置一台，后续的版本中会增加使用SDK多服务网络方案。
+4、在`docker-sdk.yaml`文件中将好Fabric网络中的crypto-config挂载到指定目录下。
 <br>
 5、执行`docker-compose -f docker-sdk.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
 <br>
@@ -47,61 +51,43 @@ v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升�
 <br><br>
 **docker-sdk.yaml说明**
 <br>
-关于docker-sdk.yaml编排文件中的参数，主要来自两个地方，一是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)（点击链接自行学习二进制文件生成指定证书文件以及参考crypto-config文件配置），二是在当前Fabric网络中创建的通道以及通道中创建的智能合约信息。
-<br><br>
-首先参考[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)，在该文件中定义的参数与[docker-sdk.yaml](https://github.com/aberic/fabric-sdk-container/blob/master/docker-sdk.yaml)中关于排序服务以及节点服务的信息相对应。
-<br><br>
-相对其他配置如通道及合约的也是如上对应，具体参数释义如下表所示：
-<br>
+关于docker-sdk.yaml编排文件中的参数，主要是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)（点击链接自行学习二进制文件生成指定证书文件以及参考crypto-config文件配置）。
+<br>                                                                                                                                                                   |
 
-| Environment                  | Description                  | map                                                          |
-| :--                          | :--                          | :--                                                                  |
-| ORG_NAME                     | 节点所属组织名称               | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> PeerOrgs-Name                                                          |
-| ORG_TLS                      | 节点是否开启TLS                | 根据自身创建网络情况选择true或false                                                                                                                                                                   |
-| ORG_USERNAME                 | 节点所属组织用户名称            | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/users)目录下的两个用户，默认配置中选择的Admin                           |
-| ORG_CRYPTO_CONFIG_DIR        | 映射到容器中的crypto-config目录 | 即[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/users)目录                                                           |
-| ORG_MSP_ID                   | 节点所属组织ID                 | 参见[configtx](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/configtx.yaml)文件中 -> Organizations-&Org1-Name                                                         |
-| ORG_DOMAIN_NAME              | 节点所属组织域名名称            | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> PeerOrgs-Domain                                                        |
-| ORG_ORDERER_DOMAIN_NAME      | 节点所属排序服务域名名称         | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> OrdererOrgs-Domain                                                     |
-| CHANNEL_NAME                 | 自行创建的通道名称              | 如：`peer channel create -o orderer.example.com:7050 -c mychannel -t 50 -f ./channel-artifacts/mychannel.tx` 命令所创建的mychannel                                                                   |
-| CHAINCODE_NAME               | 智能合约名称                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令所创建的testcc                                                            |
-| CHAINCODE_PATH               | 智能合约路径                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令中的github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 |
-| CHAINCODE_VERSION            | 智能合约版本                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令中的1.0                                                                   |
-| CHAINCODE_PROPOSAL_WAIT_TIME | 单个提案请求超时时间以毫秒为单位  | 默认90000                                                                                                                                                                                           |
-| CHAINCODE_INVOKE_WAIT_TIME   | 事务等待时间以秒为单位           | 默认120                                                                                                                                                                                            |
-| ORDERER_NAME                 | 排序服务名称                   | 参见[configtx](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/configtx.yaml)文件中 -> Orderer-Addresses                                                                 |
-| ORDERER_LOCATION             | 排序服务访问路径                | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
-| PEER_NAME                    | 节点服务域名名称                | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/peers)目录下的节点域名列表                                            |
-| PEER_EVENT_HUB_NAME          | 节点服务事件域名名称            | 同上                                                                                                                                                                                                |
-| PEER_LOCATION                | 节点服务路径                   | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
-| PEER_EVENT_HUB_LOCATION      | 节点服务事件路径                | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
-| PEER_IS_EVENT_LISTENER       | 节点所属组织名称                | 根据自身需求选择是否监听回调服务                                                                                                                                                                       |
-
-docker-sdk.yaml中的`image: aberic/fabric-sdk`，可以指定其版本号，默认是latest。
+docker-sdk.yaml中的`image: aberic/fabric-sdk`，需要指定其版本号。
 <br>
-docker-sdk.yaml中volumes的挂载与ORG_CRYPTO_CONFIG_DIR变量相关，volumes使用方法请学习compose相关知识。
+docker-sdk.yaml中volumes使用方法请学习docker compose相关知识。
 <br>
 docker-sdk.yaml中的ports，后一个为容器中端口号，不用修改，冒号前的可以指定为自身服务器未占用的端口号，最终调用sdk接口时通过冒号前指定的端口号即可。
 <br><br>
 **API入口文档**
 
-| Method | REST API         | Description                        |
-| :--:   | :--              | :--                                |
-| POST   | /sdk/chaincode/invoke    | 执行智能合约                 |
-| POST   | /sdk/chaincode/query     | 查询智能合约                 |
-| POST   | /sdk/org/add             | 新增组织对象                 |
-| GET    | /sdk/org/list            | 获取组织对象集合              |
-| POST   | /sdk/org/update          | 更新组织对象                 |
-| POST   | /sdk/orderer/add         | 新增排序服务对象              |
-| GET    | /sdk/orderer/list/{orgHash} | 获取排序服务对象集合          |
-| POST   | /sdk/orderer/update      | 更新排序服务对象              |
-| POST   | /sdk/peer/add            | 新增节点服务对象              |
-| GET    | /sdk/peer/list/{orgHash}    | 获取节点服务对象集合          |
-| POST   | /sdk/peer/update         | 更新节点服务对象              |
-| POST   | /sdk/trace/orgHash          | 根据交易hash查询区块          |
-| POST   | /sdk/trace/number        | 根据交易区块高度查询区块       |
-| POST   | /sdk/trace/txid          | 根据交易ID查询区块            |
-| GET    | /sdk/trace/info/{orgHash}   | 根据当前组织hash查询当前链信息 |
+| Method | REST API             | Description                 |
+| :--:   | :--                  | :--                         |
+| POST   | /state/invoke        | 执行智能合约                  |
+| POST   | /state/query         | 查询智能合约                  |
+| POST   | /trace/hash          | 根据交易hash查询区块           |
+| POST   | /trace/number        | 根据交易区块高度查询区块        |
+| POST   | /trace/txid          | 根据交易ID查询区块             |
+| GET    | /trace/info/{id}     | 根据当前智能合约id查询当前链信息 |
+| POST   | /league/add          | 新增联盟对象                  |
+| GET    | /league/list         | 获取联盟对象集合               |
+| POST   | /league/update       | 更新联盟对象                  |
+| POST   | /org/add             | 新增组织对象                  |
+| GET    | /org/list/{id}       | 获取组织对象集合               |
+| POST   | /org/update          | 更新组织对象                  |
+| POST   | /orderer/add         | 新增排序服务对象               |
+| GET    | /orderer/list/{id}   | 获取排序服务对象集合           |
+| POST   | /orderer/update      | 更新排序服务对象               |
+| POST   | /peer/add            | 新增节点服务对象               |
+| GET    | /peer/list/{id}      | 获取节点服务对象集合           |
+| POST   | /peer/update         | 更新节点服务对象               |
+| POST   | /channel/add         | 新增通道对象                  |
+| GET    | /channel/list/{id}   | 获取通道对象集合               |
+| POST   | /channel/update      | 更新通道对象                  |
+| POST   | /chaincode/add       | 新增链码对象                  |
+| GET    | /chaincode/list/{id} | 获取链码对象集合               |
+| POST   | /chaincode/update    | 更新链码对象                  |
 
 该版本目前为即上即用的版本，仅提供单排序服务及单节点服务，因此API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有PAAS服务的需要，可以自行参考v0.2中的方案来解决。
 <br>
