@@ -4,7 +4,7 @@
 [![Swagger Validator](https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json.svg)](http://140.143.210.217:8090/swagger-ui.html)
 <br>
 本项目依赖于任意一个已经部署完成的HyperLedger Fabric网络，并对该网络提供REST API服务，包括通道、智能合约及Fabric网络中节点等管理功能。
-<br>
+<br><br>
 这是一个基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)的项目，该项目的主要目的是简化HyperLedger/Fabric开发人员在SDK应用层上的工作流程，使得开发和部署更加简单。
 <br><br>
 该项目使用方便，只需要部署有Docker及docker compose环境即可轻松调用Fabric网络接口，包括执行、查询智能合约，以及trace相关的溯源接口。
@@ -34,7 +34,7 @@
 <br>
 [v1.0-beta3](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta3)：删除docker-sdk.yaml环境变量配置，取消hash标识（容易被误会），细化Fabric网络及数据库结构，简化启动脚本。
 <br>
-v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能。
+v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能；新增Fabric后台管理功能。
 <br><br>
 ## 使用sdk-container
 1、确定Linux内核在`3.10`及以上。
@@ -51,9 +51,8 @@ v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升�
 <br><br>
 **docker-sdk.yaml说明**
 <br>
-关于docker-sdk.yaml编排文件中的参数，主要是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)（点击链接自行学习二进制文件生成指定证书文件以及参考crypto-config文件配置）。
+关于docker-sdk.yaml编排文件中的参数，主要是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)（点击链接自行学习二进制文件生成指定证书文件以及参考crypto-config文件配置）。该目录最终被指定挂在于容器/home/config/目录下。
 <br>                                                                                                                                                                   |
-
 docker-sdk.yaml中的`image: aberic/fabric-sdk`，需要指定其版本号。
 <br>
 docker-sdk.yaml中volumes使用方法请学习docker compose相关知识。
@@ -74,35 +73,41 @@ docker-sdk.yaml中的ports，后一个为容器中端口号，不用修改，冒
 | GET    | /league/list         | 获取联盟对象集合               |
 | POST   | /league/update       | 更新联盟对象                  |
 | POST   | /org/add             | 新增组织对象                  |
-| GET    | /org/list/{id}       | 获取组织对象集合               |
+| GET    | /org/list/{id}       | 根据联盟id获取组织对象集合      |
 | POST   | /org/update          | 更新组织对象                  |
 | POST   | /orderer/add         | 新增排序服务对象               |
-| GET    | /orderer/list/{id}   | 获取排序服务对象集合           |
+| GET    | /orderer/list/{id}   | 根据组织id获取排序服务对象集合  |
 | POST   | /orderer/update      | 更新排序服务对象               |
 | POST   | /peer/add            | 新增节点服务对象               |
-| GET    | /peer/list/{id}      | 获取节点服务对象集合           |
+| GET    | /peer/list/{id}      | 根据组织id获取节点服务对象集合   |
 | POST   | /peer/update         | 更新节点服务对象               |
 | POST   | /channel/add         | 新增通道对象                  |
-| GET    | /channel/list/{id}   | 获取通道对象集合               |
+| GET    | /channel/list/{id}   | 根据节点获取通道对象集合        |
 | POST   | /channel/update      | 更新通道对象                  |
 | POST   | /chaincode/add       | 新增链码对象                  |
-| GET    | /chaincode/list/{id} | 获取链码对象集合               |
+| GET    | /chaincode/list/{id} | 根据通道id获取链码对象集合      |
 | POST   | /chaincode/update    | 更新链码对象                  |
 
-该版本目前为即上即用的版本，仅提供单排序服务及单节点服务，因此API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有PAAS服务的需要，可以自行参考v0.2中的方案来解决。
+API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有SaaS/PaaS服务的紧急需求，可以自行参考v0.2中的方案来解决。
 <br>
 ### API要点
-由于提供了[swagger2](https://github.com/aberic/fabric-sdk-container/blob/v1.0-beta2/swagger2.json)接口文档，在本文档中就不再赘述接口样例，可自行在[swagger-editor](http://editor.swagger.io/)进行查阅。
+这是[swagger2](https://github.com/aberic/fabric-sdk-container/blob/v1.0-beta2/swagger2.json)接口文档，API用例可参考[api_demo](https://github.com/aberic/fabric-sdk-container/blob/master/API_DEMO.md)。
 <br>
 也可以通过当前部署fabric-sdk-container服务器的ip和配置文件中映射的端口号进行访问，如`http://ip:port/swagger-ui.html`。
 <br><br>
-这里有几个点需要说明一下：
+![FabricNet](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/FabricNet.png "Fabric 网络")
 <br>
-1、组织hash可以通过/sdk/org/list接口获取，这个接口获取的是一个集合，请选择你所需要的组织hash。
+如上图，需要对Fabric网络有一个简单的理解一致，并对以下几个点说明一下：
 <br>
-2、args是调用合约传入的参数，在用go编写智能合约的时候，智能合约所接收的参数为一个字符串数组，其中字符串数组的第一个参数是智能合约的方法名。chaincode接口中的args所传入的参数就是智能合约所接收的数组参数。
+1、一个Fabric网络包含一个或多个组织且含有不少于一台排序服务集，一个组织包含一个或多个节点服务，一个节点服务可以加入一个或多个通道，一个通道可以安装一个或多个智能合约。
 <br>
-3、新增排序服务和节点服务中的hash来自新增组织的api回调结果，即必须先新增组织，然后在该组织下新增排序服务和节点服务，以此来完成一个Fabric的组网操作。
+2、根据1所述，仅有联盟对象集合查询不需要指定id。组织集合查询需要指定联盟id，排序及节点服务集合查询需要指定组织id，通道集合查询需要指定节点id，智能合约集合查询需要指定通道id。
+<br>
+3、可以根据某一个智能合约逆向查出该智能合约的整个联盟网络，因此执行state和trace接口时只需要传入智能合约id即可。
+<br>
+4、执行state接口红的args是调用合约传入的参数，在用go编写智能合约的时候，智能合约所接收的参数为一个字符串数组，其中字符串数组的第一个参数是智能合约的方法名。chaincode接口中的args所传入的参数就是智能合约所接收的数组参数。
+<br>
+5、Fabric网络新增操作必须遵循第2点所述，即必须从联盟对象开始新增，直到最后新增智能合约。
 ## 代码简要说明
 ### sdk-advance
 sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
@@ -142,11 +147,10 @@ Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织�
 * [FabricManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/FabricManager.java)<br>
 区块链网络服务管理器FabricManager，作为APP直接调用Fabric区块链网络的入口对象，该对象提供了Channel和ChaincodeID相关的所有接口。
 <br><br>
-### simple
-simple是一个基于spring-boot的项目，在simple中主要关注[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象的使用。<br>
-**我的这个simple中的ip的自己申请的服务器，大家可以随便测试，但不保证有效期，建议自行搭建本地服务测试。**
-<br><br>
 欢迎与我多多交流：<br>
 技术博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
 HyperLedger/Fabric**微信交流群**，扫微信订阅号加入：<br>
 ![HLFStudy](https://images2017.cnblogs.com/blog/1240530/201802/1240530-20180201103733812-1730907548.jpg "HLFStudy 微信订阅号")
+<br><br>
+《HyperLedger Fabric开发实战——快速掌握区块链技术》<br>
+[![HyperLedger Fabric开发实战](https://images2018.cnblogs.com/blog/1240530/201806/1240530-20180614234142771-2017750800.png "HyperLedger Fabric开发实战")](https://item.jd.com/12381034.html?dist=jd)
