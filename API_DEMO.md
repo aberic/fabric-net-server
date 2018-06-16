@@ -1,4 +1,4 @@
-## API接口用例
+## API接口部分用例
 ### 新增Fabric联盟
 POST：http://ip:port/league/add
 ```json
