@@ -10,34 +10,8 @@ services:
   sdk:
     container_name: sdk
     image: aberic/fabric-sdk
-    environment:
-      # 组织相关配置
-      - ORG_NAME=Org1
-      - ORG_TLS=true
-      - ORG_USERNAME=Admin
-      - ORG_CRYPTO_CONFIG_DIR=/home/config/crypto-config
-      - ORG_MSP_ID=Org1MSP
-      - ORG_DOMAIN_NAME=org1.example.com
-      - ORG_ORDERER_DOMAIN_NAME=example.com
-      # 通道相关配置
-      - CHANNEL_NAME=mychannel
-      # 智能合约相关配置
-      - CHAINCODE_NAME=testcc
-      - CHAINCODE_PATH=github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02
-      - CHAINCODE_VERSION=1.2
-      - CHAINCODE_PROPOSAL_WAIT_TIME=90000
-      - CHAINCODE_INVOKE_WAIT_TIME=120
-      # 排序服务相关配置
-      - ORDERER_NAME=orderer.example.com
-      - ORDERER_LOCATION=grpc://118.89.243.236:7050
-      # 节点服务相关配置
-      - PEER_NAME=peer0.org1.example.com
-      - PEER_EVENT_HUB_NAME=peer0.org1.example.com
-      - PEER_LOCATION=grpc://118.89.243.236:7051
-      - PEER_EVENT_HUB_LOCATION=grpc://118.89.243.236:7053
-      - PEER_IS_EVENT_LISTENER=true
     volumes:
       - /home/jar/config/:/home/config/
     command: bash /home/init.sh
     ports:
-      - 8090:8080
+      - 8080:8080

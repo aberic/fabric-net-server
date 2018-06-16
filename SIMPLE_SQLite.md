@@ -7,7 +7,7 @@
 * 创建org表
 ```sqlite
 CREATE TABLE org (
-  "hash" text(256,0) NOT NULL,
+  "orgHash" text(256,0) NOT NULL,
   "org_name" text(45,0) NOT NULL,
   "tls" integer(1,0) NOT NULL,
   "username" text(45,0) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE org (
 * 创建Orderer表
 ```sqlite
 CREATE TABLE orderer (
-	 "hash" text(256,0) NOT NULL,
+	 "orgHash" text(256,0) NOT NULL,
 	 "org_hash" text(256,0) NOT NULL,
 	 "name" text(128,0) NOT NULL,
 	 "location" text(256,0) NOT NULL
@@ -35,7 +35,7 @@ CREATE TABLE orderer (
 * 创建Peer表
 ```sqlite
 CREATE TABLE peer (
-	 "hash" text(256,0) NOT NULL,
+	 "orgHash" text(256,0) NOT NULL,
 	 "org_hash" text(256,0) NOT NULL,
 	 "peer_name" text(128,0) NOT NULL,
 	 "peer_event_hub_name" text(128,0) NOT NULL,

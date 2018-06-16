@@ -11,7 +11,7 @@ CREATE SCHEMA `fabric` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin ;
 * 创建org表
 ```mysql
 CREATE TABLE `org` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '组织ID',
+  `chainCodeId` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '组织ID',
   `org_name` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '组织名称',
   `tls` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否开启TLS，0不开启，1开启',
   `ca_tls` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否开启CA TLS，0不开启，1开启',
@@ -30,19 +30,19 @@ CREATE TABLE `org` (
   `chaincode_version` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '智能合约版本',
   `proposal_wait_time` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '单个提案请求的超时时间以毫秒为单位',
   `invoke_wait_time` varchar(45) COLLATE utf8_bin NOT NULL COMMENT '事务等待时间以秒为单位',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  PRIMARY KEY (`chainCodeId`),
+  UNIQUE KEY `id_UNIQUE` (`chainCodeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='使用指定用户访问指定通道指定智能合约的组织信息表'
 ```
 * 创建Orderer表
 ```mysql
 CREATE TABLE `fabric`.`orderer` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '排序服务器ID',
+  `chainCodeId` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '排序服务器ID',
   `org_id` INT NOT NULL COMMENT '排序服务器所属组织ID',
   `name` VARCHAR(128) NOT NULL COMMENT '排序服务器名称',
   `location` VARCHAR(256) NOT NULL COMMENT '排序服务器地址',
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`chainCodeId`),
+  UNIQUE INDEX `id_UNIQUE` (`chainCodeId` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin
@@ -51,15 +51,15 @@ COMMENT = '排序服务器表';
 * 创建Peer表
 ```mysql
 CREATE TABLE `fabric`.`peer` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `chainCodeId` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `org_id` INT NOT NULL COMMENT '节点服务器所属组织ID',
   `peer_name` VARCHAR(128) NULL COMMENT '当前指定的组织节点域名',
   `peer_event_hub_name` VARCHAR(128) NULL COMMENT '当前指定的组织节点事件域名',
   `peer_location` VARCHAR(256) NULL COMMENT '当前指定的组织节点访问地址',
   `peer_event_hub_location` VARCHAR(256) NULL COMMENT '当前指定的组织节点事件监听访问地址',
   `event_listener` TINYINT NULL DEFAULT 0 COMMENT '当前peer是否增加Event事件处理，0不监听，1监听',
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
+  PRIMARY KEY (`chainCodeId`),
+  UNIQUE INDEX `id_UNIQUE` (`chainCodeId` ASC) VISIBLE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin
