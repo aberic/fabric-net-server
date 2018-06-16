@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "HyperLedger Fabric SDK API接口文档",
+        "description": "fabric-sdk-container 接口文档",
         "version": "1.0",
         "title": "fabric-sdk-container-api",
         "contact": {
@@ -10,16 +10,749 @@
             "email": "aberic@qq.com"
         }
     },
-    "host": "localhost:8080",
+    "host": "140.143.210.217:8080",
     "basePath": "/",
     "tags": [{
-        "name": "fabric-sdk-api",
-        "description": "Simple Controller"
+        "name": "区块链网络中排序服务相关接口",
+        "description": "Orderer Controller"
+    }, {
+        "name": "区块链网络中数据库状态增删改查接口",
+        "description": "State Controller"
+    }, {
+        "name": "区块链网络中数据追溯接口",
+        "description": "Trace Controller"
+    }, {
+        "name": "区块链网络中组织相关接口",
+        "description": "Org Controller"
+    }, {
+        "name": "区块链网络中联盟相关接口",
+        "description": "League Controller"
+    }, {
+        "name": "区块链网络中节点服务相关接口",
+        "description": "Peer Controller"
+    }, {
+        "name": "区块链网络中通道服务相关接口",
+        "description": "Channel Controller"
+    }, {
+        "name": "区块链网络中链码服务相关接口",
+        "description": "Chain Code Controller"
     }],
     "paths": {
-        "/sdk/chaincode/invoke": {
+        "/chaincode/add": {
             "post": {
-                "tags": ["fabric-sdk-api"],
+                "tags": ["区块链网络中链码服务相关接口"],
+                "summary": "新增链码对象",
+                "operationId": "addUsingPOST",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "链码对象",
+                    "description": "链码对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/智能合约对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/chaincode/list/{id}": {
+            "get": {
+                "tags": ["区块链网络中链码服务相关接口"],
+                "summary": "获取链码对象集合",
+                "operationId": "listUsingGET",
+                "produces": ["*/*"],
+                "parameters": [{
+                    "name": "链码所属通道id",
+                    "in": "path",
+                    "description": "id值",
+                    "required": true,
+                    "type": "integer",
+                    "format": "int32"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/chaincode/update": {
+            "post": {
+                "tags": ["区块链网络中链码服务相关接口"],
+                "summary": "更新链码对象",
+                "operationId": "updateUsingPOST",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "链码对象",
+                    "description": "链码对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/智能合约对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/channel/add": {
+            "post": {
+                "tags": ["区块链网络中通道服务相关接口"],
+                "summary": "新增通道对象",
+                "operationId": "addUsingPOST_1",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "通道对象",
+                    "description": "通道对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/通道对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/channel/list/{id}": {
+            "get": {
+                "tags": ["区块链网络中通道服务相关接口"],
+                "summary": "获取通道对象集合",
+                "operationId": "listUsingGET_1",
+                "produces": ["*/*"],
+                "parameters": [{
+                    "name": "通道所属节点id",
+                    "in": "path",
+                    "description": "id值",
+                    "required": true,
+                    "type": "integer",
+                    "format": "int32"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/channel/update": {
+            "post": {
+                "tags": ["区块链网络中通道服务相关接口"],
+                "summary": "更新通道对象",
+                "operationId": "updateUsingPOST_1",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "通道对象",
+                    "description": "通道对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/通道对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/league/add": {
+            "post": {
+                "tags": ["区块链网络中联盟相关接口"],
+                "summary": "新增联盟对象",
+                "operationId": "addUsingPOST_2",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "联盟对象",
+                    "description": "联盟对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/联盟对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/league/list": {
+            "get": {
+                "tags": ["区块链网络中联盟相关接口"],
+                "summary": "获取联盟对象集合",
+                "operationId": "listUsingGET_2",
+                "produces": ["*/*"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/league/update": {
+            "post": {
+                "tags": ["区块链网络中联盟相关接口"],
+                "summary": "更新联盟对象",
+                "operationId": "updateUsingPOST_2",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "组织对象",
+                    "description": "组织对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/联盟对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/orderer/add": {
+            "post": {
+                "tags": ["区块链网络中排序服务相关接口"],
+                "summary": "新增排序服务对象",
+                "operationId": "addUsingPOST_3",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "排序服务对象",
+                    "description": "排序服务对象信息",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/排序服务对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/orderer/get/{id}": {
+            "get": {
+                "tags": ["区块链网络中排序服务相关接口"],
+                "summary": "获取排序服务对象",
+                "operationId": "getUsingGET",
+                "produces": ["*/*"],
+                "parameters": [{
+                    "name": "排序服务对象id",
+                    "in": "path",
+                    "description": "id值",
+                    "required": true,
+                    "type": "integer",
+                    "format": "int32"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/orderer/list/{id}": {
+            "get": {
+                "tags": ["区块链网络中排序服务相关接口"],
+                "summary": "获取排序服务对象集合",
+                "operationId": "listUsingGET_3",
+                "produces": ["*/*"],
+                "parameters": [{
+                    "name": "当前组织id",
+                    "in": "path",
+                    "description": "id值",
+                    "required": true,
+                    "type": "integer",
+                    "format": "int32"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/orderer/update": {
+            "post": {
+                "tags": ["区块链网络中排序服务相关接口"],
+                "summary": "更新排序服务对象",
+                "operationId": "updateUsingPOST_3",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "排序服务对象",
+                    "description": "排序服务对象信息",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/排序服务对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/org/add": {
+            "post": {
+                "tags": ["区块链网络中组织相关接口"],
+                "summary": "新增组织对象",
+                "operationId": "addUsingPOST_4",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "组织对象",
+                    "description": "组织对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/组织对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/org/get/{id}": {
+            "get": {
+                "tags": ["区块链网络中组织相关接口"],
+                "summary": "根据组织对象id获取组织对象",
+                "operationId": "getUsingGET_1",
+                "produces": ["*/*"],
+                "parameters": [{
+                    "name": "组织对象id",
+                    "in": "path",
+                    "description": "id值",
+                    "required": true,
+                    "type": "integer",
+                    "format": "int32"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/org/list/{id}": {
+            "get": {
+                "tags": ["区块链网络中组织相关接口"],
+                "summary": "根据联盟id获取组织对象集合",
+                "operationId": "listUsingGET_4",
+                "produces": ["*/*"],
+                "parameters": [{
+                    "name": "联盟id",
+                    "in": "path",
+                    "description": "id值",
+                    "required": true,
+                    "type": "integer",
+                    "format": "int32"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/org/update": {
+            "post": {
+                "tags": ["区块链网络中组织相关接口"],
+                "summary": "更新组织对象",
+                "operationId": "updateUsingPOST_4",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "组织对象",
+                    "description": "组织对象详情",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/组织对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/peer/add": {
+            "post": {
+                "tags": ["区块链网络中节点服务相关接口"],
+                "summary": "新增节点服务对象",
+                "operationId": "addUsingPOST_5",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "节点服务对象",
+                    "description": "节点服务对象信息",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/节点服务对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/peer/list/{id}": {
+            "get": {
+                "tags": ["区块链网络中节点服务相关接口"],
+                "summary": "获取节点服务对象集合",
+                "operationId": "listUsingGET_5",
+                "produces": ["*/*"],
+                "parameters": [{
+                    "name": "当前组织id",
+                    "in": "path",
+                    "description": "id值",
+                    "required": true,
+                    "type": "integer",
+                    "format": "int32"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/peer/update": {
+            "post": {
+                "tags": ["区块链网络中节点服务相关接口"],
+                "summary": "更新节点服务对象",
+                "operationId": "updateUsingPOST_5",
+                "consumes": ["application/json"],
+                "produces": ["*/*"],
+                "parameters": [{
+                    "in": "body",
+                    "name": "节点服务对象",
+                    "description": "节点服务对象信息",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/节点服务对象"
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/state/invoke": {
+            "post": {
+                "tags": ["区块链网络中数据库状态增删改查接口"],
                 "summary": "执行智能合约",
                 "operationId": "invokeUsingPOST",
                 "consumes": ["application/json"],
@@ -30,7 +763,7 @@
                     "description": "操作合约所需转接对象",
                     "required": true,
                     "schema": {
-                        "$ref": "#/definitions/合约对象"
+                        "$ref": "#/definitions/状态对象"
                     }
                 }],
                 "responses": {
@@ -55,9 +788,9 @@
                 }
             }
         },
-        "/sdk/chaincode/query": {
+        "/state/query": {
             "post": {
-                "tags": ["fabric-sdk-api"],
+                "tags": ["区块链网络中数据库状态增删改查接口"],
                 "summary": "查询智能合约",
                 "operationId": "queryUsingPOST",
                 "consumes": ["application/json"],
@@ -68,7 +801,7 @@
                     "description": "操作合约所需转接对象",
                     "required": true,
                     "schema": {
-                        "$ref": "#/definitions/合约对象"
+                        "$ref": "#/definitions/状态对象"
                     }
                 }],
                 "responses": {
@@ -93,352 +826,9 @@
                 }
             }
         },
-        "/sdk/init": {
-            "get": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "初始化环境变量数据，一般不允许被调用",
-                "operationId": "initUsingGET",
-                "produces": ["*/*"],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/orderer/add": {
+        "/trace/hash": {
             "post": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "新增排序服务对象",
-                "operationId": "addOrdererUsingPOST",
-                "consumes": ["application/json"],
-                "produces": ["*/*"],
-                "parameters": [{
-                    "in": "body",
-                    "name": "排序服务对象",
-                    "description": "排序服务对象信息",
-                    "required": true,
-                    "schema": {
-                        "$ref": "#/definitions/排序服务对象"
-                    }
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "201": {
-                        "description": "Created"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/orderer/list/{hash}": {
-            "get": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "获取排序服务对象集合",
-                "operationId": "ordererListUsingGET",
-                "produces": ["*/*"],
-                "parameters": [{
-                    "name": "当前组织Hash",
-                    "in": "path",
-                    "description": "Hash值",
-                    "required": true,
-                    "type": "string"
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/orderer/update": {
-            "post": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "更新排序服务对象",
-                "operationId": "updateOrdererUsingPOST",
-                "consumes": ["application/json"],
-                "produces": ["*/*"],
-                "parameters": [{
-                    "in": "body",
-                    "name": "排序服务对象",
-                    "description": "排序服务对象信息",
-                    "required": true,
-                    "schema": {
-                        "$ref": "#/definitions/排序服务对象"
-                    }
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "201": {
-                        "description": "Created"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/org/add": {
-            "post": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "新增组织对象",
-                "operationId": "addOrgUsingPOST",
-                "consumes": ["application/json"],
-                "produces": ["*/*"],
-                "parameters": [{
-                    "in": "body",
-                    "name": "组织对象",
-                    "description": "组织对象详情",
-                    "required": true,
-                    "schema": {
-                        "$ref": "#/definitions/使用指定用户访问指定通道指定智能合约的组织信息对象"
-                    }
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "201": {
-                        "description": "Created"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/org/list": {
-            "get": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "获取组织对象集合",
-                "operationId": "orgListUsingGET",
-                "produces": ["*/*"],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/org/update": {
-            "post": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "更新组织对象",
-                "operationId": "updateOrgUsingPOST",
-                "consumes": ["application/json"],
-                "produces": ["*/*"],
-                "parameters": [{
-                    "in": "body",
-                    "name": "组织对象",
-                    "description": "组织对象详情",
-                    "required": true,
-                    "schema": {
-                        "$ref": "#/definitions/使用指定用户访问指定通道指定智能合约的组织信息对象"
-                    }
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "201": {
-                        "description": "Created"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/peer/add": {
-            "post": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "新增节点服务对象",
-                "operationId": "addPeerUsingPOST",
-                "consumes": ["application/json"],
-                "produces": ["*/*"],
-                "parameters": [{
-                    "in": "body",
-                    "name": "节点服务对象",
-                    "description": "节点服务对象信息",
-                    "required": true,
-                    "schema": {
-                        "$ref": "#/definitions/节点服务对象"
-                    }
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "201": {
-                        "description": "Created"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/peer/list/{hash}": {
-            "get": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "获取节点服务对象集合",
-                "operationId": "peerListUsingGET",
-                "produces": ["*/*"],
-                "parameters": [{
-                    "name": "当前组织Hash",
-                    "in": "path",
-                    "description": "Hash值",
-                    "required": true,
-                    "type": "string"
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/peer/update": {
-            "post": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "更新节点服务对象",
-                "operationId": "updatePeerUsingPOST",
-                "consumes": ["application/json"],
-                "produces": ["*/*"],
-                "parameters": [{
-                    "in": "body",
-                    "name": "节点服务对象",
-                    "description": "节点服务对象信息",
-                    "required": true,
-                    "schema": {
-                        "$ref": "#/definitions/节点服务对象"
-                    }
-                }],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "201": {
-                        "description": "Created"
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "Not Found"
-                    }
-                }
-            }
-        },
-        "/sdk/trace/hash": {
-            "post": {
-                "tags": ["fabric-sdk-api"],
+                "tags": ["区块链网络中数据追溯接口"],
                 "summary": "根据交易hash查询区块",
                 "operationId": "queryBlockByHashUsingPOST",
                 "consumes": ["application/json"],
@@ -474,18 +864,19 @@
                 }
             }
         },
-        "/sdk/trace/info/{hash}": {
+        "/trace/info/{id}": {
             "get": {
-                "tags": ["fabric-sdk-api"],
-                "summary": "查询当前链信息",
-                "operationId": "queryBlockchainInfoUsingGET",
+                "tags": ["区块链网络中数据追溯接口"],
+                "summary": "查询当前智能合约上的链信息",
+                "operationId": "queryBlockChainInfoUsingGET",
                 "produces": ["*/*"],
                 "parameters": [{
-                    "name": "当前组织Hash",
+                    "name": "溯源智能合约id",
                     "in": "path",
-                    "description": "Hash值",
+                    "description": "溯源智能合约id",
                     "required": true,
-                    "type": "string"
+                    "type": "integer",
+                    "format": "int32"
                 }],
                 "responses": {
                     "200": {
@@ -506,9 +897,9 @@
                 }
             }
         },
-        "/sdk/trace/number": {
+        "/trace/number": {
             "post": {
-                "tags": ["fabric-sdk-api"],
+                "tags": ["区块链网络中数据追溯接口"],
                 "summary": "根据交易区块高度查询区块",
                 "operationId": "queryBlockByNumberUsingPOST",
                 "consumes": ["application/json"],
@@ -544,9 +935,9 @@
                 }
             }
         },
-        "/sdk/trace/txid": {
+        "/trace/txid": {
             "post": {
-                "tags": ["fabric-sdk-api"],
+                "tags": ["区块链网络中数据追溯接口"],
                 "summary": "根据交易ID查询区块",
                 "operationId": "queryBlockByTransactionIDUsingPOST",
                 "consumes": ["application/json"],
@@ -584,38 +975,50 @@
         }
     },
     "definitions": {
-        "使用指定用户访问指定通道指定智能合约的组织信息对象": {
+        "排序服务对象": {
             "type": "object",
-            "required": ["chaincodeName", "chaincodePath", "chaincodeVersion", "channelName", "cryptoConfigDir", "hash", "invokeWaitTime", "ordererDomainName", "orgDomainName", "orgMSPID", "orgName", "proposalWaitTime", "tls", "username"],
+            "required": ["location", "name", "orgId"],
             "properties": {
-                "chaincodeName": {
-                    "type": "string",
-                    "description": "智能合约名称",
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "组织唯一id",
                     "allowEmptyValue": false
                 },
-                "chaincodePath": {
+                "location": {
                     "type": "string",
-                    "description": "智能合约路径",
+                    "description": "排序服务器地址",
                     "allowEmptyValue": false
                 },
-                "chaincodeVersion": {
+                "name": {
                     "type": "string",
-                    "description": "智能合约版本",
+                    "description": "排序服务器名称",
                     "allowEmptyValue": false
                 },
-                "channelName": {
-                    "type": "string",
-                    "description": "当前组织所访问的通道名称",
+                "orgId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "组织id",
+                    "allowEmptyValue": false
+                }
+            },
+            "title": "排序服务对象",
+            "description": "排序服务对象信息"
+        },
+        "智能合约对象": {
+            "type": "object",
+            "required": ["channelId", "invokeWaitTime", "name", "path", "proposalWaitTime", "version"],
+            "properties": {
+                "channelId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "通道id",
                     "allowEmptyValue": false
                 },
-                "cryptoConfigDir": {
-                    "type": "string",
-                    "description": "CryptoConfig所在目录的目录名称",
-                    "allowEmptyValue": false
-                },
-                "hash": {
-                    "type": "string",
-                    "description": "组织hash",
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "合约唯一id",
                     "allowEmptyValue": false
                 },
                 "invokeWaitTime": {
@@ -624,30 +1027,111 @@
                     "description": "事务等待时间以秒为单位",
                     "allowEmptyValue": false
                 },
-                "ordererDomainName": {
+                "name": {
                     "type": "string",
-                    "description": "排序服务域名",
+                    "description": "智能合约名称",
                     "allowEmptyValue": false
                 },
-                "orgDomainName": {
+                "path": {
                     "type": "string",
-                    "description": "组织域名",
-                    "allowEmptyValue": false
-                },
-                "orgMSPID": {
-                    "type": "string",
-                    "description": "组织唯一标识符",
-                    "allowEmptyValue": false
-                },
-                "orgName": {
-                    "type": "string",
-                    "description": "组织名称",
+                    "description": "智能合约路径",
                     "allowEmptyValue": false
                 },
                 "proposalWaitTime": {
                     "type": "integer",
                     "format": "int32",
                     "description": "单个提案请求的超时时间以毫秒为单位",
+                    "allowEmptyValue": false
+                },
+                "version": {
+                    "type": "string",
+                    "description": "智能合约版本",
+                    "allowEmptyValue": false
+                }
+            },
+            "title": "智能合约对象",
+            "description": "智能合约对象信息"
+        },
+        "溯源对象": {
+            "type": "object",
+            "required": ["chainCodeId"],
+            "properties": {
+                "chainCodeId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "当前正在运行的智能合约id",
+                    "allowEmptyValue": false
+                },
+                "trace": {
+                    "type": "string",
+                    "description": "当前组织链查询id",
+                    "allowEmptyValue": false
+                }
+            },
+            "title": "溯源对象",
+            "description": "溯源操作所需转接对象"
+        },
+        "状态对象": {
+            "type": "object",
+            "required": ["args", "id"],
+            "properties": {
+                "args": {
+                    "type": "array",
+                    "description": "当前执行合约的参数集合",
+                    "allowEmptyValue": false,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "当前正在运行的智能合约id",
+                    "allowEmptyValue": false
+                }
+            },
+            "title": "状态对象",
+            "description": "操作合约所需状态对象"
+        },
+        "组织对象": {
+            "type": "object",
+            "required": ["cryptoConfigDir", "domainName", "leagueId", "mspId", "name", "ordererDomainName", "tls", "username"],
+            "properties": {
+                "cryptoConfigDir": {
+                    "type": "string",
+                    "description": "CryptoConfig所在目录的目录名称",
+                    "allowEmptyValue": false
+                },
+                "domainName": {
+                    "type": "string",
+                    "description": "组织域名",
+                    "allowEmptyValue": false
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "组织唯一id",
+                    "allowEmptyValue": false
+                },
+                "leagueId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "联盟id",
+                    "allowEmptyValue": false
+                },
+                "mspId": {
+                    "type": "string",
+                    "description": "组织唯一标识符",
+                    "allowEmptyValue": false
+                },
+                "name": {
+                    "type": "string",
+                    "description": "组织名称",
+                    "allowEmptyValue": false
+                },
+                "ordererDomainName": {
+                    "type": "string",
+                    "description": "排序服务域名",
                     "allowEmptyValue": false
                 },
                 "tls": {
@@ -662,116 +1146,94 @@
                     "allowEmptyValue": false
                 }
             },
-            "title": "使用指定用户访问指定通道指定智能合约的组织信息对象",
-            "description": "组织信息对象"
+            "title": "组织对象",
+            "description": "组织对象信息"
         },
-        "合约对象": {
+        "联盟对象": {
             "type": "object",
-            "required": ["args", "hash"],
+            "required": ["name"],
             "properties": {
-                "args": {
-                    "type": "array",
-                    "description": "当前执行合约的参数集合",
-                    "allowEmptyValue": false,
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "hash": {
+                "id": {
                     "type": "string",
-                    "description": "当前执行合约的组织hash",
-                    "allowEmptyValue": false
-                }
-            },
-            "title": "合约对象",
-            "description": "操作合约所需转接对象"
-        },
-        "排序服务对象": {
-            "type": "object",
-            "required": ["hash", "location", "name", "orgHash"],
-            "properties": {
-                "hash": {
-                    "type": "string",
-                    "description": "排序服务hash",
-                    "allowEmptyValue": false
-                },
-                "location": {
-                    "type": "string",
-                    "description": "排序服务器地址",
+                    "description": "当前联盟唯一id",
                     "allowEmptyValue": false
                 },
                 "name": {
                     "type": "string",
-                    "description": "排序服务器名称",
-                    "allowEmptyValue": false
-                },
-                "orgHash": {
-                    "type": "string",
-                    "description": "组织hash",
+                    "description": "当前联盟名称",
                     "allowEmptyValue": false
                 }
             },
-            "title": "排序服务对象",
-            "description": "排序服务对象信息"
-        },
-        "溯源对象": {
-            "type": "object",
-            "required": ["hash", "trace"],
-            "properties": {
-                "hash": {
-                    "type": "string",
-                    "description": "当前执行合约的组织hash",
-                    "allowEmptyValue": false
-                },
-                "trace": {
-                    "type": "string",
-                    "description": "当前组织链查询id",
-                    "allowEmptyValue": false
-                }
-            },
-            "title": "溯源对象",
-            "description": "溯源操作所需转接对象"
+            "title": "联盟对象",
+            "description": "联盟对象信息"
         },
         "节点服务对象": {
             "type": "object",
-            "required": ["hash", "orgHash", "peerEventHubLocation", "peerEventHubName", "peerLocation", "peerName"],
+            "required": ["eventHubLocation", "eventHubName", "location", "name", "orgId"],
             "properties": {
-                "eventListener": {
-                    "type": "boolean"
-                },
-                "hash": {
-                    "type": "string",
-                    "description": "节点hash",
-                    "allowEmptyValue": false
-                },
-                "orgHash": {
-                    "type": "string",
-                    "description": "组织hash",
-                    "allowEmptyValue": false
-                },
-                "peerEventHubLocation": {
+                "eventHubLocation": {
                     "type": "string",
                     "description": "当前指定的组织节点事件监听访问地址",
                     "allowEmptyValue": false
                 },
-                "peerEventHubName": {
+                "eventHubName": {
                     "type": "string",
                     "description": "当前指定的组织节点事件域名",
                     "allowEmptyValue": false
                 },
-                "peerLocation": {
+                "eventListener": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "节点唯一id",
+                    "allowEmptyValue": false
+                },
+                "location": {
                     "type": "string",
                     "description": "当前指定的组织节点访问地址",
                     "allowEmptyValue": false
                 },
-                "peerName": {
+                "name": {
                     "type": "string",
                     "description": "当前指定的组织节点域名",
+                    "allowEmptyValue": false
+                },
+                "orgId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "节点id",
                     "allowEmptyValue": false
                 }
             },
             "title": "节点服务对象",
             "description": "节点服务对象信息"
+        },
+        "通道对象": {
+            "type": "object",
+            "required": ["name", "peerId"],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "通道唯一id",
+                    "allowEmptyValue": false
+                },
+                "name": {
+                    "type": "string",
+                    "description": "当前组织所访问的通道名称",
+                    "allowEmptyValue": false
+                },
+                "peerId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "节点id",
+                    "allowEmptyValue": false
+                }
+            },
+            "title": "通道对象",
+            "description": "通道对象信息"
         }
     }
 }
