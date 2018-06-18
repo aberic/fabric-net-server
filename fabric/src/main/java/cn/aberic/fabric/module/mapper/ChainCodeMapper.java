@@ -17,7 +17,7 @@ public interface ChainCodeMapper {
     int add(@Param("c") ChainCodeDTO chainCode);
 
     @Update("update chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
-            "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} where hash=#{c.hash}")
+            "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} where rowid=#{c.id}")
     int update(@Param("c") ChainCodeDTO chainCode);
 
     @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id from chaincode where rowid=#{id}")
