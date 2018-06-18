@@ -1,13 +1,19 @@
 package cn.aberic.fabric.module.service.impl;
 
 import cn.aberic.fabric.module.bean.dto.LeagueDTO;
+import cn.aberic.fabric.module.bean.vo.LeagueVO;
 import cn.aberic.fabric.module.mapper.LeagueMapper;
+import cn.aberic.fabric.module.mapper.OrgMapper;
 import cn.aberic.fabric.module.service.LeagueService;
+import cn.aberic.fabric.module.service.OrgService;
+import cn.aberic.fabric.utils.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 描述：
@@ -19,9 +25,12 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Resource
     private LeagueMapper leagueMapper;
+    @Resource
+    private OrgMapper orgMapper;
 
-   @Override
+    @Override
     public String add(LeagueDTO league) {
+        league.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         if (leagueMapper.addLeague(league) > 0) {
             return responseSuccess(league.toString());
         }
@@ -44,5 +53,20 @@ public class LeagueServiceImpl implements LeagueService {
     @Override
     public String get(int id) {
         return "";
+    }
+
+    @Override
+    public List<LeagueVO> leagues() {
+        List<LeagueDTO> leagueDTOS = leagueMapper.getLeagueList();
+        List<LeagueVO> leagueVOS = new ArrayList<>();
+        for (LeagueDTO leagueDTO: leagueDTOS) {
+            LeagueVO leagueVO = new LeagueVO();
+            leagueVO.setId(leagueDTO.getId());
+            leagueVO.setName(leagueDTO.getName());
+            leagueVO.setDate(leagueDTO.getDate());
+            leagueVO.setCount(orgMapper.count(leagueDTO.getId()));
+            leagueVOS.add(leagueVO);
+        }
+        return leagueVOS;
     }
 }
