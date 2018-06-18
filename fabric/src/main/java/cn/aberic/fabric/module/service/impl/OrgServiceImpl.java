@@ -46,4 +46,9 @@ public class OrgServiceImpl implements OrgService {
     public String get(int id) {
         return responseSuccess(JSON.toJSONString(orgMapper.get(id)));
     }
+
+    @Override
+    public int count(int id) {
+        return orgMapper.count(id);
+    }
 }
