@@ -12,16 +12,17 @@ import java.util.List;
 @Mapper
 public interface LeagueMapper {
 
-    @Insert("insert into league values (#{l.name})")
+    @Insert("insert into league  (name,date) values (#{l.name},#{l.date})")
     int addLeague(@Param("l") LeagueDTO league);
 
     @Update("update league set name=#{l.name} where rowid=#{l.id}")
     int updateLeagueById(@Param("l") LeagueDTO league);
 
-    @Select("select rowid,name from league")
+    @Select("select rowid,name,date from league")
     @Results({
             @Result(property = "id", column = "rowid"),
-            @Result(property = "name", column = "name")
+            @Result(property = "name", column = "name"),
+            @Result(property = "date", column = "date")
     })
     List<LeagueDTO> getLeagueList();
 
