@@ -1,4 +1,4 @@
-package cn.aberic.fabric.module.bean.dto;
+package cn.aberic.fabric.module.bean.vo;
 
 import cn.aberic.fabric.base.BaseDTO;
 import io.swagger.annotations.ApiModel;
@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author : Aberic 【2018/6/5 16:01】
  */
 @ApiModel(value = "节点服务对象", description = "节点服务对象信息")
-public class PeerDTO extends BaseDTO {
+public class PeerVO extends BaseDTO {
 
     /** 节点唯一id */
     @ApiModelProperty(value = "节点唯一id")
@@ -33,9 +33,12 @@ public class PeerDTO extends BaseDTO {
     /** 节点id */
     @ApiModelProperty(value = "节点id", required = true)
     private int orgId;
-    /** 当前节点创建日期 */
-    @ApiModelProperty(value = "当前节点创建日期")
-    private String date;
+    /** 节点名称 */
+    @ApiModelProperty(value = "节点名称", required = true)
+    private String orgName;
+    /** 当前组织下通道数量 */
+    @ApiModelProperty(value = "当前组织下通道数量")
+    private int count;
 
     public int getId() {
         return id;
@@ -93,25 +96,19 @@ public class PeerDTO extends BaseDTO {
         this.orgId = orgId;
     }
 
-    public String getDate() {
-        return date;
+    public int getCount() {
+        return count;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    @Override
-    public String toString() {
-        return "PeerDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", eventHubName='" + eventHubName + '\'' +
-                ", location='" + location + '\'' +
-                ", eventHubLocation='" + eventHubLocation + '\'' +
-                ", isEventListener=" + isEventListener +
-                ", orgId=" + orgId +
-                ", date='" + date + '\'' +
-                '}';
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }

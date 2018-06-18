@@ -1,6 +1,6 @@
-package cn.aberic.fabric.module.bean.dto;
+package cn.aberic.fabric.module.bean.vo;
 
-import cn.aberic.fabric.base.BaseDTO;
+import cn.aberic.fabric.base.BaseVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author : Aberic 【2018/6/5 15:51】
  */
 @ApiModel(value = "组织对象", description = "组织对象信息")
-public class OrgDTO extends BaseDTO {
+public class OrgVO extends BaseVO {
 
     /** 组织唯一id */
     @ApiModelProperty(value = "组织唯一id")
@@ -39,9 +39,18 @@ public class OrgDTO extends BaseDTO {
     /** 联盟id */
     @ApiModelProperty(value = "联盟id", required = true)
     private int leagueId;
+    /** 所属联盟名称 */
+    @ApiModelProperty(value = "所属联盟名称", required = true)
+    private String leagueName;
     /** 当前组织创建日期 */
     @ApiModelProperty(value = "当前组织创建日期")
     private String date;
+    /** 当前组织下节点服务数量 */
+    @ApiModelProperty(value = "当前组织下节点服务数量")
+    private int peerCount;
+    /** 当前组织下排序服务数量 */
+    @ApiModelProperty(value = "当前组织下排序服务数量")
+    private int ordererCount;
 
     public int getId() {
         return id;
@@ -123,19 +132,28 @@ public class OrgDTO extends BaseDTO {
         this.date = date;
     }
 
-    @Override
-    public String toString() {
-        return "OrgDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", tls=" + tls +
-                ", username='" + username + '\'' +
-                ", cryptoConfigDir='" + cryptoConfigDir + '\'' +
-                ", mspId='" + mspId + '\'' +
-                ", domainName='" + domainName + '\'' +
-                ", ordererDomainName='" + ordererDomainName + '\'' +
-                ", leagueId=" + leagueId +
-                ", date='" + date + '\'' +
-                '}';
+    public int getPeerCount() {
+        return peerCount;
     }
+
+    public void setPeerCount(int peerCount) {
+        this.peerCount = peerCount;
+    }
+
+    public int getOrdererCount() {
+        return ordererCount;
+    }
+
+    public void setOrdererCount(int ordererCount) {
+        this.ordererCount = ordererCount;
+    }
+
+    public String getLeagueName() {
+        return leagueName;
+    }
+
+    public void setLeagueName(String leagueName) {
+        this.leagueName = leagueName;
+    }
+
 }

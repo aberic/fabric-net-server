@@ -22,6 +22,13 @@ public interface DTOService<B> {
     String list(int id);
 
     /**
+     * 获取对象列表
+     *
+     * @return 对象列表
+     */
+    String listAll();
+
+    /**
      * 更新对象
      *
      * @return 请求返回

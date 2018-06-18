@@ -12,15 +12,18 @@ import java.util.List;
 @Mapper
 public interface ChainCodeMapper {
 
-    @Insert("insert into chaincode (name,path,version,proposal_wait_time,invoke_wait_time,channel_id)" +
-            "values (#{c.name},#{c.path},#{c.version},#{c.proposalWaitTime},#{c.invokeWaitTime},#{c.channelId})")
+    @Insert("insert into chaincode (name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date) values " +
+            "(#{c.name},#{c.path},#{c.version},#{c.proposalWaitTime},#{c.invokeWaitTime},#{c.channelId},#{c.date})")
     int add(@Param("c") ChainCodeDTO chainCode);
 
     @Update("update chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
             "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} where rowid=#{c.id}")
     int update(@Param("c") ChainCodeDTO chainCode);
 
-    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id from chaincode where rowid=#{id}")
+    @Select("select count(name) from chaincode where channel_id=#{id}")
+    int count(@Param("id") int id);
+
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -28,11 +31,12 @@ public interface ChainCodeMapper {
             @Result(property = "version", column = "version"),
             @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
             @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
-            @Result(property = "channelId", column = "channel_id")
+            @Result(property = "channelId", column = "channel_id"),
+            @Result(property = "date", column = "date")
     })
     ChainCodeDTO get(@Param("id") int id);
 
-    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id from chaincode where channel_id=#{id}")
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode where channel_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -40,8 +44,22 @@ public interface ChainCodeMapper {
             @Result(property = "version", column = "version"),
             @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
             @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
-            @Result(property = "channelId", column = "channel_id")
+            @Result(property = "channelId", column = "channel_id"),
+            @Result(property = "date", column = "date")
     })
     List<ChainCodeDTO> list(@Param("id") int id);
+
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "path", column = "path"),
+            @Result(property = "version", column = "version"),
+            @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
+            @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
+            @Result(property = "channelId", column = "channel_id"),
+            @Result(property = "date", column = "date")
+    })
+    List<ChainCodeDTO> listAll();
 
 }

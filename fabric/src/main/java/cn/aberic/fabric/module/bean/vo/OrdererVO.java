@@ -1,7 +1,6 @@
-package cn.aberic.fabric.module.bean.dto;
+package cn.aberic.fabric.module.bean.vo;
 
 import cn.aberic.fabric.base.BaseDTO;
-import cn.aberic.fabric.utils.MD5Helper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author : Aberic 【2018/6/5 15:59】
  */
 @ApiModel(value = "排序服务对象", description = "排序服务对象信息")
-public class OrdererDTO extends BaseDTO {
+public class OrdererVO extends BaseDTO {
 
     /** 组织唯一id */
     @ApiModelProperty(value = "组织唯一id")
@@ -25,9 +24,9 @@ public class OrdererDTO extends BaseDTO {
     /** 组织id */
     @ApiModelProperty(value = "组织id", required = true)
     private int orgId;
-    /** 当前排序服务创建日期 */
-    @ApiModelProperty(value = "当前排序服务创建日期")
-    private String date;
+    /** 组织名称 */
+    @ApiModelProperty(value = "组织名称", required = true)
+    private String orgName;
 
     public int getId() {
         return id;
@@ -61,23 +60,12 @@ public class OrdererDTO extends BaseDTO {
         this.orgId = orgId;
     }
 
-    public String getDate() {
-        return date;
+    public String getOrgName() {
+        return orgName;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return "OrdererDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", location='" + location + '\'' +
-                ", orgId=" + orgId +
-                ", date='" + date + '\'' +
-                '}';
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }
 

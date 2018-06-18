@@ -12,15 +12,18 @@ import java.util.List;
 @Mapper
 public interface PeerMapper {
 
-    @Insert("insert into peer (name,event_hub_name,location,event_hub_location,event_listener,org_id) " +
-            "values (#{p.name},#{p.eventHubName},#{p.location},#{p.eventHubLocation},#{p.isEventListener},#{p.orgId})")
+    @Insert("insert into peer (name,event_hub_name,location,event_hub_location,event_listener,org_id,date) " +
+            "values (#{p.name},#{p.eventHubName},#{p.location},#{p.eventHubLocation},#{p.isEventListener},#{p.orgId},#{p.date})")
     int add(@Param("p") PeerDTO peer);
 
     @Update("update peer set name=#{p.name}, event_hub_name=#{p.eventHubName}, location=#{p.location}" +
             ", event_hub_location=#{p.eventHubLocation}, event_listener=#{p.isEventListener} where rowid=#{p.id}")
     int update(@Param("p") PeerDTO peer);
 
-    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id from peer where rowid=#{id}")
+    @Select("select count(name) from peer where org_id=#{id}")
+    int count(@Param("id") int id);
+
+    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id,date from peer where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -28,11 +31,12 @@ public interface PeerMapper {
             @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "isEventListener", column = "event_listener"),
-            @Result(property = "orgId", column = "org_id")
+            @Result(property = "orgId", column = "org_id"),
+            @Result(property = "date", column = "date")
     })
     PeerDTO get(@Param("id") int id);
 
-    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id from peer where org_id=#{id}")
+    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id,date from peer where org_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -40,8 +44,22 @@ public interface PeerMapper {
             @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "isEventListener", column = "event_listener"),
-            @Result(property = "orgId", column = "org_id")
+            @Result(property = "orgId", column = "org_id"),
+            @Result(property = "date", column = "date")
     })
     List<PeerDTO> list(@Param("id") int id);
+
+    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id,date from peer")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "eventHubName", column = "event_hub_name"),
+            @Result(property = "location", column = "location"),
+            @Result(property = "eventHubLocation", column = "event_hub_location"),
+            @Result(property = "isEventListener", column = "event_listener"),
+            @Result(property = "orgId", column = "org_id"),
+            @Result(property = "date", column = "date")
+    })
+    List<PeerDTO> listAll();
 
 }

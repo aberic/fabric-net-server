@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 public interface OrgMapper {
 
-    @Insert("insert into org (name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id)" +
+    @Insert("insert into org (name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date)" +
             "values (#{o.name},#{o.tls},#{o.username},#{o.cryptoConfigDir},#{o.mspId},#{o.domainName}," +
             "#{o.ordererDomainName},#{o.leagueId})")
     int add(@Param("o") OrgDTO org);
@@ -22,10 +22,10 @@ public interface OrgMapper {
             " where rowid=#{o.id}")
     int update(@Param("o") OrgDTO org);
 
-    @Select("select count(name) from org where rowid=#{id}")
+    @Select("select count(name) from org where league_id=#{id}")
     int count(@Param("id") int id);
 
-    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id from org where rowid=#{id}")
+    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from org where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -35,11 +35,12 @@ public interface OrgMapper {
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "domainName", column = "domain_name"),
             @Result(property = "ordererDomainName", column = "orderer_domain_name"),
-            @Result(property = "leagueId", column = "league_id")
+            @Result(property = "leagueId", column = "league_id"),
+            @Result(property = "date", column = "date")
     })
     OrgDTO get(@Param("id") int id);
 
-    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id from org where league_id=#{id}")
+    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from org where league_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -49,8 +50,24 @@ public interface OrgMapper {
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "domainName", column = "domain_name"),
             @Result(property = "ordererDomainName", column = "orderer_domain_name"),
-            @Result(property = "leagueId", column = "league_id")
+            @Result(property = "leagueId", column = "league_id"),
+            @Result(property = "date", column = "date")
     })
     List<OrgDTO> list(@Param("id") int id);
+
+    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from org")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "tls", column = "tls"),
+            @Result(property = "username", column = "username"),
+            @Result(property = "cryptoConfigDir", column = "crypto_config_dir"),
+            @Result(property = "mspId", column = "msp_id"),
+            @Result(property = "domainName", column = "domain_name"),
+            @Result(property = "ordererDomainName", column = "orderer_domain_name"),
+            @Result(property = "leagueId", column = "league_id"),
+            @Result(property = "date", column = "date")
+    })
+    List<OrgDTO> listAll();
 
 }

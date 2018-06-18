@@ -1,7 +1,6 @@
-package cn.aberic.fabric.module.bean.dto;
+package cn.aberic.fabric.module.bean.vo;
 
 import cn.aberic.fabric.base.BaseDTO;
-import cn.aberic.fabric.utils.MD5Helper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 邮箱：abericyang@gmail.com
  */
 @ApiModel(value = "智能合约对象", description = "智能合约对象信息")
-public class ChainCodeDTO  extends BaseDTO {
+public class ChainCodeVO extends BaseDTO {
 
     /** 合约唯一id */
     @ApiModelProperty(value = "合约唯一id")
@@ -33,9 +32,9 @@ public class ChainCodeDTO  extends BaseDTO {
     /** 通道id */
     @ApiModelProperty(value = "通道id", required = true)
     private int channelId;
-    /** 当前合约创建日期 */
-    @ApiModelProperty(value = "当前合约创建日期")
-    private String date;
+    /** 通道名称 */
+    @ApiModelProperty(value = "通道名称", required = true)
+    private String channelName;
 
     public int getId() {
         return id;
@@ -93,25 +92,11 @@ public class ChainCodeDTO  extends BaseDTO {
         this.channelId = channelId;
     }
 
-    public String getDate() {
-        return date;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return "ChainCodeDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", path='" + path + '\'' +
-                ", version='" + version + '\'' +
-                ", proposalWaitTime=" + proposalWaitTime +
-                ", invokeWaitTime=" + invokeWaitTime +
-                ", channelId=" + channelId +
-                ", date='" + date + '\'' +
-                '}';
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
     }
 }

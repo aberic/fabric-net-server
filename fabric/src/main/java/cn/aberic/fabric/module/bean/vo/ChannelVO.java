@@ -1,7 +1,6 @@
-package cn.aberic.fabric.module.bean.dto;
+package cn.aberic.fabric.module.bean.vo;
 
 import cn.aberic.fabric.base.BaseDTO;
-import cn.aberic.fabric.utils.MD5Helper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 邮箱：abericyang@gmail.com
  */
 @ApiModel(value = "通道对象", description = "通道对象信息")
-public class ChannelDTO  extends BaseDTO {
+public class ChannelVO extends BaseDTO {
 
     /** 通道唯一id */
     @ApiModelProperty(value = "通道唯一id")
@@ -21,9 +20,12 @@ public class ChannelDTO  extends BaseDTO {
     /** 节点id */
     @ApiModelProperty(value = "节点id", required = true)
     private int peerId;
-    /** 当前通道创建日期 */
-    @ApiModelProperty(value = "当前通道创建日期")
-    private String date;
+    /** 节点名称 */
+    @ApiModelProperty(value = "节点名称", required = true)
+    private String peerName;
+    /** 当前通道下合约数量 */
+    @ApiModelProperty(value = "当前通道下合约数量")
+    private int count;
 
     public int getId() {
         return id;
@@ -49,21 +51,19 @@ public class ChannelDTO  extends BaseDTO {
         this.peerId = peerId;
     }
 
-    public String getDate() {
-        return date;
+    public int getCount() {
+        return count;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setCount(int count) {
+        this.count = count;
     }
 
-    @Override
-    public String toString() {
-        return "ChannelDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", peerId=" + peerId +
-                ", date='" + date + '\'' +
-                '}';
+    public String getPeerName() {
+        return peerName;
+    }
+
+    public void setPeerName(String peerName) {
+        this.peerName = peerName;
     }
 }

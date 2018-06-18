@@ -12,26 +12,40 @@ import java.util.List;
 @Mapper
 public interface ChannelMapper {
 
-    @Insert("insert into channel (name,peer_id) values (#{c.name},#{c.peerId})")
+    @Insert("insert into channel (name,peer_id,date) values (#{c.name},#{c.peerId},#{c.date})")
     int add(@Param("c") ChannelDTO channel);
 
     @Update("update channel set name=#{c.name} where rowid=#{c.id}")
     int update(@Param("c") ChannelDTO channel);
 
-    @Select("select rowid,name,peer_id from channel where rowid=#{id}")
+    @Select("select count(name) from channel where peer_id=#{id}")
+    int count(@Param("id") int id);
+
+    @Select("select rowid,name,peer_id,date from channel where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
-            @Result(property = "peerId", column = "peer_id")
+            @Result(property = "peerId", column = "peer_id"),
+            @Result(property = "date", column = "date")
     })
     ChannelDTO get(@Param("id") int id);
 
-    @Select("select rowid,name,peer_id from channel where peer_id=#{id}")
+    @Select("select rowid,name,peer_id,date from channel where peer_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
-            @Result(property = "peerId", column = "peer_id")
+            @Result(property = "peerId", column = "peer_id"),
+            @Result(property = "date", column = "date")
     })
     List<ChannelDTO> list(@Param("id") int id);
+
+    @Select("select rowid,name,peer_id,date from channel")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "peerId", column = "peer_id"),
+            @Result(property = "date", column = "date")
+    })
+    List<ChannelDTO> listAll();
 
 }

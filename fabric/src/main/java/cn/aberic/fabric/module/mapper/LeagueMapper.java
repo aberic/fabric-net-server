@@ -13,10 +13,18 @@ import java.util.List;
 public interface LeagueMapper {
 
     @Insert("insert into league  (name,date) values (#{l.name},#{l.date})")
-    int addLeague(@Param("l") LeagueDTO league);
+    int add(@Param("l") LeagueDTO league);
 
     @Update("update league set name=#{l.name} where rowid=#{l.id}")
-    int updateLeagueById(@Param("l") LeagueDTO league);
+    int update(@Param("l") LeagueDTO league);
+
+    @Select("select rowid,name,date from league where rowid=#{id}")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "date", column = "date")
+    })
+    LeagueDTO get(@Param("id") int id);
 
     @Select("select rowid,name,date from league")
     @Results({
@@ -24,6 +32,6 @@ public interface LeagueMapper {
             @Result(property = "name", column = "name"),
             @Result(property = "date", column = "date")
     })
-    List<LeagueDTO> getLeagueList();
+    List<LeagueDTO> listAll();
 
 }

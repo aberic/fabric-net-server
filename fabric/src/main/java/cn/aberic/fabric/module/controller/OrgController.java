@@ -41,6 +41,12 @@ public class OrgController {
         return orgService.list(id);
     }
 
+    @ApiOperation(value = "根据联盟id获取组织对象集合")
+    @GetMapping(value = "listAll")
+    public String listAll() {
+        return orgService.listAll();
+    }
+
     @ApiOperation(value = "根据组织对象id获取组织对象")
     @GetMapping(value = "get/{id}")
     public String get(@ApiParam(name = "组织对象id", value = "id值", required = true) @PathVariable("id") int id) {

@@ -12,28 +12,43 @@ import java.util.List;
 @Mapper
 public interface OrdererMapper {
 
-    @Insert("insert into orderer (name,location,org_id) values (#{o.name},#{o.location},#{o.orgId})")
+    @Insert("insert into orderer (name,location,org_id,date) values (#{o.name},#{o.location},#{o.orgId},#{o.date})")
     int add(@Param("o") OrdererDTO orderer);
 
     @Update("update orderer set name=#{o.name}, location=#{o.location} where rowid=#{o.id}")
     int update(@Param("o") OrdererDTO orderer);
 
-    @Select("select rowid,name,location,org_id from orderer where rowid=#{id}")
-    @Results({
-            @Result(property = "id", column = "rowid"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "location", column = "location"),
-            @Result(property = "org_id", column = "orgId")
-    })
-    OrdererDTO get(@Param("hash") int id);
+    @Select("select count(name) from orderer where org_id=#{id}")
+    int count(@Param("id") int id);
 
-    @Select("select rowid,name,location,org_id from orderer where org_id=#{id}")
+    @Select("select rowid,name,location,org_id,date from orderer where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "location", column = "location"),
-            @Result(property = "org_id", column = "orgId")
+            @Result(property = "org_id", column = "orgId"),
+            @Result(property = "date", column = "date")
+    })
+    OrdererDTO get(@Param("id") int id);
+
+    @Select("select rowid,name,location,org_id,date from orderer where org_id=#{id}")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "location", column = "location"),
+            @Result(property = "org_id", column = "orgId"),
+            @Result(property = "date", column = "date")
     })
     List<OrdererDTO> list(@Param("id") int id);
+
+    @Select("select rowid,name,location,org_id,date from orderer")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "location", column = "location"),
+            @Result(property = "org_id", column = "orgId"),
+            @Result(property = "date", column = "date")
+    })
+    List<OrdererDTO> listAll();
 
 }
