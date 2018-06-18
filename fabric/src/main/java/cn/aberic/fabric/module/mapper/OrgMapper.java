@@ -22,6 +22,9 @@ public interface OrgMapper {
             " where rowid=#{o.id}")
     int update(@Param("o") OrgDTO org);
 
+    @Select("select count(name) from org where rowid=#{id}")
+    int count(@Param("id") int id);
+
     @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id from org where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
