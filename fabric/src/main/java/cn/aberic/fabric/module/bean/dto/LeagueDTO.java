@@ -13,17 +13,19 @@ public class LeagueDTO extends BaseDTO {
 
     /** 当前联盟唯一id */
     @ApiModelProperty(value = "当前联盟唯一id")
-    private String id;
-
+    private int id;
     /** 当前联盟名称 */
     @ApiModelProperty(value = "当前联盟名称", required = true)
     private String name;
+    /** 当前联盟创建日期 */
+    @ApiModelProperty(value = "当前联盟创建日期")
+    private String date;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -35,12 +37,20 @@ public class LeagueDTO extends BaseDTO {
         this.name = name;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "LeagueDTO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", date='" + date + '\'' +
                 '}';
     }
-
 }
