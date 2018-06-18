@@ -11,5 +11,14 @@ import cn.aberic.fabric.module.bean.dto.OrgDTO;
  */
 public interface OrgService extends BaseService, DTOService<OrgDTO> {
 
+    /**
+     * 根据id查询总数
+     *
+     * @param id id
+     *
+     * @return 总数
+     */
+    int count(int id);
+
 
 }
