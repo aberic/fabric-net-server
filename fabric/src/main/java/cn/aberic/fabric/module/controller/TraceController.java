@@ -15,6 +15,7 @@ import javax.annotation.Resource;
  * @author : Aberic 【2018/6/4 15:01】
  */
 @Api(value = "Trace Controller", tags = {"区块链网络中数据追溯接口"})
+@CrossOrigin
 @RestController
 @RequestMapping("trace")
 public class TraceController {

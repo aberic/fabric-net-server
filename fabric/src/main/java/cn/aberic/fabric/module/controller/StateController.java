@@ -5,10 +5,7 @@ import cn.aberic.fabric.module.service.StateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -18,6 +15,7 @@ import javax.annotation.Resource;
  * @author : Aberic 【2018/6/4 15:01】
  */
 @Api(value = "State Controller", tags = {"区块链网络中数据库状态增删改查接口"})
+@CrossOrigin
 @RestController
 @RequestMapping("state")
 public class StateController {

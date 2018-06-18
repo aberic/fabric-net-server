@@ -15,6 +15,7 @@ import javax.annotation.Resource;
  * @author : Aberic 【2018/6/4 15:01】
  */
 @Api(value = "Orderer Controller", tags = {"区块链网络中排序服务相关接口"})
+@CrossOrigin
 @RestController
 @RequestMapping("orderer")
 public class OrdererController {
