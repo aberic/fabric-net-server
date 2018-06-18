@@ -1,5 +1,6 @@
 package cn.aberic.fabric.base;
 
+import cn.aberic.fabric.utils.VerifyUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -14,16 +15,14 @@ public interface BaseService {
     int FAIL = 9999;
 
     default String responseSuccess(String result) {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = parseResult(result);
         jsonObject.put("code", SUCCESS);
-        jsonObject.put("data", result);
         return jsonObject.toString();
     }
 
     default String responseSuccess(String result, String txid) {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = parseResult(result);
         jsonObject.put("code", SUCCESS);
-        jsonObject.put("data", result);
         jsonObject.put("txid", txid);
         return jsonObject.toString();
     }
@@ -47,6 +46,23 @@ public interface BaseService {
         jsonObject.put("code", FAIL);
         jsonObject.put("error", result);
         return jsonObject.toString();
+    }
+
+    default JSONObject parseResult(String result) {
+        JSONObject jsonObject = new JSONObject();
+        int jsonVerify = VerifyUtil.isJSONValid(result);
+        switch (jsonVerify) {
+            case 0:
+                jsonObject.put("data", result);
+                break;
+            case 1:
+                jsonObject.put("data", JSONObject.parseObject(result));
+                break;
+            case 2:
+                jsonObject.put("data", JSONObject.parseArray(result));
+                break;
+        }
+        return jsonObject;
     }
 
 }
