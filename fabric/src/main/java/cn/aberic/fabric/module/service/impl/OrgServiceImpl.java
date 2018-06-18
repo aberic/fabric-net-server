@@ -5,7 +5,6 @@ import cn.aberic.fabric.module.mapper.OrgMapper;
 import cn.aberic.fabric.module.service.OrgService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
