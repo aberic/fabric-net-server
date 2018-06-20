@@ -5,10 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>cn.aberic</groupId>
-  <artifactId>Fabric</artifactId>
+  <artifactId>fabric-net-server</artifactId>
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>sdk-advance</module>
+    <module>fabric-service-api</module>
   </modules>
   <packaging>pom</packaging>
 
