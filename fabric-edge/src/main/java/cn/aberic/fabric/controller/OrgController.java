@@ -35,6 +35,34 @@ public class OrgController {
         return "fail";
     }
 
+    @PostMapping(value = "submit")
+    public ModelAndView submit(@ModelAttribute OrgInfo org, @RequestParam("intent") String intent, @RequestParam("id") int id) {
+        try {
+            switch (intent) {
+                case "add":
+                    multiService.getOrgService().add(org);
+                    break;
+                case "edit":
+                    org.setId(id);
+                    multiService.getOrgService().update(org);
+                    break;
+            }
+        } catch (TException e) {
+            e.printStackTrace();
+        }
+        return list();
+    }
+
+    @GetMapping(value = "add")
+    public ModelAndView add() {
+        ModelAndView modelAndView = new ModelAndView("orgSubmit");
+        modelAndView.addObject("intentLarge", "新建组织");
+        modelAndView.addObject("intentLittle", "新建");
+        modelAndView.addObject("intent", "add");
+        modelAndView.addObject("org", new OrgInfo());
+        return modelAndView;
+    }
+
     @PostMapping(value = "update")
     public String update(@RequestBody OrgInfo org) {
         try {

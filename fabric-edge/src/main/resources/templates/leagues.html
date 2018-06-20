@@ -62,6 +62,7 @@
                                        id="example-r">
                                     <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>联盟名称</th>
                                         <th>组织数量</th>
                                         <th>时间</th>
@@ -70,6 +71,7 @@
                                     </thead>
                                     <tbody>
                                     <tr class="gradeX" th:each="league : ${leagues}">
+                                        <td th:text="${league.id}">ID</td>
                                         <td th:text="${league.name}">联盟名称</td>
                                         <td th:text="${league.orgCount}">组织数量</td>
                                         <td th:text="${league.date}">时间</td>

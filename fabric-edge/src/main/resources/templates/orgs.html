@@ -62,6 +62,7 @@
                                        id="example-r">
                                     <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>组织列表</th>
                                         <th>联盟名称</th>
                                         <th>排序数量</th>
@@ -72,6 +73,7 @@
                                     </thead>
                                     <tbody>
                                     <tr class="gradeX" th:each="league : ${orgs}">
+                                        <td th:text="${orgs.id}">ID</td>
                                         <td th:text="${orgs.name}">组织名称</td>
                                         <td th:text="${orgs.leagueName}">联盟名称</td>
                                         <td th:text="${orgs.ordererCount}">排序数量</td>
