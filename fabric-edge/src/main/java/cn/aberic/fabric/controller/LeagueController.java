@@ -24,9 +24,17 @@ public class LeagueController {
     private MultiServiceProvider multiService;
 
     @PostMapping(value = "submit")
-    public ModelAndView submit(@ModelAttribute LeagueInfo league) {
+    public ModelAndView submit(@ModelAttribute LeagueInfo league, @RequestParam("intent") String intent, @RequestParam("id") int id) {
         try {
-            multiService.getLeagueService().add(league);
+            switch (intent) {
+                case "add":
+                    multiService.getLeagueService().add(league);
+                    break;
+                case "edit":
+                    league.setId(id);
+                    multiService.getLeagueService().update(league);
+                    break;
+            }
         } catch (TException e) {
             e.printStackTrace();
         }
@@ -35,7 +43,7 @@ public class LeagueController {
 
     @GetMapping(value = "add")
     public ModelAndView add() {
-        ModelAndView modelAndView = new ModelAndView("leagueAdd");
+        ModelAndView modelAndView = new ModelAndView("leagueSubmit");
         modelAndView.addObject("intentLarge", "新建联盟");
         modelAndView.addObject("intentLittle", "新建");
         modelAndView.addObject("intent", "add");
@@ -44,12 +52,14 @@ public class LeagueController {
     }
 
     @GetMapping(value = "edit")
-    public ModelAndView edit() {
-        ModelAndView modelAndView = new ModelAndView("leagueAdd");
+    public ModelAndView edit(@RequestParam("id") int id) {
+        ModelAndView modelAndView = new ModelAndView("leagueSubmit");
         modelAndView.addObject("intentLarge", "编辑联盟");
         modelAndView.addObject("intentLittle", "编辑");
         modelAndView.addObject("intent", "edit");
-        modelAndView.addObject("leagueDTO", new LeagueInfo());
+        LeagueInfo league = new LeagueInfo();
+        league.setId(id);
+        modelAndView.addObject("league", league);
         return modelAndView;
     }
 

@@ -65,6 +65,8 @@
                                             class="tpl-form-line-small-title">Name</span></label>
                                     <div class="am-u-sm-9">
                                         <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入名称文字" th:field="*{name}">
+                                        <input type="hidden" name="intent" th:value="${intent}"/>
+                                        <input type="hidden" name="id" th:value="${league.id}"/>
                                         <small>请填写联盟名称10-20字左右。</small>
                                     </div>
                                 </div>

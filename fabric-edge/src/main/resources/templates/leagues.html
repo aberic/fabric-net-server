@@ -75,11 +75,8 @@
                                         <td th:text="${league.date}">时间</td>
                                         <td>
                                             <div class="tpl-table-black-operation">
-                                                <a href="/league/edit">
+                                                <a th:href="@{/league/edit(id=${league.id})}">
                                                     <i class="am-icon-pencil"></i> 编辑
-                                                </a>
-                                                <a href="javascript:;" class="tpl-table-black-operation-del">
-                                                    <i class="am-icon-trash"></i> 查看
                                                 </a>
                                             </div>
                                         </td>
