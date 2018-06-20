@@ -4,9 +4,10 @@ import cn.aberic.fabric.thrift.MultiServiceProvider;
 import cn.aberic.thrift.orderer.OrdererInfo;
 import org.apache.thrift.TException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 描述：
@@ -19,12 +20,12 @@ import java.util.List;
 public class OrdererController {
 
     @Resource
-    private MultiServiceProvider multiSService;
+    private MultiServiceProvider multiService;
 
     @PostMapping(value = "add")
     public String add(@RequestBody OrdererInfo orderer) {
         try {
-            if (multiSService.getOrdererService().add(orderer) > 0) {
+            if (multiService.getOrdererService().add(orderer) > 0) {
                 return "success";
             }
         } catch (TException e) {
@@ -36,7 +37,7 @@ public class OrdererController {
     @PostMapping(value = "update")
     public String update(@RequestBody OrdererInfo orderer) {
         try {
-            if (multiSService.getOrdererService().update(orderer) > 0) {
+            if (multiService.getOrdererService().update(orderer) > 0) {
                 return "success";
             }
         } catch (TException e) {
@@ -45,24 +46,16 @@ public class OrdererController {
         return "fail";
     }
 
-    @GetMapping(value = "list/{id}")
-    public List<OrdererInfo> list(@PathVariable("id") int id) {
+    @GetMapping(value = "list")
+    public ModelAndView list() {
+        ModelAndView modelAndView = new ModelAndView("orderers");
         try {
-            return multiSService.getOrdererService().listById(id);
+            modelAndView.addObject("orderers", multiService.getOrdererService().listAll());
         } catch (TException e) {
+            modelAndView.addObject("orderers", new ArrayList<>());
             e.printStackTrace();
         }
-        return null;
-    }
-
-    @GetMapping(value = "listAll")
-    public List<OrdererInfo> listAll() {
-        try {
-            return multiSService.getOrdererService().listAll();
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return modelAndView;
     }
 
 }

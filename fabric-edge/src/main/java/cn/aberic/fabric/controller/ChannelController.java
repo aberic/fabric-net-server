@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,16 +24,22 @@ import java.util.List;
 public class ChannelController {
 
     @Resource
-    private MultiServiceProvider multiSService;
+    private MultiServiceProvider multiService;
 
-    @GetMapping(value = "listAll")
-    public List<ChannelInfo> listAll() {
+    @GetMapping(value = "list")
+    public ModelAndView list() {
+        ModelAndView modelAndView = new ModelAndView("channels");
         try {
-            return multiSService.getChannelService().listAll();
+            List<ChannelInfo> channels = multiService.getChannelService().listAll();
+            for (ChannelInfo channel : channels) {
+                channel.setChaincodeCount(multiService.getChaincodeService().countById(channel.getId()));
+            }
+            modelAndView.addObject("channels", channels);
         } catch (TException e) {
+            modelAndView.addObject("channels", new ArrayList<>());
             e.printStackTrace();
         }
-        return null;
+        return modelAndView;
     }
 
 }

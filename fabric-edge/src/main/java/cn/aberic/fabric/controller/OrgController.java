@@ -4,8 +4,10 @@ import cn.aberic.fabric.thrift.MultiServiceProvider;
 import cn.aberic.thrift.org.OrgInfo;
 import org.apache.thrift.TException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,12 +21,12 @@ import java.util.List;
 public class OrgController {
 
     @Resource
-    private MultiServiceProvider multiSService;
+    private MultiServiceProvider multiService;
 
     @PostMapping(value = "add")
     public String add(@RequestBody OrgInfo org) {
         try {
-            if (multiSService.getOrgService().add(org) > 0) {
+            if (multiService.getOrgService().add(org) > 0) {
                 return "success";
             }
         } catch (TException e) {
@@ -36,7 +38,7 @@ public class OrgController {
     @PostMapping(value = "update")
     public String update(@RequestBody OrgInfo org) {
         try {
-            if (multiSService.getOrgService().update(org) > 0) {
+            if (multiService.getOrgService().update(org) > 0) {
                 return "success";
             }
         } catch (TException e) {
@@ -45,34 +47,21 @@ public class OrgController {
         return "fail";
     }
 
-    @GetMapping(value = "list/{id}")
-    public List<OrgInfo> list(@PathVariable("id") int id) {
+    @GetMapping(value = "list")
+    public ModelAndView list() {
+        ModelAndView modelAndView = new ModelAndView("orgs");
         try {
-            return multiSService.getOrgService().listById(id);
+            List<OrgInfo> orgs = multiService.getOrgService().listAll();
+            for (OrgInfo org : orgs) {
+                org.setOrdererCount(multiService.getOrdererService().countById(org.getId()));
+                org.setPeerCount(multiService.getPeerService().countById(org.getId()));
+            }
+            modelAndView.addObject("orgs", orgs);
         } catch (TException e) {
+            modelAndView.addObject("orgs", new ArrayList<>());
             e.printStackTrace();
         }
-        return null;
-    }
-
-    @GetMapping(value = "listAll")
-    public List<OrgInfo> listAll() {
-        try {
-            return multiSService.getOrgService().listAll();
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @GetMapping(value = "get/{id}")
-    public OrgInfo get(@PathVariable("id") int id) {
-        try {
-            return multiSService.getOrgService().get(id);
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return modelAndView;
     }
 
 }

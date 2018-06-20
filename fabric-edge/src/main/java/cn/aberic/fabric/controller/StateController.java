@@ -18,12 +18,12 @@ import javax.annotation.Resource;
 public class StateController {
 
     @Resource
-    private MultiServiceProvider multiSService;
+    private MultiServiceProvider multiService;
 
     @PostMapping(value = "invoke")
     public String invoke(@RequestBody StateInfo stateInfo) {
         try {
-            return multiSService.getStateService().invoke(stateInfo);
+            return multiService.getStateService().invoke(stateInfo);
         } catch (TException e) {
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class StateController {
     @PostMapping(value = "query")
     public String query(@RequestBody StateInfo stateInfo) {
         try {
-            return multiSService.getStateService().query(stateInfo);
+            return multiService.getStateService().query(stateInfo);
         } catch (TException e) {
             e.printStackTrace();
         }

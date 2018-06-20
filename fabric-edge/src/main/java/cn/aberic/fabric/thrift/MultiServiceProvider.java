@@ -19,7 +19,7 @@ import org.apache.thrift.transport.TTransportException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Service("multiSService")
+@Service("multiService")
 public class MultiServiceProvider {
 
     @Value("${api.ip}")

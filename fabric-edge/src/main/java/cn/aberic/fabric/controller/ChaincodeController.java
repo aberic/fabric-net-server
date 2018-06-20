@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,19 +21,32 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("chaincode")
-public class ChainCodeController {
+public class ChaincodeController {
 
     @Resource
-    private MultiServiceProvider multiSService;
+    private MultiServiceProvider multiService;
 
     @GetMapping(value = "listAll")
     public List<ChaincodeInfo> listAll() {
         try {
-            return multiSService.getChaincodeService().listAll();
+            return multiService.getChaincodeService().listAll();
         } catch (TException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @GetMapping(value = "list")
+    public ModelAndView list() {
+        ModelAndView modelAndView = new ModelAndView("chaincodes");
+        try {
+            List<ChaincodeInfo> chaincodes = multiService.getChaincodeService().listAll();
+            modelAndView.addObject("chaincodes", chaincodes);
+        } catch (TException e) {
+            modelAndView.addObject("chaincodes", new ArrayList<>());
+            e.printStackTrace();
+        }
+        return modelAndView;
     }
 
 }

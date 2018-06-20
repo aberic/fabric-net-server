@@ -4,8 +4,10 @@ import cn.aberic.fabric.thrift.MultiServiceProvider;
 import cn.aberic.thrift.league.LeagueInfo;
 import org.apache.thrift.TException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,24 +21,42 @@ import java.util.List;
 public class LeagueController {
 
     @Resource
-    private MultiServiceProvider multiSService;
+    private MultiServiceProvider multiService;
 
-    @PostMapping(value = "add")
-    public String add(@RequestBody LeagueInfo league) {
+    @PostMapping(value = "submit")
+    public ModelAndView submit(@ModelAttribute LeagueInfo league) {
         try {
-            if (multiSService.getLeagueService().add(league) > 0) {
-                return "success";
-            }
+            multiService.getLeagueService().add(league);
         } catch (TException e) {
             e.printStackTrace();
         }
-        return "fail";
+        return list();
+    }
+
+    @GetMapping(value = "add")
+    public ModelAndView add() {
+        ModelAndView modelAndView = new ModelAndView("leagueAdd");
+        modelAndView.addObject("intentLarge", "新建联盟");
+        modelAndView.addObject("intentLittle", "新建");
+        modelAndView.addObject("intent", "add");
+        modelAndView.addObject("league", new LeagueInfo());
+        return modelAndView;
+    }
+
+    @GetMapping(value = "edit")
+    public ModelAndView edit() {
+        ModelAndView modelAndView = new ModelAndView("leagueAdd");
+        modelAndView.addObject("intentLarge", "编辑联盟");
+        modelAndView.addObject("intentLittle", "编辑");
+        modelAndView.addObject("intent", "edit");
+        modelAndView.addObject("leagueDTO", new LeagueInfo());
+        return modelAndView;
     }
 
     @PostMapping(value = "update")
     public String update(@RequestBody LeagueInfo league) {
         try {
-            if (multiSService.getLeagueService().update(league) > 0) {
+            if (multiService.getLeagueService().update(league) > 0) {
                 return "success";
             }
         } catch (TException e) {
@@ -45,14 +65,20 @@ public class LeagueController {
         return "fail";
     }
 
-    @GetMapping(value = "listAll")
-    public List<LeagueInfo> listAll() {
+    @GetMapping(value = "list")
+    public ModelAndView list() {
+        ModelAndView modelAndView = new ModelAndView("leagues");
         try {
-            return multiSService.getLeagueService().listAll();
+            List<LeagueInfo> leagues = multiService.getLeagueService().listAll();
+            for (LeagueInfo league : leagues) {
+                league.setOrgCount(multiService.getOrgService().countById(league.getId()));
+            }
+            modelAndView.addObject("leagues", leagues);
         } catch (TException e) {
+            modelAndView.addObject("leagues", new ArrayList<>());
             e.printStackTrace();
         }
-        return null;
+        return modelAndView;
     }
 
 }
