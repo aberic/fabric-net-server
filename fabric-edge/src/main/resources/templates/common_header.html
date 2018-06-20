@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="header">
+    <div class="am-fl tpl-header-logo">
+        <a href="/index"><img src="/static/img/logo.png" alt=""></a>
+    </div>
+    <!-- 右侧内容 -->
+    <div class="tpl-header-fluid">
+        <!-- 侧边切换 -->
+        <div class="am-fl tpl-header-switch-button am-icon-list">
+                    <span>
+
+                </span>
+        </div>
+        <!-- 搜索 -->
+        <div class="am-fl tpl-header-search">
+            <form class="tpl-header-search-form" action="javascript:;">
+                <button class="tpl-header-search-btn am-icon-search"></button>
+                <input class="tpl-header-search-box" type="text" placeholder="搜索内容...">
+            </form>
+        </div>
+        <!-- 其它功能-->
+        <div class="am-fr tpl-header-navbar">
+            <ul>
+                <!-- 欢迎语 -->
+                <li class="am-text-sm tpl-header-navbar-welcome">
+                    欢迎你, <span>Fabric Manager</span>
+                </li>
+                <!-- 退出 -->
+                <li class="am-text-sm">
+                    <a href="javascript:;">
+                        <span class="am-icon-sign-out"></span> 退出
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</html>
