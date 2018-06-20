@@ -1,6 +1,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.OrgMapper;
+import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.org.OrgService;
 import org.apache.thrift.TException;
@@ -18,12 +19,13 @@ public class OrgServiceImpl implements OrgService.Iface {
 
     @Override
     public int add(OrgInfo orgInfo) throws TException {
-        return 0;
+        orgInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        return orgMapper.add(orgInfo);
     }
 
     @Override
     public int update(OrgInfo orgInfo) throws TException {
-        return 0;
+        return orgMapper.update(orgInfo);
     }
 
     @Override
@@ -33,21 +35,21 @@ public class OrgServiceImpl implements OrgService.Iface {
 
     @Override
     public List<OrgInfo> listById(int id) throws TException {
-        return null;
+        return orgMapper.list(id);
     }
 
     @Override
     public OrgInfo get(int id) throws TException {
-        return null;
+        return orgMapper.get(id);
     }
 
     @Override
     public int countById(int id) throws TException {
-        return 0;
+        return orgMapper.count(id);
     }
 
     @Override
     public int count() throws TException {
-        return 0;
+        return orgMapper.countAll();
     }
 }

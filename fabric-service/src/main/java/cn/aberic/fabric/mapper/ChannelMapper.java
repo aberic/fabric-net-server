@@ -21,6 +21,9 @@ public interface ChannelMapper {
     @Select("select count(name) from channel where peer_id=#{id}")
     int count(@Param("id") int id);
 
+    @Select("select count(name) from channel")
+    int countAll();
+
     @Select("select rowid,name,peer_id,date from channel where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),

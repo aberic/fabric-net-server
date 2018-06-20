@@ -1,6 +1,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.OrdererMapper;
+import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.thrift.orderer.OrdererInfo;
 import cn.aberic.thrift.orderer.OrdererService;
 import org.apache.thrift.TException;
@@ -17,12 +18,13 @@ public class OrdererServiceImpl implements OrdererService.Iface {
 
     @Override
     public int add(OrdererInfo ordererInfo) throws TException {
-        return 0;
+        ordererInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        return ordererMapper.add(ordererInfo);
     }
 
     @Override
     public int update(OrdererInfo ordererInfo) throws TException {
-        return 0;
+        return ordererMapper.update(ordererInfo);
     }
 
     @Override
@@ -32,21 +34,21 @@ public class OrdererServiceImpl implements OrdererService.Iface {
 
     @Override
     public List<OrdererInfo> listById(int id) throws TException {
-        return null;
+        return ordererMapper.list(id);
     }
 
     @Override
     public OrdererInfo get(int id) throws TException {
-        return null;
+        return ordererMapper.get(id);
     }
 
     @Override
     public int countById(int id) throws TException {
-        return 0;
+        return ordererMapper.count(id);
     }
 
     @Override
     public int count() throws TException {
-        return 0;
+        return ordererMapper.countAll();
     }
 }

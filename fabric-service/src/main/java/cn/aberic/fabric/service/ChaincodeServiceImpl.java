@@ -1,6 +1,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.ChaincodeMapper;
+import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.thrift.chaincode.ChaincodeInfo;
 import cn.aberic.thrift.chaincode.ChaincodeService;
 import org.apache.thrift.TException;
@@ -17,12 +18,13 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface {
 
     @Override
     public int add(ChaincodeInfo chaincodeInfo) throws TException {
-        return 0;
+        chaincodeInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        return chaincodeMapper.add(chaincodeInfo);
     }
 
     @Override
     public int update(ChaincodeInfo chaincodeInfo) throws TException {
-        return 0;
+        return chaincodeMapper.update(chaincodeInfo);
     }
 
     @Override
@@ -32,21 +34,21 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface {
 
     @Override
     public List<ChaincodeInfo> listById(int id) throws TException {
-        return null;
+        return chaincodeMapper.list(id);
     }
 
     @Override
     public ChaincodeInfo get(int id) throws TException {
-        return null;
+        return chaincodeMapper.get(id);
     }
 
     @Override
     public int countById(int id) throws TException {
-        return 0;
+        return chaincodeMapper.count(id);
     }
 
     @Override
     public int count() throws TException {
-        return 0;
+        return chaincodeMapper.countAll();
     }
 }

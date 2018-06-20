@@ -23,6 +23,9 @@ public interface ChaincodeMapper {
     @Select("select count(name) from chaincode where channel_id=#{id}")
     int count(@Param("id") int id);
 
+    @Select("select count(name) from chaincode")
+    int countAll();
+
     @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),

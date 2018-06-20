@@ -23,6 +23,9 @@ public interface PeerMapper {
     @Select("select count(name) from peer where org_id=#{id}")
     int count(@Param("id") int id);
 
+    @Select("select count(name) from peer")
+    int countAll();
+
     @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id,date from peer where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),

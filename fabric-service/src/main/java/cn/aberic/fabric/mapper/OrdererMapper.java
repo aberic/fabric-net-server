@@ -21,6 +21,9 @@ public interface OrdererMapper {
     @Select("select count(name) from orderer where org_id=#{id}")
     int count(@Param("id") int id);
 
+    @Select("select count(name) from orderer")
+    int countAll();
+
     @Select("select rowid,name,location,org_id,date from orderer where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),

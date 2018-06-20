@@ -25,6 +25,9 @@ public interface OrgMapper {
     @Select("select count(name) from org where league_id=#{id}")
     int count(@Param("id") int id);
 
+    @Select("select count(name) from org")
+    int countAll();
+
     @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from org where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),

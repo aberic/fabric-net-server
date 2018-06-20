@@ -1,6 +1,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.ChannelMapper;
+import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.channel.ChannelService;
 import org.apache.thrift.TException;
@@ -17,12 +18,13 @@ public class ChannelServiceImpl implements ChannelService.Iface {
 
     @Override
     public int add(ChannelInfo channelInfo) throws TException {
-        return 0;
+        channelInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        return channelMapper.add(channelInfo);
     }
 
     @Override
     public int update(ChannelInfo channelInfo) throws TException {
-        return 0;
+        return channelMapper.update(channelInfo);
     }
 
     @Override
@@ -32,21 +34,21 @@ public class ChannelServiceImpl implements ChannelService.Iface {
 
     @Override
     public List<ChannelInfo> listById(int id) throws TException {
-        return null;
+        return channelMapper.list(id);
     }
 
     @Override
     public ChannelInfo get(int id) throws TException {
-        return null;
+        return channelMapper.get(id);
     }
 
     @Override
     public int countById(int id) throws TException {
-        return 0;
+        return channelMapper.count(id);
     }
 
     @Override
     public int count() throws TException {
-        return 0;
+        return channelMapper.countAll();
     }
 }
