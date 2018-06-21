@@ -53,16 +53,7 @@ public class PeerController {
         modelAndView.addObject("submit", "新增");
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("peer", new PeerInfo());
-        List<OrgInfo> orgs;
-        try {
-            orgs = multiService.getOrgService().listAll();
-            for (OrgInfo org : orgs) {
-                org.setLeagueName(multiService.getLeagueService().get(org.getLeagueId()).getName());
-            }
-        } catch (TException e) {
-            orgs = new ArrayList<>();
-            e.printStackTrace();
-        }
+        List<OrgInfo> orgs = multiService.getForPeerAndOrderer();
         modelAndView.addObject("orgs", orgs);
         return modelAndView;
     }
