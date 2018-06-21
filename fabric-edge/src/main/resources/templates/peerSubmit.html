@@ -68,7 +68,7 @@
                                                 id="org-name"
                                                 th:field="*{orgId}">
                                             <option th:each="org: ${orgs}" th:value="${org.id}"
-                                                    th:text="${org.name}"></option>
+                                                    th:text="${org.leagueName}+'-'+${org.name}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -116,7 +116,8 @@
                                     <label for="event-listener" class="am-u-sm-3 am-form-label">Event事件处理 <span
                                             class="tpl-form-line-small-title">event listener</span></label>
                                     <div class="am-u-sm-9">
-                                        <select data-am-selected="{searchBox: 1}" style="display: none;" id="event-listener"
+                                        <select data-am-selected="{searchBox: 1}" style="display: none;"
+                                                id="event-listener"
                                                 th:field="*{isEventListener}">
                                             <option th:value="true">监听</option>
                                             <option th:value="false">关闭</option>
