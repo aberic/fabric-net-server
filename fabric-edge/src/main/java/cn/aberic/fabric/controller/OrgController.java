@@ -104,18 +104,6 @@ public class OrgController {
         return modelAndView;
     }
 
-    @PostMapping(value = "update")
-    public String update(@RequestBody OrgInfo org) {
-        try {
-            if (multiService.getOrgService().update(org) > 0) {
-                return "success";
-            }
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-        return "fail";
-    }
-
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("orgs");
