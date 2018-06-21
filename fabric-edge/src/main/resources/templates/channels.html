@@ -4,15 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>通道列表</title>
-    <meta name="description" content="通道列表">
+    <title>组织列表</title>
+    <meta name="description" content="组织列表">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp"/>
     <link rel="icon" type="image/png" href="/static/i/favicon.png">
     <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
-    <meta name="apple-mobile-web-app-title" content="通道列表"/>
+    <meta name="apple-mobile-web-app-title" content="组织列表"/>
     <script src="/static/js/echarts.min.js"></script>
     <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
     <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
@@ -39,7 +39,7 @@
                 <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                     <div class="widget am-cf">
                         <div class="widget-head am-cf">
-                            <div class="widget-title  am-cf">通道列表</div>
+                            <div class="widget-title  am-cf">节点列表</div>
                         </div>
                         <div class="widget-body  am-fr">
 
@@ -62,28 +62,25 @@
                                        id="example-r">
                                     <thead>
                                     <tr>
-                                        <th>组织列表</th>
-                                        <th>联盟名称</th>
-                                        <th>排序数量</th>
-                                        <th>节点数量</th>
+                                        <th>ID</th>
+                                        <th>通道列表</th>
+                                        <th>节点名称</th>
+                                        <th>合约数量</th>
                                         <th>时间</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="gradeX" th:each="league : ${orgs}">
-                                        <td th:text="${orgs.name}">组织名称</td>
-                                        <td th:text="${orgs.leagueName}">联盟名称</td>
-                                        <td th:text="${orgs.ordererCount}">排序数量</td>
-                                        <td th:text="${orgs.peerCount}">节点数量</td>
-                                        <td th:text="${orgs.date}">时间</td>
+                                    <tr class="gradeX" th:each="channel : ${channels}">
+                                        <td th:text="${channel.id}">ID</td>
+                                        <td th:text="${channel.name}">节点列表</td>
+                                        <td th:text="${channel.peerName}">组织名称</td>
+                                        <td th:text="${channel.chaincodeCount}">通道数量</td>
+                                        <td th:text="${channel.date}">时间</td>
                                         <td>
                                             <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
+                                                <a th:href="@{/channel/edit(id=${channel.id})}">
                                                     <i class="am-icon-pencil"></i> 编辑
-                                                </a>
-                                                <a href="javascript:;" class="tpl-table-black-operation-del">
-                                                    <i class="am-icon-trash"></i> 删除
                                                 </a>
                                             </div>
                                         </td>
