@@ -38,10 +38,11 @@
         <div class="container-fluid am-cf">
             <div class="row">
                 <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
-                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> 新建通道
+                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"
+                                                           th:text="${intentLarge}"></span>
                         <small>HyperLedger Fabric网络根单元</small>
                     </div>
-                    <p class="page-header-description">fabric-net-container可以管理多个联盟</p>
+                    <p class="page-header-description">fabric-net-server可以管理多个联盟</p>
                 </div>
             </div>
 
@@ -52,27 +53,40 @@
                 <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                     <div class="widget am-cf">
                         <div class="widget-head am-cf">
-                            <div class="widget-title am-fl">新建</div>
-                            <div class="widget-function am-fr">
-                                <a href="javascript:;" class="am-icon-cog"></a>
-                            </div>
+                            <div class="widget-title am-fl" th:text="${intentLittle}"></div>
                         </div>
                         <div class="widget-body am-fr">
 
-                            <form class="am-form tpl-form-line-form" th:action="@{add}" th:method="post" th:object="${leagueDTO}">
+                            <form class="am-form tpl-form-line-form" th:action="@{submit}" th:method="post"
+                                  enctype="multipart/form-data"
+                                  th:object="${channel}">
                                 <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span
+                                    <label for="peer-name" class="am-u-sm-3 am-form-label">节点 <span
+                                            class="tpl-form-line-small-title">org</span></label>
+                                    <div class="am-u-sm-9">
+                                        <select data-am-selected="{searchBox: 1}" style="display: none;"
+                                                id="peer-name"
+                                                th:field="*{peerId}">
+                                            <option th:each="peer: ${peers}" th:value="${peer.id}"
+                                                    th:text="${channel.leagueName}+'-'+${channel.orgName}+'-'+${channel.peerName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="host" class="am-u-sm-3 am-form-label">通道名称 <span
                                             class="tpl-form-line-small-title">Name</span></label>
                                     <div class="am-u-sm-9">
-                                        <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入名称文字" th:field="*{name}">
-                                        <small>请填写联盟名称10-20字左右。</small>
+                                        <input type="text" class="tpl-form-input" id="host" placeholder="请输入通道名称"
+                                               th:field="*{name}">
+                                        <input type="hidden" name="intent" th:value="${intent}"/>
+                                        <input type="hidden" name="id" th:value="${channel.id}"/>
+                                        <small>请输入通道名称，如mychannel。</small>
                                     </div>
                                 </div>
                                 <div class="am-form-group">
                                     <div class="am-u-sm-9 am-u-sm-push-3">
-                                        <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success ">
-                                            提交
-                                        </button>
+                                        <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "
+                                                th:text="${submit}"></button>
                                     </div>
                                 </div>
                             </form>
