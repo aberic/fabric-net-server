@@ -29,7 +29,7 @@ public interface OrdererMapper {
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "location", column = "location"),
-            @Result(property = "org_id", column = "orgId"),
+            @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })
     OrdererInfo get(@Param("id") int id);
@@ -39,7 +39,7 @@ public interface OrdererMapper {
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "location", column = "location"),
-            @Result(property = "org_id", column = "org_id"),
+            @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })
     List<OrdererInfo> list(@Param("id") int id);
