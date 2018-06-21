@@ -72,20 +72,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="gradeX" th:each="league : ${orgs}">
-                                        <td th:text="${orgs.id}">ID</td>
-                                        <td th:text="${orgs.name}">组织名称</td>
-                                        <td th:text="${orgs.leagueName}">联盟名称</td>
-                                        <td th:text="${orgs.ordererCount}">排序数量</td>
-                                        <td th:text="${orgs.peerCount}">节点数量</td>
-                                        <td th:text="${orgs.date}">时间</td>
+                                    <tr class="gradeX" th:each="org : ${orgs}">
+                                        <td th:text="${org.id}">ID</td>
+                                        <td th:text="${org.name}">组织名称</td>
+                                        <td th:text="${org.leagueName}">联盟名称</td>
+                                        <td th:text="${org.ordererCount}">排序数量</td>
+                                        <td th:text="${org.peerCount}">节点数量</td>
+                                        <td th:text="${org.date}">时间</td>
                                         <td>
                                             <div class="tpl-table-black-operation">
-                                                <a href="javascript:;">
+                                                <a th:href="@{/org/edit(id=${org.id})}">
                                                     <i class="am-icon-pencil"></i> 编辑
-                                                </a>
-                                                <a href="javascript:;" class="tpl-table-black-operation-del">
-                                                    <i class="am-icon-trash"></i> 删除
                                                 </a>
                                             </div>
                                         </td>

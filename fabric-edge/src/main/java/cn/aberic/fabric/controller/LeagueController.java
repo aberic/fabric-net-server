@@ -24,7 +24,9 @@ public class LeagueController {
     private MultiServiceProvider multiService;
 
     @PostMapping(value = "submit")
-    public ModelAndView submit(@ModelAttribute LeagueInfo league, @RequestParam("intent") String intent, @RequestParam("id") int id) {
+    public ModelAndView submit(@ModelAttribute LeagueInfo league,
+                               @RequestParam("intent") String intent,
+                               @RequestParam("id") int id) {
         try {
             switch (intent) {
                 case "add":
@@ -46,6 +48,7 @@ public class LeagueController {
         ModelAndView modelAndView = new ModelAndView("leagueSubmit");
         modelAndView.addObject("intentLarge", "新建联盟");
         modelAndView.addObject("intentLittle", "新建");
+        modelAndView.addObject("submit", "新增");
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("league", new LeagueInfo());
         return modelAndView;
@@ -56,9 +59,15 @@ public class LeagueController {
         ModelAndView modelAndView = new ModelAndView("leagueSubmit");
         modelAndView.addObject("intentLarge", "编辑联盟");
         modelAndView.addObject("intentLittle", "编辑");
+        modelAndView.addObject("submit", "修改");
         modelAndView.addObject("intent", "edit");
-        LeagueInfo league = new LeagueInfo();
-        league.setId(id);
+        LeagueInfo league;
+        try {
+            league = multiService.getLeagueService().get(id);
+        } catch (TException e) {
+            league = new LeagueInfo();
+            e.printStackTrace();
+        }
         modelAndView.addObject("league", league);
         return modelAndView;
     }
