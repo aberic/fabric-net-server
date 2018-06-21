@@ -61,18 +61,6 @@
                                   enctype="multipart/form-data"
                                   th:object="${org}">
                                 <div class="am-form-group">
-                                    <label for="name" class="am-u-sm-3 am-form-label">名称 <span
-                                            class="tpl-form-line-small-title">Name</span></label>
-                                    <div class="am-u-sm-9">
-                                        <input type="text" class="tpl-form-input" id="name" placeholder="请输入组织名称"
-                                               th:value="${org.name}"
-                                               th:field="*{name}">
-                                        <input type="hidden" name="intent" th:value="${intent}"/>
-                                        <input type="hidden" name="id" th:value="${org.id}"/>
-                                        <small>请填写联盟名称，如Org1。</small>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
                                     <label for="league-name" class="am-u-sm-3 am-form-label">联盟 <span
                                             class="tpl-form-line-small-title">league</span></label>
                                     <div class="am-u-sm-9">
@@ -82,6 +70,18 @@
                                             <option th:each="league: ${leagues}" th:value="${league.id}"
                                                     th:text="${league.name}"></option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="name" class="am-u-sm-3 am-form-label">名称 <span
+                                            class="tpl-form-line-small-title">Name</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="name" placeholder="请输入组织名称"
+                                               th:value="${org.name}"
+                                               th:field="*{name}">
+                                        <input type="hidden" name="intent" th:value="${intent}"/>
+                                        <input type="hidden" name="id" th:value="${org.id}"/>
+                                        <small>请填写组织名称，如Org1。</small>
                                     </div>
                                 </div>
                                 <div class="am-form-group">
