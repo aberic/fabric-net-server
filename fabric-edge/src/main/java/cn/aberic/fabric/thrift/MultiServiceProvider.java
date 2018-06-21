@@ -4,10 +4,12 @@ import cn.aberic.thrift.chaincode.ChaincodeService;
 import cn.aberic.thrift.channel.ChannelService;
 import cn.aberic.thrift.league.LeagueService;
 import cn.aberic.thrift.orderer.OrdererService;
+import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.org.OrgService;
 import cn.aberic.thrift.peer.PeerService;
 import cn.aberic.thrift.state.StateService;
 import cn.aberic.thrift.trace.TraceService;
+import org.apache.thrift.TException;
 import org.apache.thrift.TServiceClient;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TMultiplexedProtocol;
@@ -18,6 +20,9 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("multiService")
 public class MultiServiceProvider {
@@ -117,6 +122,20 @@ public class MultiServiceProvider {
         }
 
         return (T) client;
+    }
+
+    public List<OrgInfo> getForPeerAndOrderer() {
+        List<OrgInfo> orgs;
+        try {
+            orgs = getOrgService().listAll();
+            for (OrgInfo org : orgs) {
+                org.setLeagueName(getLeagueService().get(org.getLeagueId()).getName());
+            }
+        } catch (TException e) {
+            orgs = new ArrayList<>();
+            e.printStackTrace();
+        }
+        return orgs;
     }
 
 }
