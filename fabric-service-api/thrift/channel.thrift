@@ -3,14 +3,10 @@ namespace java cn.aberic.thrift.channel
 struct ChannelInfo {
     1:i32 id,
     2:string name,
-    3:string eventHubName,
-    4:string location,
-    5:string eventHubLocation,
-    6:bool isEventListener,
-    7:i32 peerId,
-    8:string peerName,
-    9:string date,
-    10:i32 chaincodeCount
+    3:i32 peerId,
+    4:string peerName,
+    5:string date,
+    6:i32 chaincodeCount
 }
 service ChannelService {
 
