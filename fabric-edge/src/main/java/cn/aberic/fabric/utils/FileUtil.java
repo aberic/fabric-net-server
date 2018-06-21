@@ -1,7 +1,7 @@
 package cn.aberic.fabric.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,9 +11,8 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ZipUtil {
-
-    private static Logger logger = LogManager.getLogger(ZipUtil.class);
+@Slf4j
+public class FileUtil {
 
     private static final int BUFFER_SIZE = 2 * 1024;
 
@@ -23,7 +22,7 @@ public class ZipUtil {
      * @param unZipFile 压缩文件的路径
      * @param destFile  解压到的目录
      */
-    public static void unZip(String unZipFile, String destFile) {
+    private static void unZip(String unZipFile, String destFile) {
         FileOutputStream fileOut;
         File file;
         InputStream inputStream;
@@ -59,7 +58,43 @@ public class ZipUtil {
             }
             zipFile.close();
         } catch (IOException e) {
-            logger.error("Error", e);
+            log.error("Error", e);
         }
     }
+
+    public static void unZipAndSave(MultipartFile file, String path) throws IOException {
+        String fileName = file.getOriginalFilename();
+        File dest = new File(path + "/" + fileName);
+        if (dest.getParentFile().exists()) { // 判断文件父目录是否存在
+            deleteFiles(path);
+        }
+        dest.getParentFile().mkdirs();
+        file.transferTo(dest); //保存文件
+        unZip(String.format("%s/%s", path, fileName), path);
+        dest.delete();
+    }
+
+    /**
+     * 通过递归得到某一路径下所有的目录及其文件并删除所有文件
+     *
+     * @param filePath 文件夹路径
+     */
+    private static void deleteFiles(String filePath) {
+        File root = new File(filePath);
+        if (!root.exists()) {
+            return;
+        }
+        File[] files = root.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                deleteFiles(file.getAbsolutePath());// 递归调用
+                file.delete();
+                log.debug(String.format("显示%s下所有子目录及其文件", file.getAbsolutePath()));
+            } else {
+                file.delete();
+                log.debug(String.format("显示%s下所有子目录%s====文件名：%s", filePath, file.getAbsolutePath(), file.getName()));
+            }
+        }
+    }
+
 }
