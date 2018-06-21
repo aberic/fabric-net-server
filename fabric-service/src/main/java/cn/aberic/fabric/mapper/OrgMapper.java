@@ -14,11 +14,11 @@ public interface OrgMapper {
 
     @Insert("insert into org (name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date)" +
             "values (#{o.name},#{o.tls},#{o.username},#{o.cryptoConfigDir},#{o.mspId},#{o.domainName}," +
-            "#{o.ordererDomainName},#{o.leagueId})")
+            "#{o.ordererDomainName},#{o.leagueId},#{o.date})")
     int add(@Param("o") OrgInfo org);
 
     @Update("update org set name=#{o.name}, tls=#{o.tls}, username=#{o.username}, crypto_config_dir=#{o.cryptoConfigDir}, " +
-            "msp_id=#{o.mspId}, domain_name=#{o.domainName}, orderer_domain_name=#{o.ordererDomainName}" +
+            "msp_id=#{o.mspId}, domain_name=#{o.domainName}, orderer_domain_name=#{o.ordererDomainName}, league_id=#{o.leagueId}" +
             " where rowid=#{o.id}")
     int update(@Param("o") OrgInfo org);
 
