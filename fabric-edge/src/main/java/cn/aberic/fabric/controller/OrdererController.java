@@ -69,9 +69,7 @@ public class OrdererController {
         List<OrgInfo> orgs;
         try {
             orderer = multiService.getOrdererService().get(id);
-            OrgInfo org0 = multiService.getOrgService().get(orderer.getOrgId());
-            LeagueInfo league = multiService.getLeagueService().get(org0.getLeagueId());
-            // LeagueInfo league = multiService.getLeagueService().get(multiService.getOrgService().get(orderer.getOrgId()).getLeagueId());
+            LeagueInfo league = multiService.getLeagueService().get(multiService.getOrgService().get(orderer.getOrgId()).getLeagueId());
             orgs = multiService.getOrgService().listById(league.getId());
             for (OrgInfo org : orgs) {
                 org.setLeagueName(league.getName());
