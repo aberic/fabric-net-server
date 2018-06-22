@@ -70,7 +70,7 @@ var pageData = {
                 color: '#838FA1'
             },
             series: [{
-                name: '邮件营销',
+                name: '区块数量',
                 type: 'line',
                 stack: '总量',
                 areaStyle: { normal: {} },
