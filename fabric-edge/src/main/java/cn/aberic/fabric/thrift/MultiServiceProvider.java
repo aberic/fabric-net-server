@@ -170,7 +170,7 @@ public class MultiServiceProvider {
     public String formatTrace(TraceInfo trace) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", trace.getId());
-        jsonObject.put("trace", trace);
+        jsonObject.put("trace", trace.getTrace());
         return jsonObject.toJSONString();
     }
 
