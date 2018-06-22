@@ -5,9 +5,7 @@ import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.league.LeagueInfo;
 import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.peer.PeerInfo;
-import cn.aberic.thrift.vo.ChannelVO;
 import org.apache.thrift.TException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,7 +53,7 @@ public class ChannelController {
         modelAndView.addObject("intentLittle", "新建");
         modelAndView.addObject("submit", "新增");
         modelAndView.addObject("intent", "add");
-        ChannelVO channel = new ChannelVO();
+        ChannelInfo channel = new ChannelInfo();
         List<PeerInfo> peers;
         try {
             peers = multiService.getPeerService().listAll();
@@ -82,11 +80,11 @@ public class ChannelController {
         modelAndView.addObject("intentLittle", "编辑");
         modelAndView.addObject("submit", "修改");
         modelAndView.addObject("intent", "edit");
-        ChannelVO channel = new ChannelVO();
+        ChannelInfo channel;
         List<PeerInfo> peers;
         OrgInfo org;
         try {
-            BeanUtils.copyProperties(multiService.getChannelService().get(id), channel);
+            channel = multiService.getChannelService().get(id);
             org = multiService.getOrgService().get(multiService.getPeerService().get(channel.getPeerId()).getOrgId());
             channel.setOrgName(org.getName());
             peers = multiService.getPeerService().listById(org.getId());
@@ -97,6 +95,7 @@ public class ChannelController {
                 peer.setOrgName(org.getName());
             }
         } catch (TException e) {
+            channel = new ChannelInfo();
             peers = new ArrayList<>();
             e.printStackTrace();
         }
