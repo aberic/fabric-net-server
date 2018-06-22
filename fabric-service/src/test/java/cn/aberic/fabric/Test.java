@@ -1,7 +1,5 @@
 package cn.aberic.fabric;
 
-import cn.aberic.fabric.utils.SystemUtil;
-
 import java.io.IOException;
 
 public class Test {
