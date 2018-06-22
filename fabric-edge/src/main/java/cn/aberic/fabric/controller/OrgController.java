@@ -39,7 +39,7 @@ public class OrgController {
             String path = String.format("%s/%s/%s", env.getProperty("config.dir"), multiService.getLeagueService().get(org.getLeagueId()).getName(), org.getName());
             switch (intent) {
                 case "add":
-                    org.setCryptoConfigDir(path);
+                    org.setCryptoConfigDir(String.format("%s/crypto-config", path));
                     if (multiService.getOrgService().add(org) <= 0) {
                         break;
                     }
@@ -50,7 +50,7 @@ public class OrgController {
                     break;
                 case "edit":
                     org.setId(id);
-                    org.setCryptoConfigDir(path);
+                    org.setCryptoConfigDir(String.format("%s/crypto-config", path));
                     if (!file.isEmpty()) {
                         FileUtil.unZipAndSave(file, path);
                     }
