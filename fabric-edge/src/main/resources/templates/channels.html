@@ -39,7 +39,7 @@
                 <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                     <div class="widget am-cf">
                         <div class="widget-head am-cf">
-                            <div class="widget-title  am-cf">节点列表</div>
+                            <div class="widget-title  am-cf">通道列表</div>
                         </div>
                         <div class="widget-body  am-fr">
 
@@ -63,7 +63,7 @@
                                     <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>通道列表</th>
+                                        <th>通道名称</th>
                                         <th>节点名称</th>
                                         <th>合约数量</th>
                                         <th>时间</th>
@@ -73,7 +73,7 @@
                                     <tbody>
                                     <tr class="gradeX" th:each="channel : ${channels}">
                                         <td th:text="${channel.id}">ID</td>
-                                        <td th:text="${channel.name}">节点列表</td>
+                                        <td th:text="${channel.name}">节点名称</td>
                                         <td th:text="${channel.peerName}">组织名称</td>
                                         <td th:text="${channel.chaincodeCount}">通道数量</td>
                                         <td th:text="${channel.date}">时间</td>
@@ -87,20 +87,6 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="am-u-lg-12 am-cf">
-
-                                <div class="am-fr">
-                                    <ul class="am-pagination tpl-pagination">
-                                        <li class="am-disabled"><a href="#">«</a></li>
-                                        <li class="am-active"><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li><a href="#">»</a></li>
-                                    </ul>
-                                </div>
                             </div>
                         </div>
                     </div>
