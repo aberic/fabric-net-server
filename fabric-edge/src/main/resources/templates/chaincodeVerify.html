@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>合约验证</title>
+    <meta name="description" content="合约验证">
+    <meta name="keywords" content="合约验证">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="合约验证"/>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="widgets">
+<script src="/static/js/theme.js"></script>
+<div class="am-g tpl-g">
+    <!-- 头部 -->
+    <header>
+        <div th:include="common_header :: header"></div>
+    </header>
+    <!-- 风格切换 -->
+    <div th:include="common_skin.html :: skin"></div>
+    <!-- 侧边导航栏 -->
+    <div th:include="common_sidebar :: sidebar"></div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"
+                                                           th:text="${intentLarge}"></span>
+                        <small>HyperLedger Fabric网络合约验证</small>
+                    </div>
+                    <p class="page-header-description">执行合约，如：{"id": "1", "strArray": ["invoke", "a", "b", "2"]}</p>
+                    <p class="page-header-description">查询合约，如：{"id": "1", "strArray": ["query", "a"]}</p>
+                    <p class="page-header-description">根据交易hash查询区块，如：{"id": "1", "trace": "4d82788f30965d51ebe1347c42625b3eda9298367d4a739ae9e5fb4d5d38ef7b"}</p>
+                    <p class="page-header-description">根据交易区块高度查询区块，如：{"id": "1", "trace": "3"}</p>
+                    <p class="page-header-description">根据交易ID查询区块，如：{"id": "1", "trace": "4d82788f30965d51ebe1347c42625b3eda9298367d4a739ae9e5fb4d5d38ef7b"}</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl" th:text="${intentLittle}"></div>
+                        </div>
+                        <div class="widget-body am-fr">
+
+                            <form class="am-form tpl-form-line-form" th:action="@{verify(chaincodeId=${chaincodeId})}" th:method="post"
+                                  enctype="multipart/form-data"
+                                  th:object="${apiIntent}">
+                                <div class="am-form-group">
+                                    <label for="api" class="am-u-sm-3 am-form-label">接口 <span
+                                            class="tpl-form-line-small-title">api</span></label>
+                                    <div class="am-u-sm-9">
+                                        <select data-am-selected="{searchBox: 1}" style="display: none;"
+                                                id="api"
+                                                th:field="*{index}">
+                                            <option th:each="api: ${apis}" th:value="${api.index}"
+                                                    th:text="${api.name}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-intro" class="am-u-sm-3 am-form-label">接口参数</label>
+                                    <div class="am-u-sm-9">
+                                        <textarea class="" rows="10" id="user-intro" placeholder="请输入接口参数：&#10;1、执行及查询智能合约请输入以半角逗号分隔的字符串数组，如：invoke,a,b,10&#10;上述数组与你在智能合约中定义都接收参数数组内容一致。&#10;2、查询区块请在选择接口后直接写入hash、txid或者区块高度。&#10;3、查询当前链信息，此文本框内为空即可。" th:field="*{exec}"></textarea>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-9 am-u-sm-push-3">
+                                        <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "
+                                                th:text="${submit}"></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/js/amazeui.min.js"></script>
+<script src="/static/js/amazeui.datatables.min.js"></script>
+<script src="/static/js/dataTables.responsive.min.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+
+</html>
