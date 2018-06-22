@@ -3,6 +3,7 @@ package cn.aberic.fabric.thrift;
 import cn.aberic.fabric.bean.Api;
 import cn.aberic.thrift.chaincode.ChaincodeService;
 import cn.aberic.thrift.channel.ChannelService;
+import cn.aberic.thrift.common.SystemService;
 import cn.aberic.thrift.league.LeagueService;
 import cn.aberic.thrift.orderer.OrdererService;
 import cn.aberic.thrift.org.OrgInfo;
@@ -40,6 +41,7 @@ public class MultiServiceProvider {
     private int apiPort;
 
     public enum ServiceType {
+        SYSTEM,
         LEAGUE,
         ORG,
         ORDERER,
@@ -48,6 +50,10 @@ public class MultiServiceProvider {
         CHAINCODE,
         STATE,
         TRACE
+    }
+
+    public SystemService.Client getSystemService() {
+        return getService(apiIp, apiPort, ServiceType.SYSTEM);
     }
 
     public LeagueService.Client getLeagueService() {
@@ -101,6 +107,9 @@ public class MultiServiceProvider {
 
         TServiceClient client = null;
         switch (serviceType) {
+            case SYSTEM:
+                client = new SystemService.Client(new TMultiplexedProtocol(protocol, "system"));
+                break;
             case LEAGUE:
                 // 构建客户端对象
                 client = new LeagueService.Client(new TMultiplexedProtocol(protocol, "league"));
