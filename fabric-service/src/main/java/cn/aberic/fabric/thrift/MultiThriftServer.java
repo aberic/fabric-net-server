@@ -2,6 +2,7 @@ package cn.aberic.fabric.thrift;
 
 import cn.aberic.thrift.chaincode.ChaincodeService;
 import cn.aberic.thrift.channel.ChannelService;
+import cn.aberic.thrift.common.SystemService;
 import cn.aberic.thrift.league.LeagueService;
 import cn.aberic.thrift.orderer.OrdererService;
 import cn.aberic.thrift.org.OrgService;
@@ -34,6 +35,8 @@ public class MultiThriftServer {
     private int servicePort;
 
     @Resource
+    private SystemService.Iface systemService;
+    @Resource
     private LeagueService.Iface leagueService;
     @Resource
     private OrgService.Iface orgService;
@@ -54,6 +57,7 @@ public class MultiThriftServer {
     @PostConstruct
     public void startThriftServer(){
         // 把Service中的服务注册到Thrift中的执行器中
+        TProcessor systemProcessor = new SystemService.Processor<>(systemService);
         TProcessor leagueProcessor = new LeagueService.Processor<>(leagueService);
         TProcessor orgProcessor = new OrgService.Processor<>(orgService);
         TProcessor ordererProcessor = new OrdererService.Processor<>(ordererService);
@@ -64,6 +68,7 @@ public class MultiThriftServer {
         TProcessor traceProcessor = new TraceService.Processor<>(traceService);
         // 注册多个TMultiplexedProcessor
         TMultiplexedProcessor multiplexedProcessor = new TMultiplexedProcessor();
+        multiplexedProcessor.registerProcessor("system", systemProcessor);
         multiplexedProcessor.registerProcessor("league", leagueProcessor);
         multiplexedProcessor.registerProcessor("org", orgProcessor);
         multiplexedProcessor.registerProcessor("orderer", ordererProcessor);
