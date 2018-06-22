@@ -1,18 +1,25 @@
 package cn.aberic.fabric.controller;
 
+import cn.aberic.fabric.bean.Api;
 import cn.aberic.fabric.thrift.MultiServiceProvider;
 import cn.aberic.thrift.chaincode.ChaincodeInfo;
 import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.league.LeagueInfo;
 import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.peer.PeerInfo;
+import cn.aberic.thrift.state.StateInfo;
+import cn.aberic.thrift.trace.TraceInfo;
+import com.alibaba.fastjson.JSON;
 import org.apache.thrift.TException;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+
+import static cn.aberic.fabric.bean.Api.Intent.INVOKE;
 
 /**
  * 描述：
@@ -26,6 +33,8 @@ public class ChaincodeController {
 
     @Resource
     private MultiServiceProvider multiService;
+    @Resource
+    private Environment env;
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute ChaincodeInfo chaincode,
@@ -104,6 +113,90 @@ public class ChaincodeController {
         }
         modelAndView.addObject("chaincode", chaincode);
         modelAndView.addObject("channels", channels);
+        return modelAndView;
+    }
+
+
+    @GetMapping(value = "verify")
+    public ModelAndView verify(@RequestParam("chaincodeId") int chaincodeId) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeVerify");
+        modelAndView.addObject("intentLarge", "验证合约");
+        modelAndView.addObject("intentLittle", "验证");
+        modelAndView.addObject("submit", "验证");
+        modelAndView.addObject("chaincodeId", chaincodeId);
+
+        List<Api> apis = new ArrayList<>();
+        Api apiInvoke = new Api("执行智能合约", INVOKE.getIndex());
+        Api apiQuery = new Api("查询智能合约", Api.Intent.QUERY.getIndex());
+        Api apiInfo = new Api("查询当前链信息", Api.Intent.INFO.getIndex());
+        Api apiHash = new Api("根据交易hash查询区块", Api.Intent.HASH.getIndex());
+        Api apiNumber = new Api("根据交易区块高度查询区块", Api.Intent.NUMBER.getIndex());
+        Api apiTxid = new Api("根据交易ID查询区块", Api.Intent.TXID.getIndex());
+        apis.add(apiInvoke);
+        apis.add(apiQuery);
+        apis.add(apiInfo);
+        apis.add(apiHash);
+        apis.add(apiNumber);
+        apis.add(apiTxid);
+
+        Api apiIntent = new Api();
+
+        modelAndView.addObject("apis", apis);
+        modelAndView.addObject("apiIntent", apiIntent);
+        return modelAndView;
+    }
+
+    @PostMapping(value = "verify")
+    public ModelAndView verify(@ModelAttribute Api api, @RequestParam("chaincodeId") int id) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeResult");
+        Api.Intent intent = Api.Intent.get(api.index);
+        String result = null;
+        String url = String.format("http://localhost:%s/%s", env.getProperty("server.port"), intent.getApiUrl());
+        try {
+            switch (intent) {
+                case INVOKE:
+                    StateInfo state = multiService.getState(id, api);
+                    result = multiService.getStateService().invoke(state);
+                    modelAndView.addObject("jsonStr", multiService.formatState(state));
+                    modelAndView.addObject("method", "POST");
+                    break;
+                case QUERY:
+                    state = multiService.getState(id, api);
+                    result = multiService.getStateService().query(state);
+                    modelAndView.addObject("jsonStr", multiService.formatState(state));
+                    modelAndView.addObject("method", "POST");
+                    break;
+                case INFO:
+                    result = multiService.getTraceService().queryBlockChainInfo(id);
+                    modelAndView.addObject("jsonStr", "");
+                    modelAndView.addObject("method", "GET");
+                    break;
+                case HASH:
+                    TraceInfo trace = multiService.getTrace(id, api);
+                    result = multiService.getTraceService().queryBlockByHash(trace);
+                    modelAndView.addObject("jsonStr", multiService.formatTrace(trace));
+                    modelAndView.addObject("method", "POST");
+                    break;
+                case NUMBER:
+                    trace = multiService.getTrace(id, api);
+                    result = multiService.getTraceService().queryBlockByNumber(trace);
+                    modelAndView.addObject("jsonStr", multiService.formatTrace(trace));
+                    modelAndView.addObject("method", "POST");
+                    break;
+                case TXID:
+                    trace = multiService.getTrace(id, api);
+                    result = multiService.getTraceService().queryBlockByTransactionID(trace);
+                    modelAndView.addObject("jsonStr", multiService.formatTrace(trace));
+                    modelAndView.addObject("method", "POST");
+                    break;
+            }
+        } catch (TException e) {
+            result = String.format("error:%s", e.getMessage());
+            e.printStackTrace();
+        }
+        modelAndView.addObject("result", result);
+        modelAndView.addObject("api", api);
+        modelAndView.addObject("url", url);
         return modelAndView;
     }
 
