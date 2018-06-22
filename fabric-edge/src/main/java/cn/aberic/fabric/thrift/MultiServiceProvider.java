@@ -12,6 +12,9 @@ import cn.aberic.thrift.state.StateInfo;
 import cn.aberic.thrift.state.StateService;
 import cn.aberic.thrift.trace.TraceInfo;
 import cn.aberic.thrift.trace.TraceService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.thrift.TException;
 import org.apache.thrift.TServiceClient;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -154,6 +157,21 @@ public class MultiServiceProvider {
         trace.setId(id);
         trace.setTrace(api.exec.trim());
         return trace;
+    }
+
+    public String formatState(StateInfo state) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", state.getId());
+        JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(state.getStrArray()));
+        jsonObject.put("strArray", jsonArray);
+        return jsonObject.toJSONString();
+    }
+
+    public String formatTrace(TraceInfo trace) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", trace.getId());
+        jsonObject.put("trace", trace);
+        return jsonObject.toJSONString();
     }
 
 }
