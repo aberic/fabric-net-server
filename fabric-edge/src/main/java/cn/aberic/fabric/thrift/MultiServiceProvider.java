@@ -1,5 +1,6 @@
 package cn.aberic.fabric.thrift;
 
+import cn.aberic.fabric.bean.Api;
 import cn.aberic.thrift.chaincode.ChaincodeService;
 import cn.aberic.thrift.channel.ChannelService;
 import cn.aberic.thrift.league.LeagueService;
@@ -7,7 +8,9 @@ import cn.aberic.thrift.orderer.OrdererService;
 import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.org.OrgService;
 import cn.aberic.thrift.peer.PeerService;
+import cn.aberic.thrift.state.StateInfo;
 import cn.aberic.thrift.state.StateService;
+import cn.aberic.thrift.trace.TraceInfo;
 import cn.aberic.thrift.trace.TraceService;
 import org.apache.thrift.TException;
 import org.apache.thrift.TServiceClient;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service("multiService")
@@ -136,6 +140,20 @@ public class MultiServiceProvider {
             e.printStackTrace();
         }
         return orgs;
+    }
+
+    public StateInfo getState(int id, Api api) {
+        StateInfo state = new StateInfo();
+        state.setId(id);
+        state.setStrArray(Arrays.asList(api.exec.trim().split(",")));
+        return state;
+    }
+
+    public TraceInfo getTrace(int id, Api api) {
+        TraceInfo trace = new TraceInfo();
+        trace.setId(id);
+        trace.setTrace(api.exec.trim());
+        return trace;
     }
 
 }
