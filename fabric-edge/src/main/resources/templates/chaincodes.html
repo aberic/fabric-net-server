@@ -80,6 +80,9 @@
                                                 <a th:href="@{/chaincode/edit(id=${chaincode.id})}">
                                                     <i class="am-icon-pencil"></i> 编辑
                                                 </a>
+                                                <a th:href="@{/chaincode/verify(chaincodeId=${chaincode.id})}" class="tpl-table-black-operation-del">
+                                                    <i class="am-icon-trash"></i> 测试
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
