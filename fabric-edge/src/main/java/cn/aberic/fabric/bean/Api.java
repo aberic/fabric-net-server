@@ -9,12 +9,14 @@ public class Api {
 
     /** API 意图 */
     public enum Intent {
-        INVOKE(1), QUERY(2), INFO(3), HASH(4), NUMBER(5), TXID(6);
+        INVOKE(1, "state/invoke"), QUERY(2, "state/query"), INFO(3, "trace/info/1"), HASH(4, "trace/hash"), NUMBER(5, "trace/number"), TXID(6, "trace/txid");
 
         private int index;
+        private String apiUrl;
 
-        private Intent(int index) {
+        private Intent(int index, String apiUrl) {
             this.index = index;
+            this.apiUrl = apiUrl;
         }
 
         public static Intent get(int index) {
@@ -24,6 +26,14 @@ public class Api {
                 }
             }
             return null;
+        }
+
+        public String getApiUrl() {
+            return apiUrl;
+        }
+
+        public void setApiUrl(String apiUrl) {
+            this.apiUrl = apiUrl;
         }
 
         public int getIndex() {
