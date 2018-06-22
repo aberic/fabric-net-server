@@ -2,11 +2,13 @@ namespace java cn.aberic.thrift.channel
 
 struct ChannelInfo {
     1:i32 id,
-    2:string name,
-    3:i32 peerId,
-    4:string peerName,
-    5:string date,
-    6:i32 chaincodeCount
+    2:required string name,
+    3:required i32 peerId,
+    4:optional string date,
+    5:optional string peerName,
+    6:optional string orgName,
+    7:optional string leagueName,
+    8:optional i32 chaincodeCount
 }
 service ChannelService {
 
