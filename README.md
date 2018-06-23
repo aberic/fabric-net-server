@@ -24,11 +24,11 @@ api执行结果及使用方案界面预览
 <br>
 ![首页视图](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/chaincode2.jpeg "Fabric 网络")
 ## 版本说明
-1、如有源码学习需要的，可以参阅[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)或含MySQL数据库的[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/0.2)版本。
+1、如有源码学习需要的，可以参阅[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)或含MySQL数据库的[v0.2](https://github.com/abericyang/fabric-net-server/tree/0.2)版本。
 <br>
-2、从1.0-RC开始提供后台视图服务，之前的beta版仅提供接口方案。
+2、从[v1.0-RC](https://github.com/aberic/fabric-net-server/tree/1.0-RC1)开始提供后台视图服务，之前的beta版仅提供接口方案。
 <br>
-3、如有二次开发需求，建议以[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)为蓝本。
+3、如有二次开发需求，建议以[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)为蓝本。
 <br>
 4、下一版计划实现安装、实例化智能合约及加入通道等功能。
 <br><br>
@@ -43,7 +43,7 @@ api执行结果及使用方案界面预览
 <br>
 5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
 <br>
-6、服务启动完成后，访问http://localhost:port即可。
+6、服务启动完成后，通过http://localhost:port 访问即可。
 <br><br>
 #### docker-fabric-net-server.yaml说明
 ```yaml
@@ -77,7 +77,7 @@ services:
 <br>
 3、yaml启动需要指定镜像版本号，或tag镜像版本号为latest。
 <br><br>
-#### 架构
+#### 架构（请无视小图标）
 ![FabricNet](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/FabricNet.png "Fabric 网络")
 <br>
 如上图，需要对Fabric网络有一个简单的理解一致，并对以下几个点说明一下：
@@ -123,6 +123,7 @@ league、org、orderer、peer、channel及chaincode中后台创建所需的字�
 | CHAINCODE_PROPOSAL_WAIT_TIME | 单个提案请求超时时间以毫秒为单位  | 默认90000                                                                                                                                                                                           |
 | CHAINCODE_INVOKE_WAIT_TIME   | 事务等待时间以秒为单位           | 默认120                                                                                                                                                                                            |
 
+<br>
 
 **API参考**
 
@@ -135,17 +136,21 @@ league、org、orderer、peer、channel及chaincode中后台创建所需的字�
 | POST   | /trace/txid          | 根据交易ID查询区块             |
 | GET    | /trace/info/{id}     | 根据当前智能合约id查询当前链信息 |
 
-API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有SaaS/BaaS服务的紧急需求，可以自行参考[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)中的方案来解决。
+API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有SaaS/BaaS服务的紧急需求，可以自行参考[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)中的方案来解决。
 <br>
+
 ##讨论
 * [HyperLedger/Aberic](http://www.cnblogs.com/aberic/)
 <br>
+
 ##社群
 * 扫微信订阅号加入：
 <br>
 ![HLFStudy](https://images2017.cnblogs.com/blog/1240530/201802/1240530-20180201103733812-1730907548.jpg "HLFStudy 微信订阅号")
 <br>
+
 ##入门书籍
 [《HyperLedger Fabric开发实战——快速掌握区块链技术》](https://item.jd.com/12381034.html?dist=jd)
 <br>
+
 [![HyperLedger Fabric开发实战](https://images2018.cnblogs.com/blog/1240530/201806/1240530-20180614234142771-2017750800.png "HyperLedger Fabric开发实战")](https://item.jd.com/12381034.html?dist=jd)
