@@ -17,9 +17,9 @@ struct OrgInfo {
 }
 service OrgService {
 
-    i32 add(1:OrgInfo orgInfo);
+    i32 add(1:OrgInfo orgInfo, 2:binary buff, 3:string fileName);
 
-    i32 update(1:OrgInfo orgInfo);
+    i32 update(1:OrgInfo orgInfo, 2:binary buff, 3:string fileName);
 
     list<OrgInfo> listAll();
 
