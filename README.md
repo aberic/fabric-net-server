@@ -139,17 +139,18 @@ league、org、orderer、peer、channel及chaincode中后台创建所需的字�
 API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有SaaS/BaaS服务的紧急需求，可以自行参考[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)中的方案来解决。
 <br>
 
-##讨论
+## 讨论
 * [HyperLedger/Aberic](http://www.cnblogs.com/aberic/)
 <br>
 
-##社群
+## 社群
 * 扫微信订阅号加入：
 <br>
+
 ![HLFStudy](https://images2017.cnblogs.com/blog/1240530/201802/1240530-20180201103733812-1730907548.jpg "HLFStudy 微信订阅号")
 <br>
 
-##入门书籍
+## 入门书籍
 [《HyperLedger Fabric开发实战——快速掌握区块链技术》](https://item.jd.com/12381034.html?dist=jd)
 <br>
 
