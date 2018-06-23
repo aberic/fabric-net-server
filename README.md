@@ -1,7 +1,6 @@
 # HyperLedger/Fabric SDK Docker Image
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
-[![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/fabric-sdk/)
-[![Swagger Validator](https://img.shields.io/swagger/valid/2.0/https/raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json.svg)](http://140.143.210.217:8090/swagger-ui.html)
+[![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/)
 <br>
 本项目依赖于任意一个已经部署完成的HyperLedger Fabric网络，并对该网络提供REST API服务，包括通道、智能合约及Fabric网络中节点等管理功能。
 <br><br>
