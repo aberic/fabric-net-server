@@ -153,4 +153,4 @@ HyperLedger/Fabric**微信交流群**，扫微信订阅号加入：<br>
 ![HLFStudy](https://images2017.cnblogs.com/blog/1240530/201802/1240530-20180201103733812-1730907548.jpg "HLFStudy 微信订阅号")
 <br><br>
 《HyperLedger Fabric开发实战——快速掌握区块链技术》<br>
-[![HyperLedger Fabric开发实战](https://images2018.cnblogs.com/blog/1240530/201806/1240530-20180614234142771-2017750800.png "HyperLedger Fabric开发实战")](https://item.jd.com/12381034.html?dist=jd)
+[![HyperLedger Fabric开发实战](https://images2018.cnblogs.com/blog/1240530/201806/1240530-20180614234142771-2017750800.png "HyperLedger Fabric开发实战")](https://item.jd.com/12381034.html?dist=jd) [![Join the chat at https://gitter.im/fabric-net-server/Lobby](https://badges.gitter.im/fabric-net-server/Lobby.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
