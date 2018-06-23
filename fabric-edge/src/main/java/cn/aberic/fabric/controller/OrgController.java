@@ -1,17 +1,16 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.thrift.MultiServiceProvider;
-import cn.aberic.fabric.utils.FileUtil;
 import cn.aberic.thrift.league.LeagueInfo;
 import cn.aberic.thrift.org.OrgInfo;
 import org.apache.thrift.TException;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +26,6 @@ public class OrgController {
 
     @Resource
     private MultiServiceProvider multiService;
-    @Resource
-    private Environment env;
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute OrgInfo org,
@@ -36,25 +33,15 @@ public class OrgController {
                                @RequestParam("file") MultipartFile file,
                                @RequestParam("id") int id) {
         try {
-            String path = String.format("%s/%s/%s", env.getProperty("config.dir"), multiService.getLeagueService().get(org.getLeagueId()).getName(), org.getName());
             switch (intent) {
                 case "add":
-                    org.setCryptoConfigDir(String.format("%s/crypto-config", path));
-                    if (multiService.getOrgService().add(org) <= 0) {
+                    if (multiService.getOrgService().add(org, ByteBuffer.wrap(file.getBytes()), file.getOriginalFilename()) <= 0) {
                         break;
                     }
-                    if (file.isEmpty()) {
-                        break;
-                    }
-                    FileUtil.unZipAndSave(file, path);
                     break;
                 case "edit":
                     org.setId(id);
-                    org.setCryptoConfigDir(String.format("%s/crypto-config", path));
-                    if (!file.isEmpty()) {
-                        FileUtil.unZipAndSave(file, path);
-                    }
-                    multiService.getOrgService().update(org);
+                    multiService.getOrgService().update(org, ByteBuffer.wrap(file.getBytes()), file.getOriginalFilename());
                     break;
             }
         } catch (TException | IOException e) {
