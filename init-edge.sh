@@ -8,11 +8,11 @@ echo "|____/    |_|   /_/   \_\ |_| \_\   |_|   "
 echo
 
 ## 启动SDK
-startSDK () {
+startEdge () {
     ## 启动spring-boot服务
-    nohup java -jar /home/fabric-1.0-beta3.jar > /home/fabric-1.0-beta3.nohup 2>&1 &
+    nohup java -jar /home/fabric-edge-1.0-RC1.jar > /home/fabric-edge-1.0-RC1.nohup 2>&1 &
 
-    tail -f logs /home/fabric-1.0-beta3.nohup
+    tail -f logs /home/fabric-edge-1.0-RC1.nohup
 }
 
-startSDK
+startEdge

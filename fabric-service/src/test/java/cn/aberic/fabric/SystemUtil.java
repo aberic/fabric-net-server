@@ -1,12 +1,12 @@
 package cn.aberic.fabric;
 
-import cn.aberic.thrift.common.SystemInfo;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperic.jni.ArchNotSupportedException;
 import org.hyperic.sigar.*;
 import org.hyperic.sigar.FileSystem;
+import org.junit.Ignore;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -18,6 +18,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.Properties;
 
+@Ignore
 public class SystemUtil {
 
     private static Logger logger = LogManager.getLogger(SystemUtil.class);

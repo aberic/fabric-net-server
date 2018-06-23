@@ -1,7 +1,10 @@
 package cn.aberic.fabric;
 
+import org.junit.Ignore;
+
 import java.io.IOException;
 
+@Ignore
 public class Test {
 
     public static void main(String[] args) throws IOException {
