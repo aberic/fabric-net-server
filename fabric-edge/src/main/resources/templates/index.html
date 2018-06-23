@@ -139,13 +139,32 @@
             </div>
 
             <div class="row am-cf">
-                <div class="am-u-sm-12 am-u-md-8">
-                    <div class="widget am-cf">
-                        <div class="widget-head am-cf">
-                            <div class="widget-title am-fl">区块数量变化</div>
-                        </div>
-                        <div class="widget-body-md widget-body tpl-amendment-echarts am-fr" id="tpl-echarts">
-
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-8 widget-margin-bottom-lg">
+                    <div class="widget am-cf widget-body-lg">
+                        <div class="widget-body  am-fr">
+                            <div class="am-scrollable-horizontal ">
+                                <table width="100%" class="am-table am-table-compact am-text-nowrap tpl-table-black "
+                                       id="example-r">
+                                    <thead>
+                                    <tr>
+                                        <th>区块高度</th>
+                                        <th>交易数</th>
+                                        <th>通道名称</th>
+                                        <th>创建者</th>
+                                        <th>时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="gradeX" th:each="transaction : ${transactions}">
+                                        <td th:text="${transaction.num}">区块高度</td>
+                                        <td th:text="${transaction.txCount}">交易数</td>
+                                        <td th:text="${transaction.channelName}">通道名称</td>
+                                        <td th:text="${transaction.createMSPID}">创建者</td>
+                                        <td th:text="${transaction.date}">时间</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
