@@ -46,6 +46,31 @@ public class FabricHelper {
         fabricManagerMap = new HashMap<>();
     }
 
+    public void removeManager(List<PeerInfo> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
+        for (PeerInfo peer : peers) {
+            List<ChannelInfo> channels = channelMapper.list(peer.getId());
+            for (ChannelInfo channel : channels) {
+                List<ChaincodeInfo> chaincodes = chaincodeMapper.list(channel.getId());
+                for (ChaincodeInfo chaincode : chaincodes) {
+                    fabricManagerMap.remove(chaincode.getId());
+                }
+            }
+        }
+    }
+
+    public void removeManager(List<ChannelInfo> channels, ChaincodeMapper chaincodeMapper) {
+        for (ChannelInfo channel : channels) {
+            List<ChaincodeInfo> chaincodes = chaincodeMapper.list(channel.getId());
+            for (ChaincodeInfo chaincode : chaincodes) {
+                fabricManagerMap.remove(chaincode.getId());
+            }
+        }
+    }
+
+    public void removeManager(int chainCodeId) {
+        fabricManagerMap.remove(chainCodeId);
+    }
+
     public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper) throws Exception {
         return get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, -1);

@@ -1,8 +1,8 @@
 package cn.aberic.fabric.service;
 
-import cn.aberic.fabric.mapper.LeagueMapper;
-import cn.aberic.fabric.mapper.OrgMapper;
+import cn.aberic.fabric.mapper.*;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.FileUtil;
 import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.org.OrgService;
@@ -25,6 +25,12 @@ public class OrgServiceImpl implements OrgService.Iface {
     private Environment env;
     @Resource
     private LeagueMapper leagueMapper;
+    @Resource
+    private PeerMapper peerMapper;
+    @Resource
+    private ChannelMapper channelMapper;
+    @Resource
+    private ChaincodeMapper chaincodeMapper;
 
 
     @Override
@@ -50,6 +56,7 @@ public class OrgServiceImpl implements OrgService.Iface {
             orgInfo.setCryptoConfigDir(path + File.separator + fileName.split("\\.")[0]);
             saveConfig(buff, orgInfo, fileName, path);
         }
+        FabricHelper.obtain().removeManager(peerMapper.list(orgInfo.getId()), channelMapper, chaincodeMapper);
         return orgMapper.update(orgInfo);
     }
 

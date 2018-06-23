@@ -2,6 +2,7 @@ package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.ChaincodeMapper;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.thrift.chaincode.ChaincodeInfo;
 import cn.aberic.thrift.chaincode.ChaincodeService;
 import org.apache.thrift.TException;
@@ -32,6 +33,7 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface {
 
     @Override
     public int update(ChaincodeInfo chaincodeInfo) throws TException {
+        FabricHelper.obtain().removeManager(chaincodeInfo.getId());
         return chaincodeMapper.update(chaincodeInfo);
     }
 

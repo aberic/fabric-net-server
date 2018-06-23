@@ -1,7 +1,10 @@
 package cn.aberic.fabric.service;
 
+import cn.aberic.fabric.mapper.ChaincodeMapper;
+import cn.aberic.fabric.mapper.ChannelMapper;
 import cn.aberic.fabric.mapper.PeerMapper;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.thrift.peer.PeerInfo;
 import cn.aberic.thrift.peer.PeerService;
 import org.apache.thrift.TException;
@@ -16,6 +19,10 @@ public class PeerServiceImpl implements PeerService.Iface {
 
     @Resource
     private PeerMapper peerMapper;
+    @Resource
+    private ChannelMapper channelMapper;
+    @Resource
+    private ChaincodeMapper chaincodeMapper;
 
 
     @Override
@@ -32,6 +39,7 @@ public class PeerServiceImpl implements PeerService.Iface {
 
     @Override
     public int update(PeerInfo peerInfo) throws TException {
+        FabricHelper.obtain().removeManager(peerMapper.list(peerInfo.getOrgId()), channelMapper, chaincodeMapper);
         return peerMapper.update(peerInfo);
     }
 
