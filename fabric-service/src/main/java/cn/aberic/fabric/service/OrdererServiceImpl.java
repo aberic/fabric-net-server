@@ -6,6 +6,7 @@ import cn.aberic.thrift.orderer.OrdererInfo;
 import cn.aberic.thrift.orderer.OrdererService;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +19,10 @@ public class OrdererServiceImpl implements OrdererService.Iface {
 
     @Override
     public int add(OrdererInfo ordererInfo) throws TException {
+        if (StringUtils.isEmpty(ordererInfo.getName()) ||
+                StringUtils.isEmpty(ordererInfo.getLocation())) {
+            return 0;
+        }
         ordererInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         return ordererMapper.add(ordererInfo);
     }

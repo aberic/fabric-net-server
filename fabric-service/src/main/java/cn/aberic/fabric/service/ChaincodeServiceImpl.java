@@ -6,6 +6,7 @@ import cn.aberic.thrift.chaincode.ChaincodeInfo;
 import cn.aberic.thrift.chaincode.ChaincodeService;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +19,13 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface {
 
     @Override
     public int add(ChaincodeInfo chaincodeInfo) throws TException {
+        if (StringUtils.isEmpty(chaincodeInfo.getName()) ||
+                StringUtils.isEmpty(chaincodeInfo.getPath()) ||
+                StringUtils.isEmpty(chaincodeInfo.getVersion()) ||
+                chaincodeInfo.getProposalWaitTime() == 0 ||
+                chaincodeInfo.getInvokeWaitTime() == 0) {
+            return 0;
+        }
         chaincodeInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         return chaincodeMapper.add(chaincodeInfo);
     }

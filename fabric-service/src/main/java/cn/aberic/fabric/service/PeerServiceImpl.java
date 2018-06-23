@@ -6,6 +6,7 @@ import cn.aberic.thrift.peer.PeerInfo;
 import cn.aberic.thrift.peer.PeerService;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,6 +20,12 @@ public class PeerServiceImpl implements PeerService.Iface {
 
     @Override
     public int add(PeerInfo peerInfo) throws TException {
+        if (StringUtils.isEmpty(peerInfo.getName()) ||
+                StringUtils.isEmpty(peerInfo.getLocation()) ||
+                StringUtils.isEmpty(peerInfo.getEventHubName()) ||
+                StringUtils.isEmpty(peerInfo.getEventHubLocation())) {
+            return 0;
+        }
         peerInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         return peerMapper.add(peerInfo);
     }

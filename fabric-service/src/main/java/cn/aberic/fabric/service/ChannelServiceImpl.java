@@ -6,6 +6,7 @@ import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.channel.ChannelService;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +19,9 @@ public class ChannelServiceImpl implements ChannelService.Iface {
 
     @Override
     public int add(ChannelInfo channelInfo) throws TException {
+        if (StringUtils.isEmpty(channelInfo.getName())) {
+            return 0;
+        }
         channelInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         return channelMapper.add(channelInfo);
     }
