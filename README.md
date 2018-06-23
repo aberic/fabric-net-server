@@ -1,65 +1,130 @@
-# HyperLedger/Fabric SDK Docker Image
+**注意：** 这是一个依赖于已经部署好的HyperLedger Fabric项目，关于前者搭建部署的方案可以通过参考[从零开始](https://www.cnblogs.com/aberic/category/1148898.html)或购买[开发实战](https://item.jd.com/12381034.html?dist=jd)等途径学习。目前这些都还不在当前项目的支持范围内，未来也许会计划开发一套基于Fabric深度定制的一键部署及管理平台（非K8S）。
+<br>
+# Fabric Net Server [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg)](http://www.cnblogs.com/aberic/)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
 [![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/)
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
+[![Join the chat at https://gitter.im/fabric-net-server/Lobby](https://badges.gitter.im/fabric-net-server/Lobby.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<br><br>
+本项目目前提供一套Fabric网络后台服务，包括对已经在Fabric网络中创建好的org、peer、channel、chaincode等进行网络新增，并基于已经新增成功的内容提供[REST API](https://github.com/aberic/fabric-net-server/blob/master/API_DEMO.md)服务，目前仅支持智能合约的执行、查询以及溯源功能，未来计划支持后台动态加入通道、安装合约、实例化合约等基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)已有接口的实现。
+<br><br>
+本项目开发环境和框架大致有：IntelliJ IDEA、Maven、JDK8+、spring-boot、thrift、thymeleaf以及Docker等。具体实践可使用项目中提供的Docker镜像部署，也可以自定义源码二次开发。
+<br><br>
+由于个人人力实在有限，后面的工程和工作量会逐步变大变多，在保证个人工作顺利的情况下，会将大部分精力都投入到本项目中。
+<br><br>
+## 项目预览
+后台首页界面预览
 <br>
-本项目依赖于任意一个已经部署完成的HyperLedger Fabric网络，并对该网络提供REST API服务，包括通道、智能合约及Fabric网络中节点等管理功能。
+![首页视图](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/index.jpeg "Fabric 网络")
 <br><br>
-这是一个基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)的项目，该项目的主要目的是简化HyperLedger/Fabric开发人员在SDK应用层上的工作流程，使得开发和部署更加简单。
+api执行介绍界面预览
 <br><br>
-该项目使用方便，只需要部署有Docker及docker compose环境即可轻松调用Fabric网络接口，包括执行、查询智能合约，以及trace相关的溯源接口。
+![首页视图](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/chaincode1.jpeg "Fabric 网络")
 <br><br>
-## 开发环境
-* IntelliJ IDEA
-* Maven
-* JDK-1.8
-* spring-boot
-* Docker
-* docker compose
-<br><br>
+api执行结果及使用方案界面预览
+<br>
+![首页视图](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/chaincode2.jpeg "Fabric 网络")
 ## 版本说明
-0.x系列的版本主要是非Docker应用方面的项目，即相互交流的源码层项目。<br>
-1.x及以上系列的版本均Docker项目，帮助开发人员快速部署SDK应用，减少开发环节，从而实现业务的快速落地。<br>
-提供链接的为已发布版本，未提供连接的为待实现版本。<br><br>
-目前主要版本如下列表所示：<br>
-[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)：无数据库版，适合轻量级的Fabric平台应用。
+1、如有源码学习需要的，可以参阅[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)或含MySQL数据库的[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/0.2)版本。
 <br>
-[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
+2、从1.0-RC开始提供后台视图服务，之前的beta版仅提供接口方案。
 <br>
-[v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/v1.0-alpha)：提供Docker容器服务，方便SDK快速部署。此版本为单排序服务及单节点服务配置，符合绝大部分需求。
+3、如有二次开发需求，建议以[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)为蓝本。
 <br>
-[v1.0-beta](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta)：新增支持多服务节点。
-<br>
-[v1.0-beta2](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta2)：修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。
-<br>
-[v1.0-beta3](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta3)：删除docker-sdk.yaml环境变量配置，取消hash标识（容易被误会），细化Fabric网络及数据库结构，简化启动脚本。
-<br>
-v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能；新增Fabric后台管理功能。
+4、下一版计划实现安装、实例化智能合约及加入通道等功能。
 <br><br>
-## 使用sdk-container
+## 使用
 1、确定Linux内核在`3.10`及以上。
 <br>
 2、在待部署SDK服务器上安装`Docker`及`docker compose`环境。
 <br>
-3、执行`docker pull aberic/fabric-sdk:1.0-beta3`下载镜像。
+3、执行`docker pull aberic/fabric-service:1.0-RC1`及`docker pull aberic/fabric-edge:1.0-RC1`下载两个镜像。
 <br>
-4、在`docker-sdk.yaml`文件中将好Fabric网络中的crypto-config挂载到指定目录下。
+4、编辑`docker-fabric-net-server.yaml`，参考。
 <br>
-5、执行`docker-compose -f docker-sdk.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
+5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
 <br>
-6、服务启动完成后，参考下面的API介绍以便更快投入使用。
+6、服务启动完成后，访问http://localhost:port即可。
 <br><br>
-**docker-sdk.yaml说明**
+#### docker-fabric-net-server.yaml说明
+```yaml
+version: '2'
+
+services:
+
+  service:
+    container_name: service
+    image: aberic/fabric-service
+    command: bash /home/init-service.sh
+    ports:
+      - 8081:8081
+
+  edge:
+    container_name: edge
+    image: aberic/fabric-edge
+    environment:
+      # service地址配置
+      - SERVICE_IP=10.163.90.220
+      - SERVICE_PORT=8081
+    command: bash /home/init-edge.sh
+    ports:
+      - 8080:8080
+    depends_on:
+      - service
+```
+1、上述配置仅为demo，主要关注自己的端口映射，edge的端口号决定了项目访问的最终地址。
 <br>
-关于docker-sdk.yaml编排文件中的参数，主要是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)（点击链接自行学习二进制文件生成指定证书文件以及参考crypto-config文件配置）。该目录最终被指定挂在于容器/home/config/目录下。
-<br>                                                                                                                                                                   |
-docker-sdk.yaml中的`image: aberic/fabric-sdk`，需要指定其版本号。
+2、edge中SERVICE_IP和SERVICE_PORT两个变量的值取决于service的部署情况，理论上可以在一台物理机中部署即可。
 <br>
-docker-sdk.yaml中volumes使用方法请学习docker compose相关知识。
-<br>
-docker-sdk.yaml中的ports，后一个为容器中端口号，不用修改，冒号前的可以指定为自身服务器未占用的端口号，最终调用sdk接口时通过冒号前指定的端口号即可。
+3、yaml启动需要指定镜像版本号，或tag镜像版本号为latest。
 <br><br>
-**API入口文档**
+#### 架构
+![FabricNet](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/FabricNet.png "Fabric 网络")
+<br>
+如上图，需要对Fabric网络有一个简单的理解一致，并对以下几个点说明一下：
+<br>
+1、一个Fabric网络即是一个league（联盟链），一个league包含一个或多个org（组织）且含有不少于一个orderer（排序服务），一个org包含一个或多个peer（节点服务），一个peer可以加入一个或多个channel（通道），一个channel可以安装一个或多个chaincode（智能合约）。
+<br>
+2、根据1所述，仅有league对象集合查询不需要指定id。org集合查询需要指定联盟id，orderer及peer集合查询需要指定orgId，channel集合查询需要指定peerId，chaincode集合查询需要指定channelId。
+<br>
+3、可以根据某一个chaincode逆向查出该chaincode的整个league网络，因此执行state和trace接口时只需要传入chaincodeId即可。
+<br>
+4、执行state接口中的`strArray`是调用Fabric网络中部署的chaincode所传入的参数，在用go编写chaincode的时候，chaincode所接收的参数为一个字符串数组，其中字符串数组的第一个参数是chaincode的方法名。chaincode接口中的args所传入的参数就是智能合约所接收的数组参数。如[chaincode_example02](https://github.com/aberic/fabric-net-server/blob/master/chaincode_example02/chaincode_example02.go)中执行invoke时传入的参数为`["invoke", "a", "b", "10"]`，那么在本项目中执行state接口时传入的参数即为`[invoke,a,b,10]`，与Fabric网络中安装的chaincode所需参数保持一致，实现与业务解耦，仅用于维护Fabric项目和做业务与chaincode的桥梁，不参与实际业务当中。
+<br>
+5、执行trace接口可使用项目中在chaincode管理中提供的测试工具进行测试，上一步中的操作也可以通过该方法测试，测试结果会将正确的请求方式显示出来，以便对外提供服务。
+<br>
+6、Fabric网络新增操作必须遵循第2点所述，即必须从league开始新增，直到最后新增chaincode。
+<br>
+7、新增org中需要上传用`zip`压缩的`crypto-config`目录，`crypto-config`是[二进制](https://www.cnblogs.com/aberic/p/7542835.html)生成的证书文件目录。目录下的内容可参考[crypto-config.dir](https://github.com/aberic/fabric-net-server/tree/master/crypto-config)，配置方案可参考[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)。
+<br><br>
+#### 对象新建字段部分释义
+league、org、orderer、peer、channel及chaincode中后台创建所需的字段有如下表中释义：
+<br>
+
+| Params                       | Description                  | Map                                                                                                                                                                                               |
+| :--                          | :--                          | :--                                                                                                                                                                                               |
+| ORG_NAME                     | 节点所属组织名称               | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> PeerOrgs-Name                                                          |
+| ORG_TLS                      | 节点是否开启TLS                | 根据自身创建网络情况选择true或false                                                                                                                                                                   |
+| ORG_USERNAME                 | 节点所属组织用户名称            | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/users)目录下的两个用户，默认配置中选择的Admin                           |
+| ORG_CRYPTO_CONFIG_DIR        | 映射到容器中的crypto-config目录 | 即[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/users)目录                                                           |
+| ORG_MSP_ID                   | 节点所属组织ID                 | 参见[configtx](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/configtx.yaml)文件中 -> Organizations-&Org1-Name                                                         |
+| ORG_DOMAIN_NAME              | 节点所属组织域名名称            | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> PeerOrgs-Domain                                                        |
+| ORG_ORDERER_DOMAIN_NAME      | 节点所属排序服务域名名称         | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/crypto-config.yaml)文件中 -> OrdererOrgs-Domain                                                     |
+| ORDERER_NAME                 | 排序服务名称                   | 参见[configtx](https://github.com/aberic/fabric-sdk-container/blob/master/yaml_config_from/configtx.yaml)文件中 -> Orderer-Addresses                                                                 |
+| ORDERER_LOCATION             | 排序服务访问路径                | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
+| PEER_NAME                    | 节点服务域名名称                | 参见[crypto-config](https://github.com/aberic/fabric-sdk-container/tree/master/crypto-config/peerOrganizations/org1.example.com/peers)目录下的节点域名列表                                            |
+| PEER_EVENT_HUB_NAME          | 节点服务事件域名名称            | 同上                                                                                                                                                                                                |
+| PEER_LOCATION                | 节点服务路径                   | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
+| PEER_EVENT_HUB_LOCATION      | 节点服务事件路径                | 根据自身设置实际情况修改，一般为`grpc://host:port`的格式                                                                                                                                                |
+| PEER_IS_EVENT_LISTENER       | 节点所属组织名称                | 根据自身需求选择是否监听回调服务                                                                                                                                                                       |
+| CHANNEL_NAME                 | 自行创建的通道名称              | 如：`peer channel create -o orderer.example.com:7050 -c mychannel -t 50 -f ./channel-artifacts/mychannel.tx` 命令所创建的mychannel                                                                   |
+| CHAINCODE_NAME               | 智能合约名称                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令所创建的testcc                                                            |
+| CHAINCODE_PATH               | 智能合约路径                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令中的github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 |
+| CHAINCODE_VERSION            | 智能合约版本                   | 如：`peer chaincode install -n testcc -p github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02 -v 1.0 `命令中的1.0                                                                   |
+| CHAINCODE_PROPOSAL_WAIT_TIME | 单个提案请求超时时间以毫秒为单位  | 默认90000                                                                                                                                                                                           |
+| CHAINCODE_INVOKE_WAIT_TIME   | 事务等待时间以秒为单位           | 默认120                                                                                                                                                                                            |
+
+
+**API参考**
 
 | Method | REST API             | Description                 |
 | :--:   | :--                  | :--                         |
@@ -69,88 +134,18 @@ docker-sdk.yaml中的ports，后一个为容器中端口号，不用修改，冒
 | POST   | /trace/number        | 根据交易区块高度查询区块        |
 | POST   | /trace/txid          | 根据交易ID查询区块             |
 | GET    | /trace/info/{id}     | 根据当前智能合约id查询当前链信息 |
-| POST   | /league/add          | 新增联盟对象                  |
-| GET    | /league/list         | 获取联盟对象集合               |
-| POST   | /league/update       | 更新联盟对象                  |
-| POST   | /org/add             | 新增组织对象                  |
-| GET    | /org/list/{id}       | 根据联盟id获取组织对象集合      |
-| POST   | /org/update          | 更新组织对象                  |
-| POST   | /orderer/add         | 新增排序服务对象               |
-| GET    | /orderer/list/{id}   | 根据组织id获取排序服务对象集合  |
-| POST   | /orderer/update      | 更新排序服务对象               |
-| POST   | /peer/add            | 新增节点服务对象               |
-| GET    | /peer/list/{id}      | 根据组织id获取节点服务对象集合   |
-| POST   | /peer/update         | 更新节点服务对象               |
-| POST   | /channel/add         | 新增通道对象                  |
-| GET    | /channel/list/{id}   | 根据节点获取通道对象集合        |
-| POST   | /channel/update      | 更新通道对象                  |
-| POST   | /chaincode/add       | 新增链码对象                  |
-| GET    | /chaincode/list/{id} | 根据通道id获取链码对象集合      |
-| POST   | /chaincode/update    | 更新链码对象                  |
 
-API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有SaaS/PaaS服务的紧急需求，可以自行参考v0.2中的方案来解决。
+API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有SaaS/BaaS服务的紧急需求，可以自行参考[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)中的方案来解决。
 <br>
-### API要点
-这是[swagger2](https://github.com/aberic/fabric-sdk-container/blob/v1.0-beta2/swagger2.json)接口文档，API用例可参考[api_demo](https://github.com/aberic/fabric-sdk-container/blob/master/API_DEMO.md)。
+##讨论
+* [HyperLedger/Aberic](http://www.cnblogs.com/aberic/)
 <br>
-也可以通过当前部署fabric-sdk-container服务器的ip和配置文件中映射的端口号进行访问，如`http://ip:port/swagger-ui.html`。
-<br><br>
-![FabricNet](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/FabricNet.png "Fabric 网络")
+##社群
+* 扫微信订阅号加入：
 <br>
-如上图，需要对Fabric网络有一个简单的理解一致，并对以下几个点说明一下：
-<br>
-1、一个Fabric网络包含一个或多个组织且含有不少于一台排序服务集，一个组织包含一个或多个节点服务，一个节点服务可以加入一个或多个通道，一个通道可以安装一个或多个智能合约。
-<br>
-2、根据1所述，仅有联盟对象集合查询不需要指定id。组织集合查询需要指定联盟id，排序及节点服务集合查询需要指定组织id，通道集合查询需要指定节点id，智能合约集合查询需要指定通道id。
-<br>
-3、可以根据某一个智能合约逆向查出该智能合约的整个联盟网络，因此执行state和trace接口时只需要传入智能合约id即可。
-<br>
-4、执行state接口红的args是调用合约传入的参数，在用go编写智能合约的时候，智能合约所接收的参数为一个字符串数组，其中字符串数组的第一个参数是智能合约的方法名。chaincode接口中的args所传入的参数就是智能合约所接收的数组参数。
-<br>
-5、Fabric网络新增操作必须遵循第2点所述，即必须从联盟对象开始新增，直到最后新增智能合约。
-## 代码简要说明
-### sdk-advance
-sdk-advance是基于fabric-sdk-java v1.1的服务，其主要目的是为了更简单的使用fabric-sdk-java，对原有的调用方法做了进一步封装，主要提供了各种中转对象，如智能合约、通道、排序服务、节点、用户等等，最终将所有的中转对象交由一个中转组织来负责配置，其对外提供服务的方式则交给FabricManager来掌管。
-<br><br>
-该项目仅作为学习分享的形式提交维护，关于生产部署方面，sdk-advance与app的交互可自行选择采用thrift或protobuf等数据传输协议实现，这里并没有提供该方案的具体实现，需要自己动手解决。
-<br><br>
-#### sdk-advance-intermediate
-intermediate系列对象是该项目的主要封装对象，间接屏蔽了真实应用层与fabric-sdk-java之间的直接交互。
-* [IntermediateOrderer](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediateOrderer.java)<br>
-对于Orderer，我们需要知道所选组织名称，同时还需要知道Orderer的服务器域名及真实访问地址。这里的服务器域名是指由crypto-config.yaml中进行指定。<br>
-该对象主要提供了对Orderer的服务器域名及真实访问地址的封装。
-<br><br>
-* [IntermediatePeer](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediatePeer.java)<br>
-Peer是部署于本地节点的配置对象，主要包括当前指定的组织节点域名、当前指定的组织节点事件域名、当前指定的组织节点访问地址、当前指定的组织节点事件监听访问地址以及当前peer是否增加Event事件处理。这里的主要配置信息也由crypto-config.yaml中进行指定
-<br><br>
-* [IntermediateChannel](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediateChannel.java)<br>
-每一个Peer所加入的Channel都有独立的通道信息，包括名称或通道tx文件等。IntermediateChannel中定义了通道名称，除此之外，还针对上面两个对象进行了调用，并最终生成了Channel对象。<br>
-IntermediateChannel中已经开始提供对外服务了，主要依赖于Channel对象所提供的，包括最基本的Peer加入频道的方法。<br>
-另外，IntermediateChannel还提供了一系列基本的溯源方法，包括查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash、在指定频道内根据transactionID查询区块、在指定频道内根据hash查询区块以及在指定频道内根据区块高度查询区块等方法。
-<br><br>
-* [IntermediateChaincodeID](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediateChaincodeID.java)<br>
-IntermediateChaincodeID对象与IntermediateChannel相似，除了包含了必须的成员参数外，也提供了一些对外服务。在IntermediateChaincodeID中主要对智能合约名称、包含智能合约的go环境路径、智能合约安装路径、智能合约版本号、指定ID的智能合约以及单个提案请求的超时时间以毫秒为单位和事务等待时间以秒为单位。<br>
-同时对外提供了安装智能合约、实例化智能合约、升级智能合约、执行智能合约以及查询智能合约的服务。
-<br><br>
-* [IntermediateUser](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediateUser.java)<br>
-Fabric中有用户的概念，当然除了用户之外，在1.1中也有组织、节点等基于CA服务的概念。IntermediateUser主要就是用来处理用户CA信息的，目前尚未对此类服务提供更好的封装策略，后续更新中会逐步加入进来，以便提供更简便的实现方案。当前的具体实现可参考[IntermediateOrg](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediateOrg.java)。
-<br><br>
-* [IntermediateOrg](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/IntermediateOrg.java)<br>
-上述无论是排序服务、节点服务或是通道、合约等内容，都应该被同一个组织所拥有，这里的同一个是指单体组织，而不是只为一个组织服务，整个基于Fabric的区块链网络至少应该为一个组织提供服务。<br>
-在IntermediateOrg中集合了已有的对象信息，并从中生成了组织用户以便调用Fabric网络中的接口数据。案例中的方案并非最优方案，关于Fabric CA的实践还没有完成（按照官方的Demo实现无法跑通，如果有能够实现的朋友，欢迎提交代码）。
-<br><br>
-#### sdk-advance-manager
-* [OrgManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/OrgManager.java)<br>
-组织生成器，该对象已经完全暴露给APP所使用，可以通过[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)对象查看其主要用法。通过OrgManager对外暴露的服务生成系列Intermediate对象，并最终使用use方法确定调用的组织具体对象来生成真正提供Fabric区块链网络服务的[FabricManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/FabricManager.java)。<br>
-在使用OrgManager的时候，如果有进一步开发SAAS或更深层BAAS服务的想法，建议不要直接使用[SimpleManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/simple/src/main/java/cn/aberic/simple/module/manager/SimpleManager.java)中的方案，而是结合关系型数据库如MySQL等解决方案，将组织中的相关数据持久化，以便后台可以直接获取并调用。
-<br><br>
-* [FabricManager](https://github.com/abericyang/fabric-sdk-java-app/blob/master/sdk-advance/src/main/java/org/hyperledger/fabric/sdk/aberic/FabricManager.java)<br>
-区块链网络服务管理器FabricManager，作为APP直接调用Fabric区块链网络的入口对象，该对象提供了Channel和ChaincodeID相关的所有接口。
-<br><br>
-欢迎与我多多交流：<br>
-技术博客：[HyperLedger/Aberic](http://www.cnblogs.com/aberic/)<br>
-HyperLedger/Fabric**微信交流群**，扫微信订阅号加入：<br>
 ![HLFStudy](https://images2017.cnblogs.com/blog/1240530/201802/1240530-20180201103733812-1730907548.jpg "HLFStudy 微信订阅号")
-<br><br>
-《HyperLedger Fabric开发实战——快速掌握区块链技术》<br>
+<br>
+##入门书籍
+[《HyperLedger Fabric开发实战——快速掌握区块链技术》](https://item.jd.com/12381034.html?dist=jd)
+<br>
 [![HyperLedger Fabric开发实战](https://images2018.cnblogs.com/blog/1240530/201806/1240530-20180614234142771-2017750800.png "HyperLedger Fabric开发实战")](https://item.jd.com/12381034.html?dist=jd)
