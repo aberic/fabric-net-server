@@ -1,14 +1,22 @@
 package cn.aberic.fabric.controller;
 
+import cn.aberic.fabric.bean.Transaction;
 import cn.aberic.fabric.thrift.MultiServiceProvider;
+import cn.aberic.thrift.chaincode.ChaincodeInfo;
 import cn.aberic.thrift.common.SystemInfo;
-import org.apache.thrift.TException;
+import cn.aberic.thrift.trace.TraceInfo;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * 描述：
@@ -31,6 +39,7 @@ public class CommonController {
         int peerCount = 0;
         int channelCount = 0;
         int chaincodeCount = 0;
+        List<Transaction> transactions = new ArrayList<>();
         SystemInfo systemInfo;
         try {
             if (!multiService.getSystemService().isInit()) {
@@ -46,7 +55,35 @@ public class CommonController {
             systemInfo.setCpu((double) Math.round(systemInfo.getCpu() * 100) / 100);
             systemInfo.setMemory((double) Math.round(systemInfo.getMemory() * 100) / 100);
             systemInfo.setSwap((double) Math.round(systemInfo.getSwap() * 100) / 100);
-        } catch (TException e) {
+            List<ChaincodeInfo> chaincodes = multiService.getChaincodeService().listAll();
+
+            for (ChaincodeInfo chaincode: chaincodes) {
+                JSONObject blockInfo = JSON.parseObject(multiService.getTraceService().queryBlockChainInfo(chaincode.getId()));
+                int height = blockInfo.getJSONObject("data").getInteger("height");
+                for (int num = height - 1; num >= 0; num--) {
+                    TraceInfo trace = new TraceInfo();
+                    trace.setId(chaincode.getId());
+                    trace.setTrace(String.valueOf(num));
+                    JSONObject blockMessage = JSON.parseObject(multiService.getTraceService().queryBlockByNumber(trace));
+                    JSONArray envelopes = blockMessage.getJSONObject("data").getJSONArray("envelopes");
+                    int size = envelopes.size();
+                    for (int i = 0; i < size; i++) {
+                        Transaction transaction = new Transaction();
+                        transaction.setNum(num);
+                        JSONObject envelope = envelopes.getJSONObject(i);
+                        transaction.setTxCount(envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount"));
+                        transaction.setChannelName(envelope.getString("channelId"));
+                        transaction.setCreateMSPID(envelope.getString("createMSPID"));
+                        transaction.setDate(envelope.getString("timestamp"));
+                        transactions.add(transaction);
+                    }
+                    if ((height - num) > 6) {
+                        break;
+                    }
+                }
+            }
+            transactions.sort(Comparator.comparing(Transaction::getDate));
+        } catch (Exception e) {
             systemInfo = new SystemInfo();
             e.printStackTrace();
         }
@@ -57,6 +94,7 @@ public class CommonController {
         modelAndView.addObject("channelCount", channelCount);
         modelAndView.addObject("chaincodeCount", chaincodeCount);
         modelAndView.addObject("systemInfo", systemInfo);
+        modelAndView.addObject("transactions", transactions);
 
         return modelAndView;
     }
