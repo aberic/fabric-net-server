@@ -53,40 +53,60 @@ public class MultiServiceProvider {
     }
 
     public SystemService.Client getSystemService() {
-        return getService(apiIp, apiPort, ServiceType.SYSTEM);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.SYSTEM);
     }
-
     public LeagueService.Client getLeagueService() {
-        return getService(apiIp, apiPort, ServiceType.LEAGUE);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.LEAGUE);
     }
-
     public OrgService.Client getOrgService() {
-        return getService(apiIp, apiPort, ServiceType.ORG);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.ORG);
     }
-
     public OrdererService.Client getOrdererService() {
-        return getService(apiIp, apiPort, ServiceType.ORDERER);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.ORDERER);
     }
-
     public PeerService.Client getPeerService() {
-        return getService(apiIp, apiPort, ServiceType.PEER);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.PEER);
     }
-
     public ChannelService.Client getChannelService() {
-        return getService(apiIp, apiPort, ServiceType.CHANNEL);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.CHANNEL);
     }
-
     public ChaincodeService.Client getChaincodeService() {
-        return getService(apiIp, apiPort, ServiceType.CHAINCODE);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.CHAINCODE);
     }
-
     public StateService.Client getStateService() {
-        return getService(apiIp, apiPort, ServiceType.STATE);
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.STATE);
+    }
+    public TraceService.Client getTraceService() {
+        return getService(System.getenv("SERVICE_IP"), Integer.valueOf(System.getenv("SERVICE_PORT")), ServiceType.TRACE);
     }
 
-    public TraceService.Client getTraceService() {
-        return getService(apiIp, apiPort, ServiceType.TRACE);
-    }
+//    public SystemService.Client getSystemService() {
+//        return getService(apiIp, apiPort, ServiceType.SYSTEM);
+//    }
+//    public LeagueService.Client getLeagueService() {
+//        return getService(apiIp, apiPort, ServiceType.LEAGUE);
+//    }
+//    public OrgService.Client getOrgService() {
+//        return getService(apiIp, apiPort, ServiceType.ORG);
+//    }
+//    public OrdererService.Client getOrdererService() {
+//        return getService(apiIp, apiPort, ServiceType.ORDERER);
+//    }
+//    public PeerService.Client getPeerService() {
+//        return getService(apiIp, apiPort, ServiceType.PEER);
+//    }
+//    public ChannelService.Client getChannelService() {
+//        return getService(apiIp, apiPort, ServiceType.CHANNEL);
+//    }
+//    public ChaincodeService.Client getChaincodeService() {
+//        return getService(apiIp, apiPort, ServiceType.CHAINCODE);
+//    }
+//    public StateService.Client getStateService() {
+//        return getService(apiIp, apiPort, ServiceType.STATE);
+//    }
+//    public TraceService.Client getTraceService() {
+//        return getService(apiIp, apiPort, ServiceType.TRACE);
+//    }
 
     private <T> T getService(String host, int port, ServiceType serviceType) {
         // 客户端需要连接到服务端，先新建一个socker的连接
