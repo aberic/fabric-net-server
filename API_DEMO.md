@@ -5,7 +5,7 @@ POST：http://ip:port/state/invoke
 ```json
 {
    "id": "1",
-   "args": ["invoke", "a", "b", "1"]
+   "strArray": ["invoke", "a", "b", "1"]
 }
 
 ```
@@ -15,7 +15,7 @@ POST：http://ip:port/state/query
 ```json
 {
    "id": "1",
-   "args": ["query", "a"]
+   "strArray": ["query", "a"]
 }
 
 ```
@@ -23,7 +23,7 @@ POST：http://ip:port/state/query
 POST：http://ip:port/trace/txid
 ```json
 {
-   "chainCodeId": "1",
+   "id": "1",
    "trace": "4f1711315d00e84bd76f60bf40af1fa56ff7c5ba398bc264a7d2ca3f882dfe0b"
 }
 ```
@@ -31,7 +31,7 @@ POST：http://ip:port/trace/txid
 POST：http://ip:port/trace/hash
 ```json
 {
-   "chainCodeId": "1",
+   "id": "1",
    "trace": "6ca9ec68a119bdf54b7a400adf09aa178e17f47d397b09eeef1917cd25208dce"
 }
 ```
@@ -39,7 +39,7 @@ POST：http://ip:port/trace/hash
 POST：http://ip:port/trace/number
 ```json
 {
-   "chainCodeId": "1",
+   "id": "1",
    "trace": "3"
 }
 ```
