@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Fabric Net Server</title>
+    <meta name="description" content="Fabric">
+    <meta name="keywords" content="Fabric">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Fabric Net Server"/>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="index">
+<script src="/static/js/theme.js"></script>
+<div class="am-g tpl-g">
+    <!-- 头部 -->
+    <header>
+        <div th:include="common_header :: header"></div>
+    </header>
+    <!-- 风格切换 -->
+    <div th:include="common_skin.html :: skin"></div>
+    <!-- 侧边导航栏 -->
+    <div th:include="common_sidebar :: sidebar"></div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> FNS
+                        <small>fabric-net-server</small>
+                    </div>
+                    <p class="page-header-description">HyperLedger网络服务，提供sdk简化方案。</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row-content am-cf">
+            <div class="row  am-cf">
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-primary am-cf">
+                        <div class="widget-statistic-header">
+                            联盟链总数
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value" th:text="${leagueCount}"></div>
+                            <div class="widget-statistic-description">
+                                即当前服务加入或创建的 <strong>联盟链</strong> 数量
+                            </div>
+                            <span class="widget-statistic-icon am-icon-gg"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-primary am-cf">
+                        <div class="widget-statistic-header">
+                            组织总数
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value" th:text="${orgCount}"></div>
+                            <div class="widget-statistic-description">
+                                即FNS所管理的 <strong>组织</strong> 数量
+                            </div>
+                            <span class="widget-statistic-icon am-icon-object-group"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-primary am-cf">
+                        <div class="widget-statistic-header">
+                            排序服务总数
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value" th:text="${ordererCount}"></div>
+                            <div class="widget-statistic-description">
+                                即FNS所管理的 <strong>排序服务</strong> 数量
+                            </div>
+                            <span class="widget-statistic-icon am-icon-support"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row  am-cf">
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-purple am-cf">
+                        <div class="widget-statistic-header">
+                            节点服务总数
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value" th:text="${peerCount}"></div>
+                            <div class="widget-statistic-description">
+                                即FNS所管理的 <strong>节点服务</strong> 数量
+                            </div>
+                            <span class="widget-statistic-icon am-icon-anchor"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-purple am-cf">
+                        <div class="widget-statistic-header">
+                            通道总数
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value" th:text="${channelCount}"></div>
+                            <div class="widget-statistic-description">
+                                即FNS所管理的 <strong>通道</strong> 数量
+                            </div>
+                            <span class="widget-statistic-icon am-icon-code-fork"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                    <div class="widget widget-purple am-cf">
+                        <div class="widget-statistic-header">
+                            智能合约总数
+                        </div>
+                        <div class="widget-statistic-body">
+                            <div class="widget-statistic-value" th:text="${chaincodeCount}"></div>
+                            <div class="widget-statistic-description">
+                                即FNS所管理的 <strong>智能合约</strong> 数量
+                            </div>
+                            <span class="widget-statistic-icon am-icon-database"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row am-cf">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-8 widget-margin-bottom-lg">
+                    <div class="widget am-cf widget-body-lg">
+                        <div class="widget-body  am-fr">
+                            <div class="am-scrollable-horizontal ">
+                                <table width="100%" class="am-table am-table-compact am-text-nowrap tpl-table-black "
+                                       id="example-r">
+                                    <thead>
+                                    <tr>
+                                        <th>区块高度</th>
+                                        <th>交易数</th>
+                                        <th>通道名称</th>
+                                        <th>创建者</th>
+                                        <th>时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="gradeX" th:each="transaction : ${transactions}">
+                                        <td th:text="${transaction.num}">区块高度</td>
+                                        <td th:text="${transaction.txCount}">交易数</td>
+                                        <td th:text="${transaction.channelName}">通道名称</td>
+                                        <td th:text="${transaction.createMSPID}">创建者</td>
+                                        <td th:text="${transaction.date}">时间</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="am-u-sm-12 am-u-md-4">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl">SDK服务器负载</div>
+                        </div>
+                        <div class="widget-body widget-body-md am-fr">
+
+                            <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more"
+                                                                          th:text="${systemInfo.cpu}+'% / 100%'"></span>
+                            </div>
+                            <div class="am-progress">
+                                <div class="am-progress-bar" th:style="'width:'+${systemInfo.cpu}+'%'"></div>
+                            </div>
+                            <div class="am-progress-title">Mem Load <span class="am-fr am-progress-title-more"
+                                                                          th:text="${systemInfo.memory}+'% / 100%'"></span>
+                            </div>
+                            <div class="am-progress">
+                                <div class="am-progress-bar  am-progress-bar-warning"
+                                     th:style="'width:'+${systemInfo.memory}+'%'"></div>
+                            </div>
+                            <div class="am-progress-title">Swap Load <span class="am-fr am-progress-title-more"
+                                                                           th:text="${systemInfo.swap}+'% / 100%'"></span>
+                            </div>
+                            <div class="am-progress">
+                                <div class="am-progress-bar am-progress-bar-danger"
+                                     th:style="'width:'+${systemInfo.swap}+'%'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/js/amazeui.min.js"></script>
+<script src="/static/js/amazeui.datatables.min.js"></script>
+<script src="/static/js/dataTables.responsive.min.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+
+</html>

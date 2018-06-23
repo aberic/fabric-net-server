@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>新增排序服务</title>
+    <meta name="description" content="新增排序服务">
+    <meta name="keywords" content="新增排序服务">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="新增排序服务"/>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="widgets">
+<script src="/static/js/theme.js"></script>
+<div class="am-g tpl-g">
+    <!-- 头部 -->
+    <header>
+        <div th:include="common_header :: header"></div>
+    </header>
+    <!-- 风格切换 -->
+    <div th:include="common_skin.html :: skin"></div>
+    <!-- 侧边导航栏 -->
+    <div th:include="common_sidebar :: sidebar"></div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"
+                                                           th:text="${intentLarge}"></span>
+                        <small>HyperLedger Fabric网络排序服务单元</small>
+                    </div>
+                    <p class="page-header-description">fabric-net-server可以管理多个排序服务</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl" th:text="${intentLittle}"></div>
+                        </div>
+                        <div class="widget-body am-fr">
+
+                            <form class="am-form tpl-form-line-form" th:action="@{submit}" th:method="post"
+                                  enctype="multipart/form-data"
+                                  th:object="${orderer}">
+                                <div class="am-form-group">
+                                    <label for="org-name" class="am-u-sm-3 am-form-label">组织 <span
+                                            class="tpl-form-line-small-title">org</span></label>
+                                    <div class="am-u-sm-9">
+                                        <select data-am-selected="{searchBox: 1}" style="display: none;"
+                                                id="org-name"
+                                                th:field="*{orgId}">
+                                            <option th:each="org: ${orgs}" th:value="${org.id}"
+                                                    th:text="${org.leagueName}+'-'+${org.name}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="host" class="am-u-sm-3 am-form-label">域名 <span
+                                            class="tpl-form-line-small-title">Host</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="host" placeholder="请输入排序服务域名"
+                                               th:field="*{name}">
+                                        <input type="hidden" name="intent" th:value="${intent}"/>
+                                        <input type="hidden" name="id" th:value="${orderer.id}"/>
+                                        <small>请输入排序服务域名，如orderer.example.com。</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="location" class="am-u-sm-3 am-form-label">访问地址 <span
+                                            class="tpl-form-line-small-title">grpc://ip:port</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="location" placeholder="请输入访问地址"
+                                               th:field="*{location}">
+                                        <small>请输入访问地址，如grpc://118.89.243.236:7050。</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-9 am-u-sm-push-3">
+                                        <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "
+                                                th:text="${submit}"></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/js/amazeui.min.js"></script>
+<script src="/static/js/amazeui.datatables.min.js"></script>
+<script src="/static/js/dataTables.responsive.min.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+
+</html>

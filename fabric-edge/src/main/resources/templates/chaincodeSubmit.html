@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>新增合约</title>
+    <meta name="description" content="新增合约">
+    <meta name="keywords" content="新增合约">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="新增合约"/>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="widgets">
+<script src="/static/js/theme.js"></script>
+<div class="am-g tpl-g">
+    <!-- 头部 -->
+    <header>
+        <div th:include="common_header :: header"></div>
+    </header>
+    <!-- 风格切换 -->
+    <div th:include="common_skin.html :: skin"></div>
+    <!-- 侧边导航栏 -->
+    <div th:include="common_sidebar :: sidebar"></div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"
+                                                           th:text="${intentLarge}"></span>
+                        <small>HyperLedger Fabric网络合约单元</small>
+                    </div>
+                    <p class="page-header-description">fabric-net-server可以管理多个合约</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl" th:text="${intentLittle}"></div>
+                        </div>
+                        <div class="widget-body am-fr">
+
+                            <form class="am-form tpl-form-line-form" th:action="@{submit}" th:method="post"
+                                  enctype="multipart/form-data"
+                                  th:object="${chaincode}">
+                                <div class="am-form-group">
+                                    <label for="org-name" class="am-u-sm-3 am-form-label">通道 <span
+                                            class="tpl-form-line-small-title">org</span></label>
+                                    <div class="am-u-sm-9">
+                                        <select data-am-selected="{searchBox: 1}" style="display: none;"
+                                                id="org-name"
+                                                th:field="*{channelId}">
+                                            <option th:each="channel: ${channels}" th:value="${channel.id}"
+                                                    th:text="${chaincode.leagueName}+'-'+${chaincode.orgName}+'-'+${chaincode.peerName}+'-'+${chaincode.channelName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="host" class="am-u-sm-3 am-form-label">名称 <span
+                                            class="tpl-form-line-small-title">Name</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="host" placeholder="请输入合约名称"
+                                               th:field="*{name}">
+                                        <input type="hidden" name="intent" th:value="${intent}"/>
+                                        <input type="hidden" name="id" th:value="${chaincode.id}"/>
+                                        <small>请输入合约名称，如testcc。</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="chaincode-path" class="am-u-sm-3 am-form-label">智能合约路径 <span
+                                            class="tpl-form-line-small-title">chaincode path</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="chaincode-path"
+                                               placeholder="请输入智能合约路径"
+                                               th:field="*{path}">
+                                        <small>
+                                            请输入智能合约路径，如github.com/hyperledger/fabric/aberic/chaincode/go/chaincode_example02。
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="version" class="am-u-sm-3 am-form-label">智能合约版本 <span
+                                            class="tpl-form-line-small-title">version</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="version"
+                                               placeholder="请输入智能合约版本"
+                                               th:field="*{version}">
+                                        <small>请填写智能合约版本，如1.0。</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="proposal-wait-time" class="am-u-sm-3 am-form-label">提案超时时间 <span
+                                            class="tpl-form-line-small-title">proposal wait time</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="proposal-wait-time"
+                                               placeholder="单个提案请求的超时时间以毫秒为单位"
+                                               th:field="*{proposalWaitTime}">
+                                        <small>请输入提案超时时间，如90000。</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="invoke-wait-time" class="am-u-sm-3 am-form-label">事务等待时间 <span
+                                            class="tpl-form-line-small-title">invoke wait time</span></label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" class="tpl-form-input" id="invoke-wait-time"
+                                               placeholder="事务等待时间以秒为单位"
+                                               th:field="*{invokeWaitTime}">
+                                        <small>请输入事务等待时间，如120。</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-9 am-u-sm-push-3">
+                                        <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "
+                                                th:text="${submit}"></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/js/amazeui.min.js"></script>
+<script src="/static/js/amazeui.datatables.min.js"></script>
+<script src="/static/js/dataTables.responsive.min.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+
+</html>

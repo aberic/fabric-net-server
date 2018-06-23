@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>合约验证结果</title>
+    <meta name="description" content="合约验证结果">
+    <meta name="keywords" content="合约验证结果">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="/static/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="合约验证结果"/>
+    <script src="/static/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
+    <link rel="stylesheet" href="/static/css/app.css">
+    <script src="/static/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="widgets">
+<script src="/static/js/theme.js"></script>
+<div class="am-g tpl-g">
+    <!-- 头部 -->
+    <header>
+        <div th:include="common_header :: header"></div>
+    </header>
+    <!-- 风格切换 -->
+    <div th:include="common_skin.html :: skin"></div>
+    <!-- 侧边导航栏 -->
+    <div th:include="common_sidebar :: sidebar"></div>
+    <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+
+        <div class="container-fluid am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon">合约验证结果</span>
+                        <small>HyperLedger Fabric网络合约验证结果</small>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row-content am-cf">
+            <div class="row">
+                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                    <div class="widget am-cf">
+                        <div class="widget-head am-cf">
+                            <div class="widget-title am-fl">验证结果</div>
+                        </div>
+                        <div class="widget-body am-fr">
+                            <p th:text="'请求接口：'+${url}"></p>
+                            <p th:text="'请求方式：'+${method}"></p>
+                            <p th:text="'请求参数：'+${jsonStr}"></p>
+                            <p th:text="'请求结果：'+${result}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/js/amazeui.min.js"></script>
+<script src="/static/js/amazeui.datatables.min.js"></script>
+<script src="/static/js/dataTables.responsive.min.js"></script>
+<script src="/static/js/app.js"></script>
+
+</body>
+
+</html>

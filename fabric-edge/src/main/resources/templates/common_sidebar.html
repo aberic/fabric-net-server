@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sidebar">
+    <!-- 侧边导航栏 -->
+    <div class="left-sidebar">
+        <!-- 菜单 -->
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-heading">Components <span class="sidebar-nav-heading-info"> 附加组件</span></li>
+            <li class="sidebar-nav-link">
+                <a href="/index">
+                    <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
+                </a>
+            </li>
+            <li class="sidebar-nav-link">
+                <a href="/league/list">
+                    <i class="am-icon-table sidebar-nav-link-logo"></i> 联盟列表
+                </a>
+            </li>
+            <li class="sidebar-nav-link">
+                <a href="/org/list">
+                    <i class="am-icon-calendar sidebar-nav-link-logo"></i> 组织列表
+                </a>
+            </li>
+            <li class="sidebar-nav-link">
+                <a href="/orderer/list">
+                    <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 排序列表
+
+                </a>
+            </li>
+            <li class="sidebar-nav-link">
+                <a href="/peer/list">
+                    <i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 节点列表
+
+                </a>
+            </li>
+            <li class="sidebar-nav-link">
+                <a href="/channel/list">
+                    <i class="am-icon-clone sidebar-nav-link-logo"></i> 通道列表
+                </a>
+            </li>
+            <li class="sidebar-nav-link">
+                <a href="/chaincode/list">
+                    <i class="am-icon-key sidebar-nav-link-logo"></i> 合约列表
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>

@@ -1,0 +1,28 @@
+# Copyright Aberic Person. All Rights Reserved.
+#
+# Is licensed under the: GNU General Public License v2.0
+#
+
+version: '2'
+
+services:
+
+  service:
+    container_name: service
+    image: aberic/fabric-service
+    command: bash /home/init-service.sh
+    ports:
+      - 8081:8081
+
+  edge:
+    container_name: edge
+    image: aberic/fabric-edge
+    environment:
+      # service地址配置
+      - SERVICE_IP=10.163.90.220
+      - SERVICE_PORT=8081
+    command: bash /home/init-edge.sh
+    ports:
+      - 8080:8080
+    depends_on:
+      - service
