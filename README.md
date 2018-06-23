@@ -1,6 +1,11 @@
 # HyperLedger/Fabric SDK Docker Image
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
 [![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
+[![Github file size](https://img.shields.io/github/size/webcaetano/craft/build/phaser-craft.min.js.svg)](https://github.com/aberic/fabric-net-server)
+[![GitHub issues](https://img.shields.io/github/issues/badges/shields.svg)](https://github.com/aberic/fabric-net-server/issues)
+[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/google/skia/infra/config.svg)](https://github.com/aberic/fabric-net-server)
+[![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)](https://github.com/aberic/fabric-net-server)
 <br>
 本项目依赖于任意一个已经部署完成的HyperLedger Fabric网络，并对该网络提供REST API服务，包括通道、智能合约及Fabric网络中节点等管理功能。
 <br><br>
