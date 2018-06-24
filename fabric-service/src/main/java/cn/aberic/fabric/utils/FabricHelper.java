@@ -1,6 +1,8 @@
 package cn.aberic.fabric.utils;
 
 import cn.aberic.fabric.mapper.*;
+import cn.aberic.fabric.sdk.FabricManager;
+import cn.aberic.fabric.sdk.OrgManager;
 import cn.aberic.thrift.chaincode.ChaincodeInfo;
 import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.orderer.OrdererInfo;
@@ -8,8 +10,6 @@ import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.peer.PeerInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hyperledger.fabric.sdk.aberic.FabricManager;
-import org.hyperledger.fabric.sdk.aberic.OrgManager;
 
 import java.util.HashMap;
 import java.util.List;

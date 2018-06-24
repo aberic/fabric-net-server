@@ -2,11 +2,11 @@ package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.mapper.*;
+import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.thrift.state.StateInfo;
 import cn.aberic.thrift.state.StateService;
 import org.apache.thrift.TException;
-import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

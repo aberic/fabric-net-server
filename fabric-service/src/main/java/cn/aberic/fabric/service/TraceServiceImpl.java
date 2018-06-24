@@ -2,13 +2,13 @@ package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.mapper.*;
+import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.thrift.trace.TraceInfo;
 import cn.aberic.thrift.trace.TraceService;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.thrift.TException;
-import org.hyperledger.fabric.sdk.aberic.FabricManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
