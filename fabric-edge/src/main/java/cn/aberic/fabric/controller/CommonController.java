@@ -5,6 +5,7 @@ import cn.aberic.fabric.thrift.MultiServiceProvider;
 import cn.aberic.thrift.chaincode.ChaincodeInfo;
 import cn.aberic.thrift.common.SystemInfo;
 import cn.aberic.thrift.trace.TraceInfo;
+import cn.aberic.thrift.utils.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -15,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -82,7 +82,17 @@ public class CommonController {
                     }
                 }
             }
-            transactions.sort(Comparator.comparing(Transaction::getDate));
+            // transactions.sort(Comparator.comparing(Transaction::getDate));
+            transactions.sort((t1, t2) -> {
+                try {
+                    long td1 = DateUtil.str2Date(t1.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
+                    long td2 = DateUtil.str2Date(t2.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
+                    return Math.toIntExact(td2 - td1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            });
         } catch (Exception e) {
             systemInfo = new SystemInfo();
             e.printStackTrace();
