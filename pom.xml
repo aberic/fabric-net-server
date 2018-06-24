@@ -8,8 +8,8 @@
   <artifactId>fabric-net-server</artifactId>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>sdk-advance</module>
     <module>fabric-service-api</module>
+    <module>fabric-sdk-service</module>
   </modules>
   <packaging>pom</packaging>
 
