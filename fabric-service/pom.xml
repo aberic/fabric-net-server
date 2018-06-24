@@ -28,7 +28,7 @@
 
         <dependency>
             <groupId>cn.aberic</groupId>
-            <artifactId>sdk-advance</artifactId>
+            <artifactId>fabric-sdk-service</artifactId>
             <version>1.0-SNAPSHOT</version>
             <!--去掉spring boot本身log4j日志依赖-->
             <exclusions>
