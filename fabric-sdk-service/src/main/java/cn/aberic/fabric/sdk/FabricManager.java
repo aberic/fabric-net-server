@@ -1,4 +1,4 @@
-package org.hyperledger.fabric.sdk.aberic;
+package cn.aberic.fabric.sdk;
 
 import org.hyperledger.fabric.sdk.exception.ChaincodeEndorsementPolicyParseException;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;

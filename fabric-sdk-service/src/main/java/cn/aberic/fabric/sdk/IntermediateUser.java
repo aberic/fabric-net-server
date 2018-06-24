@@ -1,4 +1,4 @@
-package org.hyperledger.fabric.sdk.aberic;
+package cn.aberic.fabric.sdk;
 
 import io.netty.util.internal.StringUtil;
 import org.bouncycastle.util.encoders.Hex;

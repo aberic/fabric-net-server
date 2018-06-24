@@ -1,4 +1,4 @@
-package org.hyperledger.fabric.sdk.aberic;
+package cn.aberic.fabric.sdk;
 
 import java.util.Map;
 

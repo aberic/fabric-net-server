@@ -1,4 +1,4 @@
-package org.hyperledger.fabric.sdk.aberic;
+package cn.aberic.fabric.sdk;
 
 /**
  * 描述：中继单节点对象

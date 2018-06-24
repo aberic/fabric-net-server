@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <version>1.0-SNAPSHOT</version>
 
-    <artifactId>sdk-advance</artifactId>
+    <artifactId>fabric-sdk-service</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,5 +45,6 @@
             <version>2.11.0</version>
         </dependency>
     </dependencies>
+
 
 </project>
