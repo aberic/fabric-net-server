@@ -91,7 +91,7 @@ public class FileUtil {
         }
     }
 
-    public static void save(ByteBuffer buff, String fileName, String path) throws TException {
+    public static void save(ByteBuffer buff, String fileName, String path, boolean samePath) throws TException {
         InputStream is = new ByteArrayInputStream(buff.array());
         OutputStream os = null;
         int bytesRead = 0;
@@ -99,10 +99,12 @@ public class FileUtil {
         try {
             String unZipFile = path + File.separator + fileName;
             File zipFile = new File(path + File.separator + fileName);
-            if (zipFile.getParentFile().exists()) {
+            if (zipFile.getParentFile().exists() && samePath) {
                 zipFile.getParentFile().delete();
             }
-            zipFile.getParentFile().mkdirs();
+            if (samePath) {
+                zipFile.getParentFile().mkdirs();
+            }
             os = new FileOutputStream(zipFile);
             while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
                 os.write(buffer, 0, bytesRead);
