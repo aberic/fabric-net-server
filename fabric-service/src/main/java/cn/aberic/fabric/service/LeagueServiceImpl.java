@@ -1,9 +1,9 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.LeagueMapper;
-import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.thrift.league.LeagueInfo;
 import cn.aberic.thrift.league.LeagueService;
+import cn.aberic.thrift.utils.DateUtil;
 import org.apache.thrift.TException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

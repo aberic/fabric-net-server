@@ -1,11 +1,11 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.*;
-import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.FileUtil;
 import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.org.OrgService;
+import cn.aberic.thrift.utils.DateUtil;
 import org.apache.thrift.TException;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class OrgServiceImpl implements OrgService.Iface {
         orgInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         String path = String.format("%s/%s/%s", env.getProperty("config.dir"), leagueMapper.get(orgInfo.getLeagueId()).getName(), orgInfo.getName());
         orgInfo.setCryptoConfigDir(path + File.separator + fileName.split("\\.")[0]);
-        saveConfig(buff, fileName, path);
+        FileUtil.save(buff, fileName, path);
         return orgMapper.add(orgInfo);
     }
 
@@ -54,7 +54,7 @@ public class OrgServiceImpl implements OrgService.Iface {
         if (null != buff) {
             String path = String.format("%s/%s/%s", env.getProperty("config.dir"), leagueMapper.get(orgInfo.getLeagueId()).getName(), orgInfo.getName());
             orgInfo.setCryptoConfigDir(path + File.separator + fileName.split("\\.")[0]);
-            saveConfig(buff, fileName, path);
+            FileUtil.save(buff, fileName, path);
         }
         FabricHelper.obtain().removeManager(peerMapper.list(orgInfo.getId()), channelMapper, chaincodeMapper);
         return orgMapper.update(orgInfo);
@@ -85,34 +85,4 @@ public class OrgServiceImpl implements OrgService.Iface {
         return orgMapper.countAll();
     }
 
-    private void saveConfig(ByteBuffer buff, String fileName, String path) throws TException {
-        InputStream is = new ByteArrayInputStream(buff.array());
-        OutputStream os = null;
-        int bytesRead = 0;
-        byte[] buffer = new byte[8192];
-        try {
-            String unZipFile = path + File.separator + fileName;
-            File zipFile = new File(path + File.separator + fileName);
-            if (zipFile.getParentFile().exists()) {
-                zipFile.getParentFile().delete();
-            }
-            zipFile.getParentFile().mkdirs();
-            os = new FileOutputStream(zipFile);
-            while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
-                os.write(buffer, 0, bytesRead);
-            }
-            FileUtil.unZipAndSave(unZipFile, path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-                if (null != os) {
-                    os.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
