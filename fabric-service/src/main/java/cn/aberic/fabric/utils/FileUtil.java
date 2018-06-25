@@ -2,11 +2,10 @@ package cn.aberic.fabric.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.thrift.TException;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -63,7 +62,7 @@ public class FileUtil {
         }
     }
 
-    public static void unZipAndSave(String unZipFile, String destFile) throws IOException {
+    private static void unZipAndSave(String unZipFile, String destFile) throws IOException {
         File dest = new File(unZipFile);
         unZip(unZipFile, destFile);
         dest.delete();
@@ -88,6 +87,37 @@ public class FileUtil {
             } else {
                 file.delete();
                 log.debug(String.format("显示%s下所有子目录%s====文件名：%s", filePath, file.getAbsolutePath(), file.getName()));
+            }
+        }
+    }
+
+    public static void save(ByteBuffer buff, String fileName, String path) throws TException {
+        InputStream is = new ByteArrayInputStream(buff.array());
+        OutputStream os = null;
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        try {
+            String unZipFile = path + File.separator + fileName;
+            File zipFile = new File(path + File.separator + fileName);
+            if (zipFile.getParentFile().exists()) {
+                zipFile.getParentFile().delete();
+            }
+            zipFile.getParentFile().mkdirs();
+            os = new FileOutputStream(zipFile);
+            while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            FileUtil.unZipAndSave(unZipFile, path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+                if (null != os) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
