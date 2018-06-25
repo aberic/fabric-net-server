@@ -52,6 +52,11 @@
                                                     <span class="am-icon-plus"></span> 新增
                                                 </button>
                                             </a>
+                                            <a href="/chaincode/install">
+                                                <button type="button" class="am-btn am-btn-default am-btn-success">
+                                                    <span class="am-icon-plus"></span> 安装
+                                                </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -79,6 +84,9 @@
                                             <div class="tpl-table-black-operation">
                                                 <a th:href="@{/chaincode/edit(id=${chaincode.id})}">
                                                     <i class="am-icon-pencil"></i> 编辑
+                                                </a>
+                                                <a th:href="@{/chaincode/instantiate(chaincodeId=${chaincode.id})}">
+                                                    <i class="am-icon-pencil"></i> 实例化
                                                 </a>
                                                 <a th:href="@{/chaincode/verify(chaincodeId=${chaincode.id})}" class="tpl-table-black-operation-del">
                                                     <i class="am-icon-trash"></i> 测试
