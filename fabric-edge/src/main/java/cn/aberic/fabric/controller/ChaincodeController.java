@@ -9,16 +9,20 @@ import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.peer.PeerInfo;
 import cn.aberic.thrift.state.StateInfo;
 import cn.aberic.thrift.trace.TraceInfo;
-import com.alibaba.fastjson.JSON;
 import org.apache.thrift.TException;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static cn.aberic.fabric.bean.Api.Intent.INSTANTIATE;
 import static cn.aberic.fabric.bean.Api.Intent.INVOKE;
 
 /**
@@ -39,6 +43,7 @@ public class ChaincodeController {
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute ChaincodeInfo chaincode,
                                @RequestParam("intent") String intent,
+                               @RequestParam(value = "file", required = false) MultipartFile file,
                                @RequestParam("id") int id) {
         try {
             switch (intent) {
@@ -48,6 +53,21 @@ public class ChaincodeController {
                 case "edit":
                     chaincode.setId(id);
                     multiService.getChaincodeService().update(chaincode);
+                    break;
+                case "install":
+                    ChannelInfo channel = multiService.getChannelService().get(chaincode.getChannelId());
+                    PeerInfo peer = multiService.getPeerService().get(channel.getPeerId());
+                    OrgInfo org = multiService.getOrgService().get(peer.getId());
+                    LeagueInfo league = multiService.getLeagueService().get(org.getLeagueId());
+                    chaincode.setLeagueName(league.getName());
+                    chaincode.setOrgName(org.getName());
+                    chaincode.setPeerName(peer.getName());
+                    chaincode.setChannelName(channel.getName());
+                    try {
+                        multiService.getChaincodeService().install(chaincode, ByteBuffer.wrap(file.getBytes()), file.getOriginalFilename());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         } catch (TException e) {
@@ -66,16 +86,7 @@ public class ChaincodeController {
         ChaincodeInfo chaincode = new ChaincodeInfo();
         List<ChannelInfo> channels;
         try {
-            channels = multiService.getChannelService().listAll();
-            for (ChannelInfo channel : channels) {
-                chaincode.setChannelName(channel.getName());
-                PeerInfo peer = multiService.getPeerService().get(channel.getPeerId());
-                chaincode.setPeerName(peer.getName());
-                OrgInfo org = multiService.getOrgService().get(peer.getId());
-                chaincode.setOrgName(org.getName());
-                LeagueInfo league = multiService.getLeagueService().get(org.getLeagueId());
-                chaincode.setLeagueName(league.getName());
-            }
+            channels = multiService.getChannelFullList();
         } catch (TException e) {
             channels = new ArrayList<>();
             e.printStackTrace();
@@ -83,6 +94,45 @@ public class ChaincodeController {
         modelAndView.addObject("chaincode", chaincode);
         modelAndView.addObject("channels", channels);
         return modelAndView;
+    }
+
+    @GetMapping(value = "install")
+    public ModelAndView install() {
+        ModelAndView modelAndView = new ModelAndView("chaincodeInstall");
+        modelAndView.addObject("intentLarge", "安装合约");
+        modelAndView.addObject("intentLittle", "安装");
+        modelAndView.addObject("submit", "安装");
+        modelAndView.addObject("intent", "install");
+        ChaincodeInfo chaincode = new ChaincodeInfo();
+        List<ChannelInfo> channels;
+        try {
+            channels = multiService.getChannelFullList();
+        } catch (TException e) {
+            channels = new ArrayList<>();
+            e.printStackTrace();
+        }
+        modelAndView.addObject("chaincode", chaincode);
+        modelAndView.addObject("channels", channels);
+        return modelAndView;
+    }
+
+    @PostMapping(value = "instantiate")
+    public ModelAndView instantiate(@ModelAttribute Api api, @RequestParam("chaincodeId") int id) {
+        try {
+            ChaincodeInfo chaincode = multiService.getChaincodeService().get(id);
+            ChannelInfo channel = multiService.getChannelService().get(chaincode.getChannelId());
+            PeerInfo peer = multiService.getPeerService().get(channel.getPeerId());
+            OrgInfo org = multiService.getOrgService().get(peer.getId());
+            LeagueInfo league = multiService.getLeagueService().get(org.getLeagueId());
+            chaincode.setLeagueName(league.getName());
+            chaincode.setOrgName(org.getName());
+            chaincode.setPeerName(peer.getName());
+            chaincode.setChannelName(channel.getName());
+            multiService.getChaincodeService().instantiate(chaincode, Arrays.asList(api.exec.split(",")));
+        } catch (TException e) {
+            e.printStackTrace();
+        }
+        return list();
     }
 
     @GetMapping(value = "edit")
@@ -104,7 +154,9 @@ public class ChaincodeController {
             chaincode.setLeagueName(league.getName());
             channels = multiService.getChannelService().listById(peer.getId());
             for (ChannelInfo channel : channels) {
-                chaincode.setChannelName(channel.getName());
+                channel.setPeerName(peer.getName());
+                channel.setOrgName(org.getName());
+                channel.setLeagueName(league.getName());
             }
         } catch (TException e) {
             chaincode = new ChaincodeInfo();
@@ -116,6 +168,19 @@ public class ChaincodeController {
         return modelAndView;
     }
 
+    @GetMapping(value = "instantiate")
+    public ModelAndView instantiate(@RequestParam("chaincodeId") int chaincodeId) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeInstantiate");
+        modelAndView.addObject("intentLarge", "实例化合约");
+        modelAndView.addObject("intentLittle", "实例化");
+        modelAndView.addObject("submit", "实例化");
+        modelAndView.addObject("chaincodeId", chaincodeId);
+
+        Api apiInstantiate = new Api("实例化智能合约", INSTANTIATE.getIndex());
+
+        modelAndView.addObject("api", apiInstantiate);
+        return modelAndView;
+    }
 
     @GetMapping(value = "verify")
     public ModelAndView verify(@RequestParam("chaincodeId") int chaincodeId) {
