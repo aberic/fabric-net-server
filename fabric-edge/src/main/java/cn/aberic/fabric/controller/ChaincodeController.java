@@ -43,7 +43,8 @@ public class ChaincodeController {
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute ChaincodeInfo chaincode,
                                @RequestParam("intent") String intent,
-                               @RequestParam(value = "file", required = false) MultipartFile file,
+                               @RequestParam(value = "sourceFile", required = false) MultipartFile sourceFile,
+                               @RequestParam(value = "policyFile", required = false) MultipartFile policyFile,
                                @RequestParam("id") int id) {
         try {
             switch (intent) {
@@ -64,7 +65,10 @@ public class ChaincodeController {
                     chaincode.setPeerName(peer.getName());
                     chaincode.setChannelName(channel.getName());
                     try {
-                        multiService.getChaincodeService().install(chaincode, ByteBuffer.wrap(file.getBytes()), file.getOriginalFilename());
+                        multiService.getChaincodeService().install(chaincode,
+                                ByteBuffer.wrap(sourceFile.getBytes()),
+                                ByteBuffer.wrap(policyFile.getBytes()),
+                                sourceFile.getOriginalFilename());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
