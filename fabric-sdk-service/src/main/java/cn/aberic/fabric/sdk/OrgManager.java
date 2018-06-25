@@ -27,7 +27,6 @@ public class OrgManager {
      *
      * @param chainCodeId 组织Hash
      * @param openTLS     设置是否开启TLS
-     *
      * @return self
      */
     public OrgManager init(int chainCodeId, boolean openTLS) {
@@ -47,7 +46,6 @@ public class OrgManager {
      *
      * @param username         用户名
      * @param cryptoConfigPath 用户/节点组织/排序服务证书文件路径
-     *
      * @return self
      */
     public OrgManager setUser(@Nonnull String username, @Nonnull String cryptoConfigPath) {
@@ -86,12 +84,12 @@ public class OrgManager {
      * @param chaincodeVersion 智能合约版本
      * @param proposalWaitTime 单个提案请求的超时时间以毫秒为单位
      * @param invokeWaitTime   事务等待时间以秒为单位
-     *
      * @return Fabric
      */
-    public OrgManager setChainCode(String chaincodeName, String chaincodePath, String chaincodeVersion, int proposalWaitTime, int invokeWaitTime) {
+    public OrgManager setChainCode(String chaincodeName, String chaincodePath, String chaincodeSource, String chaincodeVersion, int proposalWaitTime, int invokeWaitTime) {
         IntermediateChaincodeID chaincode = new IntermediateChaincodeID();
         chaincode.setChaincodeName(chaincodeName);
+        chaincode.setChaincodeSource(chaincodeSource);
         chaincode.setChaincodePath(chaincodePath);
         chaincode.setChaincodeVersion(chaincodeVersion);
         chaincode.setProposalWaitTime(proposalWaitTime);
@@ -104,7 +102,6 @@ public class OrgManager {
      * 设置频道
      *
      * @param channelName 频道名称
-     *
      * @return Fabric
      */
     public OrgManager setChannel(String channelName) {
