@@ -2,12 +2,15 @@ package cn.aberic.fabric.thrift;
 
 import cn.aberic.fabric.bean.Api;
 import cn.aberic.thrift.chaincode.ChaincodeService;
+import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.channel.ChannelService;
 import cn.aberic.thrift.common.SystemService;
+import cn.aberic.thrift.league.LeagueInfo;
 import cn.aberic.thrift.league.LeagueService;
 import cn.aberic.thrift.orderer.OrdererService;
 import cn.aberic.thrift.org.OrgInfo;
 import cn.aberic.thrift.org.OrgService;
+import cn.aberic.thrift.peer.PeerInfo;
 import cn.aberic.thrift.peer.PeerService;
 import cn.aberic.thrift.state.StateInfo;
 import cn.aberic.thrift.state.StateService;
@@ -158,6 +161,19 @@ public class MultiServiceProvider {
         }
 
         return (T) client;
+    }
+
+    public List<ChannelInfo> getChannelFullList() throws TException {
+        List<ChannelInfo> channels = getChannelService().listAll();
+        for (ChannelInfo channel : channels) {
+            PeerInfo peer = getPeerService().get(channel.getPeerId());
+            channel.setPeerName(peer.getName());
+            OrgInfo org = getOrgService().get(peer.getId());
+            channel.setOrgName(org.getName());
+            LeagueInfo league = getLeagueService().get(org.getLeagueId());
+            channel.setLeagueName(league.getName());
+        }
+        return channels;
     }
 
     public List<OrgInfo> getForPeerAndOrderer() {
