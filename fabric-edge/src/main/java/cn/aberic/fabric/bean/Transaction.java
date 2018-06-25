@@ -11,7 +11,9 @@ import lombok.Setter;
 @Getter
 public class Transaction {
 
-    /**块高度*/
+    /** 序号，无实际意义 */
+    private int index;
+    /** 块高度 */
     private int num;
     private int txCount;
     private String channelName;
