@@ -2,7 +2,6 @@ package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.mapper.ChaincodeMapper;
 import cn.aberic.fabric.mapper.ChannelMapper;
-import cn.aberic.fabric.mapper.PeerMapper;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.channel.ChannelService;
@@ -19,8 +18,6 @@ public class ChannelServiceImpl implements ChannelService.Iface {
 
     @Resource
     private ChannelMapper channelMapper;
-    @Resource
-    private PeerMapper peerMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
 
