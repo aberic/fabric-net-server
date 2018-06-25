@@ -5,21 +5,22 @@ struct ChaincodeInfo {
     2:required string name,
     3:optional string source,
     4:optional string path,
-    5:required string version,
-    6:required i32 proposalWaitTime,
-    7:required i32 invokeWaitTime,
-    8:required i32 channelId,
-    9:optional string date,
-    10:optional string channelName,
-    11:optional string peerName,
-    12:optional string orgName,
-    13:optional string leagueName
+    5:optional string policy,
+    6:required string version,
+    7:required i32 proposalWaitTime,
+    8:required i32 invokeWaitTime,
+    9:required i32 channelId,
+    10:optional string date,
+    11:optional string channelName,
+    12:optional string peerName,
+    13:optional string orgName,
+    14:optional string leagueName
 }
 service ChaincodeService {
 
     i32 add(1:ChaincodeInfo chaincodeInfo);
 
-    string install(1:ChaincodeInfo chaincodeInfo, 2:binary buff, 3:string fileName);
+    string install(1:ChaincodeInfo chaincodeInfo, 2:binary sourceBuff, 3:binary policyBuff, 4:string fileName);
 
     string instantiate(1:ChaincodeInfo chaincodeInfo, 2:list<string> strArray)
 

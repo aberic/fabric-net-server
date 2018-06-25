@@ -15,15 +15,16 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
   private static final org.apache.thrift.protocol.TField NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("name", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField SOURCE_FIELD_DESC = new org.apache.thrift.protocol.TField("source", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField PATH_FIELD_DESC = new org.apache.thrift.protocol.TField("path", org.apache.thrift.protocol.TType.STRING, (short)4);
-  private static final org.apache.thrift.protocol.TField VERSION_FIELD_DESC = new org.apache.thrift.protocol.TField("version", org.apache.thrift.protocol.TType.STRING, (short)5);
-  private static final org.apache.thrift.protocol.TField PROPOSAL_WAIT_TIME_FIELD_DESC = new org.apache.thrift.protocol.TField("proposalWaitTime", org.apache.thrift.protocol.TType.I32, (short)6);
-  private static final org.apache.thrift.protocol.TField INVOKE_WAIT_TIME_FIELD_DESC = new org.apache.thrift.protocol.TField("invokeWaitTime", org.apache.thrift.protocol.TType.I32, (short)7);
-  private static final org.apache.thrift.protocol.TField CHANNEL_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("channelId", org.apache.thrift.protocol.TType.I32, (short)8);
-  private static final org.apache.thrift.protocol.TField DATE_FIELD_DESC = new org.apache.thrift.protocol.TField("date", org.apache.thrift.protocol.TType.STRING, (short)9);
-  private static final org.apache.thrift.protocol.TField CHANNEL_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("channelName", org.apache.thrift.protocol.TType.STRING, (short)10);
-  private static final org.apache.thrift.protocol.TField PEER_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("peerName", org.apache.thrift.protocol.TType.STRING, (short)11);
-  private static final org.apache.thrift.protocol.TField ORG_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("orgName", org.apache.thrift.protocol.TType.STRING, (short)12);
-  private static final org.apache.thrift.protocol.TField LEAGUE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("leagueName", org.apache.thrift.protocol.TType.STRING, (short)13);
+  private static final org.apache.thrift.protocol.TField POLICY_FIELD_DESC = new org.apache.thrift.protocol.TField("policy", org.apache.thrift.protocol.TType.STRING, (short)5);
+  private static final org.apache.thrift.protocol.TField VERSION_FIELD_DESC = new org.apache.thrift.protocol.TField("version", org.apache.thrift.protocol.TType.STRING, (short)6);
+  private static final org.apache.thrift.protocol.TField PROPOSAL_WAIT_TIME_FIELD_DESC = new org.apache.thrift.protocol.TField("proposalWaitTime", org.apache.thrift.protocol.TType.I32, (short)7);
+  private static final org.apache.thrift.protocol.TField INVOKE_WAIT_TIME_FIELD_DESC = new org.apache.thrift.protocol.TField("invokeWaitTime", org.apache.thrift.protocol.TType.I32, (short)8);
+  private static final org.apache.thrift.protocol.TField CHANNEL_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("channelId", org.apache.thrift.protocol.TType.I32, (short)9);
+  private static final org.apache.thrift.protocol.TField DATE_FIELD_DESC = new org.apache.thrift.protocol.TField("date", org.apache.thrift.protocol.TType.STRING, (short)10);
+  private static final org.apache.thrift.protocol.TField CHANNEL_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("channelName", org.apache.thrift.protocol.TType.STRING, (short)11);
+  private static final org.apache.thrift.protocol.TField PEER_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("peerName", org.apache.thrift.protocol.TType.STRING, (short)12);
+  private static final org.apache.thrift.protocol.TField ORG_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("orgName", org.apache.thrift.protocol.TType.STRING, (short)13);
+  private static final org.apache.thrift.protocol.TField LEAGUE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("leagueName", org.apache.thrift.protocol.TType.STRING, (short)14);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new ChaincodeInfoStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new ChaincodeInfoTupleSchemeFactory();
@@ -32,6 +33,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
   public java.lang.String name; // required
   public java.lang.String source; // optional
   public java.lang.String path; // optional
+  public java.lang.String policy; // optional
   public java.lang.String version; // required
   public int proposalWaitTime; // required
   public int invokeWaitTime; // required
@@ -48,15 +50,16 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
     NAME((short)2, "name"),
     SOURCE((short)3, "source"),
     PATH((short)4, "path"),
-    VERSION((short)5, "version"),
-    PROPOSAL_WAIT_TIME((short)6, "proposalWaitTime"),
-    INVOKE_WAIT_TIME((short)7, "invokeWaitTime"),
-    CHANNEL_ID((short)8, "channelId"),
-    DATE((short)9, "date"),
-    CHANNEL_NAME((short)10, "channelName"),
-    PEER_NAME((short)11, "peerName"),
-    ORG_NAME((short)12, "orgName"),
-    LEAGUE_NAME((short)13, "leagueName");
+    POLICY((short)5, "policy"),
+    VERSION((short)6, "version"),
+    PROPOSAL_WAIT_TIME((short)7, "proposalWaitTime"),
+    INVOKE_WAIT_TIME((short)8, "invokeWaitTime"),
+    CHANNEL_ID((short)9, "channelId"),
+    DATE((short)10, "date"),
+    CHANNEL_NAME((short)11, "channelName"),
+    PEER_NAME((short)12, "peerName"),
+    ORG_NAME((short)13, "orgName"),
+    LEAGUE_NAME((short)14, "leagueName");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -79,23 +82,25 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
           return SOURCE;
         case 4: // PATH
           return PATH;
-        case 5: // VERSION
+        case 5: // POLICY
+          return POLICY;
+        case 6: // VERSION
           return VERSION;
-        case 6: // PROPOSAL_WAIT_TIME
+        case 7: // PROPOSAL_WAIT_TIME
           return PROPOSAL_WAIT_TIME;
-        case 7: // INVOKE_WAIT_TIME
+        case 8: // INVOKE_WAIT_TIME
           return INVOKE_WAIT_TIME;
-        case 8: // CHANNEL_ID
+        case 9: // CHANNEL_ID
           return CHANNEL_ID;
-        case 9: // DATE
+        case 10: // DATE
           return DATE;
-        case 10: // CHANNEL_NAME
+        case 11: // CHANNEL_NAME
           return CHANNEL_NAME;
-        case 11: // PEER_NAME
+        case 12: // PEER_NAME
           return PEER_NAME;
-        case 12: // ORG_NAME
+        case 13: // ORG_NAME
           return ORG_NAME;
-        case 13: // LEAGUE_NAME
+        case 14: // LEAGUE_NAME
           return LEAGUE_NAME;
         default:
           return null;
@@ -142,7 +147,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
   private static final int __INVOKEWAITTIME_ISSET_ID = 2;
   private static final int __CHANNELID_ISSET_ID = 3;
   private byte __isset_bitfield = 0;
-  private static final _Fields optionals[] = {_Fields.SOURCE,_Fields.PATH,_Fields.DATE,_Fields.CHANNEL_NAME,_Fields.PEER_NAME,_Fields.ORG_NAME,_Fields.LEAGUE_NAME};
+  private static final _Fields optionals[] = {_Fields.SOURCE,_Fields.PATH,_Fields.POLICY,_Fields.DATE,_Fields.CHANNEL_NAME,_Fields.PEER_NAME,_Fields.ORG_NAME,_Fields.LEAGUE_NAME};
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -153,6 +158,8 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
     tmpMap.put(_Fields.SOURCE, new org.apache.thrift.meta_data.FieldMetaData("source", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.PATH, new org.apache.thrift.meta_data.FieldMetaData("path", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.POLICY, new org.apache.thrift.meta_data.FieldMetaData("policy", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.VERSION, new org.apache.thrift.meta_data.FieldMetaData("version", org.apache.thrift.TFieldRequirementType.REQUIRED, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
@@ -215,6 +222,9 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
     if (other.isSetPath()) {
       this.path = other.path;
     }
+    if (other.isSetPolicy()) {
+      this.policy = other.policy;
+    }
     if (other.isSetVersion()) {
       this.version = other.version;
     }
@@ -249,6 +259,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
     this.name = null;
     this.source = null;
     this.path = null;
+    this.policy = null;
     this.version = null;
     setProposalWaitTimeIsSet(false);
     this.proposalWaitTime = 0;
@@ -355,6 +366,30 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
   public void setPathIsSet(boolean value) {
     if (!value) {
       this.path = null;
+    }
+  }
+
+  public java.lang.String getPolicy() {
+    return this.policy;
+  }
+
+  public ChaincodeInfo setPolicy(java.lang.String policy) {
+    this.policy = policy;
+    return this;
+  }
+
+  public void unsetPolicy() {
+    this.policy = null;
+  }
+
+  /** Returns true if field policy is set (has been assigned a value) and false otherwise */
+  public boolean isSetPolicy() {
+    return this.policy != null;
+  }
+
+  public void setPolicyIsSet(boolean value) {
+    if (!value) {
+      this.policy = null;
     }
   }
 
@@ -605,6 +640,14 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
       }
       break;
 
+    case POLICY:
+      if (value == null) {
+        unsetPolicy();
+      } else {
+        setPolicy((java.lang.String)value);
+      }
+      break;
+
     case VERSION:
       if (value == null) {
         unsetVersion();
@@ -694,6 +737,9 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
     case PATH:
       return getPath();
 
+    case POLICY:
+      return getPolicy();
+
     case VERSION:
       return getVersion();
 
@@ -740,6 +786,8 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
       return isSetSource();
     case PATH:
       return isSetPath();
+    case POLICY:
+      return isSetPolicy();
     case VERSION:
       return isSetVersion();
     case PROPOSAL_WAIT_TIME:
@@ -810,6 +858,15 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
       if (!(this_present_path && that_present_path))
         return false;
       if (!this.path.equals(that.path))
+        return false;
+    }
+
+    boolean this_present_policy = true && this.isSetPolicy();
+    boolean that_present_policy = true && that.isSetPolicy();
+    if (this_present_policy || that_present_policy) {
+      if (!(this_present_policy && that_present_policy))
+        return false;
+      if (!this.policy.equals(that.policy))
         return false;
     }
 
@@ -915,6 +972,10 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
     if (isSetPath())
       hashCode = hashCode * 8191 + path.hashCode();
 
+    hashCode = hashCode * 8191 + ((isSetPolicy()) ? 131071 : 524287);
+    if (isSetPolicy())
+      hashCode = hashCode * 8191 + policy.hashCode();
+
     hashCode = hashCode * 8191 + ((isSetVersion()) ? 131071 : 524287);
     if (isSetVersion())
       hashCode = hashCode * 8191 + version.hashCode();
@@ -992,6 +1053,16 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
     }
     if (isSetPath()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.path, other.path);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = java.lang.Boolean.valueOf(isSetPolicy()).compareTo(other.isSetPolicy());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetPolicy()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.policy, other.policy);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1134,6 +1205,16 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
         sb.append("null");
       } else {
         sb.append(this.path);
+      }
+      first = false;
+    }
+    if (isSetPolicy()) {
+      if (!first) sb.append(", ");
+      sb.append("policy:");
+      if (this.policy == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.policy);
       }
       first = false;
     }
@@ -1293,7 +1374,15 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 5: // VERSION
+          case 5: // POLICY
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.policy = iprot.readString();
+              struct.setPolicyIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
+          case 6: // VERSION
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.version = iprot.readString();
               struct.setVersionIsSet(true);
@@ -1301,7 +1390,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 6: // PROPOSAL_WAIT_TIME
+          case 7: // PROPOSAL_WAIT_TIME
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
               struct.proposalWaitTime = iprot.readI32();
               struct.setProposalWaitTimeIsSet(true);
@@ -1309,7 +1398,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 7: // INVOKE_WAIT_TIME
+          case 8: // INVOKE_WAIT_TIME
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
               struct.invokeWaitTime = iprot.readI32();
               struct.setInvokeWaitTimeIsSet(true);
@@ -1317,7 +1406,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 8: // CHANNEL_ID
+          case 9: // CHANNEL_ID
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
               struct.channelId = iprot.readI32();
               struct.setChannelIdIsSet(true);
@@ -1325,7 +1414,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 9: // DATE
+          case 10: // DATE
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.date = iprot.readString();
               struct.setDateIsSet(true);
@@ -1333,7 +1422,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 10: // CHANNEL_NAME
+          case 11: // CHANNEL_NAME
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.channelName = iprot.readString();
               struct.setChannelNameIsSet(true);
@@ -1341,7 +1430,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 11: // PEER_NAME
+          case 12: // PEER_NAME
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.peerName = iprot.readString();
               struct.setPeerNameIsSet(true);
@@ -1349,7 +1438,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 12: // ORG_NAME
+          case 13: // ORG_NAME
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.orgName = iprot.readString();
               struct.setOrgNameIsSet(true);
@@ -1357,7 +1446,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 13: // LEAGUE_NAME
+          case 14: // LEAGUE_NAME
             if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
               struct.leagueName = iprot.readString();
               struct.setLeagueNameIsSet(true);
@@ -1408,6 +1497,13 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
         if (struct.isSetPath()) {
           oprot.writeFieldBegin(PATH_FIELD_DESC);
           oprot.writeString(struct.path);
+          oprot.writeFieldEnd();
+        }
+      }
+      if (struct.policy != null) {
+        if (struct.isSetPolicy()) {
+          oprot.writeFieldBegin(POLICY_FIELD_DESC);
+          oprot.writeString(struct.policy);
           oprot.writeFieldEnd();
         }
       }
@@ -1492,22 +1588,25 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
       if (struct.isSetPath()) {
         optionals.set(2);
       }
-      if (struct.isSetDate()) {
+      if (struct.isSetPolicy()) {
         optionals.set(3);
       }
-      if (struct.isSetChannelName()) {
+      if (struct.isSetDate()) {
         optionals.set(4);
       }
-      if (struct.isSetPeerName()) {
+      if (struct.isSetChannelName()) {
         optionals.set(5);
       }
-      if (struct.isSetOrgName()) {
+      if (struct.isSetPeerName()) {
         optionals.set(6);
       }
-      if (struct.isSetLeagueName()) {
+      if (struct.isSetOrgName()) {
         optionals.set(7);
       }
-      oprot.writeBitSet(optionals, 8);
+      if (struct.isSetLeagueName()) {
+        optionals.set(8);
+      }
+      oprot.writeBitSet(optionals, 9);
       if (struct.isSetId()) {
         oprot.writeI32(struct.id);
       }
@@ -1516,6 +1615,9 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
       }
       if (struct.isSetPath()) {
         oprot.writeString(struct.path);
+      }
+      if (struct.isSetPolicy()) {
+        oprot.writeString(struct.policy);
       }
       if (struct.isSetDate()) {
         oprot.writeString(struct.date);
@@ -1547,7 +1649,7 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
       struct.setInvokeWaitTimeIsSet(true);
       struct.channelId = iprot.readI32();
       struct.setChannelIdIsSet(true);
-      java.util.BitSet incoming = iprot.readBitSet(8);
+      java.util.BitSet incoming = iprot.readBitSet(9);
       if (incoming.get(0)) {
         struct.id = iprot.readI32();
         struct.setIdIsSet(true);
@@ -1561,22 +1663,26 @@ public class ChaincodeInfo implements org.apache.thrift.TBase<ChaincodeInfo, Cha
         struct.setPathIsSet(true);
       }
       if (incoming.get(3)) {
+        struct.policy = iprot.readString();
+        struct.setPolicyIsSet(true);
+      }
+      if (incoming.get(4)) {
         struct.date = iprot.readString();
         struct.setDateIsSet(true);
       }
-      if (incoming.get(4)) {
+      if (incoming.get(5)) {
         struct.channelName = iprot.readString();
         struct.setChannelNameIsSet(true);
       }
-      if (incoming.get(5)) {
+      if (incoming.get(6)) {
         struct.peerName = iprot.readString();
         struct.setPeerNameIsSet(true);
       }
-      if (incoming.get(6)) {
+      if (incoming.get(7)) {
         struct.orgName = iprot.readString();
         struct.setOrgNameIsSet(true);
       }
-      if (incoming.get(7)) {
+      if (incoming.get(8)) {
         struct.leagueName = iprot.readString();
         struct.setLeagueNameIsSet(true);
       }

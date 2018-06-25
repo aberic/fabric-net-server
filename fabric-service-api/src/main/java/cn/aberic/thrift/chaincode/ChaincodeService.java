@@ -14,7 +14,7 @@ public class ChaincodeService {
 
     public int add(ChaincodeInfo chaincodeInfo) throws org.apache.thrift.TException;
 
-    public java.lang.String install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer buff, java.lang.String fileName) throws org.apache.thrift.TException;
+    public java.lang.String install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer sourceBuff, java.nio.ByteBuffer policyBuff, java.lang.String fileName) throws org.apache.thrift.TException;
 
     public java.lang.String instantiate(ChaincodeInfo chaincodeInfo, java.util.List<java.lang.String> strArray) throws org.apache.thrift.TException;
 
@@ -36,7 +36,7 @@ public class ChaincodeService {
 
     public void add(ChaincodeInfo chaincodeInfo, org.apache.thrift.async.AsyncMethodCallback<java.lang.Integer> resultHandler) throws org.apache.thrift.TException;
 
-    public void install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer buff, java.lang.String fileName, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException;
+    public void install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer sourceBuff, java.nio.ByteBuffer policyBuff, java.lang.String fileName, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException;
 
     public void instantiate(ChaincodeInfo chaincodeInfo, java.util.List<java.lang.String> strArray, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException;
 
@@ -97,17 +97,18 @@ public class ChaincodeService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "add failed: unknown result");
     }
 
-    public java.lang.String install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer buff, java.lang.String fileName) throws org.apache.thrift.TException
+    public java.lang.String install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer sourceBuff, java.nio.ByteBuffer policyBuff, java.lang.String fileName) throws org.apache.thrift.TException
     {
-      send_install(chaincodeInfo, buff, fileName);
+      send_install(chaincodeInfo, sourceBuff, policyBuff, fileName);
       return recv_install();
     }
 
-    public void send_install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer buff, java.lang.String fileName) throws org.apache.thrift.TException
+    public void send_install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer sourceBuff, java.nio.ByteBuffer policyBuff, java.lang.String fileName) throws org.apache.thrift.TException
     {
       install_args args = new install_args();
       args.setChaincodeInfo(chaincodeInfo);
-      args.setBuff(buff);
+      args.setSourceBuff(sourceBuff);
+      args.setPolicyBuff(policyBuff);
       args.setFileName(fileName);
       sendBase("install", args);
     }
@@ -332,21 +333,23 @@ public class ChaincodeService {
       }
     }
 
-    public void install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer buff, java.lang.String fileName, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException {
+    public void install(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer sourceBuff, java.nio.ByteBuffer policyBuff, java.lang.String fileName, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      install_call method_call = new install_call(chaincodeInfo, buff, fileName, resultHandler, this, ___protocolFactory, ___transport);
+      install_call method_call = new install_call(chaincodeInfo, sourceBuff, policyBuff, fileName, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class install_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.String> {
       private ChaincodeInfo chaincodeInfo;
-      private java.nio.ByteBuffer buff;
+      private java.nio.ByteBuffer sourceBuff;
+      private java.nio.ByteBuffer policyBuff;
       private java.lang.String fileName;
-      public install_call(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer buff, java.lang.String fileName, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public install_call(ChaincodeInfo chaincodeInfo, java.nio.ByteBuffer sourceBuff, java.nio.ByteBuffer policyBuff, java.lang.String fileName, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.chaincodeInfo = chaincodeInfo;
-        this.buff = buff;
+        this.sourceBuff = sourceBuff;
+        this.policyBuff = policyBuff;
         this.fileName = fileName;
       }
 
@@ -354,7 +357,8 @@ public class ChaincodeService {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("install", org.apache.thrift.protocol.TMessageType.CALL, 0));
         install_args args = new install_args();
         args.setChaincodeInfo(chaincodeInfo);
-        args.setBuff(buff);
+        args.setSourceBuff(sourceBuff);
+        args.setPolicyBuff(policyBuff);
         args.setFileName(fileName);
         args.write(prot);
         prot.writeMessageEnd();
@@ -662,7 +666,7 @@ public class ChaincodeService {
 
       public install_result getResult(I iface, install_args args) throws org.apache.thrift.TException {
         install_result result = new install_result();
-        result.success = iface.install(args.chaincodeInfo, args.buff, args.fileName);
+        result.success = iface.install(args.chaincodeInfo, args.sourceBuff, args.policyBuff, args.fileName);
         return result;
       }
     }
@@ -989,7 +993,7 @@ public class ChaincodeService {
       }
 
       public void start(I iface, install_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.String> resultHandler) throws org.apache.thrift.TException {
-        iface.install(args.chaincodeInfo, args.buff, args.fileName,resultHandler);
+        iface.install(args.chaincodeInfo, args.sourceBuff, args.policyBuff, args.fileName,resultHandler);
       }
     }
 
@@ -2156,21 +2160,24 @@ public class ChaincodeService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("install_args");
 
     private static final org.apache.thrift.protocol.TField CHAINCODE_INFO_FIELD_DESC = new org.apache.thrift.protocol.TField("chaincodeInfo", org.apache.thrift.protocol.TType.STRUCT, (short)1);
-    private static final org.apache.thrift.protocol.TField BUFF_FIELD_DESC = new org.apache.thrift.protocol.TField("buff", org.apache.thrift.protocol.TType.STRING, (short)2);
-    private static final org.apache.thrift.protocol.TField FILE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("fileName", org.apache.thrift.protocol.TType.STRING, (short)3);
+    private static final org.apache.thrift.protocol.TField SOURCE_BUFF_FIELD_DESC = new org.apache.thrift.protocol.TField("sourceBuff", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField POLICY_BUFF_FIELD_DESC = new org.apache.thrift.protocol.TField("policyBuff", org.apache.thrift.protocol.TType.STRING, (short)3);
+    private static final org.apache.thrift.protocol.TField FILE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("fileName", org.apache.thrift.protocol.TType.STRING, (short)4);
 
     private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new install_argsStandardSchemeFactory();
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new install_argsTupleSchemeFactory();
 
     public ChaincodeInfo chaincodeInfo; // required
-    public java.nio.ByteBuffer buff; // required
+    public java.nio.ByteBuffer sourceBuff; // required
+    public java.nio.ByteBuffer policyBuff; // required
     public java.lang.String fileName; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       CHAINCODE_INFO((short)1, "chaincodeInfo"),
-      BUFF((short)2, "buff"),
-      FILE_NAME((short)3, "fileName");
+      SOURCE_BUFF((short)2, "sourceBuff"),
+      POLICY_BUFF((short)3, "policyBuff"),
+      FILE_NAME((short)4, "fileName");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -2187,9 +2194,11 @@ public class ChaincodeService {
         switch(fieldId) {
           case 1: // CHAINCODE_INFO
             return CHAINCODE_INFO;
-          case 2: // BUFF
-            return BUFF;
-          case 3: // FILE_NAME
+          case 2: // SOURCE_BUFF
+            return SOURCE_BUFF;
+          case 3: // POLICY_BUFF
+            return POLICY_BUFF;
+          case 4: // FILE_NAME
             return FILE_NAME;
           default:
             return null;
@@ -2236,7 +2245,9 @@ public class ChaincodeService {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.CHAINCODE_INFO, new org.apache.thrift.meta_data.FieldMetaData("chaincodeInfo", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ChaincodeInfo.class)));
-      tmpMap.put(_Fields.BUFF, new org.apache.thrift.meta_data.FieldMetaData("buff", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+      tmpMap.put(_Fields.SOURCE_BUFF, new org.apache.thrift.meta_data.FieldMetaData("sourceBuff", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING          , true)));
+      tmpMap.put(_Fields.POLICY_BUFF, new org.apache.thrift.meta_data.FieldMetaData("policyBuff", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING          , true)));
       tmpMap.put(_Fields.FILE_NAME, new org.apache.thrift.meta_data.FieldMetaData("fileName", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
@@ -2249,12 +2260,14 @@ public class ChaincodeService {
 
     public install_args(
       ChaincodeInfo chaincodeInfo,
-      java.nio.ByteBuffer buff,
+      java.nio.ByteBuffer sourceBuff,
+      java.nio.ByteBuffer policyBuff,
       java.lang.String fileName)
     {
       this();
       this.chaincodeInfo = chaincodeInfo;
-      this.buff = org.apache.thrift.TBaseHelper.copyBinary(buff);
+      this.sourceBuff = org.apache.thrift.TBaseHelper.copyBinary(sourceBuff);
+      this.policyBuff = org.apache.thrift.TBaseHelper.copyBinary(policyBuff);
       this.fileName = fileName;
     }
 
@@ -2265,8 +2278,11 @@ public class ChaincodeService {
       if (other.isSetChaincodeInfo()) {
         this.chaincodeInfo = new ChaincodeInfo(other.chaincodeInfo);
       }
-      if (other.isSetBuff()) {
-        this.buff = org.apache.thrift.TBaseHelper.copyBinary(other.buff);
+      if (other.isSetSourceBuff()) {
+        this.sourceBuff = org.apache.thrift.TBaseHelper.copyBinary(other.sourceBuff);
+      }
+      if (other.isSetPolicyBuff()) {
+        this.policyBuff = org.apache.thrift.TBaseHelper.copyBinary(other.policyBuff);
       }
       if (other.isSetFileName()) {
         this.fileName = other.fileName;
@@ -2280,7 +2296,8 @@ public class ChaincodeService {
     @Override
     public void clear() {
       this.chaincodeInfo = null;
-      this.buff = null;
+      this.sourceBuff = null;
+      this.policyBuff = null;
       this.fileName = null;
     }
 
@@ -2308,37 +2325,71 @@ public class ChaincodeService {
       }
     }
 
-    public byte[] getBuff() {
-      setBuff(org.apache.thrift.TBaseHelper.rightSize(buff));
-      return buff == null ? null : buff.array();
+    public byte[] getSourceBuff() {
+      setSourceBuff(org.apache.thrift.TBaseHelper.rightSize(sourceBuff));
+      return sourceBuff == null ? null : sourceBuff.array();
     }
 
-    public java.nio.ByteBuffer bufferForBuff() {
-      return org.apache.thrift.TBaseHelper.copyBinary(buff);
+    public java.nio.ByteBuffer bufferForSourceBuff() {
+      return org.apache.thrift.TBaseHelper.copyBinary(sourceBuff);
     }
 
-    public install_args setBuff(byte[] buff) {
-      this.buff = buff == null ? (java.nio.ByteBuffer)null : java.nio.ByteBuffer.wrap(buff.clone());
+    public install_args setSourceBuff(byte[] sourceBuff) {
+      this.sourceBuff = sourceBuff == null ? (java.nio.ByteBuffer)null : java.nio.ByteBuffer.wrap(sourceBuff.clone());
       return this;
     }
 
-    public install_args setBuff(java.nio.ByteBuffer buff) {
-      this.buff = org.apache.thrift.TBaseHelper.copyBinary(buff);
+    public install_args setSourceBuff(java.nio.ByteBuffer sourceBuff) {
+      this.sourceBuff = org.apache.thrift.TBaseHelper.copyBinary(sourceBuff);
       return this;
     }
 
-    public void unsetBuff() {
-      this.buff = null;
+    public void unsetSourceBuff() {
+      this.sourceBuff = null;
     }
 
-    /** Returns true if field buff is set (has been assigned a value) and false otherwise */
-    public boolean isSetBuff() {
-      return this.buff != null;
+    /** Returns true if field sourceBuff is set (has been assigned a value) and false otherwise */
+    public boolean isSetSourceBuff() {
+      return this.sourceBuff != null;
     }
 
-    public void setBuffIsSet(boolean value) {
+    public void setSourceBuffIsSet(boolean value) {
       if (!value) {
-        this.buff = null;
+        this.sourceBuff = null;
+      }
+    }
+
+    public byte[] getPolicyBuff() {
+      setPolicyBuff(org.apache.thrift.TBaseHelper.rightSize(policyBuff));
+      return policyBuff == null ? null : policyBuff.array();
+    }
+
+    public java.nio.ByteBuffer bufferForPolicyBuff() {
+      return org.apache.thrift.TBaseHelper.copyBinary(policyBuff);
+    }
+
+    public install_args setPolicyBuff(byte[] policyBuff) {
+      this.policyBuff = policyBuff == null ? (java.nio.ByteBuffer)null : java.nio.ByteBuffer.wrap(policyBuff.clone());
+      return this;
+    }
+
+    public install_args setPolicyBuff(java.nio.ByteBuffer policyBuff) {
+      this.policyBuff = org.apache.thrift.TBaseHelper.copyBinary(policyBuff);
+      return this;
+    }
+
+    public void unsetPolicyBuff() {
+      this.policyBuff = null;
+    }
+
+    /** Returns true if field policyBuff is set (has been assigned a value) and false otherwise */
+    public boolean isSetPolicyBuff() {
+      return this.policyBuff != null;
+    }
+
+    public void setPolicyBuffIsSet(boolean value) {
+      if (!value) {
+        this.policyBuff = null;
       }
     }
 
@@ -2376,14 +2427,26 @@ public class ChaincodeService {
         }
         break;
 
-      case BUFF:
+      case SOURCE_BUFF:
         if (value == null) {
-          unsetBuff();
+          unsetSourceBuff();
         } else {
           if (value instanceof byte[]) {
-            setBuff((byte[])value);
+            setSourceBuff((byte[])value);
           } else {
-            setBuff((java.nio.ByteBuffer)value);
+            setSourceBuff((java.nio.ByteBuffer)value);
+          }
+        }
+        break;
+
+      case POLICY_BUFF:
+        if (value == null) {
+          unsetPolicyBuff();
+        } else {
+          if (value instanceof byte[]) {
+            setPolicyBuff((byte[])value);
+          } else {
+            setPolicyBuff((java.nio.ByteBuffer)value);
           }
         }
         break;
@@ -2404,8 +2467,11 @@ public class ChaincodeService {
       case CHAINCODE_INFO:
         return getChaincodeInfo();
 
-      case BUFF:
-        return getBuff();
+      case SOURCE_BUFF:
+        return getSourceBuff();
+
+      case POLICY_BUFF:
+        return getPolicyBuff();
 
       case FILE_NAME:
         return getFileName();
@@ -2423,8 +2489,10 @@ public class ChaincodeService {
       switch (field) {
       case CHAINCODE_INFO:
         return isSetChaincodeInfo();
-      case BUFF:
-        return isSetBuff();
+      case SOURCE_BUFF:
+        return isSetSourceBuff();
+      case POLICY_BUFF:
+        return isSetPolicyBuff();
       case FILE_NAME:
         return isSetFileName();
       }
@@ -2455,12 +2523,21 @@ public class ChaincodeService {
           return false;
       }
 
-      boolean this_present_buff = true && this.isSetBuff();
-      boolean that_present_buff = true && that.isSetBuff();
-      if (this_present_buff || that_present_buff) {
-        if (!(this_present_buff && that_present_buff))
+      boolean this_present_sourceBuff = true && this.isSetSourceBuff();
+      boolean that_present_sourceBuff = true && that.isSetSourceBuff();
+      if (this_present_sourceBuff || that_present_sourceBuff) {
+        if (!(this_present_sourceBuff && that_present_sourceBuff))
           return false;
-        if (!this.buff.equals(that.buff))
+        if (!this.sourceBuff.equals(that.sourceBuff))
+          return false;
+      }
+
+      boolean this_present_policyBuff = true && this.isSetPolicyBuff();
+      boolean that_present_policyBuff = true && that.isSetPolicyBuff();
+      if (this_present_policyBuff || that_present_policyBuff) {
+        if (!(this_present_policyBuff && that_present_policyBuff))
+          return false;
+        if (!this.policyBuff.equals(that.policyBuff))
           return false;
       }
 
@@ -2484,9 +2561,13 @@ public class ChaincodeService {
       if (isSetChaincodeInfo())
         hashCode = hashCode * 8191 + chaincodeInfo.hashCode();
 
-      hashCode = hashCode * 8191 + ((isSetBuff()) ? 131071 : 524287);
-      if (isSetBuff())
-        hashCode = hashCode * 8191 + buff.hashCode();
+      hashCode = hashCode * 8191 + ((isSetSourceBuff()) ? 131071 : 524287);
+      if (isSetSourceBuff())
+        hashCode = hashCode * 8191 + sourceBuff.hashCode();
+
+      hashCode = hashCode * 8191 + ((isSetPolicyBuff()) ? 131071 : 524287);
+      if (isSetPolicyBuff())
+        hashCode = hashCode * 8191 + policyBuff.hashCode();
 
       hashCode = hashCode * 8191 + ((isSetFileName()) ? 131071 : 524287);
       if (isSetFileName())
@@ -2513,12 +2594,22 @@ public class ChaincodeService {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.valueOf(isSetBuff()).compareTo(other.isSetBuff());
+      lastComparison = java.lang.Boolean.valueOf(isSetSourceBuff()).compareTo(other.isSetSourceBuff());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetBuff()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.buff, other.buff);
+      if (isSetSourceBuff()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.sourceBuff, other.sourceBuff);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = java.lang.Boolean.valueOf(isSetPolicyBuff()).compareTo(other.isSetPolicyBuff());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetPolicyBuff()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.policyBuff, other.policyBuff);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -2561,11 +2652,19 @@ public class ChaincodeService {
       }
       first = false;
       if (!first) sb.append(", ");
-      sb.append("buff:");
-      if (this.buff == null) {
+      sb.append("sourceBuff:");
+      if (this.sourceBuff == null) {
         sb.append("null");
       } else {
-        org.apache.thrift.TBaseHelper.toString(this.buff, sb);
+        org.apache.thrift.TBaseHelper.toString(this.sourceBuff, sb);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("policyBuff:");
+      if (this.policyBuff == null) {
+        sb.append("null");
+      } else {
+        org.apache.thrift.TBaseHelper.toString(this.policyBuff, sb);
       }
       first = false;
       if (!first) sb.append(", ");
@@ -2631,15 +2730,23 @@ public class ChaincodeService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
-            case 2: // BUFF
+            case 2: // SOURCE_BUFF
               if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.buff = iprot.readBinary();
-                struct.setBuffIsSet(true);
+                struct.sourceBuff = iprot.readBinary();
+                struct.setSourceBuffIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
-            case 3: // FILE_NAME
+            case 3: // POLICY_BUFF
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.policyBuff = iprot.readBinary();
+                struct.setPolicyBuffIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 4: // FILE_NAME
               if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
                 struct.fileName = iprot.readString();
                 struct.setFileNameIsSet(true);
@@ -2667,9 +2774,14 @@ public class ChaincodeService {
           struct.chaincodeInfo.write(oprot);
           oprot.writeFieldEnd();
         }
-        if (struct.buff != null) {
-          oprot.writeFieldBegin(BUFF_FIELD_DESC);
-          oprot.writeBinary(struct.buff);
+        if (struct.sourceBuff != null) {
+          oprot.writeFieldBegin(SOURCE_BUFF_FIELD_DESC);
+          oprot.writeBinary(struct.sourceBuff);
+          oprot.writeFieldEnd();
+        }
+        if (struct.policyBuff != null) {
+          oprot.writeFieldBegin(POLICY_BUFF_FIELD_DESC);
+          oprot.writeBinary(struct.policyBuff);
           oprot.writeFieldEnd();
         }
         if (struct.fileName != null) {
@@ -2698,18 +2810,24 @@ public class ChaincodeService {
         if (struct.isSetChaincodeInfo()) {
           optionals.set(0);
         }
-        if (struct.isSetBuff()) {
+        if (struct.isSetSourceBuff()) {
           optionals.set(1);
         }
-        if (struct.isSetFileName()) {
+        if (struct.isSetPolicyBuff()) {
           optionals.set(2);
         }
-        oprot.writeBitSet(optionals, 3);
+        if (struct.isSetFileName()) {
+          optionals.set(3);
+        }
+        oprot.writeBitSet(optionals, 4);
         if (struct.isSetChaincodeInfo()) {
           struct.chaincodeInfo.write(oprot);
         }
-        if (struct.isSetBuff()) {
-          oprot.writeBinary(struct.buff);
+        if (struct.isSetSourceBuff()) {
+          oprot.writeBinary(struct.sourceBuff);
+        }
+        if (struct.isSetPolicyBuff()) {
+          oprot.writeBinary(struct.policyBuff);
         }
         if (struct.isSetFileName()) {
           oprot.writeString(struct.fileName);
@@ -2719,17 +2837,21 @@ public class ChaincodeService {
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, install_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(3);
+        java.util.BitSet incoming = iprot.readBitSet(4);
         if (incoming.get(0)) {
           struct.chaincodeInfo = new ChaincodeInfo();
           struct.chaincodeInfo.read(iprot);
           struct.setChaincodeInfoIsSet(true);
         }
         if (incoming.get(1)) {
-          struct.buff = iprot.readBinary();
-          struct.setBuffIsSet(true);
+          struct.sourceBuff = iprot.readBinary();
+          struct.setSourceBuffIsSet(true);
         }
         if (incoming.get(2)) {
+          struct.policyBuff = iprot.readBinary();
+          struct.setPolicyBuffIsSet(true);
+        }
+        if (incoming.get(3)) {
           struct.fileName = iprot.readString();
           struct.setFileNameIsSet(true);
         }
