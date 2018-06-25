@@ -9,7 +9,13 @@ public class Api {
 
     /** API 意图 */
     public enum Intent {
-        INVOKE(1, "state/invoke"), QUERY(2, "state/query"), INFO(3, "trace/info/1"), HASH(4, "trace/hash"), NUMBER(5, "trace/number"), TXID(6, "trace/txid");
+        INVOKE(1, "state/invoke"),
+        QUERY(2, "state/query"),
+        INFO(3, "trace/info/1"),
+        HASH(4, "trace/hash"),
+        NUMBER(5, "trace/number"),
+        TXID(6, "trace/txid"),
+        INSTANTIATE(7, "chaincode/instantiate");
 
         private int index;
         private String apiUrl;
