@@ -12,13 +12,13 @@ import java.util.List;
 @Mapper
 public interface ChaincodeMapper {
 
-    @Insert("insert into chaincode (name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source) values " +
-            "(#{c.name},#{c.path},#{c.version},#{c.proposalWaitTime},#{c.invokeWaitTime},#{c.channelId},#{c.date},#{c.source})")
+    @Insert("insert into chaincode (name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source,policy) values " +
+            "(#{c.name},#{c.path},#{c.version},#{c.proposalWaitTime},#{c.invokeWaitTime},#{c.channelId},#{c.date},#{c.source},#{c.policy})")
     int add(@Param("c") ChaincodeInfo chainCode);
 
     @Update("update chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
             "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} " +
-            "source=#{c.source} where rowid=#{c.id}")
+            "source=#{c.source}, policy=#{c.policy} where rowid=#{c.id}")
     int update(@Param("c") ChaincodeInfo chainCode);
 
     @Select("select count(name) from chaincode where channel_id=#{id}")
@@ -36,7 +36,9 @@ public interface ChaincodeMapper {
             @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
             @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
             @Result(property = "channelId", column = "channel_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "date", column = "date"),
+            @Result(property = "source", column = "source"),
+            @Result(property = "policy", column = "policy")
     })
     ChaincodeInfo get(@Param("id") int id);
 
@@ -49,7 +51,9 @@ public interface ChaincodeMapper {
             @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
             @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
             @Result(property = "channelId", column = "channel_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "date", column = "date"),
+            @Result(property = "source", column = "source"),
+            @Result(property = "policy", column = "policy")
     })
     ChaincodeInfo getByName(@Param("name") String name);
 
@@ -62,7 +66,9 @@ public interface ChaincodeMapper {
             @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
             @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
             @Result(property = "channelId", column = "channel_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "date", column = "date"),
+            @Result(property = "source", column = "source"),
+            @Result(property = "policy", column = "policy")
     })
     List<ChaincodeInfo> list(@Param("id") int id);
 
@@ -75,7 +81,9 @@ public interface ChaincodeMapper {
             @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
             @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
             @Result(property = "channelId", column = "channel_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "date", column = "date"),
+            @Result(property = "source", column = "source"),
+            @Result(property = "policy", column = "policy")
     })
     List<ChaincodeInfo> listAll();
 

@@ -48,9 +48,9 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface, BaseService
     }
 
     @Override
-    public String install(ChaincodeInfo chaincodeInfo, ByteBuffer buff, String fileName) throws TException {
-        if (null == buff) {
-            return responseFail("install error");
+    public String install(ChaincodeInfo chaincodeInfo, ByteBuffer sourceBuff, ByteBuffer policyBuff, String fileName) throws TException {
+        if (null == sourceBuff || null == policyBuff) {
+            return responseFail("install error, source or policy mush be uploaded");
         }
         String chaincodeSource = String.format("%s/%s/%s/%s/%s", env.getProperty("chaincode.source"),
                 chaincodeInfo.getLeagueName(),
@@ -61,10 +61,12 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface, BaseService
         chaincodeInfo.setSource(chaincodeSource);
         chaincodeInfo.setPath(chaincodepath);
         chaincodeInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
-        FileUtil.save(buff, fileName, chaincodeSource);
-        chaincodeMapper.add(chaincodeInfo);
-        chaincodeInfo.setId(chaincodeMapper.getByName(chaincodeInfo.getName()).getId());
-        return chainCode(chaincodeInfo.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
+        FileUtil.save(sourceBuff, fileName, chaincodeSource, true);
+        FileUtil.save(policyBuff, fileName, chaincodeSource, false);
+//        chaincodeMapper.add(chaincodeInfo);
+//        chaincodeInfo.setId(chaincodeMapper.getByName(chaincodeInfo.getName()).getId());
+//        return chainCode(chaincodeInfo.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
+        return "";
     }
 
     @Override

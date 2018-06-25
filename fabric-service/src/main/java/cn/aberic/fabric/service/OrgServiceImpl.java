@@ -45,7 +45,7 @@ public class OrgServiceImpl implements OrgService.Iface {
         orgInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         String path = String.format("%s/%s/%s", env.getProperty("config.dir"), leagueMapper.get(orgInfo.getLeagueId()).getName(), orgInfo.getName());
         orgInfo.setCryptoConfigDir(path + File.separator + fileName.split("\\.")[0]);
-        FileUtil.save(buff, fileName, path);
+        FileUtil.save(buff, fileName, path, true);
         return orgMapper.add(orgInfo);
     }
 
@@ -54,7 +54,7 @@ public class OrgServiceImpl implements OrgService.Iface {
         if (null != buff) {
             String path = String.format("%s/%s/%s", env.getProperty("config.dir"), leagueMapper.get(orgInfo.getLeagueId()).getName(), orgInfo.getName());
             orgInfo.setCryptoConfigDir(path + File.separator + fileName.split("\\.")[0]);
-            FileUtil.save(buff, fileName, path);
+            FileUtil.save(buff, fileName, path, true);
         }
         FabricHelper.obtain().removeManager(peerMapper.list(orgInfo.getId()), channelMapper, chaincodeMapper);
         return orgMapper.update(orgInfo);
