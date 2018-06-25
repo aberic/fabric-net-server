@@ -3,6 +3,7 @@ package cn.aberic.fabric.controller;
 import cn.aberic.fabric.bean.Transaction;
 import cn.aberic.fabric.thrift.MultiServiceProvider;
 import cn.aberic.thrift.chaincode.ChaincodeInfo;
+import cn.aberic.thrift.channel.ChannelInfo;
 import cn.aberic.thrift.common.SystemInfo;
 import cn.aberic.thrift.trace.TraceInfo;
 import cn.aberic.thrift.utils.DateUtil;
@@ -39,6 +40,7 @@ public class CommonController {
         int peerCount = 0;
         int channelCount = 0;
         int chaincodeCount = 0;
+        List<Transaction> tmpTransactions = new ArrayList<>();
         List<Transaction> transactions = new ArrayList<>();
         SystemInfo systemInfo;
         try {
@@ -55,35 +57,43 @@ public class CommonController {
             systemInfo.setCpu((double) Math.round(systemInfo.getCpu() * 100) / 100);
             systemInfo.setMemory((double) Math.round(systemInfo.getMemory() * 100) / 100);
             systemInfo.setSwap((double) Math.round(systemInfo.getSwap() * 100) / 100);
-            List<ChaincodeInfo> chaincodes = multiService.getChaincodeService().listAll();
 
-            for (ChaincodeInfo chaincode: chaincodes) {
-                JSONObject blockInfo = JSON.parseObject(multiService.getTraceService().queryBlockChainInfo(chaincode.getId()));
-                int height = blockInfo.getJSONObject("data").getInteger("height");
-                for (int num = height - 1; num >= 0; num--) {
-                    TraceInfo trace = new TraceInfo();
-                    trace.setId(chaincode.getId());
-                    trace.setTrace(String.valueOf(num));
-                    JSONObject blockMessage = JSON.parseObject(multiService.getTraceService().queryBlockByNumber(trace));
-                    JSONArray envelopes = blockMessage.getJSONObject("data").getJSONArray("envelopes");
-                    int size = envelopes.size();
-                    for (int i = 0; i < size; i++) {
-                        Transaction transaction = new Transaction();
-                        transaction.setNum(num);
-                        JSONObject envelope = envelopes.getJSONObject(i);
-                        transaction.setTxCount(envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount"));
-                        transaction.setChannelName(envelope.getString("channelId"));
-                        transaction.setCreateMSPID(envelope.getString("createMSPID"));
-                        transaction.setDate(envelope.getString("timestamp"));
-                        transactions.add(transaction);
-                    }
-                    if ((height - num) > 6) {
+            List<ChannelInfo> channels = multiService.getChannelService().listAll();
+            for (ChannelInfo channel : channels) {
+                List<ChaincodeInfo> chaincodes = multiService.getChaincodeService().listById(channel.getId());
+                for (ChaincodeInfo chaincode: chaincodes) {
+                    try {
+                        JSONObject blockInfo = JSON.parseObject(multiService.getTraceService().queryBlockChainInfo(chaincode.getId()));
+                        int height = blockInfo.getJSONObject("data").getInteger("height");
+                        for (int num = height - 1; num >= 0; num--) {
+                            TraceInfo trace = new TraceInfo();
+                            trace.setId(chaincode.getId());
+                            trace.setTrace(String.valueOf(num));
+                            JSONObject blockMessage = JSON.parseObject(multiService.getTraceService().queryBlockByNumber(trace));
+                            JSONArray envelopes = blockMessage.getJSONObject("data").getJSONArray("envelopes");
+                            int size = envelopes.size();
+                            for (int i = 0; i < size; i++) {
+                                Transaction transaction = new Transaction();
+                                transaction.setNum(num);
+                                JSONObject envelope = envelopes.getJSONObject(i);
+                                transaction.setTxCount(envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount"));
+                                transaction.setChannelName(envelope.getString("channelId"));
+                                transaction.setCreateMSPID(envelope.getString("createMSPID"));
+                                transaction.setDate(envelope.getString("timestamp"));
+                                tmpTransactions.add(transaction);
+                            }
+                            if ((height - num) > 6) {
+                                break;
+                            }
+                        }
                         break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
             // transactions.sort(Comparator.comparing(Transaction::getDate));
-            transactions.sort((t1, t2) -> {
+            tmpTransactions.sort((t1, t2) -> {
                 try {
                     long td1 = DateUtil.str2Date(t1.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
                     long td2 = DateUtil.str2Date(t2.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
@@ -93,6 +103,11 @@ public class CommonController {
                 }
                 return 0;
             });
+            for (int i = 0; i < 7; i++) {
+                Transaction transaction = tmpTransactions.get(i);
+                transaction.setIndex(i + 1);
+                transactions.add(transaction);
+            }
         } catch (Exception e) {
             systemInfo = new SystemInfo();
             e.printStackTrace();
