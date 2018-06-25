@@ -147,6 +147,7 @@
                                        id="example-r">
                                     <thead>
                                     <tr>
+                                        <th>序号</th>
                                         <th>区块高度</th>
                                         <th>交易数</th>
                                         <th>通道名称</th>
@@ -156,6 +157,7 @@
                                     </thead>
                                     <tbody>
                                     <tr class="gradeX" th:each="transaction : ${transactions}">
+                                        <td th:text="${transaction.index}">序号</td>
                                         <td th:text="${transaction.num}">区块高度</td>
                                         <td th:text="${transaction.txCount}">交易数</td>
                                         <td th:text="${transaction.channelName}">通道名称</td>
