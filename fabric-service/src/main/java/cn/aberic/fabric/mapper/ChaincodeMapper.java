@@ -12,12 +12,13 @@ import java.util.List;
 @Mapper
 public interface ChaincodeMapper {
 
-    @Insert("insert into chaincode (name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date) values " +
-            "(#{c.name},#{c.path},#{c.version},#{c.proposalWaitTime},#{c.invokeWaitTime},#{c.channelId},#{c.date})")
+    @Insert("insert into chaincode (name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source) values " +
+            "(#{c.name},#{c.path},#{c.version},#{c.proposalWaitTime},#{c.invokeWaitTime},#{c.channelId},#{c.date},#{c.source})")
     int add(@Param("c") ChaincodeInfo chainCode);
 
     @Update("update chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
-            "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} where rowid=#{c.id}")
+            "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} " +
+            "source=#{c.source} where rowid=#{c.id}")
     int update(@Param("c") ChaincodeInfo chainCode);
 
     @Select("select count(name) from chaincode where channel_id=#{id}")
@@ -38,6 +39,19 @@ public interface ChaincodeMapper {
             @Result(property = "date", column = "date")
     })
     ChaincodeInfo get(@Param("id") int id);
+
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode where name=#{name}")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "path", column = "path"),
+            @Result(property = "version", column = "version"),
+            @Result(property = "proposalWaitTime", column = "proposal_wait_time"),
+            @Result(property = "invokeWaitTime", column = "invoke_wait_time"),
+            @Result(property = "channelId", column = "channel_id"),
+            @Result(property = "date", column = "date")
+    })
+    ChaincodeInfo getByName(@Param("name") String name);
 
     @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode where channel_id=#{id}")
     @Results({
