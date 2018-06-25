@@ -1,6 +1,8 @@
 package cn.aberic.fabric.runner;
 
 import cn.aberic.fabric.thrift.MultiServiceProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import javax.annotation.Resource;
 @Component
 public class FabricEdgeRunner implements ApplicationRunner {
 
+    private Logger logger = LogManager.getLogger(FabricEdgeRunner.class);
+
     @Resource
     private MultiServiceProvider multiService;
 
@@ -22,7 +26,7 @@ public class FabricEdgeRunner implements ApplicationRunner {
         try {
             multiService.getSystemService().init();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.debug("edge start first!");
         }
         System.out.println();
         System.out.println(" _____   _   _   ____    ");
