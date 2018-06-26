@@ -20,7 +20,7 @@ service ChaincodeService {
 
     i32 add(1:ChaincodeInfo chaincodeInfo);
 
-    string install(1:ChaincodeInfo chaincodeInfo, 2:binary sourceBuff, 3:binary policyBuff, 4:string fileName);
+    string install(1:ChaincodeInfo chaincodeInfo, 2:binary sourceBuff, 3:string sourceFileName);
 
     string instantiate(1:ChaincodeInfo chaincodeInfo, 2:list<string> strArray)
 
