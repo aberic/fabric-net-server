@@ -32,6 +32,8 @@ class IntermediateChaincodeID {
     private String chaincodeSource; // /opt/gopath
     /** 智能合约安装路径 */
     private String chaincodePath; // github.com/hyperledger/fabric/xxx/chaincode/go/example/test
+    /** 智能合约背书策略文件存放路径 */
+    private String chaincodePolicy; // /home/policy.yaml
     /** 智能合约版本号 */
     private String chaincodeVersion; // 1.0
     /** 指定ID的智能合约 */
@@ -57,6 +59,10 @@ class IntermediateChaincodeID {
     void setChaincodePath(String chaincodePath) {
         this.chaincodePath = chaincodePath;
         setChaincodeID();
+    }
+
+    void setChaincodePolicy(String chaincodePolicy) {
+        this.chaincodePolicy = chaincodePolicy;
     }
 
     void setChaincodeVersion(String chaincodeVersion) {
@@ -105,7 +111,7 @@ class IntermediateChaincodeID {
         instantiateProposalRequest.setArgs(args);
 
         ChaincodeEndorsementPolicy chaincodeEndorsementPolicy = new ChaincodeEndorsementPolicy();
-        chaincodeEndorsementPolicy.fromYamlFile(new File("/code/src/policy/chaincodeendorsementpolicy.yaml"));
+        chaincodeEndorsementPolicy.fromYamlFile(new File(chaincodePolicy));
         instantiateProposalRequest.setChaincodeEndorsementPolicy(chaincodeEndorsementPolicy);
 
         Map<String, byte[]> tm2 = new HashMap<>();
