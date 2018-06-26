@@ -113,13 +113,13 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="file-source" class="am-u-sm-3 am-form-label">智能合约 <span
-                                            class="tpl-form-line-small-title">chaincode</span></label>
+                                    <label for="file-source" class="am-u-sm-3 am-form-label">智能合约和背书 <span
+                                            class="tpl-form-line-small-title">chaincode policy</span></label>
                                     <div class="am-u-sm-9">
                                         <div class="am-form-group am-form-file">
                                             <button type="button" class="am-btn am-btn-danger am-btn-sm"
                                                     id="file-source">
-                                                <i class="am-icon-cloud-upload"></i> 智能合约所在目录
+                                                <i class="am-icon-cloud-upload"></i> 智能合约及背书策略
                                             </button>
                                             <input id="doc-form-source-file" type="file" name="sourceFile">
                                         </div>
@@ -135,33 +135,7 @@
                                                 });
                                             });
                                         </script>
-                                        <small>请上传打包在zip文件中的智能合约。如chaincode_example02，则直接以zip打包chaincode_example02上传即可。</small>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="file-policy" class="am-u-sm-3 am-form-label">背书策略 <span
-                                            class="tpl-form-line-small-title">policy</span></label>
-                                    <div class="am-u-sm-9">
-                                        <div class="am-form-group am-form-file">
-                                            <button type="button" class="am-btn am-btn-danger am-btn-sm"
-                                                    id="file-policy">
-                                                <i class="am-icon-cloud-upload"></i> 智能合约背书所在目录
-                                            </button>
-                                            <input id="doc-form-policy-file" type="file" name="policyFile">
-                                        </div>
-                                        <div id="file-list-policy"></div>
-                                        <script>
-                                            $(function () {
-                                                $('#doc-form-policy-file').on('change', function () {
-                                                    var fileNames = '';
-                                                    $.each(this.files, function () {
-                                                        fileNames += '<span class="am-badge">' + this.name + '</span> ';
-                                                    });
-                                                    $('#file-list-policy').html(fileNames);
-                                                });
-                                            });
-                                        </script>
-                                        <small>请上传打包在zip文件中的智能合约背书策略。如chaincode-endorsement-policy.yaml，则直接以zip打包chaincode-endorsement-policy上传即可。</small>
+                                        <small>请上传打包在zip文件中的智能合约及当前合约背书策略。如chaincode_example02文件夹下是智能合约目录，将该目录与chaincode-endorsement-policy.yaml背书文件一同打包在一个zip下上传即可。</small>
                                     </div>
                                 </div>
                                 <div class="am-form-group">

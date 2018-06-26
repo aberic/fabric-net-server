@@ -44,7 +44,6 @@ public class ChaincodeController {
     public ModelAndView submit(@ModelAttribute ChaincodeInfo chaincode,
                                @RequestParam("intent") String intent,
                                @RequestParam(value = "sourceFile", required = false) MultipartFile sourceFile,
-                               @RequestParam(value = "policyFile", required = false) MultipartFile policyFile,
                                @RequestParam("id") int id) {
         try {
             switch (intent) {
@@ -67,7 +66,6 @@ public class ChaincodeController {
                     try {
                         multiService.getChaincodeService().install(chaincode,
                                 ByteBuffer.wrap(sourceFile.getBytes()),
-                                ByteBuffer.wrap(policyFile.getBytes()),
                                 sourceFile.getOriginalFilename());
                     } catch (IOException e) {
                         e.printStackTrace();
