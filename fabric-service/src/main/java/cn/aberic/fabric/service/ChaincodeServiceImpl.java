@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
@@ -48,25 +49,24 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface, BaseService
     }
 
     @Override
-    public String install(ChaincodeInfo chaincodeInfo, ByteBuffer sourceBuff, ByteBuffer policyBuff, String fileName) throws TException {
-        if (null == sourceBuff || null == policyBuff) {
+    public String install(ChaincodeInfo chaincodeInfo, ByteBuffer sourceBuff, String sourceFileName) throws TException {
+        if (null == sourceBuff) {
             return responseFail("install error, source or policy mush be uploaded");
         }
-        String chaincodeSource = String.format("%s/%s/%s/%s/%s", env.getProperty("chaincode.source"),
+        String chaincodeSource = String.format("%s/%s/%s/%s/%s/chaincode", env.getProperty("config.dir"),
                 chaincodeInfo.getLeagueName(),
                 chaincodeInfo.getOrgName(),
                 chaincodeInfo.getPeerName(),
                 chaincodeInfo.getChannelName());
-        String chaincodepath = fileName.split("\\.")[0];
+        String chaincodepath = sourceFileName.split("\\.")[0];
         chaincodeInfo.setSource(chaincodeSource);
         chaincodeInfo.setPath(chaincodepath);
+        chaincodeInfo.setPolicy(chaincodeSource + File.separator + chaincodepath + File.separator + "policy.yaml");
         chaincodeInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
-        FileUtil.save(sourceBuff, fileName, chaincodeSource, true);
-        FileUtil.save(policyBuff, fileName, chaincodeSource, false);
-//        chaincodeMapper.add(chaincodeInfo);
-//        chaincodeInfo.setId(chaincodeMapper.getByName(chaincodeInfo.getName()).getId());
-//        return chainCode(chaincodeInfo.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
-        return "";
+        FileUtil.save(sourceBuff, sourceFileName, chaincodeSource);
+        chaincodeMapper.add(chaincodeInfo);
+        chaincodeInfo.setId(chaincodeMapper.getByName(chaincodeInfo.getName()).getId());
+        return chainCode(chaincodeInfo.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
     }
 
     @Override

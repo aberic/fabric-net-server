@@ -91,20 +91,20 @@ public class FileUtil {
         }
     }
 
-    public static void save(ByteBuffer buff, String fileName, String path, boolean samePath) throws TException {
+    public static void save(ByteBuffer buff, String fileName, String path) throws TException {
         InputStream is = new ByteArrayInputStream(buff.array());
         OutputStream os = null;
         int bytesRead = 0;
         byte[] buffer = new byte[8192];
         try {
+            String unZipPath = path + File.separator + fileName.split("\\.")[0];
             String unZipFile = path + File.separator + fileName;
-            File zipFile = new File(path + File.separator + fileName);
-            if (zipFile.getParentFile().exists() && samePath) {
-                zipFile.getParentFile().delete();
+            File zipPath = new File(unZipPath);
+            File zipFile = new File(unZipFile);
+            if (zipPath.exists()) {
+                zipPath.delete();
             }
-            if (samePath) {
-                zipFile.getParentFile().mkdirs();
-            }
+            zipPath.mkdirs();
             os = new FileOutputStream(zipFile);
             while ((bytesRead = is.read(buffer, 0, 8192)) != -1) {
                 os.write(buffer, 0, bytesRead);
