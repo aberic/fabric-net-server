@@ -51,7 +51,7 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface, BaseService
     @Override
     public String install(ChaincodeInfo chaincodeInfo, ByteBuffer sourceBuff, String sourceFileName) throws TException {
         if (null == sourceBuff) {
-            return responseFail("install error, source or policy mush be uploaded");
+            return responseFail("install error, source mush be uploaded");
         }
         String chaincodeSource = String.format("%s/%s/%s/%s/%s/chaincode", env.getProperty("config.dir"),
                 chaincodeInfo.getLeagueName(),
