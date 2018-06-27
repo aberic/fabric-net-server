@@ -44,15 +44,25 @@ public class MultiServiceProvider {
     private int apiPort;
 
     public enum ServiceType {
-        SYSTEM,
-        LEAGUE,
-        ORG,
-        ORDERER,
-        PEER,
-        CHANNEL,
-        CHAINCODE,
-        STATE,
-        TRACE
+        SYSTEM("system"),
+        LEAGUE("league"),
+        ORG("org"),
+        ORDERER("orderer"),
+        PEER("peer"),
+        CHANNEL("channel"),
+        CHAINCODE("chaincode"),
+        STATE("state"),
+        TRACE("trace");
+
+        ServiceType(String serviceName) {
+            this.serviceName = serviceName;
+        }
+
+        private String serviceName;
+
+        public String getServiceName() {
+            return serviceName;
+        }
     }
 
 //    public SystemService.Client getSystemService() {
@@ -86,31 +96,40 @@ public class MultiServiceProvider {
     public SystemService.Client getSystemService() {
         return getService(apiIp, apiPort, ServiceType.SYSTEM);
     }
+
     public LeagueService.Client getLeagueService() {
         return getService(apiIp, apiPort, ServiceType.LEAGUE);
     }
+
     public OrgService.Client getOrgService() {
         return getService(apiIp, apiPort, ServiceType.ORG);
     }
+
     public OrdererService.Client getOrdererService() {
         return getService(apiIp, apiPort, ServiceType.ORDERER);
     }
+
     public PeerService.Client getPeerService() {
         return getService(apiIp, apiPort, ServiceType.PEER);
     }
+
     public ChannelService.Client getChannelService() {
         return getService(apiIp, apiPort, ServiceType.CHANNEL);
     }
+
     public ChaincodeService.Client getChaincodeService() {
         return getService(apiIp, apiPort, ServiceType.CHAINCODE);
     }
+
     public StateService.Client getStateService() {
         return getService(apiIp, apiPort, ServiceType.STATE);
     }
+
     public TraceService.Client getTraceService() {
         return getService(apiIp, apiPort, ServiceType.TRACE);
     }
 
+    @SuppressWarnings("unchecked")
     private <T> T getService(String host, int port, ServiceType serviceType) {
         // 客户端需要连接到服务端，先新建一个socker的连接
         TSocket socket = new TSocket(host, port, 3000);
@@ -131,36 +150,40 @@ public class MultiServiceProvider {
         TServiceClient client = null;
         switch (serviceType) {
             case SYSTEM:
-                client = new SystemService.Client(new TMultiplexedProtocol(protocol, "system"));
+                client = new SystemService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case LEAGUE:
                 // 构建客户端对象
-                client = new LeagueService.Client(new TMultiplexedProtocol(protocol, "league"));
+                client = new LeagueService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case ORG:
-                client = new OrgService.Client(new TMultiplexedProtocol(protocol, "org"));
+                client = new OrgService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case ORDERER:
-                client = new OrdererService.Client(new TMultiplexedProtocol(protocol, "orderer"));
+                client = new OrdererService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case PEER:
-                client = new PeerService.Client(new TMultiplexedProtocol(protocol, "peer"));
+                client = new PeerService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case CHANNEL:
-                client = new ChannelService.Client(new TMultiplexedProtocol(protocol, "channel"));
+                client = new ChannelService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case CHAINCODE:
-                client = new ChaincodeService.Client(new TMultiplexedProtocol(protocol, "chaincode"));
+                client = new ChaincodeService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case STATE:
-                client = new StateService.Client(new TMultiplexedProtocol(protocol, "state"));
+                client = new StateService.Client(getTMProtocol(protocol, serviceType));
                 break;
             case TRACE:
-                client = new TraceService.Client(new TMultiplexedProtocol(protocol, "trace"));
+                client = new TraceService.Client(getTMProtocol(protocol, serviceType));
                 break;
         }
 
         return (T) client;
+    }
+
+    private TMultiplexedProtocol getTMProtocol(TProtocol protocol, ServiceType serviceType) {
+        return new TMultiplexedProtocol(protocol, serviceType.getServiceName());
     }
 
     public List<ChannelInfo> getChannelFullList() throws TException {
