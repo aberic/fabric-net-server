@@ -58,10 +58,10 @@ public class ChaincodeServiceImpl implements ChaincodeService.Iface, BaseService
                 chaincodeInfo.getOrgName(),
                 chaincodeInfo.getPeerName(),
                 chaincodeInfo.getChannelName());
-        String chaincodepath = sourceFileName.split("\\.")[0];
+        String chaincodePath = sourceFileName.split("\\.")[0];
         chaincodeInfo.setSource(chaincodeSource);
-        chaincodeInfo.setPath(chaincodepath);
-        chaincodeInfo.setPolicy(chaincodeSource + File.separator + chaincodepath + File.separator + "policy.yaml");
+        chaincodeInfo.setPath(chaincodePath);
+        chaincodeInfo.setPolicy(chaincodeSource + File.separator + chaincodePath + File.separator + "policy.yaml");
         chaincodeInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         FileUtil.save(sourceBuff, sourceFileName, chaincodeSource);
         chaincodeMapper.add(chaincodeInfo);
