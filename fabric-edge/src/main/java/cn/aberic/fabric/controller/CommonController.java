@@ -103,7 +103,8 @@ public class CommonController {
                 }
                 return 0;
             });
-            for (int i = 0; i < 7; i++) {
+            int size = tmpTransactions.size() > 7 ? 7 : tmpTransactions.size();
+            for (int i = 0; i < size; i++) {
                 Transaction transaction = tmpTransactions.get(i);
                 transaction.setIndex(i + 1);
                 transactions.add(transaction);
