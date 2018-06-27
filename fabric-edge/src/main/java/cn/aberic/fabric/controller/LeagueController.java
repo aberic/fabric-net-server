@@ -5,6 +5,7 @@ import cn.aberic.thrift.league.LeagueInfo;
 import org.apache.thrift.TException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class LeagueController {
         } catch (TException e) {
             e.printStackTrace();
         }
-        return list();
+        return new ModelAndView(new RedirectView("list"));
     }
 
     @GetMapping(value = "add")

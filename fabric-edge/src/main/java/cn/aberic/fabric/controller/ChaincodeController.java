@@ -14,6 +14,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -134,7 +135,7 @@ public class ChaincodeController {
         } catch (TException e) {
             e.printStackTrace();
         }
-        return list();
+        return new ModelAndView(new RedirectView("list"));
     }
 
     @GetMapping(value = "edit")
