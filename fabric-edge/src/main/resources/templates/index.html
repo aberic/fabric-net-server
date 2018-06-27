@@ -170,37 +170,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="am-u-sm-12 am-u-md-4">
-                    <div class="widget am-cf">
-                        <div class="widget-head am-cf">
-                            <div class="widget-title am-fl">SDK服务器负载</div>
-                        </div>
-                        <div class="widget-body widget-body-md am-fr">
-
-                            <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more"
-                                                                          th:text="${systemInfo.cpu}+'% / 100%'"></span>
-                            </div>
-                            <div class="am-progress">
-                                <div class="am-progress-bar" th:style="'width:'+${systemInfo.cpu}+'%'"></div>
-                            </div>
-                            <div class="am-progress-title">Mem Load <span class="am-fr am-progress-title-more"
-                                                                          th:text="${systemInfo.memory}+'% / 100%'"></span>
-                            </div>
-                            <div class="am-progress">
-                                <div class="am-progress-bar  am-progress-bar-warning"
-                                     th:style="'width:'+${systemInfo.memory}+'%'"></div>
-                            </div>
-                            <div class="am-progress-title">Swap Load <span class="am-fr am-progress-title-more"
-                                                                           th:text="${systemInfo.swap}+'% / 100%'"></span>
-                            </div>
-                            <div class="am-progress">
-                                <div class="am-progress-bar am-progress-bar-danger"
-                                     th:style="'width:'+${systemInfo.swap}+'%'"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
