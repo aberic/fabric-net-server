@@ -218,7 +218,7 @@ public class ChaincodeController {
     public ModelAndView verify(@ModelAttribute Api api, @RequestParam("chaincodeId") int id) {
         ModelAndView modelAndView = new ModelAndView("chaincodeResult");
         Api.Intent intent = Api.Intent.get(api.index);
-        String result = null;
+        String result = "";
         String url = String.format("http://localhost:%s/%s", env.getProperty("server.port"), intent.getApiUrl());
         try {
             switch (intent) {
