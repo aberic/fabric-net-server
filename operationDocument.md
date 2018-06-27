@@ -77,11 +77,6 @@ services:
 #### 联盟列表界面预览
 ![联盟列表视图](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E8%81%94%E7%9B%9F%E5%88%97%E8%A1%A82.png "Fabric 联盟列表")
 ##### 添加联盟
-json示例：
-<br/>
-`{
-  "name": "fabric_league1"
-}`
 ![添加联盟](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E6%B7%BB%E5%8A%A0%E8%81%94%E7%9B%9F.png "添加联盟")
 ##### 添加联盟说明
 联盟名称没有限制，可以根据实际场景和需求设定，可以设定多个联盟
@@ -90,18 +85,6 @@ json示例：
 #### 组织列表界面预览
 ![组织列表视图](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E8%81%94%E7%9B%9F%E5%88%97%E8%A1%A82.png "Fabric 组织列表视图")
 ##### 添加组织
-json示例：
-<br/>
-`{
-  "cryptoConfigDir": "/home/config/crypto-config",
-  "domainName": "org1.example.com",
-  "leagueId": 1,
-  "mspId": "Org1MSP",
-  "name": "Org1",
-  "ordererDomainName": "example.com",
-  "tls": false,
-  "username": "Admin"
-}`
 ![添加组织](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E6%B7%BB%E5%8A%A0%E7%BB%84%E7%BB%87%E9%A2%84%E8%A7%88.png "添加组织")
 ##### 选取配置文件
 ![选取配置文件](https://raw.githubusercontent.com/Larryleo5/LarryProject/cea70c81d42a965887f5310a3fafc6b59c7b48a5/%E9%80%89%E6%8B%A9%E5%8E%8B%E7%BC%A9%E5%8C%85.png "选取配置文件")
@@ -114,13 +97,6 @@ json示例：
 #### 排序节点列表界面预览
 ![排序节点列表视图](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E6%8E%92%E5%BA%8F%E6%9C%8D%E5%8A%A1%E5%88%97%E8%A1%A8.png "Fabric 排序节点列表视图")
 ##### 添加排序节点
-json示例：
-<br/>
-`{
-  "location": "grpc://10.0.38.95:7050",
-  "name": "orderer.example.com",
-  "orgId": 1
-}`
 ![添加排序节点](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E6%B7%BB%E5%8A%A0%E6%8E%92%E5%BA%8F%E9%A2%84%E8%A7%88.png "添加排序节点")
 ##### 选择组织
 ![选择组织](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E6%B7%BB%E5%8A%A0%E6%8E%92%E5%BA%8F%E9%80%89%E6%8B%A9%E7%BB%84%E7%BB%87.png "选择组织")
@@ -131,16 +107,6 @@ json示例：
 #### 节点列表界面预览
 ![节点列表视图](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E8%8A%82%E7%82%B9%E5%88%97%E8%A1%A8.png "Fabric 节点列表视图")
 ##### 添加节点
-json示例：
-<br/>
-`{
-  "eventHubLocation": "grpc://10.0.38.95::7053",
-  "eventHubName": "peer0.org1.example.com",
-  "eventListener": true,
-  "location": "grpc://10.0.38.95::7051",
-  "name": "peer0.org1.example.com",
-  "orgId": 1
-}`
 ![添加节点](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E8%8A%82%E7%82%B9%E6%B7%BB%E5%8A%A0%E9%A2%84%E8%A7%88.png "添加节点")
 ###### 添加节点说明
 在同一组织下，可以添加多个节点，防止节点宕机造成的服务不可用。本教程中，添加一个节点即可完成链码交互。
@@ -149,12 +115,6 @@ json示例：
 #### 通道列表界面预览
 ![通道列表视图](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E9%80%9A%E9%81%93%E5%88%97%E8%A1%A8.png "Fabric 通道列表视图")
 ##### 添加通道
-json示例：
-<br/>
-`{
-  "name": "mychannel",
-  "peerId": 1
-}`
 ![添加通道](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E9%80%9A%E9%81%93%E6%B7%BB%E5%8A%A0%E9%A2%84%E8%A7%88.png "添加联盟")
 ###### 添加通道说明
 通道是由peer节点创建的，并且一个节点可以创建或者加入多个通道，所以在通道创建时需要选中peer节点
@@ -163,16 +123,6 @@ json示例：
 #### 链码列表界面预览
 ![链码列表视图](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E5%90%88%E7%BA%A6%E5%88%97%E8%A1%A8%E9%A2%84%E8%A7%88.png "Fabric 链码列表视图")
 ##### 添加链码
-json示例：
-<br/>
-`{
-  "channelId": 1,
-  "invokeWaitTime": 120,
-  "name": "mycc",
-  "path": "github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02",
-  "proposalWaitTime": 90000,
-  "version": "1.0"
-}`
 ![添加链码](https://raw.githubusercontent.com/Larryleo5/LarryProject/a82205392eedcd0800cbce5072693b42927b481d/%E5%90%88%E7%BA%A6%E6%B7%BB%E5%8A%A0%E9%A2%84%E8%A7%88.png "添加链码")
 ###### 添加链码说明
 以官方e2e_cli项目为例，启动脚本中 安装链码的指令为例
