@@ -1,15 +1,13 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.bean.Api;
-import cn.aberic.fabric.thrift.MultiServiceProvider;
-import cn.aberic.thrift.chaincode.ChaincodeInfo;
-import cn.aberic.thrift.channel.ChannelInfo;
-import cn.aberic.thrift.league.LeagueInfo;
-import cn.aberic.thrift.org.OrgInfo;
-import cn.aberic.thrift.peer.PeerInfo;
-import cn.aberic.thrift.state.StateInfo;
-import cn.aberic.thrift.trace.TraceInfo;
-import org.apache.thrift.TException;
+import cn.aberic.fabric.bean.State;
+import cn.aberic.fabric.bean.Trace;
+import cn.aberic.fabric.dao.*;
+import cn.aberic.fabric.service.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,44 +35,52 @@ import static cn.aberic.fabric.bean.Api.Intent.INVOKE;
 public class ChaincodeController {
 
     @Resource
-    private MultiServiceProvider multiService;
+    private ChannelService channelService;
+    @Resource
+    private PeerService peerService;
+    @Resource
+    private OrgService orgService;
+    @Resource
+    private LeagueService leagueService;
+    @Resource
+    private ChaincodeService chaincodeService;
+    @Resource
+    private StateService stateService;
+    @Resource
+    private TraceService traceService;
     @Resource
     private Environment env;
 
     @PostMapping(value = "submit")
-    public ModelAndView submit(@ModelAttribute ChaincodeInfo chaincode,
+    public ModelAndView submit(@ModelAttribute Chaincode chaincode,
                                @RequestParam("intent") String intent,
                                @RequestParam(value = "sourceFile", required = false) MultipartFile sourceFile,
                                @RequestParam("id") int id) {
-        try {
-            switch (intent) {
-                case "add":
-                    multiService.getChaincodeService().add(chaincode);
-                    break;
-                case "edit":
-                    chaincode.setId(id);
-                    multiService.getChaincodeService().update(chaincode);
-                    break;
-                case "install":
-                    ChannelInfo channel = multiService.getChannelService().get(chaincode.getChannelId());
-                    PeerInfo peer = multiService.getPeerService().get(channel.getPeerId());
-                    OrgInfo org = multiService.getOrgService().get(peer.getId());
-                    LeagueInfo league = multiService.getLeagueService().get(org.getLeagueId());
-                    chaincode.setLeagueName(league.getName());
-                    chaincode.setOrgName(org.getName());
-                    chaincode.setPeerName(peer.getName());
-                    chaincode.setChannelName(channel.getName());
-                    try {
-                        multiService.getChaincodeService().install(chaincode,
-                                ByteBuffer.wrap(sourceFile.getBytes()),
-                                sourceFile.getOriginalFilename());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-            }
-        } catch (TException e) {
-            e.printStackTrace();
+        switch (intent) {
+            case "add":
+                chaincodeService.add(chaincode);
+                break;
+            case "edit":
+                chaincode.setId(id);
+                chaincodeService.update(chaincode);
+                break;
+            case "install":
+                Channel channel = channelService.get(chaincode.getChannelId());
+                Peer peer = peerService.get(channel.getPeerId());
+                Org org = orgService.get(peer.getId());
+                League league = leagueService.get(org.getLeagueId());
+                chaincode.setLeagueName(league.getName());
+                chaincode.setOrgName(org.getName());
+                chaincode.setPeerName(peer.getName());
+                chaincode.setChannelName(channel.getName());
+                try {
+                    chaincodeService.install(chaincode,
+                            ByteBuffer.wrap(sourceFile.getBytes()),
+                            sourceFile.getOriginalFilename());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
         return list();
     }
@@ -86,16 +92,8 @@ public class ChaincodeController {
         modelAndView.addObject("intentLittle", "新建");
         modelAndView.addObject("submit", "新增");
         modelAndView.addObject("intent", "add");
-        ChaincodeInfo chaincode = new ChaincodeInfo();
-        List<ChannelInfo> channels;
-        try {
-            channels = multiService.getChannelFullList();
-        } catch (TException e) {
-            channels = new ArrayList<>();
-            e.printStackTrace();
-        }
-        modelAndView.addObject("chaincode", chaincode);
-        modelAndView.addObject("channels", channels);
+        modelAndView.addObject("chaincode", new Chaincode());
+        modelAndView.addObject("channels", getChannelFullList());
         return modelAndView;
     }
 
@@ -106,35 +104,23 @@ public class ChaincodeController {
         modelAndView.addObject("intentLittle", "安装");
         modelAndView.addObject("submit", "安装");
         modelAndView.addObject("intent", "install");
-        ChaincodeInfo chaincode = new ChaincodeInfo();
-        List<ChannelInfo> channels;
-        try {
-            channels = multiService.getChannelFullList();
-        } catch (TException e) {
-            channels = new ArrayList<>();
-            e.printStackTrace();
-        }
-        modelAndView.addObject("chaincode", chaincode);
-        modelAndView.addObject("channels", channels);
+        modelAndView.addObject("chaincode", new Chaincode());
+        modelAndView.addObject("channels", getChannelFullList());
         return modelAndView;
     }
 
     @PostMapping(value = "instantiate")
     public ModelAndView instantiate(@ModelAttribute Api api, @RequestParam("chaincodeId") int id) {
-        try {
-            ChaincodeInfo chaincode = multiService.getChaincodeService().get(id);
-            ChannelInfo channel = multiService.getChannelService().get(chaincode.getChannelId());
-            PeerInfo peer = multiService.getPeerService().get(channel.getPeerId());
-            OrgInfo org = multiService.getOrgService().get(peer.getId());
-            LeagueInfo league = multiService.getLeagueService().get(org.getLeagueId());
-            chaincode.setLeagueName(league.getName());
-            chaincode.setOrgName(org.getName());
-            chaincode.setPeerName(peer.getName());
-            chaincode.setChannelName(channel.getName());
-            multiService.getChaincodeService().instantiate(chaincode, Arrays.asList(api.exec.split(",")));
-        } catch (TException e) {
-            e.printStackTrace();
-        }
+        Chaincode chaincode = chaincodeService.get(id);
+        Channel channel = channelService.get(chaincode.getChannelId());
+        Peer peer = peerService.get(channel.getPeerId());
+        Org org = orgService.get(peer.getId());
+        League league = leagueService.get(org.getLeagueId());
+        chaincode.setLeagueName(league.getName());
+        chaincode.setOrgName(org.getName());
+        chaincode.setPeerName(peer.getName());
+        chaincode.setChannelName(channel.getName());
+        chaincodeService.instantiate(chaincode, Arrays.asList(api.exec.split(",")));
         return new ModelAndView(new RedirectView("list"));
     }
 
@@ -145,26 +131,18 @@ public class ChaincodeController {
         modelAndView.addObject("intentLittle", "编辑");
         modelAndView.addObject("submit", "修改");
         modelAndView.addObject("intent", "edit");
-        ChaincodeInfo chaincode;
-        List<ChannelInfo> channels;
-        try {
-            chaincode = multiService.getChaincodeService().get(id);
-            PeerInfo peer = multiService.getPeerService().get(multiService.getChannelService().get(chaincode.getChannelId()).getPeerId());
-            OrgInfo org = multiService.getOrgService().get(peer.getId());
-            LeagueInfo league = multiService.getLeagueService().get(org.getLeagueId());
-            chaincode.setPeerName(peer.getName());
-            chaincode.setOrgName(org.getName());
-            chaincode.setLeagueName(league.getName());
-            channels = multiService.getChannelService().listById(peer.getId());
-            for (ChannelInfo channel : channels) {
-                channel.setPeerName(peer.getName());
-                channel.setOrgName(org.getName());
-                channel.setLeagueName(league.getName());
-            }
-        } catch (TException e) {
-            chaincode = new ChaincodeInfo();
-            channels = new ArrayList<>();
-            e.printStackTrace();
+        Chaincode chaincode = chaincodeService.get(id);
+        Peer peer = peerService.get(channelService.get(chaincode.getChannelId()).getPeerId());
+        Org org = orgService.get(peer.getId());
+        League league = leagueService.get(org.getLeagueId());
+        chaincode.setPeerName(peer.getName());
+        chaincode.setOrgName(org.getName());
+        chaincode.setLeagueName(league.getName());
+        List<Channel> channels = channelService.listById(peer.getId());
+        for (Channel channel : channels) {
+            channel.setPeerName(peer.getName());
+            channel.setOrgName(org.getName());
+            channel.setLeagueName(league.getName());
         }
         modelAndView.addObject("chaincode", chaincode);
         modelAndView.addObject("channels", channels);
@@ -196,13 +174,13 @@ public class ChaincodeController {
         List<Api> apis = new ArrayList<>();
         Api apiInvoke = new Api("执行智能合约", INVOKE.getIndex());
         Api apiQuery = new Api("查询智能合约", Api.Intent.QUERY.getIndex());
-        Api apiInfo = new Api("查询当前链信息", Api.Intent.INFO.getIndex());
+        Api api = new Api("查询当前链信息", Api.Intent.INFO.getIndex());
         Api apiHash = new Api("根据交易hash查询区块", Api.Intent.HASH.getIndex());
         Api apiNumber = new Api("根据交易区块高度查询区块", Api.Intent.NUMBER.getIndex());
         Api apiTxid = new Api("根据交易ID查询区块", Api.Intent.TXID.getIndex());
         apis.add(apiInvoke);
         apis.add(apiQuery);
-        apis.add(apiInfo);
+        apis.add(api);
         apis.add(apiHash);
         apis.add(apiNumber);
         apis.add(apiTxid);
@@ -220,47 +198,42 @@ public class ChaincodeController {
         Api.Intent intent = Api.Intent.get(api.index);
         String result = "";
         String url = String.format("http://localhost:%s/%s", env.getProperty("server.port"), intent.getApiUrl());
-        try {
-            switch (intent) {
-                case INVOKE:
-                    StateInfo state = multiService.getState(id, api);
-                    result = multiService.getStateService().invoke(state);
-                    modelAndView.addObject("jsonStr", multiService.formatState(state));
-                    modelAndView.addObject("method", "POST");
-                    break;
-                case QUERY:
-                    state = multiService.getState(id, api);
-                    result = multiService.getStateService().query(state);
-                    modelAndView.addObject("jsonStr", multiService.formatState(state));
-                    modelAndView.addObject("method", "POST");
-                    break;
-                case INFO:
-                    result = multiService.getTraceService().queryBlockChainInfo(id);
-                    modelAndView.addObject("jsonStr", "");
-                    modelAndView.addObject("method", "GET");
-                    break;
-                case HASH:
-                    TraceInfo trace = multiService.getTrace(id, api);
-                    result = multiService.getTraceService().queryBlockByHash(trace);
-                    modelAndView.addObject("jsonStr", multiService.formatTrace(trace));
-                    modelAndView.addObject("method", "POST");
-                    break;
-                case NUMBER:
-                    trace = multiService.getTrace(id, api);
-                    result = multiService.getTraceService().queryBlockByNumber(trace);
-                    modelAndView.addObject("jsonStr", multiService.formatTrace(trace));
-                    modelAndView.addObject("method", "POST");
-                    break;
-                case TXID:
-                    trace = multiService.getTrace(id, api);
-                    result = multiService.getTraceService().queryBlockByTransactionID(trace);
-                    modelAndView.addObject("jsonStr", multiService.formatTrace(trace));
-                    modelAndView.addObject("method", "POST");
-                    break;
-            }
-        } catch (TException e) {
-            result = String.format("error:%s", e.getMessage());
-            e.printStackTrace();
+        switch (intent) {
+            case INVOKE:
+                State state = getState(id, api);
+                result = stateService.invoke(state);
+                modelAndView.addObject("jsonStr", formatState(state));
+                modelAndView.addObject("method", "POST");
+                break;
+            case QUERY:
+                state = getState(id, api);
+                result = stateService.query(state);
+                modelAndView.addObject("jsonStr", formatState(state));
+                modelAndView.addObject("method", "POST");
+                break;
+            case INFO:
+                result = traceService.queryBlockChainInfo(id);
+                modelAndView.addObject("jsonStr", "");
+                modelAndView.addObject("method", "GET");
+                break;
+            case HASH:
+                Trace trace = getTrace(id, api);
+                result = traceService.queryBlockByHash(trace);
+                modelAndView.addObject("jsonStr", formatTrace(trace));
+                modelAndView.addObject("method", "POST");
+                break;
+            case NUMBER:
+                trace = getTrace(id, api);
+                result = traceService.queryBlockByNumber(trace);
+                modelAndView.addObject("jsonStr", formatTrace(trace));
+                modelAndView.addObject("method", "POST");
+                break;
+            case TXID:
+                trace = getTrace(id, api);
+                result = traceService.queryBlockByTransactionID(trace);
+                modelAndView.addObject("jsonStr", formatTrace(trace));
+                modelAndView.addObject("method", "POST");
+                break;
         }
         modelAndView.addObject("result", result);
         modelAndView.addObject("api", api);
@@ -271,17 +244,54 @@ public class ChaincodeController {
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("chaincodes");
-        try {
-            List<ChaincodeInfo> chaincodes = multiService.getChaincodeService().listAll();
-            for (ChaincodeInfo chaincode : chaincodes) {
-                chaincode.setChannelName(multiService.getPeerService().get(chaincode.getChannelId()).getName());
-            }
-            modelAndView.addObject("chaincodes", chaincodes);
-        } catch (TException e) {
-            modelAndView.addObject("chaincodes", new ArrayList<>());
-            e.printStackTrace();
+        List<Chaincode> chaincodes = chaincodeService.listAll();
+        for (Chaincode chaincode : chaincodes) {
+            chaincode.setChannelName(peerService.get(chaincode.getChannelId()).getName());
         }
+        modelAndView.addObject("chaincodes", chaincodes);
         return modelAndView;
+    }
+
+    private List<Channel> getChannelFullList() {
+        List<Channel> channels = channelService.listAll();
+        for (Channel channel : channels) {
+            Peer peer = peerService.get(channel.getPeerId());
+            channel.setPeerName(peer.getName());
+            Org org = orgService.get(peer.getId());
+            channel.setOrgName(org.getName());
+            League league = leagueService.get(org.getLeagueId());
+            channel.setLeagueName(league.getName());
+        }
+        return channels;
+    }
+
+    private State getState(int id, Api api) {
+        State state = new State();
+        state.setId(id);
+        state.setStrArray(Arrays.asList(api.exec.trim().split(",")));
+        return state;
+    }
+
+    private String formatState(State state) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", state.getId());
+        JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(state.getStrArray()));
+        jsonObject.put("strArray", jsonArray);
+        return jsonObject.toJSONString();
+    }
+
+    private Trace getTrace(int id, Api api) {
+        Trace trace = new Trace();
+        trace.setId(id);
+        trace.setTrace(api.exec.trim());
+        return trace;
+    }
+
+    private String formatTrace(Trace trace) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", trace.getId());
+        jsonObject.put("trace", trace.getTrace());
+        return jsonObject.toJSONString();
     }
 
 }

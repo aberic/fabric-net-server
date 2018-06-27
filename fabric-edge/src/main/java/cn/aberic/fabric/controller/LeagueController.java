@@ -1,14 +1,13 @@
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.thrift.MultiServiceProvider;
-import cn.aberic.thrift.league.LeagueInfo;
-import org.apache.thrift.TException;
+import cn.aberic.fabric.dao.League;
+import cn.aberic.fabric.service.LeagueService;
+import cn.aberic.fabric.service.OrgService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,24 +21,22 @@ import java.util.List;
 public class LeagueController {
 
     @Resource
-    private MultiServiceProvider multiService;
+    private OrgService orgService;
+    @Resource
+    private LeagueService leagueService;
 
     @PostMapping(value = "submit")
-    public ModelAndView submit(@ModelAttribute LeagueInfo league,
+    public ModelAndView submit(@ModelAttribute League league,
                                @RequestParam("intent") String intent,
                                @RequestParam("id") int id) {
-        try {
-            switch (intent) {
-                case "add":
-                    multiService.getLeagueService().add(league);
-                    break;
-                case "edit":
-                    league.setId(id);
-                    multiService.getLeagueService().update(league);
-                    break;
-            }
-        } catch (TException e) {
-            e.printStackTrace();
+        switch (intent) {
+            case "add":
+                leagueService.add(league);
+                break;
+            case "edit":
+                league.setId(id);
+                leagueService.update(league);
+                break;
         }
         return new ModelAndView(new RedirectView("list"));
     }
@@ -51,7 +48,7 @@ public class LeagueController {
         modelAndView.addObject("intentLittle", "新建");
         modelAndView.addObject("submit", "新增");
         modelAndView.addObject("intent", "add");
-        modelAndView.addObject("league", new LeagueInfo());
+        modelAndView.addObject("league", new League());
         return modelAndView;
     }
 
@@ -62,25 +59,14 @@ public class LeagueController {
         modelAndView.addObject("intentLittle", "编辑");
         modelAndView.addObject("submit", "修改");
         modelAndView.addObject("intent", "edit");
-        LeagueInfo league;
-        try {
-            league = multiService.getLeagueService().get(id);
-        } catch (TException e) {
-            league = new LeagueInfo();
-            e.printStackTrace();
-        }
-        modelAndView.addObject("league", league);
+        modelAndView.addObject("league", leagueService.get(id));
         return modelAndView;
     }
 
     @PostMapping(value = "update")
-    public String update(@RequestBody LeagueInfo league) {
-        try {
-            if (multiService.getLeagueService().update(league) > 0) {
-                return "success";
-            }
-        } catch (TException e) {
-            e.printStackTrace();
+    public String update(@RequestBody League league) {
+        if (leagueService.update(league) > 0) {
+            return "success";
         }
         return "fail";
     }
@@ -88,16 +74,11 @@ public class LeagueController {
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("leagues");
-        try {
-            List<LeagueInfo> leagues = multiService.getLeagueService().listAll();
-            for (LeagueInfo league : leagues) {
-                league.setOrgCount(multiService.getOrgService().countById(league.getId()));
-            }
-            modelAndView.addObject("leagues", leagues);
-        } catch (TException e) {
-            modelAndView.addObject("leagues", new ArrayList<>());
-            e.printStackTrace();
+        List<League> leagues = leagueService.listAll();
+        for (League league : leagues) {
+            league.setOrgCount(orgService.countById(league.getId()));
         }
+        modelAndView.addObject("leagues", leagues);
         return modelAndView;
     }
 

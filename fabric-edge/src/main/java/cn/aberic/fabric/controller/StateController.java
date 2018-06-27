@@ -1,8 +1,7 @@
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.thrift.MultiServiceProvider;
-import cn.aberic.thrift.state.StateInfo;
-import org.apache.thrift.TException;
+import cn.aberic.fabric.bean.State;
+import cn.aberic.fabric.service.StateService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,26 +17,16 @@ import javax.annotation.Resource;
 public class StateController {
 
     @Resource
-    private MultiServiceProvider multiService;
+    private StateService stateService;
 
     @PostMapping(value = "invoke")
-    public String invoke(@RequestBody StateInfo stateInfo) {
-        try {
-            return multiService.getStateService().invoke(stateInfo);
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-        return "";
+    public String invoke(@RequestBody State state) {
+        return stateService.invoke(state);
     }
 
     @PostMapping(value = "query")
-    public String query(@RequestBody StateInfo stateInfo) {
-        try {
-            return multiService.getStateService().query(stateInfo);
-        } catch (TException e) {
-            e.printStackTrace();
-        }
-        return "";
+    public String query(@RequestBody State state) {
+        return stateService.query(state);
     }
 
 }

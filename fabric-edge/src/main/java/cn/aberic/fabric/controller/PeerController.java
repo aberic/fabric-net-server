@@ -1,16 +1,17 @@
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.thrift.MultiServiceProvider;
-import cn.aberic.thrift.league.LeagueInfo;
-import cn.aberic.thrift.org.OrgInfo;
-import cn.aberic.thrift.peer.PeerInfo;
-import org.apache.thrift.TException;
+import cn.aberic.fabric.dao.League;
+import cn.aberic.fabric.dao.Org;
+import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.service.ChannelService;
+import cn.aberic.fabric.service.LeagueService;
+import cn.aberic.fabric.service.OrgService;
+import cn.aberic.fabric.service.PeerService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,24 +25,26 @@ import java.util.List;
 public class PeerController {
 
     @Resource
-    private MultiServiceProvider multiService;
+    private PeerService peerService;
+    @Resource
+    private OrgService orgService;
+    @Resource
+    private LeagueService leagueService;
+    @Resource
+    private ChannelService channelService;
 
     @PostMapping(value = "submit")
-    public ModelAndView submit(@ModelAttribute PeerInfo peer,
+    public ModelAndView submit(@ModelAttribute Peer peer,
                                @RequestParam("intent") String intent,
                                @RequestParam("id") int id) {
-        try {
-            switch (intent) {
-                case "add":
-                    multiService.getPeerService().add(peer);
-                    break;
-                case "edit":
-                    peer.setId(id);
-                    multiService.getPeerService().update(peer);
-                    break;
-            }
-        } catch (TException e) {
-            e.printStackTrace();
+        switch (intent) {
+            case "add":
+                peerService.add(peer);
+                break;
+            case "edit":
+                peer.setId(id);
+                peerService.update(peer);
+                break;
         }
         return new ModelAndView(new RedirectView("list"));
     }
@@ -53,9 +56,8 @@ public class PeerController {
         modelAndView.addObject("intentLittle", "新建");
         modelAndView.addObject("submit", "新增");
         modelAndView.addObject("intent", "add");
-        modelAndView.addObject("peer", new PeerInfo());
-        List<OrgInfo> orgs = multiService.getForPeerAndOrderer();
-        modelAndView.addObject("orgs", orgs);
+        modelAndView.addObject("peer", new Peer());
+        modelAndView.addObject("orgs", getForPeerAndOrderer());
         return modelAndView;
     }
 
@@ -66,19 +68,11 @@ public class PeerController {
         modelAndView.addObject("intentLittle", "编辑");
         modelAndView.addObject("submit", "修改");
         modelAndView.addObject("intent", "edit");
-        PeerInfo peer;
-        List<OrgInfo> orgs;
-        try {
-            peer = multiService.getPeerService().get(id);
-            LeagueInfo league = multiService.getLeagueService().get(multiService.getOrgService().get(peer.getOrgId()).getLeagueId());
-            orgs = multiService.getOrgService().listById(league.getId());
-            for (OrgInfo org : orgs) {
-                org.setLeagueName(league.getName());
-            }
-        } catch (TException e) {
-            peer = new PeerInfo();
-            orgs = new ArrayList<>();
-            e.printStackTrace();
+        Peer peer = peerService.get(id);
+        League league = leagueService.get(orgService.get(peer.getOrgId()).getLeagueId());
+        List<Org> orgs = orgService.listById(league.getId());
+        for (Org org : orgs) {
+            org.setLeagueName(league.getName());
         }
         modelAndView.addObject("peer", peer);
         modelAndView.addObject("orgs", orgs);
@@ -88,18 +82,21 @@ public class PeerController {
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("peers");
-        try {
-            List<PeerInfo> peers = multiService.getPeerService().listAll();
-            for (PeerInfo peer : peers) {
-                peer.setOrgName(multiService.getOrgService().get(peer.getOrgId()).getName());
-                peer.setChannelCount(multiService.getChannelService().countById(peer.getId()));
-            }
-            modelAndView.addObject("peers", peers);
-        } catch (TException e) {
-            modelAndView.addObject("peers", new ArrayList<>());
-            e.printStackTrace();
+        List<Peer> peers = peerService.listAll();
+        for (Peer peer : peers) {
+            peer.setOrgName(orgService.get(peer.getOrgId()).getName());
+            peer.setChannelCount(channelService.countById(peer.getId()));
         }
+        modelAndView.addObject("peers", peers);
         return modelAndView;
+    }
+
+    private List<Org> getForPeerAndOrderer() {
+        List<Org> orgs = orgService.listAll();
+        for (Org org : orgs) {
+            org.setLeagueName(leagueService.get(org.getLeagueId()).getName());
+        }
+        return orgs;
     }
 
 }
