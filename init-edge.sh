@@ -10,9 +10,9 @@ echo
 ## 启动SDK
 startEdge () {
     ## 启动spring-boot服务
-    nohup java -jar /home/fabric-edge-1.0-RC1.jar > /home/fabric-edge-1.0-RC1.nohup 2>&1 &
+    nohup java -jar /home/fabric-edge-1.0-RC2.jar > /home/fabric-edge-1.0-RC2.nohup 2>&1 &
 
-    tail -f logs /home/fabric-edge-1.0-RC1.nohup
+    tail -f logs /home/fabric-edge-1.0-RC2.nohup
 }
 
 startEdge
