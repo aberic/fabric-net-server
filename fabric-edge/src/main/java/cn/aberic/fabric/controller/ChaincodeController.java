@@ -73,13 +73,7 @@ public class ChaincodeController {
                 chaincode.setOrgName(org.getName());
                 chaincode.setPeerName(peer.getName());
                 chaincode.setChannelName(channel.getName());
-                try {
-                    chaincodeService.install(chaincode,
-                            ByteBuffer.wrap(sourceFile.getBytes()),
-                            sourceFile.getOriginalFilename());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                chaincodeService.install(chaincode, sourceFile);
                 break;
         }
         return list();
