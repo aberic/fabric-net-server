@@ -24,6 +24,15 @@ public interface ChannelMapper {
     @Select("select count(name) from channel")
     int countAll();
 
+    @Select("select rowid,name,peer_id,date from channel where name=#{c.name} and peer_id=#{c.peerId}")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "peerId", column = "peer_id"),
+            @Result(property = "date", column = "date")
+    })
+    Channel check(@Param("c") Channel channel);
+
     @Select("select rowid,name,peer_id,date from channel where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
