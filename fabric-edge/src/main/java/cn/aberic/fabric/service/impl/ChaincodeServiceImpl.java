@@ -11,12 +11,14 @@ import cn.aberic.fabric.utils.FileUtil;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.nio.ByteBuffer;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service("chaincodeService")
 public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
@@ -36,11 +38,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
 
     @Override
     public int add(Chaincode chaincode) {
-        if (StringUtils.isEmpty(chaincode.getName()) ||
-                StringUtils.isEmpty(chaincode.getPath()) ||
-                StringUtils.isEmpty(chaincode.getVersion()) ||
-                chaincode.getProposalWaitTime() == 0 ||
-                chaincode.getInvokeWaitTime() == 0) {
+        if (!verify(chaincode) || null != chaincodeMapper.check(chaincode)) {
             return 0;
         }
         chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
@@ -48,25 +46,36 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     }
 
     @Override
-    public String install(Chaincode chaincode, ByteBuffer sourceBuff, String sourceFileName) {
-//        if (null == sourceBuff) {
-//            return responseFail("install error, source mush be uploaded");
-//        }
-//        String chaincodeSource = String.format("%s/%s/%s/%s/%s/chaincode", env.getProperty("config.dir"),
-//                chaincode.getLeagueName(),
-//                chaincode.getOrgName(),
-//                chaincode.getPeerName(),
-//                chaincode.getChannelName());
-//        String chaincodePath = sourceFileName.split("\\.")[0];
-//        chaincode.setSource(chaincodeSource);
-//        chaincode.setPath(chaincodePath);
-//        chaincode.setPolicy(chaincodeSource + File.separator + chaincodePath + File.separator + "policy.yaml");
-//        chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
-//        FileUtil.save(sourceBuff, sourceFileName, chaincodeSource);
-//        chaincodeMapper.add(chaincode);
-//        chaincode.setId(chaincodeMapper.getByName(chaincode.getName()).getId());
-//        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
-        return "";
+    public String install(Chaincode chaincode, MultipartFile file) {
+        if (!verify(chaincode) || null == file || null != chaincodeMapper.check(chaincode)) {
+            return responseFail("install error, param has none value and source mush be uploaded or had the same chaincode");
+        }
+        String chaincodeSource = String.format("%s%s%s%s%s%s%s%s%s%schaincode",
+                env.getProperty("config.dir"),
+                File.separator,
+                chaincode.getLeagueName(),
+                File.separator,
+                chaincode.getOrgName(),
+                File.separator,
+                chaincode.getPeerName(),
+                File.separator,
+                chaincode.getChannelName(),
+                File.separator);
+        String chaincodePath = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
+        String childrenPath = chaincodeSource + File.separator + Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
+        chaincode.setSource(chaincodeSource);
+        chaincode.setPath(chaincodePath);
+        chaincode.setPolicy(String.format("%s%spolicy.yaml", childrenPath, File.separator));
+        chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        try {
+            FileUtil.unZipAndSave(file, chaincodeSource, childrenPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return responseFail("source unzip fail");
+        }
+        chaincodeMapper.add(chaincode);
+        chaincode.setId(chaincodeMapper.check(chaincode).getId());
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
     }
 
     @Override
@@ -137,5 +146,13 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             e.printStackTrace();
             return responseFail(String.format("Request failed： %s", e.getMessage()));
         }
+    }
+
+    private boolean verify(Chaincode chaincode) {
+        return !StringUtils.isEmpty(chaincode.getName()) &&
+                !StringUtils.isEmpty(chaincode.getPath()) &&
+                !StringUtils.isEmpty(chaincode.getVersion()) &&
+                chaincode.getProposalWaitTime() != 0 &&
+                chaincode.getInvokeWaitTime() != 0;
     }
 }
