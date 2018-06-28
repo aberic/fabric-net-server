@@ -38,7 +38,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
 
     @Override
     public int add(Chaincode chaincode) {
-        if (!verify(chaincode) || null != chaincodeMapper.check(chaincode)) {
+        if (verify(chaincode) || null != chaincodeMapper.check(chaincode)) {
             return 0;
         }
         chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
@@ -149,10 +149,10 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     }
 
     private boolean verify(Chaincode chaincode) {
-        return !StringUtils.isEmpty(chaincode.getName()) &&
-                !StringUtils.isEmpty(chaincode.getPath()) &&
-                !StringUtils.isEmpty(chaincode.getVersion()) &&
-                chaincode.getProposalWaitTime() != 0 &&
-                chaincode.getInvokeWaitTime() != 0;
+        return StringUtils.isEmpty(chaincode.getName()) ||
+                StringUtils.isEmpty(chaincode.getPath()) ||
+                StringUtils.isEmpty(chaincode.getVersion()) ||
+                chaincode.getProposalWaitTime() == 0 ||
+                chaincode.getInvokeWaitTime() == 0;
     }
 }
