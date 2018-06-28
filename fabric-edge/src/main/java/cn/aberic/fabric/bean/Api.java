@@ -49,11 +49,11 @@ public class Api {
     }
 
     /** 接口名称 */
-    public String name = "";
+    private String name = "";
     /** 接口意图 */
-    public int index = 0;
+    private int index = 0;
     /** 接口执行参数 */
-    public String exec = "";
+    private String exec = "";
 
     public Api() {
     }
