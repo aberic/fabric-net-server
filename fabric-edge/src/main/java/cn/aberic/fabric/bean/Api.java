@@ -15,12 +15,13 @@ public class Api {
         HASH(4, "trace/hash"),
         NUMBER(5, "trace/number"),
         TXID(6, "trace/txid"),
-        INSTANTIATE(7, "chaincode/instantiate");
+        INSTANTIATE(7, "chaincode/instantiate"),
+        UPGRADE(7, "chaincode/upgrade");
 
         private int index;
         private String apiUrl;
 
-        private Intent(int index, String apiUrl) {
+        Intent(int index, String apiUrl) {
             this.index = index;
             this.apiUrl = apiUrl;
         }
@@ -36,10 +37,6 @@ public class Api {
 
         public String getApiUrl() {
             return apiUrl;
-        }
-
-        public void setApiUrl(String apiUrl) {
-            this.apiUrl = apiUrl;
         }
 
         public int getIndex() {
