@@ -79,13 +79,23 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     }
 
     @Override
-    public String instantiate(Chaincode chaincodeInfo, List<String> strArray) {
+    public String instantiate(Chaincode chaincode, List<String> strArray) {
         int size = strArray.size();
         String[] args = new String[size];
         for (int i = 0; i < size; i++) {
             args[i] = strArray.get(i);
         }
-        return chainCode(chaincodeInfo.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTANTIATE, args);
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTANTIATE, args);
+    }
+
+    @Override
+    public String upgrade(Chaincode chaincode, List<String> strArray) {
+        int size = strArray.size();
+        String[] args = new String[size];
+        for (int i = 0; i < size; i++) {
+            args[i] = strArray.get(i);
+        }
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.UPGRADE, args);
     }
 
     @Override
@@ -120,7 +130,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     }
 
     enum ChainCodeIntent {
-        INSTALL, INSTANTIATE
+        INSTALL, INSTANTIATE, UPGRADE
     }
 
     private String chainCode(int chaincodeId, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
@@ -135,6 +145,9 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                     break;
                 case INSTANTIATE:
                     resultMap = manager.instantiate(args);
+                    break;
+                case UPGRADE:
+                    resultMap = manager.upgrade(args);
                     break;
             }
             if (resultMap.get("code").equals("error")) {
