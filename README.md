@@ -49,6 +49,7 @@ api执行结果及使用方案界面预览
 
 <br>
 <br><br>
+
 ## 使用
 1、确定Linux内核在`3.10`及以上。
 <br>
@@ -61,7 +62,10 @@ api执行结果及使用方案界面预览
 5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动镜像，如不需要观察日志，则在命令最后追加`-d`即可。
 <br>
 6、服务启动完成后，通过http://localhost:port 访问即可。
+<br>
+7、后台部署可参考由微信群的[Larryleo5](https://github.com/Larryleo5)编写的[详细说明文档](https://github.com/aberic/fabric-net-server/blob/master/operationDocument.md)。
 <br><br>
+
 #### docker-fabric-net-server.yaml说明
 
 ```yaml
