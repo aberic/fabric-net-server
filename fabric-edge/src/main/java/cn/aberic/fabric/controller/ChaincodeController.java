@@ -15,14 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static cn.aberic.fabric.bean.Api.Intent.INSTANTIATE;
 import static cn.aberic.fabric.bean.Api.Intent.INVOKE;
+import static cn.aberic.fabric.bean.Api.Intent.UPGRADE;
 
 /**
  * 描述：
@@ -114,7 +114,16 @@ public class ChaincodeController {
         chaincode.setOrgName(org.getName());
         chaincode.setPeerName(peer.getName());
         chaincode.setChannelName(channel.getName());
-        chaincodeService.instantiate(chaincode, Arrays.asList(api.exec.split(",")));
+
+        Api.Intent intent = Api.Intent.get(api.getIndex());
+        switch (Objects.requireNonNull(intent)) {
+            case INSTANTIATE:
+                chaincodeService.instantiate(chaincode, Arrays.asList(api.getExec().split(",")));
+                break;
+            case UPGRADE:
+                chaincodeService.upgrade(chaincode, Arrays.asList(api.getExec().split(",")));
+                break;
+        }
         return new ModelAndView(new RedirectView("list"));
     }
 
@@ -157,6 +166,20 @@ public class ChaincodeController {
         return modelAndView;
     }
 
+    @GetMapping(value = "upgrade")
+    public ModelAndView upgrade(@RequestParam("chaincodeId") int chaincodeId) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeInstantiate");
+        modelAndView.addObject("intentLarge", "升级合约");
+        modelAndView.addObject("intentLittle", "升级");
+        modelAndView.addObject("submit", "升级");
+        modelAndView.addObject("chaincodeId", chaincodeId);
+
+        Api apiInstantiate = new Api("升级智能合约", UPGRADE.getIndex());
+
+        modelAndView.addObject("api", apiInstantiate);
+        return modelAndView;
+    }
+
     @GetMapping(value = "verify")
     public ModelAndView verify(@RequestParam("chaincodeId") int chaincodeId) {
         ModelAndView modelAndView = new ModelAndView("chaincodeVerify");
@@ -189,9 +212,9 @@ public class ChaincodeController {
     @PostMapping(value = "verify")
     public ModelAndView verify(@ModelAttribute Api api, @RequestParam("chaincodeId") int id) {
         ModelAndView modelAndView = new ModelAndView("chaincodeResult");
-        Api.Intent intent = Api.Intent.get(api.index);
+        Api.Intent intent = Api.Intent.get(api.getIndex());
         String result = "";
-        String url = String.format("http://localhost:%s/%s", env.getProperty("server.port"), intent.getApiUrl());
+        String url = String.format("http://localhost:%s/%s", env.getProperty("server.port"), Objects.requireNonNull(intent).getApiUrl());
         switch (intent) {
             case INVOKE:
                 State state = getState(id, api);
@@ -262,7 +285,7 @@ public class ChaincodeController {
     private State getState(int id, Api api) {
         State state = new State();
         state.setId(id);
-        state.setStrArray(Arrays.asList(api.exec.trim().split(",")));
+        state.setStrArray(Arrays.asList(api.getExec().trim().split(",")));
         return state;
     }
 
@@ -277,7 +300,7 @@ public class ChaincodeController {
     private Trace getTrace(int id, Api api) {
         Trace trace = new Trace();
         trace.setId(id);
-        trace.setTrace(api.exec.trim());
+        trace.setTrace(api.getExec().trim());
         return trace;
     }
 
