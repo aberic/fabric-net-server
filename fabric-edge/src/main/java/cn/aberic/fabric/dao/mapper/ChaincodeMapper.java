@@ -26,7 +26,7 @@ public interface ChaincodeMapper {
     @Select("select count(name) from chaincode")
     int countAll();
 
-    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode " +
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source,policy from chaincode " +
             "where name=#{c.name} and path=#{c.path} and version=#{c.version} and channel_id=#{c.channelId}")
     @Results({
             @Result(property = "id", column = "rowid"),
@@ -42,7 +42,7 @@ public interface ChaincodeMapper {
     })
     Chaincode check(@Param("c") Chaincode chaincode);
 
-    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode where rowid=#{id}")
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source,policy from chaincode where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -57,7 +57,7 @@ public interface ChaincodeMapper {
     })
     Chaincode get(@Param("id") int id);
 
-    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode where channel_id=#{id}")
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source,policy from chaincode where channel_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -72,7 +72,7 @@ public interface ChaincodeMapper {
     })
     List<Chaincode> list(@Param("id") int id);
 
-    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date from chaincode")
+    @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source,policy from chaincode")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
