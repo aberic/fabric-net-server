@@ -11,22 +11,24 @@ import java.util.List;
  */
 public interface ChaincodeService {
 
-     int add(Chaincode chaincode);
+    int add(Chaincode chaincode);
 
-     String install(Chaincode chaincode, MultipartFile file);
+    String install(Chaincode chaincode, MultipartFile file);
 
-     String instantiate(Chaincode chaincode, List<String> strArray);
+    String instantiate(Chaincode chaincode, List<String> strArray);
 
-     int update(Chaincode chaincode);
+    String upgrade(Chaincode chaincode, List<String> strArray);
 
-     List<Chaincode> listAll();
+    int update(Chaincode chaincode);
 
-     List<Chaincode> listById(int id);
+    List<Chaincode> listAll();
+
+    List<Chaincode> listById(int id);
 
     Chaincode get(int id);
 
-     int countById(int id);
+    int countById(int id);
 
-     int count();
-    
+    int count();
+
 }
