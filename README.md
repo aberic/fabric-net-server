@@ -1,14 +1,14 @@
-**注意：** 这是一个依赖于已经部署好的HyperLedger Fabric项目，关于前者搭建部署的方案可以通过参考[从零开始](https://www.cnblogs.com/aberic/category/1148898.html)或购买[开发实战](https://item.jd.com/12381034.html?dist=jd)等途径学习。目前这些都还不在当前项目的支持范围内，未来也许会计划开发一套基于Fabric深度定制的一键部署及管理平台（非K8S）。
+**注意：** 这是一个依赖于已经部署好的HyperLedger Fabric项目，关于前者搭建部署的方案可以通过参考[从零开始](https://www.cnblogs.com/aberic/category/1148898.html)或购买[开发实战](https://item.jd.com/12381034.html?dist=jd)等途径学习。Fabric环境部署等都不在当前项目的支持范围内，未来也许会计划开发一套基于Fabric深度定制的一键部署及管理平台（非K8S）。
 <br>
 # Fabric Net Server [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg)](http://www.cnblogs.com/aberic/)
-[![version](https://img.shields.io/badge/version-1.0RC1-green.svg)](http://www.cnblogs.com/aberic/)
+[![version](https://img.shields.io/badge/version-1.0RC2-green.svg)](https://github.com/aberic/fabric-net-server/tree/1.0-RC2)
 [![apache 2](https://img.shields.io/hexpm/l/plug.svg?longCache=true)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
 [![codebeat badge](https://codebeat.co/badges/92aa24de-8a82-432b-83fb-ec7413615952)](https://codebeat.co/projects/github-com-aberic-fabric-net-server-master)
 [![Join the chat at https://gitter.im/fabric-net-server/Lobby](https://badges.gitter.im/fabric-net-server/Lobby.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <br><br>
-本项目目前提供一套Fabric网络后台服务，包括对已经在Fabric网络中创建好的org、peer、channel、chaincode等进行网络新增，并基于已经新增成功的内容提供[REST API](https://github.com/aberic/fabric-net-server/blob/master/API_DEMO.md)服务，目前仅支持智能合约的执行、查询以及溯源功能，未来计划支持后台动态加入通道、安装合约、实例化合约等基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)已有接口的实现。
+本项目目前提供一套Fabric网络后台服务，包括对已经在Fabric网络中创建好的org、peer、channel、chaincode等进行网络新增，并基于已经新增成功的内容提供[REST API](https://github.com/aberic/fabric-net-server/blob/master/API_DEMO.md)服务，目前支持合约安装、实例化、执行、查询以及溯源功能，未来计划支持后台动态加入通道等基于[fabric-sdk-java](https://github.com/hyperledger/fabric-sdk-java)已有接口的实现。
 <br><br>
-本项目开发环境和框架大致有：IntelliJ IDEA、Maven、JDK8+、spring-boot、thrift、thymeleaf以及Docker等。具体实践可使用项目中提供的Docker镜像部署，也可以自定义源码二次开发。
+本项目开发环境和框架大致有：IntelliJ IDEA、Maven、JDK8+、spring-boot、thymeleaf以及Docker等。具体实践可使用项目中提供的Docker镜像部署，也可以自定义源码二次开发。
 <br><br>
 由于个人人力实在有限，后面的工程和工作量会逐步变大变多，在保证个人工作顺利的情况下，会将大部分精力都投入到本项目中。
 <br><br>
@@ -33,50 +33,65 @@ api执行结果及使用方案界面预览
 <br>
 4、下一版计划实现安装、实例化智能合约及加入通道等功能。
 <br><br>
+## 版本历史
+[v0.1](https://github.com/abericyang/fabric-sdk-java-app/tree/0.1)：无数据库版，适合轻量级的Fabric平台应用。
+<br>
+[v0.2](https://github.com/abericyang/fabric-sdk-java-app/tree/0.2)：含关系型数据库版，适合单服务管理多Fabric网络。
+<br>
+[v1.0-alpha](https://github.com/aberic/fabric-sdk-container/tree/v1.0-alpha)：提供Docker容器服务，方便SDK快速部署。此版本为单排序服务及单节点服务配置，符合绝大部分需求。
+<br>
+[v1.0-beta](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta)：新增支持多服务节点。
+<br>
+[v1.0-beta2](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta2)：修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。
+<br>
+[v1.0-beta3](https://github.com/aberic/fabric-sdk-container/tree/v1.0-beta3)：删除docker-sdk.yaml环境变量配置，取消hash标识（容易被误会），细化Fabric网络及数据库结构，简化启动脚本。
+<br>
+v1.0-RC：新增通过SDK加入通道、安装合约、实例化合约以及升级合约等功能；新增Fabric后台管理功能。
+<br>
+
+| version                                                                  | Description                                                                                |
+| :--                                                                      | :--                                                                                        | 
+| [v0.1](https://github.com/aberic/fabric-net-server/tree/0.1)             | 无数据库版，适合轻量级的Fabric平台应用。                                                        | 
+| [v0.2](https://github.com/aberic/fabric-net-server/tree/0.2)             | 含关系型数据库版，适合单服务管理多Fabric网络。                                                   |
+| [v1.0-alpha](https://github.com/aberic/fabric-net-server/tree/1.0-alpha) | 提供Docker容器服务，方便SDK快速部署。此版本为单排序服务及单节点服务配置，符合绝大部分需求。            |
+| [v1.0-beta](https://github.com/aberic/fabric-net-server/tree/1.0-beta)   | 新增支持多服务节点。                                                                           | 
+| [v1.0-beta2](https://github.com/aberic/fabric-net-server/tree/1.0-beta2) | 修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。|
+| [v1.0-beta3](https://github.com/aberic/fabric-net-server/tree/1.0-beta3) | 删除docker-sdk.yaml环境变量配置，取消hash标识（容易被误会），细化Fabric网络及数据库结构，简化启动脚本。|
+| [v1.0-RC1](https://github.com/aberic/fabric-net-server/tree/1.0-RC1)     | 提供后台视图服务，结构解耦度高，相对灵活，需部署多镜像                                              |
+| [v1.0-RC2](https://github.com/aberic/fabric-net-server/tree/1.0-RC2)     | 新增智能合约安装、实例化功能，结构增加耦合，部署难度降低                                            |
+
+<br>
+<br><br>
 ## 使用
 1、确定Linux内核在`3.10`及以上。
 <br>
 2、在待部署SDK服务器上安装`Docker`及`docker compose`环境。
 <br>
-3、执行`docker pull aberic/fabric-service:1.0-RC1`及`docker pull aberic/fabric-edge:1.0-RC1`下载两个镜像。
+3、执行`docker pull aberic/fabric-edge:1.0-RC2`下载镜像。
 <br>
-4、编辑`docker-fabric-net-server.yaml`。
+4、编辑`docker-fabric-net-server.yaml`，主要目的就是选择你所计划启用的物理机端口号。
 <br>
-5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
+5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动镜像，如不需要观察日志，则在命令最后追加`-d`即可。
 <br>
 6、服务启动完成后，通过http://localhost:port 访问即可。
 <br><br>
 #### docker-fabric-net-server.yaml说明
+
 ```yaml
 version: '2'
 
 services:
 
-  service:
-    container_name: service
-    image: aberic/fabric-service
-    command: bash /home/init-service.sh
-    ports:
-      - 8081:8081
-
   edge:
     container_name: edge
     image: aberic/fabric-edge
-    environment:
-      # service地址配置
-      - SERVICE_IP=10.163.90.220
-      - SERVICE_PORT=8081
     command: bash /home/init-edge.sh
     ports:
       - 8080:8080
-    depends_on:
-      - service
 ```
-1、上述配置仅为demo，主要关注自己的端口映射，edge的端口号决定了项目访问的最终地址。
+1、上述配置主要关注自己的端口映射，edge的端口号决定了项目访问的最终地址。
 <br>
-2、edge中SERVICE_IP和SERVICE_PORT两个变量的值取决于service的部署情况，理论上可以在一台物理机中部署即可。
-<br>
-3、yaml启动需要指定镜像版本号，或tag镜像版本号为latest。
+2、yaml启动需要指定镜像版本号，或tag镜像版本号为latest。
 <br><br>
 #### 架构（请无视小图标）
 ![FabricNet](https://raw.githubusercontent.com/aberic/fabric-sdk-container/master/img/FabricNet.png "Fabric 网络")
@@ -137,7 +152,7 @@ league、org、orderer、peer、channel及chaincode中后台创建所需的字�
 | POST   | /trace/txid          | 根据交易ID查询区块             |
 | GET    | /trace/info/{id}     | 根据当前智能合约id查询当前链信息 |
 
-API文档中未提供安装、实例化及升级操作，但在后续更新中，会支持安装、实例化及升级的功能。如果有SaaS/BaaS服务的紧急需求，可以自行参考[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)中的方案来解决。
+如果有SaaS/BaaS服务的紧急需求，可以自行参考[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)中的方案来解决。
 <br>
 
 ## 讨论
