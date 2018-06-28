@@ -4,17 +4,17 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 ---
-# A Shotgun policy xx
-identities:  # list roles to be used in the policy
-    user1: {"role": {"name": "member", "mspId": "Org1MSP"}} # role member in org with mspid Org1MSP
+# 背书策略demo
+identities:  # 列出要在策略中使用的角色
+    user1: {"role": {"name": "member", "mspId": "Org1MSP"}} # 在组织mspId为Org1MSP中为member的角色
     user2: {"role": {"name": "member", "mspId": "Org2MSP"}}
-    admin1: {"role": {"name": "admin", "mspId": "Org1MSP"}} # admin role.
+    admin1: {"role": {"name": "admin", "mspId": "Org1MSP"}} # 为admin的角色
     admin2: {"role": {"name": "admin", "mspId": "Org2MSP"}}
 
-policy: # the policy  .. could have been flat but show grouping.
-    1-of: # signed by one of these groups  can be <n>-of  where <n> is any digit 2-of, 3-of etc..
+policy: # 以分组形式显示一个扁平化背书策略
+    1-of: # 任意一组背书签名均为<n>-of这样的格式，其中<n>可以为2、3、4等任意数字，最终如2-of、3-of等
       - 1-of:
-        - signed-by: "user1" # a reference to one of the identities defined above.
+        - signed-by: "user1" # 参考上述对identities的定义
         - signed-by: "admin1"
       - 1-of:
         - signed-by: "user2"
