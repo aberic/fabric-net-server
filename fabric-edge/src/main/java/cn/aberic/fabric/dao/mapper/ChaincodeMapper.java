@@ -17,8 +17,7 @@ public interface ChaincodeMapper {
     int add(@Param("c") Chaincode chainCode);
 
     @Update("update chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
-            "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} " +
-            "source=#{c.source}, policy=#{c.policy} where rowid=#{c.id}")
+            "proposal_wait_time=#{c.proposalWaitTime}, invoke_wait_time=#{c.invokeWaitTime} where rowid=#{c.id}")
     int update(@Param("c") Chaincode chainCode);
 
     @Select("select count(name) from chaincode where channel_id=#{id}")
