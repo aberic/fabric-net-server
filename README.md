@@ -1,7 +1,8 @@
 **注意：** 这是一个依赖于已经部署好的HyperLedger Fabric项目，关于前者搭建部署的方案可以通过参考[从零开始](https://www.cnblogs.com/aberic/category/1148898.html)或购买[开发实战](https://item.jd.com/12381034.html?dist=jd)等途径学习。目前这些都还不在当前项目的支持范围内，未来也许会计划开发一套基于Fabric深度定制的一键部署及管理平台（非K8S）。
 <br>
-# Fabric Net Server [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg)](http://www.cnblogs.com/aberic/)
-[![apache 2](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
+# Fabric Net Server [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg?longCache=true&style=flat-square)](http://www.cnblogs.com/aberic/)
+[![version](https://img.shields.io/badge/version-1.0RC1-green.svg?longCache=true&style=flat-square)](http://www.cnblogs.com/aberic/)
+[![apache 2](https://img.shields.io/hexpm/l/plug.svg?longCache=true&style=flat-square)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
 [![codebeat badge](https://codebeat.co/badges/92aa24de-8a82-432b-83fb-ec7413615952)](https://codebeat.co/projects/github-com-aberic-fabric-net-server-master)
 [![Join the chat at https://gitter.im/fabric-net-server/Lobby](https://badges.gitter.im/fabric-net-server/Lobby.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <br><br>
