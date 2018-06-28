@@ -62,13 +62,13 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                 chaincode.getChannelName(),
                 File.separator);
         String chaincodePath = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
-        String childrenPath = chaincodeSource + File.separator + Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
+        String childrenPath = String.format("%s%ssrc%s%s", chaincodeSource, File.separator, File.separator, Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0]);
         chaincode.setSource(chaincodeSource);
         chaincode.setPath(chaincodePath);
         chaincode.setPolicy(String.format("%s%spolicy.yaml", childrenPath, File.separator));
         chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
         try {
-            FileUtil.unZipAndSave(file, chaincodeSource, childrenPath);
+            FileUtil.unZipAndSave(file, String.format("%s%ssrc", chaincodeSource, File.separator), childrenPath);
         } catch (IOException e) {
             e.printStackTrace();
             return responseFail("source unzip fail");
