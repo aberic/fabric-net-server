@@ -16,7 +16,7 @@ public class Api {
         NUMBER(5, "trace/number"),
         TXID(6, "trace/txid"),
         INSTANTIATE(7, "chaincode/instantiate"),
-        UPGRADE(7, "chaincode/upgrade");
+        UPGRADE(8, "chaincode/upgrade");
 
         private int index;
         private String apiUrl;
