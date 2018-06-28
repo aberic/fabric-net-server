@@ -140,7 +140,7 @@ class IntermediateChaincodeID {
         upgradeProposalRequest.setArgs(args);
 
         ChaincodeEndorsementPolicy chaincodeEndorsementPolicy = new ChaincodeEndorsementPolicy();
-        chaincodeEndorsementPolicy.fromYamlFile(new File("/code/src/policy/chaincodeendorsementpolicy.yaml"));
+        chaincodeEndorsementPolicy.fromYamlFile(new File(chaincodePolicy));
         upgradeProposalRequest.setChaincodeEndorsementPolicy(chaincodeEndorsementPolicy);
 
         Map<String, byte[]> tm2 = new HashMap<>();
