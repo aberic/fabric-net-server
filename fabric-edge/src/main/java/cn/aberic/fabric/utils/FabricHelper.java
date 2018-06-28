@@ -4,8 +4,7 @@ import cn.aberic.fabric.dao.*;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.sdk.OrgManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +15,8 @@ import java.util.Map;
  *
  * @author : Aberic 【2018/6/4 10:46】
  */
+@Slf4j
 public class FabricHelper {
-
-    private Logger logger = LogManager.getLogger(FabricHelper.class);
 
     /** 当前正在运行的智能合约Id */
     private int chainCodeId;
@@ -85,16 +83,16 @@ public class FabricHelper {
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
             synchronized (fabricManagerMap) {
                 Chaincode chaincode = chaincodeMapper.get(chaincodeId);
-                logger.debug(String.format("chaincode = %s", chaincode.toString()));
+                log.debug(String.format("chaincode = %s", chaincode.toString()));
                 Channel channel = channelMapper.get(chaincode.getChannelId());
-                logger.debug(String.format("channel = %s", channel.toString()));
+                log.debug(String.format("channel = %s", channel.toString()));
                 Peer peer = peerMapper.get(channel.getPeerId());
-                logger.debug(String.format("peer = %s", peer.toString()));
+                log.debug(String.format("peer = %s", peer.toString()));
                 int orgId = peer.getOrgId();
                 List<Peer> peers = peerMapper.list(orgId);
                 List<Orderer> orderers = ordererMapper.list(orgId);
                 Org org = orgMapper.get(orgId);
-                logger.debug(String.format("org = %s", org.toString()));
+                log.debug(String.format("org = %s", org.toString()));
                 if (orderers.size() != 0 && peers.size() != 0) {
                     fabricManager = createFabricManager(org, channel, chaincode, orderers, peers);
                     fabricManagerMap.put(chaincodeId, fabricManager);
@@ -115,8 +113,8 @@ public class FabricHelper {
                 .setChannel(channel.getName())
                 .setChainCode(chainCode.getName(), chainCode.getPath(), chainCode.getSource(), chainCode.getPolicy(), chainCode.getVersion(), chainCode.getProposalWaitTime(), chainCode.getInvokeWaitTime())
                 .setBlockListener(map -> {
-                    logger.debug(map.get("code"));
-                    logger.debug(map.get("data"));
+                    log.debug(map.get("code"));
+                    log.debug(map.get("data"));
                 });
         for (Orderer orderer : orderers) {
             orgManager.addOrderer(orderer.getName(), orderer.getLocation());
