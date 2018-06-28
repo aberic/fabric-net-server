@@ -70,6 +70,7 @@
                                         <th>ID</th>
                                         <th>合约名称</th>
                                         <th>通道名称</th>
+                                        <th>版本号</th>
                                         <th>时间</th>
                                         <th>操作</th>
                                     </tr>
@@ -77,8 +78,9 @@
                                     <tbody>
                                     <tr class="gradeX" th:each="chaincode : ${chaincodes}">
                                         <td th:text="${chaincode.id}">ID</td>
-                                        <td th:text="${chaincode.name}">节点列表</td>
-                                        <td th:text="${chaincode.channelName}">组织名称</td>
+                                        <td th:text="${chaincode.name}">合约名称</td>
+                                        <td th:text="${chaincode.channelName}">通道名称</td>
+                                        <td th:text="${chaincode.version}">版本号</td>
                                         <td th:text="${chaincode.date}">时间</td>
                                         <td>
                                             <div class="tpl-table-black-operation">
