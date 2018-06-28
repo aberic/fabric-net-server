@@ -1,8 +1,8 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.dao.Chaincode;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
@@ -13,7 +13,7 @@ public interface ChaincodeService {
 
      int add(Chaincode chaincode);
 
-     String install(Chaincode chaincode, ByteBuffer sourceBuff, String sourceFileName);
+     String install(Chaincode chaincode, MultipartFile file);
 
      String instantiate(Chaincode chaincode, List<String> strArray);
 
