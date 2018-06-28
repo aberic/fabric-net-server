@@ -6,12 +6,14 @@ import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.service.ChannelService;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.FabricHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
 
+@Slf4j
 @Service("channelService")
 public class ChannelServiceImpl implements ChannelService {
 
@@ -23,6 +25,11 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public int add(Channel channel) {
         if (StringUtils.isEmpty(channel.getName())) {
+            log.debug("channel name is empty");
+            return 0;
+        }
+        if (null != channelMapper.check(channel)) {
+            log.debug("had the same channel in this peer");
             return 0;
         }
         channel.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
