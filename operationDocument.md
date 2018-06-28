@@ -27,9 +27,9 @@ fabric是联盟链的杰出代表，所谓联盟，就是由多个相同的组�
 <br>
 2、在待部署SDK服务器上安装`Docker`及`docker compose`环境。
 <br>
-3、执行`docker pull aberic/fabric-service:1.0-RC1`及`docker pull aberic/fabric-edge:1.0-RC1`下载两个镜像。
+3、执行`docker pull aberic/fabric-service:1.0-RC1`及`docker pull aberic/fabric-edge:1.0-RC2` （注意这里群主推荐用）下载两个镜像。
 <br>
-4、编辑`docker-fabric-net-server.yaml`。
+4、新建并编辑`docker-fabric-net-server.yaml`。
 <br>
 5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
 <br>
