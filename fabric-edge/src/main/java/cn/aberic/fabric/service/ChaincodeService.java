@@ -1,6 +1,8 @@
 package cn.aberic.fabric.service;
 
+import cn.aberic.fabric.bean.Api;
 import cn.aberic.fabric.dao.Chaincode;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -13,11 +15,11 @@ public interface ChaincodeService {
 
     int add(Chaincode chaincode);
 
-    String install(Chaincode chaincode, MultipartFile file);
+    JSONObject install(Chaincode chaincode, MultipartFile file, Api api, boolean init);
 
-    String instantiate(Chaincode chaincode, List<String> strArray);
+    JSONObject instantiate(Chaincode chaincode, List<String> strArray);
 
-    String upgrade(Chaincode chaincode, List<String> strArray);
+    JSONObject upgrade(Chaincode chaincode, MultipartFile file, Api api);
 
     int update(Chaincode chaincode);
 
@@ -30,5 +32,9 @@ public interface ChaincodeService {
     int countById(int id);
 
     int count();
+
+    int delete(int id);
+
+    int deleteAll(int channelId);
 
 }
