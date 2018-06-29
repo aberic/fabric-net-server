@@ -24,6 +24,12 @@ public interface ChannelMapper {
     @Select("select count(name) from channel")
     int countAll();
 
+    @Delete("delete from channel where rowid=#{id}")
+    int delete(@Param("id") int id);
+
+    @Delete("delete from channel where peer_id=#{peerId}")
+    int deleteAll(@Param("peerId") int peerId);
+
     @Select("select rowid,name,peer_id,date from channel where name=#{c.name} and peer_id=#{c.peerId}")
     @Results({
             @Result(property = "id", column = "rowid"),

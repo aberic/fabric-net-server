@@ -12,23 +12,29 @@ import java.util.List;
 @Mapper
 public interface OrgMapper {
 
-    @Insert("insert into Org (name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date)" +
+    @Insert("insert into org (name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date)" +
             "values (#{o.name},#{o.tls},#{o.username},#{o.cryptoConfigDir},#{o.mspId},#{o.domainName}," +
             "#{o.ordererDomainName},#{o.leagueId},#{o.date})")
     int add(@Param("o") Org org);
 
-    @Update("update Org set name=#{o.name}, tls=#{o.tls}, username=#{o.username}, crypto_config_dir=#{o.cryptoConfigDir}, " +
+    @Update("update org set name=#{o.name}, tls=#{o.tls}, username=#{o.username}, crypto_config_dir=#{o.cryptoConfigDir}, " +
             "msp_id=#{o.mspId}, domain_name=#{o.domainName}, orderer_domain_name=#{o.ordererDomainName}, league_id=#{o.leagueId}" +
             " where rowid=#{o.id}")
     int update(@Param("o") Org org);
 
-    @Select("select count(name) from Org where league_id=#{id}")
+    @Select("select count(name) from org where league_id=#{id}")
     int count(@Param("id") int id);
 
-    @Select("select count(name) from Org")
+    @Select("select count(name) from org")
     int countAll();
 
-    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from Org where rowid=#{id}")
+    @Delete("delete from org where rowid=#{id}")
+    int delete(@Param("id") int id);
+
+    @Delete("delete from org where league_id=#{leagueId}")
+    int deleteAll(@Param("leagueId") int leagueId);
+
+    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from org where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -43,7 +49,7 @@ public interface OrgMapper {
     })
     Org get(@Param("id") int id);
 
-    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from Org where league_id=#{id}")
+    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from org where league_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -58,7 +64,7 @@ public interface OrgMapper {
     })
     List<Org> list(@Param("id") int id);
 
-    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from Org")
+    @Select("select rowid,name,tls,username,crypto_config_dir,msp_id,domain_name,orderer_domain_name,league_id,date from org")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),

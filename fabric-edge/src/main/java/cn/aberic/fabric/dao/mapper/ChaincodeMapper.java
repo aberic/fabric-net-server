@@ -26,6 +26,12 @@ public interface ChaincodeMapper {
     @Select("select count(name) from chaincode")
     int countAll();
 
+    @Delete("delete from chaincode where rowid=#{id}")
+    int delete(@Param("id") int id);
+
+    @Delete("delete from chaincode where channel_id=#{channelId}")
+    int deleteAll(@Param("channelId") int channelId);
+
     @Select("select rowid,name,path,version,proposal_wait_time,invoke_wait_time,channel_id,date,source,policy from chaincode " +
             "where name=#{c.name} and path=#{c.path} and version=#{c.version} and channel_id=#{c.channelId}")
     @Results({

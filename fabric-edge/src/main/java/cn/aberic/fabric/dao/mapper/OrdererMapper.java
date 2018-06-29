@@ -24,6 +24,12 @@ public interface OrdererMapper {
     @Select("select count(name) from orderer")
     int countAll();
 
+    @Delete("delete from orderer where rowid=#{id}")
+    int delete(@Param("id") int id);
+
+    @Delete("delete from orderer where org_id=#{orgId}")
+    int deleteAll(@Param("orgId") int orgId);
+
     @Select("select rowid,name,location,org_id,date from orderer where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
