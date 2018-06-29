@@ -1,5 +1,7 @@
 **注意：** 本文档是以fabric官方1.0版本中e2e_cli单机版作为启动环境，没有做其他个人更改。同时为了调试和测试方便，关闭了tls。
 <br/>
+当前文档使用于1.0-RC2。
+<br/>
 # Fabric Net Server 详细说明文档 [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg)](http://www.cnblogs.com/aberic/)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
 [![fabric-sdk image](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/aberic/)
@@ -7,7 +9,15 @@
 <br><br>
   由于aberic大大一个人精力和人力有限，作为追随者，根据自身的搭建调试经验，编写此文档，贡献一些力量。
 <br><br>
-
+### 项目说明
+**注意：** 熟悉fabric的同学可能有所了解，和fabric的交互方式有两种，一种是通过客户端cli链接peer进行操作，另一种是使用sdk，目前官方提供的sdk主要分为node，go，java，个人感觉node的成熟度最高，但是由于大部分程序员的技术栈局限性，java-sdk的需求是最高的，博主的目的也是优化官方的java-sdk，以便不同程度的java程序员可以更加方便简洁的使用java-sdk和fabric进行交互。
+<br/>
+楼主此项目，目前个人的理解就是在现有的fabric网络的基础上，通过使用一个传统的关系型数据库，对fabric网络中的各个结构（org，orderer，peer，channel，chaincode等）配置信息进行录入，在调用sdk的时候通过读取录入的结构配置信息，和fabric网络进行交互。
+<br/>
+简单的，可以理解成这是fabric网络的一个上层的中间件，通过对已经启动的fabric网络中的结构配置信息进行录入，来达到和fabric进行交互的目的。
+<br/>
+此外，在录入联盟，组织，节点，通道，链码配置信息的过程中，不会和fabric网络产生任何交互，只有在点击链码测试的时候，才会读取数据库中的结构配置信息，通过结构配置信息，生成cli客户端和fabric网络进行交互。
+<br/><br/>
 ### 功能说明
 可能有部分刚刚接触的人对这个本sdk中的联盟，组织等概念有一些混乱，这里再次根据作者的思路进行一个详细的说明。
 #### 联盟(league)
@@ -27,48 +37,32 @@ fabric是联盟链的杰出代表，所谓联盟，就是由多个相同的组�
 <br>
 2、在待部署SDK服务器上安装`Docker`及`docker compose`环境。
 <br>
-3、执行`docker pull aberic/fabric-service:1.0-RC1`及`docker pull aberic/fabric-edge:1.0-RC1`下载两个镜像。
+3、执行`docker pull aberic/fabric-edge:1.0-RC2`下载镜像。
 <br>
-4、编辑`docker-fabric-net-server.yaml`。
+4、编辑`docker-fabric-net-server.yaml`，主要目的就是选择你所计划启用的物理机端口号。
 <br>
-5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动SDK镜像服务，如果不需要观察日志，则在命令最后追加`-d`即可。
+5、执行`docker-compose -f docker-fabric-net-server.yaml up`启动镜像，如不需要观察日志，则在命令最后追加`-d`即可。
 <br>
 6、服务启动完成后，通过http://localhost:port 访问即可。
-<br><br>
+<br>
 #### docker-fabric-net-server.yaml说明
+
 ```yaml
 version: '2'
 
 services:
 
-  service:
-    container_name: service
-    image: aberic/fabric-service:1.0-RC1
-    command: bash /home/init-service.sh
-    ports:
-      - 8081:8081
-
   edge:
     container_name: edge
-    image: aberic/fabric-edge:1.0-RC1
-    environment:
-      # service地址配置
-      - SERVICE_IP=10.0.38.95
-      - SERVICE_PORT=8081
+    image: aberic/fabric-edge:1.0-RC2
     command: bash /home/init-edge.sh
     ports:
       - 8080:8080
-    depends_on:
-      - service
 ```
-1、上述配置仅为demo，主要关注自己的端口映射，edge的端口号决定了项目访问的最终地址。
+1、上述配置主要关注自己的端口映射，edge的端口号决定了项目访问的最终地址。
 <br>
-2、edge中SERVICE_IP和SERVICE_PORT两个变量的值取决于service的部署情况，理论上可以在一台物理机中部署即可。
-<br>
-3、yaml启动需要指定镜像版本号，或tag镜像版本号为latest。
-<br/>
-4、SERVICE_IP 配置的时候避免使用127.0.0.1,博主说可能会导致项目无法启动。
-<br><br>
+2、yaml启动需要指定镜像版本号，或tag镜像版本号为latest。
+<br/><br/>
 *********************************************
 ## 添加流程截图说明
 #### 后台首页界面预览
