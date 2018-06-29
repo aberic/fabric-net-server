@@ -84,7 +84,7 @@ public class CommonController {
                             transaction.setDate(envelope.getString("timestamp"));
                             tmpTransactions.add(transaction);
                         }
-                        if ((height - num) > 6) {
+                        if ((height - num) > 8) {
                             break;
                         }
                     }
@@ -105,7 +105,7 @@ public class CommonController {
             }
             return 0;
         });
-        int size = tmpTransactions.size() > 7 ? 7 : tmpTransactions.size();
+        int size = tmpTransactions.size() > 9 ? 9 : tmpTransactions.size();
         for (int i = 0; i < size; i++) {
             Transaction transaction = tmpTransactions.get(i);
             transaction.setIndex(i + 1);
