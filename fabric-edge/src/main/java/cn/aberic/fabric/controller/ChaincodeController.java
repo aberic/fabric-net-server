@@ -53,6 +53,8 @@ public class ChaincodeController {
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute Chaincode chaincode,
+                               @ModelAttribute Api api,
+                               @RequestParam("init") boolean init,
                                @RequestParam("intent") String intent,
                                @RequestParam(value = "sourceFile", required = false) MultipartFile sourceFile,
                                @RequestParam("id") int id) {
@@ -65,15 +67,14 @@ public class ChaincodeController {
                 chaincodeService.update(chaincode);
                 break;
             case "install":
-                Channel channel = channelService.get(chaincode.getChannelId());
-                Peer peer = peerService.get(channel.getPeerId());
-                Org org = orgService.get(peer.getId());
-                League league = leagueService.get(org.getLeagueId());
-                chaincode.setLeagueName(league.getName());
-                chaincode.setOrgName(org.getName());
-                chaincode.setPeerName(peer.getName());
-                chaincode.setChannelName(channel.getName());
-                chaincodeService.install(chaincode, sourceFile);
+                chaincode = resetChaincode(chaincode);
+                chaincodeService.install(chaincode, sourceFile, api, init);
+                break;
+            case "upgrade":
+                Chaincode chaincode1 = chaincodeService.get(id);
+                chaincode1 = resetChaincode(chaincode1);
+                chaincode1.setVersion(chaincode.getVersion());
+                chaincodeService.upgrade(chaincode1, sourceFile, api);
                 break;
         }
         return list();
@@ -100,6 +101,27 @@ public class ChaincodeController {
         modelAndView.addObject("intent", "install");
         modelAndView.addObject("chaincode", new Chaincode());
         modelAndView.addObject("channels", getChannelFullList());
+        modelAndView.addObject("init", false);
+
+        Api apiInstantiate = new Api("实例化智能合约", INSTANTIATE.getIndex());
+
+        modelAndView.addObject("api", apiInstantiate);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "upgrade")
+    public ModelAndView upgrade(@RequestParam("chaincodeId") int chaincodeId) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeUpgrade");
+        modelAndView.addObject("intentLarge", "升级合约");
+        modelAndView.addObject("intentLittle", "升级");
+        modelAndView.addObject("submit", "升级");
+        modelAndView.addObject("intent", "upgrade");
+        modelAndView.addObject("init", true);
+        modelAndView.addObject("chaincode", chaincodeService.get(chaincodeId));
+
+        Api apiInstantiate = new Api("升级智能合约", UPGRADE.getIndex());
+
+        modelAndView.addObject("api", apiInstantiate);
         return modelAndView;
     }
 
@@ -115,15 +137,7 @@ public class ChaincodeController {
         chaincode.setPeerName(peer.getName());
         chaincode.setChannelName(channel.getName());
 
-        Api.Intent intent = Api.Intent.get(api.getIndex());
-        switch (Objects.requireNonNull(intent)) {
-            case INSTANTIATE:
-                chaincodeService.instantiate(chaincode, Arrays.asList(api.getExec().split(",")));
-                break;
-            case UPGRADE:
-                chaincodeService.upgrade(chaincode, Arrays.asList(api.getExec().split(",")));
-                break;
-        }
+        chaincodeService.instantiate(chaincode, Arrays.asList(api.getExec().split(",")));
         return new ModelAndView(new RedirectView("list"));
     }
 
@@ -161,20 +175,6 @@ public class ChaincodeController {
         modelAndView.addObject("chaincodeId", chaincodeId);
 
         Api apiInstantiate = new Api("实例化智能合约", INSTANTIATE.getIndex());
-
-        modelAndView.addObject("api", apiInstantiate);
-        return modelAndView;
-    }
-
-    @GetMapping(value = "upgrade")
-    public ModelAndView upgrade(@RequestParam("chaincodeId") int chaincodeId) {
-        ModelAndView modelAndView = new ModelAndView("chaincodeInstantiate");
-        modelAndView.addObject("intentLarge", "升级合约");
-        modelAndView.addObject("intentLittle", "升级");
-        modelAndView.addObject("submit", "升级");
-        modelAndView.addObject("chaincodeId", chaincodeId);
-
-        Api apiInstantiate = new Api("升级智能合约", UPGRADE.getIndex());
 
         modelAndView.addObject("api", apiInstantiate);
         return modelAndView;
@@ -309,6 +309,18 @@ public class ChaincodeController {
         jsonObject.put("id", trace.getId());
         jsonObject.put("trace", trace.getTrace());
         return jsonObject.toJSONString();
+    }
+
+    private Chaincode resetChaincode(Chaincode chaincode) {
+        Channel channel = channelService.get(chaincode.getChannelId());
+        Peer peer = peerService.get(channel.getPeerId());
+        Org org = orgService.get(peer.getId());
+        League league = leagueService.get(org.getLeagueId());
+        chaincode.setLeagueName(league.getName());
+        chaincode.setOrgName(org.getName());
+        chaincode.setPeerName(peer.getName());
+        chaincode.setChannelName(channel.getName());
+        return chaincode;
     }
 
 }
