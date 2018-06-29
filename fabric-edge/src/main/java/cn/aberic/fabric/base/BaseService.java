@@ -20,11 +20,24 @@ public interface BaseService {
         return jsonObject.toString();
     }
 
+    default JSONObject responseSuccessJson(String result) {
+        JSONObject jsonObject = parseResult(result);
+        jsonObject.put("code", SUCCESS);
+        return jsonObject;
+    }
+
     default String responseSuccess(String result, String txid) {
         JSONObject jsonObject = parseResult(result);
         jsonObject.put("code", SUCCESS);
         jsonObject.put("txid", txid);
         return jsonObject.toString();
+    }
+
+    default JSONObject responseSuccessJson(String result, String txid) {
+        JSONObject jsonObject = parseResult(result);
+        jsonObject.put("code", SUCCESS);
+        jsonObject.put("txid", txid);
+        return jsonObject;
     }
 
     default String responseSuccess(JSONObject json) {
@@ -46,6 +59,13 @@ public interface BaseService {
         jsonObject.put("code", FAIL);
         jsonObject.put("error", result);
         return jsonObject.toString();
+    }
+
+    default JSONObject responseFailJson(String result) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", FAIL);
+        jsonObject.put("error", result);
+        return jsonObject;
     }
 
     default JSONObject parseResult(String result) {
