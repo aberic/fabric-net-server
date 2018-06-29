@@ -1,6 +1,7 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.base.BaseService;
+import cn.aberic.fabric.bean.Api;
 import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
@@ -8,6 +9,7 @@ import cn.aberic.fabric.service.ChaincodeService;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.FileUtil;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +41,11 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
 
     @Override
     public int add(Chaincode chaincode) {
-        if (verify(chaincode) || null != chaincodeMapper.check(chaincode)) {
+        if (StringUtils.isEmpty(chaincode.getName()) ||
+                StringUtils.isEmpty(chaincode.getPath()) ||
+                StringUtils.isEmpty(chaincode.getVersion()) ||
+                chaincode.getProposalWaitTime() == 0 ||
+                chaincode.getInvokeWaitTime() == 0 || null != chaincodeMapper.check(chaincode)) {
             return 0;
         }
         chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
@@ -46,56 +53,58 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     }
 
     @Override
-    public String install(Chaincode chaincode, MultipartFile file) {
-        if (!verify(chaincode) || null == file || null != chaincodeMapper.check(chaincode)) {
-            return responseFail("install error, param has none value and source mush be uploaded or had the same chaincode");
+    public JSONObject install(Chaincode chaincode, MultipartFile file, Api api, boolean init) {
+        if (verify(chaincode) || null == file || null != chaincodeMapper.check(chaincode)) {
+            return responseFailJson("install error, param has none value and source mush be uploaded or had the same chaincode");
         }
-        String chaincodeSource = String.format("%s%s%s%s%s%s%s%s%s%schaincode",
-                env.getProperty("config.dir"),
-                File.separator,
-                chaincode.getLeagueName(),
-                File.separator,
-                chaincode.getOrgName(),
-                File.separator,
-                chaincode.getPeerName(),
-                File.separator,
-                chaincode.getChannelName(),
-                File.separator);
-        String chaincodePath = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
-        String childrenPath = String.format("%s%ssrc%s%s", chaincodeSource, File.separator, File.separator, Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0]);
-        chaincode.setSource(chaincodeSource);
-        chaincode.setPath(chaincodePath);
-        chaincode.setPolicy(String.format("%s%spolicy.yaml", childrenPath, File.separator));
-        chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
-        try {
-            FileUtil.unZipAndSave(file, String.format("%s%ssrc", chaincodeSource, File.separator), childrenPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return responseFail("source unzip fail");
+        if (!upload(chaincode, file)){
+            return responseFailJson("source unzip fail");
         }
-        chaincodeMapper.add(chaincode);
+        if (chaincodeMapper.add(chaincode) <= 0) {
+            return responseFailJson("chaincode add fail");
+        }
         chaincode.setId(chaincodeMapper.check(chaincode).getId());
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
-    }
-
-    @Override
-    public String instantiate(Chaincode chaincode, List<String> strArray) {
-        int size = strArray.size();
-        String[] args = new String[size];
-        for (int i = 0; i < size; i++) {
-            args[i] = strArray.get(i);
+        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
+        if (jsonResult.getInteger("code") == BaseService.FAIL) {
+            delete(chaincode.getId());
+            return jsonResult;
         }
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTANTIATE, args);
+        return instantiate(chaincode, Arrays.asList(api.getExec().split(",")));
     }
 
     @Override
-    public String upgrade(Chaincode chaincode, List<String> strArray) {
+    public JSONObject upgrade(Chaincode chaincode, MultipartFile file, Api api) {
+        if (verify(chaincode) || null == file || null == chaincodeMapper.get(chaincode.getId())) {
+            return responseFailJson("install error, param has none value and source mush be uploaded or had no chaincode to upgrade");
+        }
+        if (!upload(chaincode, file)){
+            return responseFailJson("source unzip fail");
+        }
+        if (chaincodeMapper.updateForUpgrade(chaincode) <= 0) {
+            return responseFailJson("chaincode updateForUpgrade fail");
+        }
+        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
+        if (jsonResult.getInteger("code") == BaseService.FAIL) {
+            delete(chaincode.getId());
+            return jsonResult;
+        }
+        List<String> strArray = Arrays.asList(api.getExec().split(","));
         int size = strArray.size();
         String[] args = new String[size];
         for (int i = 0; i < size; i++) {
             args[i] = strArray.get(i);
         }
         return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.UPGRADE, args);
+    }
+
+    @Override
+    public JSONObject instantiate(Chaincode chaincode, List<String> strArray) {
+        int size = strArray.size();
+        String[] args = new String[size];
+        for (int i = 0; i < size; i++) {
+            args[i] = strArray.get(i);
+        }
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTANTIATE, args);
     }
 
     @Override
@@ -129,11 +138,27 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         return chaincodeMapper.countAll();
     }
 
+    @Override
+    public int delete(int id) {
+        FabricHelper.obtain().removeManager(id);
+        return chaincodeMapper.delete(id);
+    }
+
+    @Override
+    public int deleteAll(int channelId) {
+        List<Chaincode> chaincodes = chaincodeMapper.list(channelId);
+        for (Chaincode chaincode : chaincodes) {
+            FabricHelper.obtain().removeManager(chaincode.getId());
+            chaincodeMapper.delete(chaincode.getId());
+        }
+        return 0;
+    }
+
     enum ChainCodeIntent {
         INSTALL, INSTANTIATE, UPGRADE
     }
 
-    private String chainCode(int chaincodeId, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
+    private JSONObject chainCode(int chaincodeId, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper, ChainCodeIntent intent, String[] args) {
         Map<String, String> resultMap = null;
         try {
@@ -151,21 +176,47 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                     break;
             }
             if (resultMap.get("code").equals("error")) {
-                return responseFail(resultMap.get("data"));
+                return responseFailJson(resultMap.get("data"));
             } else {
-                return responseSuccess(resultMap.get("data"), resultMap.get("txid"));
+                return responseSuccessJson(resultMap.get("data"), resultMap.get("txid"));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return responseFail(String.format("Request failed： %s", e.getMessage()));
+            return responseFailJson(String.format("Request failed： %s", e.getMessage()));
         }
     }
 
     private boolean verify(Chaincode chaincode) {
         return StringUtils.isEmpty(chaincode.getName()) ||
-                StringUtils.isEmpty(chaincode.getPath()) ||
                 StringUtils.isEmpty(chaincode.getVersion()) ||
                 chaincode.getProposalWaitTime() == 0 ||
                 chaincode.getInvokeWaitTime() == 0;
+    }
+
+    private boolean upload(Chaincode chaincode, MultipartFile file){
+        String chaincodeSource = String.format("%s%s%s%s%s%s%s%s%s%schaincode",
+                env.getProperty("config.dir"),
+                File.separator,
+                chaincode.getLeagueName(),
+                File.separator,
+                chaincode.getOrgName(),
+                File.separator,
+                chaincode.getPeerName(),
+                File.separator,
+                chaincode.getChannelName(),
+                File.separator);
+        String chaincodePath = Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
+        String childrenPath = String.format("%s%ssrc%s%s", chaincodeSource, File.separator, File.separator, Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0]);
+        chaincode.setSource(chaincodeSource);
+        chaincode.setPath(chaincodePath);
+        chaincode.setPolicy(String.format("%s%spolicy.yaml", childrenPath, File.separator));
+        chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        try {
+            FileUtil.unZipAndSave(file, String.format("%s%ssrc", chaincodeSource, File.separator), childrenPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }
