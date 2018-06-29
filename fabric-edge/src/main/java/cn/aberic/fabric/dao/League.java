@@ -2,6 +2,7 @@ package cn.aberic.fabric.dao;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 作者：Aberic on 2018/6/27 21:12
@@ -9,6 +10,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@ToString
 public class League {
 
     private int id; // required
