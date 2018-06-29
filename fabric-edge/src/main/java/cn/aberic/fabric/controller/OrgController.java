@@ -50,9 +50,9 @@ public class OrgController {
     @GetMapping(value = "add")
     public ModelAndView add() {
         ModelAndView modelAndView = new ModelAndView("orgSubmit");
-        modelAndView.addObject("intentLarge", "新建组织");
-        modelAndView.addObject("intentLittle", "新建");
-        modelAndView.addObject("submit", "新增");
+        modelAndView.addObject("intentLarge", "录入组织");
+        modelAndView.addObject("intentLittle", "录入");
+        modelAndView.addObject("submit", "录入");
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("org", new Org());
         modelAndView.addObject("leagues", leagueService.listAll());

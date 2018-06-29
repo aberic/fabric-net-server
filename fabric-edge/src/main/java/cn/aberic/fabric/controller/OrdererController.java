@@ -49,9 +49,9 @@ public class OrdererController {
     @GetMapping(value = "add")
     public ModelAndView add() {
         ModelAndView modelAndView = new ModelAndView("ordererSubmit");
-        modelAndView.addObject("intentLarge", "新建排序服务");
-        modelAndView.addObject("intentLittle", "新建");
-        modelAndView.addObject("submit", "新增");
+        modelAndView.addObject("intentLarge", "录入排序服务");
+        modelAndView.addObject("intentLittle", "录入");
+        modelAndView.addObject("submit", "录入");
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("orderer", new Orderer());
         modelAndView.addObject("orgs", getForPeerAndOrderer());
