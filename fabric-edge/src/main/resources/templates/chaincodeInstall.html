@@ -42,7 +42,8 @@
                                                            th:text="${intentLarge}"></span>
                         <small>HyperLedger Fabric网络合约单元</small>
                     </div>
-                    <p class="page-header-description">新增合约，即写入一个Fabric网络中所属节点服务器上已经安装并实例化过的智能合约。</p>
+                    <p class="page-header-description">
+                        新增合约，即写入一个Fabric网络中所属节点服务器上已经安装并实例化过的智能合约，或者执行安装并同时实例化一个新的智能合约。</p>
                 </div>
             </div>
         </div>
@@ -135,7 +136,31 @@
                                                 });
                                             });
                                         </script>
-                                        <small>请上传打包在zip文件中的智能合约及当前合约背书策略。如chaincode_example02文件夹下是智能合约目录，将该目录与chaincode-endorsement-policy.yaml背书文件一同打包在一个zip下上传即可。</small>
+                                        <small>
+                                            请上传打包在zip文件中的智能合约及当前合约背书策略。如chaincode_example02文件夹下是智能合约目录，将policy.yaml背书文件放入该目录下与智能合约一同打包在一个zip下上传即可。
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="tls" class="am-u-sm-3 am-form-label">实例化 <span
+                                            class="tpl-form-line-small-title">instantiate</span></label>
+                                    <div class="am-u-sm-9">
+                                        <select data-am-selected="{searchBox: 1}" style="display: none;" id="tls"
+                                                th:name="init" th:value="${init}">
+                                            <option th:value="true">是</option>
+                                            <option th:value="false">否</option>
+                                        </select>
+                                        <small>
+                                            该选项取决于该智能合约是否被实例化过，且每一个智能合约只能被实例化一次。
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group" th:object="${api}">
+                                    <label for="user-intro" class="am-u-sm-3 am-form-label">实例化参数</label>
+                                    <div class="am-u-sm-9">
+                                        <textarea class="" rows="10" id="user-intro"
+                                                  placeholder="请输入以半角逗号分隔的字符串数组，如：“a,10,b,10“。该数组将作为智能合约实例化参数，若无则留空。"
+                                                  th:field="*{exec}"></textarea>
                                     </div>
                                 </div>
                                 <div class="am-form-group">
