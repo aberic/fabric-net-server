@@ -62,14 +62,6 @@ public class LeagueController {
         return modelAndView;
     }
 
-    @PostMapping(value = "update")
-    public String update(@RequestBody League league) {
-        if (leagueService.update(league) > 0) {
-            return "success";
-        }
-        return "fail";
-    }
-
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("leagues");
