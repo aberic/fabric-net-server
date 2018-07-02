@@ -49,7 +49,6 @@
                             <div class="card-body p-3 text-center">
                                 <div class="text-right text-blue">
                                     <span style="font-size: 14px" th:text="#{league}"></span>
-                                    <i class="fe fe-chevron-up"></i>
                                     <ion-icon name="planet"></ion-icon>
                                 </div>
                                 <div class="h1 m-0" th:text="${leagueCount}"></div>
@@ -62,7 +61,6 @@
                             <div class="card-body p-3 text-center">
                                 <div class="text-right text-cyan">
                                     <span style="font-size: 14px" th:text="#{org}"></span>
-                                    <i class="fe fe-chevron-up"></i>
                                     <ion-icon name="people"></ion-icon>
                                 </div>
                                 <div class="h1 m-0" th:text="${orgCount}"></div>
@@ -75,8 +73,7 @@
                             <div class="card-body p-3 text-center">
                                 <div class="text-right text-orange">
                                     <span style="font-size: 14px" th:text="#{orderer}"></span>
-                                    <i class="fe fe-chevron-up"></i>
-                                    <ion-icon name="git-compare"></ion-icon>
+                                    <ion-icon name="reorder"></ion-icon>
                                 </div>
                                 <div class="h1 m-0" th:text="${ordererCount}"></div>
                                 <span class="text-muted mb-4" style="font-size: 12px" th:text="#{orderer_brief}"></span>
@@ -88,7 +85,6 @@
                             <div class="card-body p-3 text-center">
                                 <div class="text-right text-purpleZ">
                                     <span style="font-size: 14px" th:text="#{peer}"></span>
-                                    <i class="fe fe-chevron-up"></i>
                                     <ion-icon name="desktop"></ion-icon>
                                 </div>
                                 <div class="h1 m-0" th:text="${peerCount}"></div>
@@ -101,7 +97,6 @@
                             <div class="card-body p-3 text-center">
                                 <div class="text-right text-green">
                                     <span style="font-size: 14px" th:text="#{channel}"></span>
-                                    <i class="fe fe-chevron-up"></i>
                                     <ion-icon name="git-commit"></ion-icon>
                                 </div>
                                 <div class="h1 m-0" th:text="${channelCount}"></div>
@@ -114,7 +109,6 @@
                             <div class="card-body p-3 text-center">
                                 <div class="text-right text-yellow">
                                     <span style="font-size: 14px" th:text="#{chaincode}"></span>
-                                    <i class="fe fe-chevron-up"></i>
                                     <ion-icon name="paper"></ion-icon>
                                 </div>
                                 <div class="h1 m-0" th:text="${chaincodeCount}"></div>
@@ -123,533 +117,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Transaction Activity</h3>
-                            </div>
-                            <div id="chart-development-activity" style="height: 10rem"></div>
-                            <div class="table-responsive">
-                                <table class="table card-table table-striped table-vcenter">
-                                    <thead>
-                                    <tr>
-                                        <th>NO</th>
-                                        <th>Creator</th>
-                                        <th>Channel Name</th>
-                                        <th>Date</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="transaction : ${transactions}">
-                                        <td th:text="${transaction.index}">序号</td>
-                                        <td th:text="${transaction.createMSPID}">创建者</td>
-                                        <td th:text="${transaction.channelName}">通道名称</td>
-                                        <td class="text-nowrap" th:text="${transaction.date}">时间</td>
-                                        <td class="w-1">
-                                            <a href="#" class="icon">
-                                                <ion-icon name="link"></ion-icon>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <script>
-                            require(['c3', 'jquery'], function (c3, $) {
-                                $(document).ready(function () {
-                                    var chart = c3.generate({
-                                        bindto: '#chart-development-activity', // id of chart wrapper
-                                        data: {
-                                            columns: [
-                                                // each columns data
-                                                ['data1', [[${transaction0}]], [[${transaction1}]], [[${transaction2}]],
-                                                    [[${transaction3}]], [[${transaction4}]], [[${transaction5}]], [[${transaction6}]],
-                                                    [[${transaction7}]], [[${transaction8}]], [[${transaction9}]]
-                                                ]
-                                            ],
-                                            type: 'area', // default type of chart
-                                            groups: [
-                                                ['data1', 'data2', 'data3']
-                                            ],
-                                            colors: {
-                                                'data1': tabler.colors["blue"]
-                                            },
-                                            names: {
-                                                // name of each serie
-                                                'data1': 'Transactions'
-                                            }
-                                        },
-                                        axis: {
-                                            y: {
-                                                padding: {
-                                                    bottom: 0,
-                                                },
-                                                show: false,
-                                                tick: {
-                                                    outer: false
-                                                }
-                                            },
-                                            x: {
-                                                padding: {
-                                                    left: 0,
-                                                    right: 0
-                                                },
-                                                show: false
-                                            }
-                                        },
-                                        legend: {
-                                            position: 'inset',
-                                            padding: 0,
-                                            inset: {
-                                                anchor: 'top-left',
-                                                x: 20,
-                                                y: 8,
-                                                step: 10
-                                            }
-                                        },
-                                        tooltip: {
-                                            format: {
-                                                title: function (x) {
-                                                    return '';
-                                                }
-                                            }
-                                        },
-                                        padding: {
-                                            bottom: 0,
-                                            left: -1,
-                                            right: -1
-                                        },
-                                        point: {
-                                            show: false
-                                        }
-                                    });
-                                });
-                            });
-                        </script>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="alert alert-primary">Are you in trouble?
-                            <a href="https://github.com/aberic/fabric-net-server/blob/master/README.md"
-                               class="alert-link">Read our documentation</a> with code samples.
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Chart title</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="chart-donut" style="height: 12rem;"></div>
-                                    </div>
-                                </div>
-                                <script>
-                                    require(['c3', 'jquery'], function (c3, $) {
-                                        $(document).ready(function () {
-                                            var chart = c3.generate({
-                                                bindto: '#chart-donut', // id of chart wrapper
-                                                data: {
-                                                    columns: [
-                                                        // each columns data
-                                                        ['data1', 63],
-                                                        ['data2', 37]
-                                                    ],
-                                                    type: 'donut', // default type of chart
-                                                    colors: {
-                                                        'data1': tabler.colors["green"],
-                                                        'data2': tabler.colors[
-                                                            "green-light"]
-                                                    },
-                                                    names: {
-                                                        // name of each serie
-                                                        'data1': 'Maximum',
-                                                        'data2': 'Minimum'
-                                                    }
-                                                },
-                                                axis: {},
-                                                legend: {
-                                                    show: false, //hide legend
-                                                },
-                                                padding: {
-                                                    bottom: 0,
-                                                    top: 0
-                                                },
-                                            });
-                                        });
-                                    });
-                                </script>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Chart title</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="chart-pie" style="height: 12rem;"></div>
-                                    </div>
-                                </div>
-                                <script>
-                                    require(['c3', 'jquery'], function (c3, $) {
-                                        $(document).ready(function () {
-                                            var chart = c3.generate({
-                                                bindto: '#chart-pie', // id of chart wrapper
-                                                data: {
-                                                    columns: [
-                                                        // each columns data
-                                                        ['data1', 63],
-                                                        ['data2', 44],
-                                                        ['data3', 12],
-                                                        ['data4', 14]
-                                                    ],
-                                                    type: 'pie', // default type of chart
-                                                    colors: {
-                                                        'data1': tabler.colors[
-                                                            "blue-darker"],
-                                                        'data2': tabler.colors["blue"],
-                                                        'data3': tabler.colors["blue-light"],
-                                                        'data4': tabler.colors[
-                                                            "blue-lighter"]
-                                                    },
-                                                    names: {
-                                                        // name of each serie
-                                                        'data1': 'A',
-                                                        'data2': 'B',
-                                                        'data3': 'C',
-                                                        'data4': 'D'
-                                                    }
-                                                },
-                                                axis: {},
-                                                legend: {
-                                                    show: false, //hide legend
-                                                },
-                                                padding: {
-                                                    bottom: 0,
-                                                    top: 0
-                                                },
-                                            });
-                                        });
-                                    });
-                                </script>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="h5">Block Number</div>
-                                        <div class="display-4 font-weight-bold mb-4">62</div>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-red" style="width: 28%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="h5">Today profit</div>
-                                        <div class="display-4 font-weight-bold mb-4">$652</div>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-green" style="width: 84%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card p-3">
-                            <div class="d-flex align-items-center">
-                                    <span class="stamp stamp-md bg-blue mr-3">
-                                        <i class="fe fe-dollar-sign"></i>
-                                    </span>
-                                <div>
-                                    <h4 class="m-0">
-                                        <a href="javascript:void(0)">132
-                                            <small>Sales</small>
-                                        </a>
-                                    </h4>
-                                    <small class="text-muted">12 waiting payments</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card p-3">
-                            <div class="d-flex align-items-center">
-                                    <span class="stamp stamp-md bg-green mr-3">
-                                        <i class="fe fe-shopping-cart"></i>
-                                    </span>
-                                <div>
-                                    <h4 class="m-0">
-                                        <a href="javascript:void(0)">78
-                                            <small>Orders</small>
-                                        </a>
-                                    </h4>
-                                    <small class="text-muted">32 shipped</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card p-3">
-                            <div class="d-flex align-items-center">
-                                    <span class="stamp stamp-md bg-red mr-3">
-                                        <i class="fe fe-users"></i>
-                                    </span>
-                                <div>
-                                    <h4 class="m-0">
-                                        <a href="javascript:void(0)">1,352
-                                            <small>Members</small>
-                                        </a>
-                                    </h4>
-                                    <small class="text-muted">163 registered today</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card p-3">
-                            <div class="d-flex align-items-center">
-                                    <span class="stamp stamp-md bg-yellow mr-3">
-                                        <i class="fe fe-message-square"></i>
-                                    </span>
-                                <div>
-                                    <h4 class="m-0">
-                                        <a href="javascript:void(0)">132
-                                            <small>Comments</small>
-                                        </a>
-                                    </h4>
-                                    <small class="text-muted">16 waiting</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row row-cards row-deck">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Invoices</h3>
+                                <h3 class="card-title" th:text="#{transactions}"></h3>
                             </div>
                             <div class="table-responsive">
                                 <table class="table card-table table-vcenter text-nowrap">
                                     <thead>
                                     <tr>
                                         <th class="w-1">No.</th>
-                                        <th>Invoice Subject</th>
-                                        <th>Client</th>
-                                        <th>VAT No.</th>
-                                        <th>Created</th>
-                                        <th>Status</th>
-                                        <th>Price</th>
-                                        <th></th>
-                                        <th></th>
+                                        <th th:text="#{blockHeight}"></th>
+                                        <th th:text="#{txCount}"></th>
+                                        <th th:text="#{channel_name}"></th>
+                                        <th th:text="#{org_msp_id}"></th>
+                                        <th th:text="#{date}"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="text-muted">001401</span>
-                                        </td>
-                                        <td>
-                                            <a href="invoice.html" class="text-inherit">Design Works</a>
-                                        </td>
-                                        <td>
-                                            Carlson Limited
-                                        </td>
-                                        <td>
-                                            87956621
-                                        </td>
-                                        <td>
-                                            15 Dec 2017
-                                        </td>
-                                        <td>
-                                            <span class="status-icon bg-success"></span> Paid
-                                        </td>
-                                        <td>$887</td>
-                                        <td class="text-right">
-                                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary btn-sm dropdown-toggle"
-                                                        data-toggle="dropdown">Actions
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a class="icon" href="javascript:void(0)">
-                                                <i class="fe fe-edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-muted">001402</span>
-                                        </td>
-                                        <td>
-                                            <a href="invoice.html" class="text-inherit">UX Wireframes</a>
-                                        </td>
-                                        <td>
-                                            Adobe
-                                        </td>
-                                        <td>
-                                            87956421
-                                        </td>
-                                        <td>
-                                            12 Apr 2017
-                                        </td>
-                                        <td>
-                                            <span class="status-icon bg-warning"></span> Pending
-                                        </td>
-                                        <td>$1200</td>
-                                        <td class="text-right">
-                                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary btn-sm dropdown-toggle"
-                                                        data-toggle="dropdown">Actions
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a class="icon" href="javascript:void(0)">
-                                                <i class="fe fe-edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-muted">001403</span>
-                                        </td>
-                                        <td>
-                                            <a href="invoice.html" class="text-inherit">New Dashboard</a>
-                                        </td>
-                                        <td>
-                                            Bluewolf
-                                        </td>
-                                        <td>
-                                            87952621
-                                        </td>
-                                        <td>
-                                            23 Oct 2017
-                                        </td>
-                                        <td>
-                                            <span class="status-icon bg-warning"></span> Pending
-                                        </td>
-                                        <td>$534</td>
-                                        <td class="text-right">
-                                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary btn-sm dropdown-toggle"
-                                                        data-toggle="dropdown">Actions
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a class="icon" href="javascript:void(0)">
-                                                <i class="fe fe-edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-muted">001404</span>
-                                        </td>
-                                        <td>
-                                            <a href="invoice.html" class="text-inherit">Landing Page</a>
-                                        </td>
-                                        <td>
-                                            Salesforce
-                                        </td>
-                                        <td>
-                                            87953421
-                                        </td>
-                                        <td>
-                                            2 Sep 2017
-                                        </td>
-                                        <td>
-                                            <span class="status-icon bg-secondary"></span> Due in 2 Weeks
-                                        </td>
-                                        <td>$1500</td>
-                                        <td class="text-right">
-                                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary btn-sm dropdown-toggle"
-                                                        data-toggle="dropdown">Actions
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a class="icon" href="javascript:void(0)">
-                                                <i class="fe fe-edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-muted">001405</span>
-                                        </td>
-                                        <td>
-                                            <a href="invoice.html" class="text-inherit">Marketing Templates</a>
-                                        </td>
-                                        <td>
-                                            Printic
-                                        </td>
-                                        <td>
-                                            87956621
-                                        </td>
-                                        <td>
-                                            29 Jan 2018
-                                        </td>
-                                        <td>
-                                            <span class="status-icon bg-danger"></span> Paid Today
-                                        </td>
-                                        <td>$648</td>
-                                        <td class="text-right">
-                                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary btn-sm dropdown-toggle"
-                                                        data-toggle="dropdown">Actions
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a class="icon" href="javascript:void(0)">
-                                                <i class="fe fe-edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="text-muted">001406</span>
-                                        </td>
-                                        <td>
-                                            <a href="invoice.html" class="text-inherit">Sales Presentation</a>
-                                        </td>
-                                        <td>
-                                            Tabdaq
-                                        </td>
-                                        <td>
-                                            87956621
-                                        </td>
-                                        <td>
-                                            4 Feb 2018
-                                        </td>
-                                        <td>
-                                            <span class="status-icon bg-secondary"></span> Due in 3 Weeks
-                                        </td>
-                                        <td>$300</td>
-                                        <td class="text-right">
-                                            <a href="javascript:void(0)" class="btn btn-secondary btn-sm">Manage</a>
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary btn-sm dropdown-toggle"
-                                                        data-toggle="dropdown">Actions
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a class="icon" href="javascript:void(0)">
-                                                <i class="fe fe-edit"></i>
-                                            </a>
-                                        </td>
+                                    <tr th:each="transaction : ${transactions}">
+                                        <td><span class="text-muted" th:text="${transaction.index}">序号</span></td>
+                                        <td th:text="${transaction.num}">区块高度</td>
+                                        <td th:text="${transaction.txCount}">交易数</td>
+                                        <td th:text="${transaction.channelName}">通道名称</td>
+                                        <td th:text="${transaction.createMSPID}">创建者</td>
+                                        <td th:text="${transaction.date}">时间</td>
                                     </tr>
                                     </tbody>
                                 </table>

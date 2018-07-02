@@ -110,9 +110,7 @@ public class CommonController {
             } else if (i <= size){
                 Transaction transaction = tmpTransactions.get(size - i);
                 transaction.setIndex(size - i + 1);
-                if (i > 4){
-                    transactions.add(transaction);
-                }
+                transactions.add(transaction);
                 modelAndView.addObject(String.format("transaction%s", 10 - i), transaction.getTxCount());
             }
         }
