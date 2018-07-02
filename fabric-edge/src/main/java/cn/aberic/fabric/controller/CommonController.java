@@ -4,15 +4,17 @@ import cn.aberic.fabric.bean.Trace;
 import cn.aberic.fabric.bean.Transaction;
 import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.User;
+import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.DateUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.codec.binary.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ import java.util.List;
 @RestController
 @RequestMapping("")
 public class CommonController {
+
+    @Resource
+    private UserMapper userMapper;
 
     @Resource
     private LeagueService leagueService;
@@ -107,7 +112,7 @@ public class CommonController {
         for (int i = 10; i > 0; i--) {
             if (i > size) {
                 modelAndView.addObject(String.format("transaction%s", 10 - i), 0);
-            } else if (i <= size){
+            } else if (i <= size) {
                 Transaction transaction = tmpTransactions.get(size - i);
                 transaction.setIndex(size - i + 1);
                 transactions.add(transaction);
@@ -122,6 +127,26 @@ public class CommonController {
         modelAndView.addObject("chaincodeCount", chaincodeCount);
         modelAndView.addObject("transactions", transactions);
 
+        return modelAndView;
+    }
+
+    @PostMapping(value = "login")
+    public ModelAndView submit(@ModelAttribute User user) {
+        try {
+            if (StringUtils.equals(user.getPassword(), userMapper.get(user.getUsername()).getPassword())) {
+                return new ModelAndView(new RedirectView("index"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ModelAndView(new RedirectView("login"));
+    }
+
+    @GetMapping(value = "login")
+    public ModelAndView login() {
+        User user = new User();
+        ModelAndView modelAndView = new ModelAndView("login");
+        modelAndView.addObject("user", user);
         return modelAndView;
     }
 }
