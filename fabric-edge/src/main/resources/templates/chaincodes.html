@@ -1,102 +1,94 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>合约列表</title>
-    <meta name="description" content="合约列表">
-    <meta name="keywords" content="合约列表">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
-    <meta name="apple-mobile-web-app-title" content="合约列表"/>
-    <script src="/static/js/echarts.min.js"></script>
-    <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
-    <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
-    <link rel="stylesheet" href="/static/css/app.css">
-    <script src="/static/js/jquery.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en"/>
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/static/images/favicon.png" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.png"/>
+    <!-- Generated: 2018-04-16 09:29:05 +0200 -->
+    <title>Fabric Net Server - github.com/aberic/fabric-net-server</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/static/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '.'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/static/css/dashboard.css" rel="stylesheet"/>
+    <script src="/static/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/static/plugins/charts-c3/plugin.css" rel="stylesheet"/>
+    <script src="/static/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/static/plugins/input-mask/plugin.js"></script>
 </head>
 
-<body data-type="widgets">
-<script src="/static/js/theme.js"></script>
-<div class="am-g tpl-g">
-    <!-- 头部 -->
-    <header>
-        <div th:include="common_header :: header"></div>
-    </header>
-    <!-- 风格切换 -->
-    <div th:include="common_skin :: skin"></div>
-    <!-- 侧边导航栏 -->
-    <div th:include="common_sidebar :: sidebar"></div>
-    <!-- 内容区域 -->
-    <div class="tpl-content-wrapper">
-        <div class="row-content am-cf">
-            <div class="row">
-                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-                    <div class="widget am-cf">
-                        <div class="widget-head am-cf">
-                            <div class="widget-title  am-cf">合约列表</div>
-                        </div>
-                        <div class="widget-body  am-fr">
-
-                            <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
-                                <div class="am-form-group">
-                                    <div class="am-btn-toolbar">
-                                        <div class="am-btn-group am-btn-group-xs">
-                                            <a href="/chaincode/add">
-                                                <button type="button" class="am-btn am-btn-default am-btn-success">
-                                                    <span class="am-icon-plus"></span> 录入
-                                                </button>
-                                            </a>
-                                            <a href="/chaincode/install">
-                                                <button type="button" class="am-btn am-btn-default am-btn-success">
-                                                    <span class="am-icon-plus"></span> 安装
-                                                </button>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+<body class="">
+<div class="page">
+    <div class="page-main">
+        <div th:include="fns_header :: header"></div>
+        <div class="my-3 my-md-5">
+            <div class="container">
+                <div class="row row-cards row-deck">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title" th:text="#{chaincodes}"></h3>
+                                <button type="button" class="btn btn-primary ml-auto text-right"
+                                        onclick="window.location.href='/chaincode/add'" th:text="#{enter}">
+                                </button>
+                                <button type="button" class="btn btn-primary ml-2 text-right"
+                                        onclick="window.location.href='/chaincode/install'" th:text="#{install}">
+                                </button>
                             </div>
-
-                            <div class="am-u-sm-12">
-                                <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black "
-                                       id="example-r">
+                            <div class="table-responsive">
+                                <table class="table card-table table-vcenter text-nowrap">
                                     <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>合约名称</th>
-                                        <th>通道名称</th>
-                                        <th>版本号</th>
-                                        <th>时间</th>
-                                        <th>操作</th>
+                                        <th class="w-1">ID</th>
+                                        <th th:text="#{chaincode_name}"></th>
+                                        <th th:text="#{channel_name}"></th>
+                                        <th th:text="#{chaincode_version}"></th>
+                                        <th th:text="#{chaincode_proposal_wait_time}"></th>
+                                        <th th:text="#{chaincode_invoke_wait_time}"></th>
+                                        <th th:text="#{date}"></th>
+                                        <th th:text="#{operate}"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="gradeX" th:each="chaincode : ${chaincodes}">
+                                    <tr th:each="chaincode : ${chaincodes}">
                                         <td th:text="${chaincode.id}">ID</td>
                                         <td th:text="${chaincode.name}">合约名称</td>
                                         <td th:text="${chaincode.channelName}">通道名称</td>
                                         <td th:text="${chaincode.version}">版本号</td>
+                                        <td th:text="${chaincode.proposalWaitTime}">提案超时时间</td>
+                                        <td th:text="${chaincode.invokeWaitTime}">事务等待时间</td>
                                         <td th:text="${chaincode.date}">时间</td>
                                         <td>
-                                            <div class="tpl-table-black-operation">
-                                                <a th:href="@{/chaincode/edit(id=${chaincode.id})}">
-                                                    <i class="am-icon-pencil"></i> 编辑
-                                                </a>
-                                                <a th:href="@{/chaincode/instantiate(chaincodeId=${chaincode.id})}">
-                                                    <i class="am-icon-pencil"></i> 实例化
-                                                </a>
-                                                <a th:href="@{/chaincode/upgrade(chaincodeId=${chaincode.id})}">
-                                                    <i class="am-icon-pencil"></i> 升级
-                                                </a>
-                                                <a th:href="@{/chaincode/verify(chaincodeId=${chaincode.id})}" class="tpl-table-black-operation-del">
-                                                    <i class="am-icon-trash"></i> 测试
-                                                </a>
-                                            </div>
+                                            <a th:href="@{/chaincode/edit(id=${chaincode.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{edit}"></a>
+                                            <a th:href="@{/chaincode/instantiate(chaincodeId=${chaincode.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{instantiate}"></a>
+                                            <a th:href="@{/chaincode/upgrade(chaincodeId=${chaincode.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{upgrade}"></a>
+                                            <a th:href="@{/chaincode/verify(chaincodeId=${chaincode.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{verify}"></a>
+                                            <a th:href="@{/chaincode/edit(id=${chaincode.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{delete}"></a>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -108,12 +100,9 @@
             </div>
         </div>
     </div>
+    <div th:include="fns_footer :: footer"></div>
 </div>
-<script src="/static/js/amazeui.min.js"></script>
-<script src="/static/js/amazeui.datatables.min.js"></script>
-<script src="/static/js/dataTables.responsive.min.js"></script>
-<script src="/static/js/app.js"></script>
-
+<script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
 </body>
 
 </html>

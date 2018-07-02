@@ -7,6 +7,7 @@ import cn.aberic.fabric.service.ChannelService;
 import cn.aberic.fabric.service.LeagueService;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.service.PeerService;
+import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -52,9 +53,8 @@ public class PeerController {
     @GetMapping(value = "add")
     public ModelAndView add() {
         ModelAndView modelAndView = new ModelAndView("peerSubmit");
-        modelAndView.addObject("intentLarge", "录入节点");
-        modelAndView.addObject("intentLittle", "录入");
-        modelAndView.addObject("submit", "录入");
+        modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("peer", new Peer());
         modelAndView.addObject("orgs", getForPeerAndOrderer());
@@ -64,9 +64,8 @@ public class PeerController {
     @GetMapping(value = "edit")
     public ModelAndView edit(@RequestParam("id") int id) {
         ModelAndView modelAndView = new ModelAndView("peerSubmit");
-        modelAndView.addObject("intentLarge", "编辑节点");
-        modelAndView.addObject("intentLittle", "编辑");
-        modelAndView.addObject("submit", "修改");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
         Peer peer = peerService.get(id);
         League league = leagueService.get(orgService.get(peer.getOrgId()).getLeagueId());

@@ -21,6 +21,7 @@ public class Peer {
     private boolean eventListener; // required
     private int orgId; // required
     private String orgName; // required
+    private String leagueName; // optional
     private String date; // required
     private int channelCount; // required
 }

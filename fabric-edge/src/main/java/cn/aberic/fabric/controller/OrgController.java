@@ -4,6 +4,7 @@ import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.service.LeagueService;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.service.PeerService;
+import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -50,11 +51,10 @@ public class OrgController {
     @GetMapping(value = "add")
     public ModelAndView add() {
         ModelAndView modelAndView = new ModelAndView("orgSubmit");
-        modelAndView.addObject("intentLarge", "录入组织");
-        modelAndView.addObject("intentLittle", "录入");
-        modelAndView.addObject("submit", "录入");
+        modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
-        modelAndView.addObject("org", new Org());
+        modelAndView.addObject("orgVO", new Org());
         modelAndView.addObject("leagues", leagueService.listAll());
         return modelAndView;
     }
@@ -62,11 +62,10 @@ public class OrgController {
     @GetMapping(value = "edit")
     public ModelAndView edit(@RequestParam("id") int id) {
         ModelAndView modelAndView = new ModelAndView("orgSubmit");
-        modelAndView.addObject("intentLarge", "编辑组织");
-        modelAndView.addObject("intentLittle", "编辑");
-        modelAndView.addObject("submit", "修改");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
-        modelAndView.addObject("org", orgService.get(id));
+        modelAndView.addObject("orgVO", orgService.get(id));
         modelAndView.addObject("leagues", leagueService.listAll());
         return modelAndView;
     }

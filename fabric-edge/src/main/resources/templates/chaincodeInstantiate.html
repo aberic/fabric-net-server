@@ -1,89 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>实例化合约</title>
-    <meta name="description" content="实例化合约">
-    <meta name="keywords" content="实例化合约">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="/static/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="/static/i/app-icon72x72@2x.png">
-    <meta name="apple-mobile-web-app-title" content="实例化合约"/>
-    <script src="/static/js/echarts.min.js"></script>
-    <link rel="stylesheet" href="/static/css/amazeui.min.css"/>
-    <link rel="stylesheet" href="/static/css/amazeui.datatables.min.css"/>
-    <link rel="stylesheet" href="/static/css/app.css">
-    <script src="/static/js/jquery.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en"/>
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/static/images/favicon.png" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.png"/>
+    <!-- Generated: 2018-04-16 09:29:05 +0200 -->
+    <title>Fabric Net Server - github.com/aberic/fabric-net-server</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/static/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '.'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/static/css/dashboard.css" rel="stylesheet"/>
+    <script src="/static/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/static/plugins/charts-c3/plugin.css" rel="stylesheet"/>
+    <script src="/static/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/static/plugins/input-mask/plugin.js"></script>
 </head>
 
-<body data-type="widgets">
-<script src="/static/js/theme.js"></script>
-<div class="am-g tpl-g">
-    <!-- 头部 -->
-    <header>
-        <div th:include="common_header :: header"></div>
-    </header>
-    <!-- 风格切换 -->
-    <div th:include="common_skin :: skin"></div>
-    <!-- 侧边导航栏 -->
-    <div th:include="common_sidebar :: sidebar"></div>
-    <!-- 内容区域 -->
-    <div class="tpl-content-wrapper">
-
-        <div class="container-fluid am-cf">
-            <div class="row">
-                <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
-                    <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"
-                                                           th:text="${intentLarge}"></span>
-                        <small>HyperLedger Fabric网络实例化合约</small>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row-content am-cf">
-            <div class="row">
-                <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-                    <div class="widget am-cf">
-                        <div class="widget-head am-cf">
-                            <div class="widget-title am-fl" th:text="${intentLittle}"></div>
-                        </div>
-                        <div class="widget-body am-fr">
-
-                            <form class="am-form tpl-form-line-form" th:action="@{instantiate(chaincodeId=${chaincodeId})}" th:method="post"
-                                  enctype="multipart/form-data"
-                                  th:object="${api}">
-                                <div class="am-form-group">
-                                    <label for="user-intro" class="am-u-sm-3 am-form-label">实例化参数</label>
-                                    <div class="am-u-sm-9">
-                                        <textarea class="" rows="10" id="user-intro" placeholder="请输入以半角逗号分隔的字符串数组，如：“a,b,10“。该数组将作为智能合约实例化参数，若无则留空。" th:field="*{exec}"></textarea>
+<body class="">
+<div class="page">
+    <div class="page-main">
+        <div th:include="fns_header :: header"></div>
+        <div class="my-3 my-md-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <form class="card" th:action="@{instantiate(chaincodeId=${chaincodeId})}" th:method="post"
+                              th:object="${api}">
+                            <div class="card-header">
+                                <h3 class="card-title" th:text="${intentLittle}"></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-12">
+                                        <div class="form-group">
+                                            <label class="form-label" th:text="#{chaincode_api_params}"></label>
+                                            <textarea class="form-control" rows="10"
+                                                      th:placeholder="#{chaincode_api_params_placeholder}"
+                                                      th:field="*{exec}"></textarea>
+                                        </div>
+                                        <div class="card-footer text-right">
+                                            <div class="d-flex">
+                                                <button type="submit" class="btn btn-primary ml-auto"
+                                                        th:text="${submit}">
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="am-form-group">
-                                    <div class="am-u-sm-9 am-u-sm-push-3">
-                                        <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success "
-                                                th:text="${submit}"></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div th:include="fns_footer :: footer"></div>
 </div>
-<script src="/static/js/amazeui.min.js"></script>
-<script src="/static/js/amazeui.datatables.min.js"></script>
-<script src="/static/js/dataTables.responsive.min.js"></script>
-<script src="/static/js/app.js"></script>
-
+<script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
 </body>
 
 </html>

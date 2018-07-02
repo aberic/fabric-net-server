@@ -3,6 +3,7 @@ package cn.aberic.fabric.controller;
 import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.service.LeagueService;
 import cn.aberic.fabric.service.OrgService;
+import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -44,9 +45,8 @@ public class LeagueController {
     @GetMapping(value = "add")
     public ModelAndView add() {
         ModelAndView modelAndView = new ModelAndView("leagueSubmit");
-        modelAndView.addObject("intentLarge", "录入联盟");
-        modelAndView.addObject("intentLittle", "录入");
-        modelAndView.addObject("submit", "录入");
+        modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("league", new League());
         return modelAndView;
@@ -55,9 +55,8 @@ public class LeagueController {
     @GetMapping(value = "edit")
     public ModelAndView edit(@RequestParam("id") int id) {
         ModelAndView modelAndView = new ModelAndView("leagueSubmit");
-        modelAndView.addObject("intentLarge", "编辑联盟");
-        modelAndView.addObject("intentLittle", "编辑");
-        modelAndView.addObject("submit", "修改");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
         modelAndView.addObject("league", leagueService.get(id));
         return modelAndView;

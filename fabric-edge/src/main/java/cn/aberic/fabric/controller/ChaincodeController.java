@@ -5,6 +5,7 @@ import cn.aberic.fabric.bean.State;
 import cn.aberic.fabric.bean.Trace;
 import cn.aberic.fabric.dao.*;
 import cn.aberic.fabric.service.*;
+import cn.aberic.fabric.utils.SpringUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -77,136 +78,7 @@ public class ChaincodeController {
                 chaincodeService.upgrade(chaincode1, sourceFile, api);
                 break;
         }
-        return list();
-    }
-
-    @GetMapping(value = "add")
-    public ModelAndView add() {
-        ModelAndView modelAndView = new ModelAndView("chaincodeSubmit");
-        modelAndView.addObject("intentLarge", "录入合约");
-        modelAndView.addObject("intentLittle", "录入");
-        modelAndView.addObject("submit", "录入");
-        modelAndView.addObject("intent", "add");
-        modelAndView.addObject("chaincode", new Chaincode());
-        modelAndView.addObject("channels", getChannelFullList());
-        return modelAndView;
-    }
-
-    @GetMapping(value = "install")
-    public ModelAndView install() {
-        ModelAndView modelAndView = new ModelAndView("chaincodeInstall");
-        modelAndView.addObject("intentLarge", "安装合约");
-        modelAndView.addObject("intentLittle", "安装");
-        modelAndView.addObject("submit", "安装");
-        modelAndView.addObject("intent", "install");
-        modelAndView.addObject("chaincode", new Chaincode());
-        modelAndView.addObject("channels", getChannelFullList());
-        modelAndView.addObject("init", false);
-
-        Api apiInstantiate = new Api("实例化智能合约", INSTANTIATE.getIndex());
-
-        modelAndView.addObject("api", apiInstantiate);
-        return modelAndView;
-    }
-
-    @GetMapping(value = "upgrade")
-    public ModelAndView upgrade(@RequestParam("chaincodeId") int chaincodeId) {
-        ModelAndView modelAndView = new ModelAndView("chaincodeUpgrade");
-        modelAndView.addObject("intentLarge", "升级合约");
-        modelAndView.addObject("intentLittle", "升级");
-        modelAndView.addObject("submit", "升级");
-        modelAndView.addObject("intent", "upgrade");
-        modelAndView.addObject("init", true);
-        modelAndView.addObject("chaincode", chaincodeService.get(chaincodeId));
-
-        Api apiInstantiate = new Api("升级智能合约", UPGRADE.getIndex());
-
-        modelAndView.addObject("api", apiInstantiate);
-        return modelAndView;
-    }
-
-    @PostMapping(value = "instantiate")
-    public ModelAndView instantiate(@ModelAttribute Api api, @RequestParam("chaincodeId") int id) {
-        Chaincode chaincode = chaincodeService.get(id);
-        Channel channel = channelService.get(chaincode.getChannelId());
-        Peer peer = peerService.get(channel.getPeerId());
-        Org org = orgService.get(peer.getId());
-        League league = leagueService.get(org.getLeagueId());
-        chaincode.setLeagueName(league.getName());
-        chaincode.setOrgName(org.getName());
-        chaincode.setPeerName(peer.getName());
-        chaincode.setChannelName(channel.getName());
-
-        chaincodeService.instantiate(chaincode, Arrays.asList(api.getExec().split(",")));
         return new ModelAndView(new RedirectView("list"));
-    }
-
-    @GetMapping(value = "edit")
-    public ModelAndView edit(@RequestParam("id") int id) {
-        ModelAndView modelAndView = new ModelAndView("chaincodeSubmit");
-        modelAndView.addObject("intentLarge", "编辑合约");
-        modelAndView.addObject("intentLittle", "编辑");
-        modelAndView.addObject("submit", "修改");
-        modelAndView.addObject("intent", "edit");
-        Chaincode chaincode = chaincodeService.get(id);
-        Peer peer = peerService.get(channelService.get(chaincode.getChannelId()).getPeerId());
-        Org org = orgService.get(peer.getId());
-        League league = leagueService.get(org.getLeagueId());
-        chaincode.setPeerName(peer.getName());
-        chaincode.setOrgName(org.getName());
-        chaincode.setLeagueName(league.getName());
-        List<Channel> channels = channelService.listById(peer.getId());
-        for (Channel channel : channels) {
-            channel.setPeerName(peer.getName());
-            channel.setOrgName(org.getName());
-            channel.setLeagueName(league.getName());
-        }
-        modelAndView.addObject("chaincode", chaincode);
-        modelAndView.addObject("channels", channels);
-        return modelAndView;
-    }
-
-    @GetMapping(value = "instantiate")
-    public ModelAndView instantiate(@RequestParam("chaincodeId") int chaincodeId) {
-        ModelAndView modelAndView = new ModelAndView("chaincodeInstantiate");
-        modelAndView.addObject("intentLarge", "实例化合约");
-        modelAndView.addObject("intentLittle", "实例化");
-        modelAndView.addObject("submit", "实例化");
-        modelAndView.addObject("chaincodeId", chaincodeId);
-
-        Api apiInstantiate = new Api("实例化智能合约", INSTANTIATE.getIndex());
-
-        modelAndView.addObject("api", apiInstantiate);
-        return modelAndView;
-    }
-
-    @GetMapping(value = "verify")
-    public ModelAndView verify(@RequestParam("chaincodeId") int chaincodeId) {
-        ModelAndView modelAndView = new ModelAndView("chaincodeVerify");
-        modelAndView.addObject("intentLarge", "验证合约");
-        modelAndView.addObject("intentLittle", "验证");
-        modelAndView.addObject("submit", "验证");
-        modelAndView.addObject("chaincodeId", chaincodeId);
-
-        List<Api> apis = new ArrayList<>();
-        Api apiInvoke = new Api("执行智能合约", INVOKE.getIndex());
-        Api apiQuery = new Api("查询智能合约", Api.Intent.QUERY.getIndex());
-        Api api = new Api("查询当前链信息", Api.Intent.INFO.getIndex());
-        Api apiHash = new Api("根据交易hash查询区块", Api.Intent.HASH.getIndex());
-        Api apiNumber = new Api("根据交易区块高度查询区块", Api.Intent.NUMBER.getIndex());
-        Api apiTxid = new Api("根据交易ID查询区块", Api.Intent.TXID.getIndex());
-        apis.add(apiInvoke);
-        apis.add(apiQuery);
-        apis.add(api);
-        apis.add(apiHash);
-        apis.add(apiNumber);
-        apis.add(apiTxid);
-
-        Api apiIntent = new Api();
-
-        modelAndView.addObject("apis", apis);
-        modelAndView.addObject("apiIntent", apiIntent);
-        return modelAndView;
     }
 
     @PostMapping(value = "verify")
@@ -258,12 +130,137 @@ public class ChaincodeController {
         return modelAndView;
     }
 
+    @PostMapping(value = "instantiate")
+    public ModelAndView instantiate(@ModelAttribute Api api, @RequestParam("chaincodeId") int id) {
+        Chaincode chaincode = chaincodeService.get(id);
+        Channel channel = channelService.get(chaincode.getChannelId());
+        Peer peer = peerService.get(channel.getPeerId());
+        Org org = orgService.get(peer.getId());
+        League league = leagueService.get(org.getLeagueId());
+        chaincode.setLeagueName(league.getName());
+        chaincode.setOrgName(org.getName());
+        chaincode.setPeerName(peer.getName());
+        chaincode.setChannelName(channel.getName());
+
+        chaincodeService.instantiate(chaincode, Arrays.asList(api.getExec().split(",")));
+        return new ModelAndView(new RedirectView("list"));
+    }
+
+    @GetMapping(value = "add")
+    public ModelAndView add() {
+        ModelAndView modelAndView = new ModelAndView("chaincodeSubmit");
+        modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
+        modelAndView.addObject("intent", "add");
+        modelAndView.addObject("chaincode", new Chaincode());
+        modelAndView.addObject("channels", getChannelFullList());
+        modelAndView.addObject("init", false);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "edit")
+    public ModelAndView edit(@RequestParam("id") int id) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeSubmit");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
+        modelAndView.addObject("intent", "edit");
+        modelAndView.addObject("init", false);
+        Chaincode chaincode = chaincodeService.get(id);
+        Peer peer = peerService.get(channelService.get(chaincode.getChannelId()).getPeerId());
+        Org org = orgService.get(peer.getId());
+        League league = leagueService.get(org.getLeagueId());
+        chaincode.setPeerName(peer.getName());
+        chaincode.setOrgName(org.getName());
+        chaincode.setLeagueName(league.getName());
+        List<Channel> channels = channelService.listById(peer.getId());
+        for (Channel channel : channels) {
+            channel.setPeerName(peer.getName());
+            channel.setOrgName(org.getName());
+            channel.setLeagueName(league.getName());
+        }
+        modelAndView.addObject("chaincode", chaincode);
+        modelAndView.addObject("channels", channels);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "instantiate")
+    public ModelAndView instantiate(@RequestParam("chaincodeId") int chaincodeId) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeInstantiate");
+        modelAndView.addObject("intentLittle", SpringUtil.get("instantiate"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
+        modelAndView.addObject("chaincodeId", chaincodeId);
+
+        Api apiInstantiate = new Api("实例化智能合约", INSTANTIATE.getIndex());
+
+        modelAndView.addObject("api", apiInstantiate);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "install")
+    public ModelAndView install() {
+        ModelAndView modelAndView = new ModelAndView("chaincodeInstall");
+        modelAndView.addObject("intentLittle", SpringUtil.get("install"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
+        modelAndView.addObject("intent", "install");
+        modelAndView.addObject("chaincode", new Chaincode());
+        modelAndView.addObject("channels", getChannelFullList());
+        modelAndView.addObject("init", false);
+
+        Api apiInstantiate = new Api("实例化智能合约", INSTANTIATE.getIndex());
+
+        modelAndView.addObject("api", apiInstantiate);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "upgrade")
+    public ModelAndView upgrade(@RequestParam("chaincodeId") int chaincodeId) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeUpgrade");
+        modelAndView.addObject("intentLittle", SpringUtil.get("upgrade"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
+        modelAndView.addObject("intent", "upgrade");
+        modelAndView.addObject("init", true);
+        modelAndView.addObject("chaincode", chaincodeService.get(chaincodeId));
+
+        Api apiInstantiate = new Api("升级智能合约", UPGRADE.getIndex());
+
+        modelAndView.addObject("api", apiInstantiate);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "verify")
+    public ModelAndView verify(@RequestParam("chaincodeId") int chaincodeId) {
+        ModelAndView modelAndView = new ModelAndView("chaincodeVerify");
+        modelAndView.addObject("intentLittle", SpringUtil.get("verify"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
+        modelAndView.addObject("chaincodeId", chaincodeId);
+
+        List<Api> apis = new ArrayList<>();
+        Api apiInvoke = new Api(SpringUtil.get("chaincode_invoke"), INVOKE.getIndex());
+        Api apiQuery = new Api(SpringUtil.get("chaincode_query"), Api.Intent.QUERY.getIndex());
+        Api api = new Api(SpringUtil.get("chaincode_block_info"), Api.Intent.INFO.getIndex());
+        Api apiHash = new Api(SpringUtil.get("chaincode_block_get_by_hash"), Api.Intent.HASH.getIndex());
+        Api apiTxid = new Api(SpringUtil.get("chaincode_block_get_by_txid"), Api.Intent.TXID.getIndex());
+        Api apiNumber = new Api(SpringUtil.get("chaincode_block_get_by_height"), Api.Intent.NUMBER.getIndex());
+        apis.add(apiInvoke);
+        apis.add(apiQuery);
+        apis.add(api);
+        apis.add(apiHash);
+        apis.add(apiTxid);
+        apis.add(apiNumber);
+
+        Api apiIntent = new Api();
+
+        modelAndView.addObject("apis", apis);
+        modelAndView.addObject("apiIntent", apiIntent);
+        return modelAndView;
+    }
+
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("chaincodes");
         List<Chaincode> chaincodes = chaincodeService.listAll();
         for (Chaincode chaincode : chaincodes) {
-            chaincode.setChannelName(peerService.get(chaincode.getChannelId()).getName());
+            chaincode.setChannelName(channelService.get(chaincode.getChannelId()).getName());
         }
         modelAndView.addObject("chaincodes", chaincodes);
         return modelAndView;

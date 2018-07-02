@@ -337,7 +337,7 @@ class IntermediateChannel {
                                 readInfoJson.put("key", key);
                                 readInfoJson.put("readVersionBlockNum", readVersionBlockNum);
                                 readInfoJson.put("readVersionTxNum", readVersionTxNum);
-                                readInfoJson.put("version", String.format("[%s : %s]", readVersionBlockNum, readVersionTxNum));
+                                readInfoJson.put("chaincode_version", String.format("[%s : %s]", readVersionBlockNum, readVersionTxNum));
                                 readJsonArray.put(readInfoJson);
                                 log.debug("Namespace " + namespace + " read set " + rs + " key " + key + " version [" + readVersionBlockNum + " : " + readVersionTxNum + "]");
                             }

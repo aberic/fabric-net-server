@@ -5,6 +5,7 @@ import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.service.*;
+import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -52,18 +53,16 @@ public class ChannelController {
     @GetMapping(value = "add")
     public ModelAndView add() {
         ModelAndView modelAndView = new ModelAndView("channelSubmit");
-        modelAndView.addObject("intentLarge", "录入通道");
-        modelAndView.addObject("intentLittle", "录入");
-        modelAndView.addObject("submit", "录入");
+        modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
         Channel channel = new Channel();
         List<Peer> peers = peerService.listAll();
         for (Peer peer : peers) {
-            channel.setPeerName(peer.getName());
             Org org = orgService.get(peer.getOrgId());
-            channel.setOrgName(org.getName());
+            peer.setOrgName(org.getName());
             League league = leagueService.get(org.getLeagueId());
-            channel.setLeagueName(league.getName());
+            peer.setLeagueName(league.getName());
         }
         modelAndView.addObject("channel", channel);
         modelAndView.addObject("peers", peers);
@@ -73,9 +72,8 @@ public class ChannelController {
     @GetMapping(value = "edit")
     public ModelAndView edit(@RequestParam("id") int id) {
         ModelAndView modelAndView = new ModelAndView("channelSubmit");
-        modelAndView.addObject("intentLarge", "编辑通道");
-        modelAndView.addObject("intentLittle", "编辑");
-        modelAndView.addObject("submit", "修改");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
         Channel channel = channelService.get(id);
         Org org = orgService.get(peerService.get(channel.getPeerId()).getOrgId());
@@ -83,8 +81,8 @@ public class ChannelController {
         List<Peer> peers = peerService.listById(org.getId());
         League league = leagueService.get(orgService.get(org.getId()).getLeagueId());
         channel.setLeagueName(league.getName());
-        org.setLeagueName(league.getName());
         for (Peer peer : peers) {
+            peer.setLeagueName(league.getName());
             peer.setOrgName(org.getName());
         }
         modelAndView.addObject("channel", channel);

@@ -19,8 +19,8 @@ public class Chaincode {
     private String path; // optional
     private String policy; // optional
     private String version; // required
-    private int proposalWaitTime; // required
-    private int invokeWaitTime; // required
+    private int proposalWaitTime = 90000; // required
+    private int invokeWaitTime = 120; // required
     private int channelId; // required
     private String date; // optional
     private String channelName; // optional

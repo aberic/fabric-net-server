@@ -63,11 +63,12 @@ public class CommonController {
         List<Channel> channels = channelService.listAll();
         for (Channel channel : channels) {
             List<Chaincode> chaincodes = chaincodeService.listById(channel.getId());
-            for (Chaincode chaincode: chaincodes) {
+            for (Chaincode chaincode : chaincodes) {
                 try {
                     JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfo(chaincode.getId()));
                     int height = blockInfo.getJSONObject("data").getInteger("height");
-                    for (int num = height - 1; num >= 0; num--) {
+                    int entCount = height - 10;
+                    for (int num = height - 1; num >= entCount; num--) {
                         Trace trace = new Trace();
                         trace.setId(chaincode.getId());
                         trace.setTrace(String.valueOf(num));
@@ -78,14 +79,11 @@ public class CommonController {
                             Transaction transaction = new Transaction();
                             transaction.setNum(num);
                             JSONObject envelope = envelopes.getJSONObject(i);
-                            transaction.setTxCount(envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount"));
+                            transaction.setTxCount(envelope.containsKey("transactionEnvelopeInfo") ? envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount") : 0);
                             transaction.setChannelName(envelope.getString("channelId"));
                             transaction.setCreateMSPID(envelope.getString("createMSPID"));
                             transaction.setDate(envelope.getString("timestamp"));
                             tmpTransactions.add(transaction);
-                        }
-                        if ((height - num) > 8) {
-                            break;
                         }
                     }
                     break;
@@ -105,11 +103,18 @@ public class CommonController {
             }
             return 0;
         });
-        int size = tmpTransactions.size() > 9 ? 9 : tmpTransactions.size();
-        for (int i = 0; i < size; i++) {
-            Transaction transaction = tmpTransactions.get(i);
-            transaction.setIndex(i + 1);
-            transactions.add(transaction);
+        int size = tmpTransactions.size() > 10 ? 10 : tmpTransactions.size();
+        for (int i = 10; i > 0; i--) {
+            if (i > size) {
+                modelAndView.addObject(String.format("transaction%s", 10 - i), 0);
+            } else if (i <= size){
+                Transaction transaction = tmpTransactions.get(size - i);
+                transaction.setIndex(size - i + 1);
+                if (i > 4){
+                    transactions.add(transaction);
+                }
+                modelAndView.addObject(String.format("transaction%s", 10 - i), transaction.getTxCount());
+            }
         }
         modelAndView.addObject("leagueCount", leagueCount);
         modelAndView.addObject("orgCount", orgCount);
