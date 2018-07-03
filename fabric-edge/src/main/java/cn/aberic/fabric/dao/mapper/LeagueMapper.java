@@ -18,7 +18,7 @@ public interface LeagueMapper {
     @Update("update league set name=#{l.name} where rowid=#{l.id}")
     int update(@Param("l") League league);
 
-    @Delete("delete from org where rowid=#{id}")
+    @Delete("delete from league where rowid=#{id}")
     int delete(@Param("id") int id);
 
     @Select("select rowid,name,date from league where rowid=#{id}")

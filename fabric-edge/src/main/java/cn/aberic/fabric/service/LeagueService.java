@@ -10,11 +10,13 @@ import java.util.List;
  */
 public interface LeagueService {
 
-     int add(League league);
+    int add(League league);
 
-     int update(League league);
+    int update(League league);
 
-     List<League> listAll();
+    List<League> listAll();
 
     League get(int id);
+
+    int delete(int id);
 }
