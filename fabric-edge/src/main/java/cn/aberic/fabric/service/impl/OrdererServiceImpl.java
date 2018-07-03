@@ -66,4 +66,9 @@ public class OrdererServiceImpl implements OrdererService {
     public int count() {
         return ordererMapper.countAll();
     }
+
+    @Override
+    public int delete(int id) {
+        return ordererMapper.delete(id);
+    }
 }

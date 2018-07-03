@@ -75,6 +75,12 @@ public class OrdererController {
         return modelAndView;
     }
 
+    @GetMapping(value = "delete")
+    public ModelAndView delete(@RequestParam("id") int id) {
+        ordererService.delete(id);
+        return new ModelAndView(new RedirectView("list"));
+    }
+
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("orderers");
