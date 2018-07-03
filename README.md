@@ -17,34 +17,10 @@
 <br>
 ![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/master/img/indexDemo.png "Fabric Net Server")
 <br><br>
-## 版本说明
-1、如有源码需求的，可以参阅[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)或含MySQL数据库的[v0.2](https://github.com/abericyang/fabric-net-server/tree/0.2)版本。
-<br>
-2、从[v1.0-RC](https://github.com/aberic/fabric-net-server/tree/1.0-RC1)开始提供后台视图服务，之前的beta版仅提供接口方案。
-<br>
-3、如有二次开发需求，建议以[v0.1](https://github.com/abericyang/fabric-net-server/tree/0.1)为蓝本。
-<br>
-<br><br>
-## 版本历史
-<br>
-
-| version                                                                  | Description                                                                                |
-| :--                                                                      | :--                                                                                        | 
-| [v0.1](https://github.com/aberic/fabric-net-server/tree/0.1)             | 无数据库版，适合轻量级的Fabric平台应用。                                                        | 
-| [v0.2](https://github.com/aberic/fabric-net-server/tree/0.2)             | 含关系型数据库版，适合单服务管理多Fabric网络。                                                   |
-| [v1.0-alpha](https://github.com/aberic/fabric-net-server/tree/1.0-alpha) | 提供Docker容器服务，方便SDK快速部署。此版本为单排序服务及单节点服务配置，符合绝大部分需求。            |
-| [v1.0-beta](https://github.com/aberic/fabric-net-server/tree/1.0-beta)   | 新增支持多服务节点。                                                                           | 
-| [v1.0-beta2](https://github.com/aberic/fabric-net-server/tree/1.0-beta2) | 修复重新新增组织、排序服务和节点服务的bug；提供更新组织、排序服务和节点服务的接口；新增Swagger2文档支持。|
-| [v1.0-beta3](https://github.com/aberic/fabric-net-server/tree/1.0-beta3) | 删除docker-sdk.yaml环境变量配置，取消hash标识（容易被误会），细化Fabric网络及数据库结构，简化启动脚本。|
-| [v1.0-RC1](https://github.com/aberic/fabric-net-server/tree/1.0-RC1)     | 提供后台视图服务，结构解耦度高，相对灵活，需部署多镜像                                              |
-| [v1.0-RC2](https://github.com/aberic/fabric-net-server/tree/1.0-RC2)     | 新增链码安装、实例化功能，结构增加耦合，部署难度降低                                               |
-| [v1.0-RC3](https://github.com/aberic/fabric-net-server/tree/1.0-RC3)     | 新增链码升级功能，新增简版用户登录管理，更换视图为开源模板，优化界面内说明部分                         |
-
-<br>
 
 ## 资源
-* [F.N.S Documentation Wiki](https://github.com/aberic/fabric-net-server/wiki)
-* [Fabric Net Server开发计划](https://github.com/aberic/fabric-net-server/wiki/Fabric-Net-Server%E5%BC%80%E5%8F%91%E8%AE%A1%E5%88%92)
-* [HyperLedger/Aberic Blog](http://www.cnblogs.com/aberic/)
-* [HyperLedger Fabric开发实战](https://item.jd.com/12381034.html?dist=jd)
-* [HLFStudy 微信订阅号](https://camo.githubusercontent.com/bbde569d4617068fe0188d51b1ef8e47561d62ea/68747470733a2f2f696d61676573323031372e636e626c6f67732e636f6d2f626c6f672f313234303533302f3230313830322f313234303533302d32303138303230313130333733333831322d313733303930373534382e6a7067)
+#### [F.N.S Documentation Wiki](https://github.com/aberic/fabric-net-server/wiki)
+#### [Fabric Net Server开发计划](https://github.com/aberic/fabric-net-server/wiki/Fabric-Net-Server%E5%BC%80%E5%8F%91%E8%AE%A1%E5%88%92)
+#### [HyperLedger/Aberic Blog](http://www.cnblogs.com/aberic/)
+#### [HyperLedger Fabric开发实战](https://item.jd.com/12381034.html?dist=jd)
+#### [HLFStudy 微信订阅号](https://camo.githubusercontent.com/bbde569d4617068fe0188d51b1ef8e47561d62ea/68747470733a2f2f696d61676573323031372e636e626c6f67732e636f6d2f626c6f672f313234303533302f3230313830322f313234303533302d32303138303230313130333733333831322d313733303930373534382e6a7067)
