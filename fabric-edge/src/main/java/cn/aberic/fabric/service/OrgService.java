@@ -24,4 +24,6 @@ public interface OrgService {
     int countById(int id);
 
     int count();
+
+    int delete(int id);
 }

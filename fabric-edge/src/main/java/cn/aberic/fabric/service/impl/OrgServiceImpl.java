@@ -1,6 +1,6 @@
 package cn.aberic.fabric.service.impl;
 
-import cn.aberic.fabric.dao.Org;
+import cn.aberic.fabric.dao.*;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.DateUtil;
@@ -28,6 +28,8 @@ public class OrgServiceImpl implements OrgService {
     private LeagueMapper leagueMapper;
     @Resource
     private PeerMapper peerMapper;
+    @Resource
+    private OrdererMapper ordererMapper;
     @Resource
     private ChannelMapper channelMapper;
     @Resource
@@ -107,6 +109,27 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public int count() {
         return orgMapper.countAll();
+    }
+
+    @Override
+    public int delete(int id) {
+        List<Peer> peers = peerMapper.list(id);
+        for (Peer peer : peers) {
+            List<Channel> channels = channelMapper.list(peer.getId());
+            for (Channel channel : channels) {
+                List<Chaincode> chaincodes = chaincodeMapper.list(channel.getId());
+                for (Chaincode chaincode : chaincodes) {
+                    chaincodeMapper.delete(chaincode.getId());
+                }
+                channelMapper.delete(channel.getId());
+            }
+            peerMapper.delete(peer.getId());
+        }
+        List<Orderer> orderers = ordererMapper.list(id);
+        for (Orderer orderer : orderers) {
+            ordererMapper.delete(orderer.getId());
+        }
+        return orgMapper.delete(id);
     }
 
 }
