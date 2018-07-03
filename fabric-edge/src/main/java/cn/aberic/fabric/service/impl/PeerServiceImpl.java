@@ -1,5 +1,7 @@
 package cn.aberic.fabric.service.impl;
 
+import cn.aberic.fabric.dao.Chaincode;
+import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
@@ -65,5 +67,18 @@ public class PeerServiceImpl implements PeerService {
     @Override
     public int count() {
         return peerMapper.countAll();
+    }
+
+    @Override
+    public int delete(int id) {
+        List<Channel> channels = channelMapper.list(id);
+        for (Channel channel: channels) {
+            List<Chaincode> chaincodes = chaincodeMapper.list(channel.getId());
+            for (Chaincode chaincode: chaincodes) {
+                chaincodeMapper.delete(chaincode.getId());
+            }
+            channelMapper.delete(channel.getId());
+        }
+        return peerMapper.delete(id);
     }
 }
