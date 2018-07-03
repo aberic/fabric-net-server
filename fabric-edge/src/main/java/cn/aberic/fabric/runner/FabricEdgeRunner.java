@@ -1,8 +1,8 @@
 package cn.aberic.fabric.runner;
 
 import cn.aberic.fabric.dao.User;
-import cn.aberic.fabric.dao.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Value;
+import cn.aberic.fabric.service.UserService;
+import cn.aberic.fabric.utils.MD5Util;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -17,12 +17,12 @@ import javax.annotation.Resource;
 public class FabricEdgeRunner implements ApplicationRunner {
 
     @Resource
-    private UserMapper userMapper;
+    private UserService userService;
 
-    @Value("${username}")
-    private String username;
-    @Value("${password}")
-    private String password;
+//    @Value("${username}")
+//    private String username;
+//    @Value("${password}")
+//    private String password;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -41,10 +41,10 @@ public class FabricEdgeRunner implements ApplicationRunner {
 
     private void addUser() {
         User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-//        user.setUsername(System.getenv("USERNAME"));
-//        user.setPassword(System.getenv("PASSWORD"));
-        userMapper.add(user);
+//        user.setUsername(username);
+//        user.setPassword(MD5Util.md5(password));
+        user.setUsername(System.getenv("USERNAME"));
+        user.setPassword(MD5Util.md5(System.getenv("PASSWORD")));
+        userService.init(user);
     }
 }
