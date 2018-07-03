@@ -7,18 +7,22 @@ import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.*;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.MD5Util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 描述：
@@ -131,9 +135,15 @@ public class CommonController {
     }
 
     @PostMapping(value = "login")
-    public ModelAndView submit(@ModelAttribute User user) {
+    public ModelAndView submit(@ModelAttribute User user, HttpServletRequest request) {
         try {
-            if (StringUtils.equals(user.getPassword(), userMapper.get(user.getUsername()).getPassword())) {
+            if (MD5Util.verify(user.getPassword(), userMapper.get(user.getUsername()).getPassword())) {
+                // 校验通过时，在session里放入一个标识
+                // 后续通过session里是否存在该标识来判断用户是否登录
+                request.getSession().setAttribute("username", user.getUsername());
+                String token = UUID.randomUUID().toString();
+                request.getSession().setAttribute("token", token);
+                CacheUtil.put(user.getUsername(), token);
                 return new ModelAndView(new RedirectView("index"));
             }
         } catch (Exception e) {
@@ -148,5 +158,11 @@ public class CommonController {
         ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.addObject("user", user);
         return modelAndView;
+    }
+
+    @GetMapping(value = "logout")
+    public ModelAndView logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return new ModelAndView(new RedirectView("login"));
     }
 }
