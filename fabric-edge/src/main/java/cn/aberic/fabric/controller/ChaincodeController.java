@@ -255,6 +255,12 @@ public class ChaincodeController {
         return modelAndView;
     }
 
+    @GetMapping(value = "delete")
+    public ModelAndView delete(@RequestParam("id") int id) {
+        chaincodeService.delete(id);
+        return new ModelAndView(new RedirectView("list"));
+    }
+
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("chaincodes");
