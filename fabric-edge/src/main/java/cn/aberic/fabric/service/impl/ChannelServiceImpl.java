@@ -1,5 +1,6 @@
 package cn.aberic.fabric.service.impl;
 
+import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
@@ -65,5 +66,14 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public int count() {
         return channelMapper.countAll();
+    }
+
+    @Override
+    public int delete(int id) {
+        List<Chaincode> chaincodes = chaincodeMapper.list(id);
+        for (Chaincode chaincode: chaincodes) {
+            chaincodeMapper.delete(chaincode.getId());
+        }
+        return channelMapper.delete(id);
     }
 }
