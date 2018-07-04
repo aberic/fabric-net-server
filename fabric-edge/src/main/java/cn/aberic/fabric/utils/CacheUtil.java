@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheUtil {
 
     private static Cache<String, String> cacheString = CacheBuilder.newBuilder().maximumSize(5)
-            .expireAfterWrite(30, TimeUnit.MINUTES).build();
+            .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     public static void put(String key, String value) {
         cacheString.put(key, value);
@@ -20,6 +20,10 @@ public class CacheUtil {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    public static void remove(String key) {
+        cacheString.invalidate(key);
     }
 
 }
