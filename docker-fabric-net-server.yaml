@@ -14,6 +14,8 @@ services:
       # user login account
       - USERNAME=admin
       - PASSWORD=password
+    volumes:
+      - /home/data/:/home/edge/data
     command: bash /home/init-edge.sh
     ports:
       - 8080:8080
