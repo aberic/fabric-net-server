@@ -36,7 +36,7 @@ public class FabricEdgeRunner implements ApplicationRunner {
         System.out.println();
         System.out.println("===================== please make your fabric net work ===================== ");
         System.out.println();
-        System.out.println("=============================== read logs ============================== ");
+        System.out.println("================================= read logs ================================ ");
     }
 
     private void addUser() {
