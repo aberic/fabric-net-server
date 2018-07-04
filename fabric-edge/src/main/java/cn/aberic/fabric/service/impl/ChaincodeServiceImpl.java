@@ -80,6 +80,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         if (!upload(chaincode, file)){
             return responseFailJson("source unzip fail");
         }
+        FabricHelper.obtain().removeManager(chaincode.getId());
         if (chaincodeMapper.updateForUpgrade(chaincode) <= 0) {
             return responseFailJson("chaincode updateForUpgrade fail");
         }
@@ -108,9 +109,9 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     }
 
     @Override
-    public int update(Chaincode chaincodeInfo) {
-        FabricHelper.obtain().removeManager(chaincodeInfo.getId());
-        return chaincodeMapper.update(chaincodeInfo);
+    public int update(Chaincode chaincode) {
+        FabricHelper.obtain().removeManager(chaincode.getId());
+        return chaincodeMapper.update(chaincode);
     }
 
     @Override
