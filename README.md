@@ -25,4 +25,7 @@
 #### [Hyperledger Fabric从零开始](https://www.cnblogs.com/aberic/category/1148898.html)
 #### [HyperLedger Fabric开发实战](https://item.jd.com/12381034.html?dist=jd)
 #### [HLFStudy 微信订阅号](https://camo.githubusercontent.com/bbde569d4617068fe0188d51b1ef8e47561d62ea/68747470733a2f2f696d61676573323031372e636e626c6f67732e636f6d2f626c6f672f313234303533302f3230313830322f313234303533302d32303138303230313130333733333831322d313733303930373534382e6a7067)
+<br>
+
+### ↓F.N.S微信交流群↓
 ![微信交流群](https://images2018.cnblogs.com/blog/1240530/201807/1240530-20180704222453050-1529088991.png "Fabric Net Server WeChat")
