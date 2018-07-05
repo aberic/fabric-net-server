@@ -30,11 +30,13 @@ public interface AppService {
 
     int update(App app);
 
-    List<App> listById(int id);
+    int updateKey(App app);
+
+    List<App> list(int id);
 
     App get(int id);
 
     int delete(int id);
 
-    int countById(int id);
+    int count(int id);
 }

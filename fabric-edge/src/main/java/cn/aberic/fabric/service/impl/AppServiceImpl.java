@@ -17,9 +17,11 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.service.AppService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -29,6 +31,9 @@ import java.util.List;
  */
 @Service("appService")
 public class AppServiceImpl implements AppService {
+
+    @Resource
+    private AppMapper appMapper;
 
     @Override
     public int add(App app) {
@@ -41,7 +46,12 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public List<App> listById(int id) {
+    public int updateKey(App app) {
+        return 0;
+    }
+
+    @Override
+    public List<App> list(int id) {
         return null;
     }
 
@@ -56,7 +66,7 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public int countById(int id) {
+    public int count(int id) {
         return 0;
     }
 }
