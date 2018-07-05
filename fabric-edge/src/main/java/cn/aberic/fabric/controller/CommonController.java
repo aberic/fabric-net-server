@@ -21,11 +21,9 @@ import cn.aberic.fabric.bean.Transaction;
 import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.User;
-import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
-import cn.aberic.fabric.utils.MD5Util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -37,7 +35,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 描述：
@@ -49,8 +46,7 @@ import java.util.UUID;
 public class CommonController {
 
     @Resource
-    private UserMapper userMapper;
-
+    private CommonService commonService;
     @Resource
     private LeagueService leagueService;
     @Resource
@@ -152,13 +148,12 @@ public class CommonController {
     @PostMapping(value = "login")
     public ModelAndView submit(@ModelAttribute User user, HttpServletRequest request) {
         try {
-            if (MD5Util.verify(user.getPassword(), userMapper.get(user.getUsername()).getPassword())) {
+            String token = commonService.login(user);
+            if (null != token) {
                 // 校验通过时，在session里放入一个标识
                 // 后续通过session里是否存在该标识来判断用户是否登录
                 request.getSession().setAttribute("username", user.getUsername());
-                String token = UUID.randomUUID().toString();
                 request.getSession().setAttribute("token", token);
-                CacheUtil.put(user.getUsername(), token);
                 return new ModelAndView(new RedirectView("index"));
             }
         } catch (Exception e) {
