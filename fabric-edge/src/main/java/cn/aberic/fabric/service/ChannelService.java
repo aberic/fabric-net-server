@@ -26,19 +26,19 @@ import java.util.List;
  */
 public interface ChannelService {
 
-     int add(Channel channel);
+    int add(Channel channel);
 
-     int update(Channel channel);
+    int update(Channel channel);
 
-     List<Channel> listAll();
+    List<Channel> listAll();
 
-     List<Channel> listById(int id);
+    List<Channel> listById(int id);
 
     Channel get(int id);
 
-     int countById(int id);
+    int countById(int id);
 
-     int count();
+    int count();
 
-     int delete(int id);
+    int delete(int id);
 }
