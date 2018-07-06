@@ -19,6 +19,8 @@ package cn.aberic.fabric.service.impl;
 import cn.aberic.fabric.bean.App;
 import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.service.AppService;
+import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.MathUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,37 +38,52 @@ public class AppServiceImpl implements AppService {
     private AppMapper appMapper;
 
     @Override
-    public int add(App app) {
-        return 0;
+    public int add(App app, int chaincodeId) {
+        if (null != appMapper.check(app)) {
+            return 0;
+        }
+        app.setChaincodeId(chaincodeId);
+        app.setKey(MathUtil.getRandom8());
+        app.setPublicKey("pub");
+        app.setPrivateKey("pri");
+        app.setCreateDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
+        app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
+        return appMapper.add(app);
     }
 
     @Override
     public int update(App app) {
-        return 0;
+        app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
+        return appMapper.update(app);
     }
 
     @Override
-    public int updateKey(App app) {
-        return 0;
+    public int updateKey(int id) {
+        App app = new App();
+        app.setId(id);
+        app.setKey(MathUtil.getRandom8());
+        app.setPublicKey("pub1");
+        app.setPrivateKey("pri1");
+        return appMapper.updateKey(app);
     }
 
     @Override
     public List<App> list(int id) {
-        return null;
+        return appMapper.list(id);
     }
 
     @Override
     public App get(int id) {
-        return null;
+        return appMapper.get(id);
     }
 
     @Override
     public int delete(int id) {
-        return 0;
+        return appMapper.delete(id);
     }
 
     @Override
     public int count(int id) {
-        return 0;
+        return appMapper.count(id);
     }
 }
