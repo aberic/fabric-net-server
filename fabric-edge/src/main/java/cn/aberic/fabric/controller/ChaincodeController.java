@@ -200,7 +200,7 @@ public class ChaincodeController {
     }
 
     @GetMapping(value = "instantiate")
-    public ModelAndView instantiate(@RequestParam("chaincodeId") int chaincodeId) {
+    public ModelAndView instantiate(@RequestParam("id") int chaincodeId) {
         ModelAndView modelAndView = new ModelAndView("chaincodeInstantiate");
         modelAndView.addObject("intentLittle", SpringUtil.get("instantiate"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
@@ -229,7 +229,7 @@ public class ChaincodeController {
     }
 
     @GetMapping(value = "upgrade")
-    public ModelAndView upgrade(@RequestParam("chaincodeId") int chaincodeId) {
+    public ModelAndView upgrade(@RequestParam("id") int chaincodeId) {
         ModelAndView modelAndView = new ModelAndView("chaincodeUpgrade");
         modelAndView.addObject("intentLittle", SpringUtil.get("upgrade"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
@@ -244,7 +244,7 @@ public class ChaincodeController {
     }
 
     @GetMapping(value = "verify")
-    public ModelAndView verify(@RequestParam("chaincodeId") int chaincodeId) {
+    public ModelAndView verify(@RequestParam("id") int chaincodeId) {
         ModelAndView modelAndView = new ModelAndView("chaincodeVerify");
         modelAndView.addObject("intentLittle", SpringUtil.get("verify"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
