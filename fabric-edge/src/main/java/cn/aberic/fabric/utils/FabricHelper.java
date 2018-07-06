@@ -22,7 +22,7 @@ import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.sdk.OrgManager;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +53,7 @@ public class FabricHelper {
     }
 
     private FabricHelper() {
-        fabricManagerMap = new HashMap<>();
+        fabricManagerMap = new LinkedHashMap<>();
     }
 
     public void removeManager(List<Peer> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
