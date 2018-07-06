@@ -86,14 +86,14 @@ public class CommonController {
             for (Chaincode chaincode : chaincodes) {
                 try {
                     JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfo(chaincode.getId()));
-                    int height = blockInfo.getJSONObject("data").getInteger("height");
+                    int height = blockInfo.containsKey("data") ? blockInfo.getJSONObject("data").getInteger("height") : 0;
                     int entCount = height - 10;
                     for (int num = height - 1; num >= entCount; num--) {
                         Trace trace = new Trace();
                         trace.setId(chaincode.getId());
                         trace.setTrace(String.valueOf(num));
                         JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumber(trace));
-                        JSONArray envelopes = blockMessage.getJSONObject("data").getJSONArray("envelopes");
+                        JSONArray envelopes = blockMessage.containsKey("data")? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
                         int size = envelopes.size();
                         for (int i = 0; i < size; i++) {
                             Transaction transaction = new Transaction();
