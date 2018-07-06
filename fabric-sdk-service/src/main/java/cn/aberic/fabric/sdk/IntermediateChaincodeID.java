@@ -262,7 +262,8 @@ class IntermediateChaincodeID {
                 resultAsString = new String(x, "UTF-8");
             }
             log.info("resultAsString = " + resultAsString);
-            org.getChannel().get().sendTransaction(successful).get(transactionWaitTime, TimeUnit.SECONDS);
+            // org.getChannel().get().sendTransaction(successful).get(transactionWaitTime, TimeUnit.SECONDS);
+            org.getChannel().get().sendTransaction(successful);
             resultMap.put("code", "success");
             resultMap.put("data", resultAsString);
             resultMap.put("txid", resp.getTransactionID());
