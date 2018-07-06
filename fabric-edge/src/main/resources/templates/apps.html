@@ -1,0 +1,114 @@
+<!doctype html>
+<!--
+  ~ Copyright (c) 2018. Aberic - All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~
+  ~ You may obtain a copy of the License at
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en"/>
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/static/images/favicon.png" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.png"/>
+    <!-- Generated: 2018-04-16 09:29:05 +0200 -->
+    <title>Fabric Net Server - github.com/aberic/fabric-net-server</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/static/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '.'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/static/css/dashboard.css" rel="stylesheet"/>
+    <script src="/static/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/static/plugins/charts-c3/plugin.css" rel="stylesheet"/>
+    <script src="/static/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/static/plugins/input-mask/plugin.js"></script>
+</head>
+
+<body class="">
+<div class="page">
+    <div class="page-main">
+        <div th:include="fns_header :: header"></div>
+        <div class="my-3 my-md-5">
+            <div class="container">
+                <div class="row row-cards row-deck">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title" th:text="#{apps}"></h3>
+                                <a th:href="@{/app/add(id=${chaincodeId})}"
+                                   class="btn btn-primary ml-auto text-right" th:text="#{new_app}"></a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table card-table table-vcenter text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th class="w-1">ID</th>
+                                        <th th:text="#{app_name}"></th>
+                                        <th th:text="#{app_key}"></th>
+                                        <th th:text="#{app_public_key}"></th>
+                                        <th th:text="#{app_create_date}"></th>
+                                        <th th:text="#{app_modify_date}"></th>
+                                        <th th:text="#{app_active}"></th>
+                                        <th th:text="#{operate}"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="app : ${apps}">
+                                        <td th:text="${app.id}">ID</td>
+                                        <td th:text="${app.name}">Name</td>
+                                        <td th:text="${app.key}">Key</td>
+                                        <td th:text="${app.publicKey}">Public Key</td>
+                                        <td th:text="${app.createDate}">Create Date</td>
+                                        <td th:text="${app.modifyDate}">Modify Date</td>
+                                        <td th:text="${app.active}">Active</td>
+                                        <td>
+                                            <a th:href="@{/app/edit(id=${app.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{edit}"></a>
+                                            <a th:href="@{/app/delete(id=${app.id}, chaincodeId=${chaincodeId})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{delete}"></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:include="fns_footer :: footer"></div>
+</div>
+<script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+</body>
+
+</html>
