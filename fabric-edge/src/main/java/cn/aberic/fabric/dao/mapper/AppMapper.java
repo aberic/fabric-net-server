@@ -28,41 +28,49 @@ import java.util.List;
 @Mapper
 public interface AppMapper {
 
-    @Insert("insert into app (name, key, chaincode_id, create_date, modify_date, private_key, public_key, active)" +
-            " values (#{a.name},#{a.key},#{a.chaincodeId},#{a.createDate},#{a.modifyDate},#{a.privateKey},#{a.publicKey},#{a.active})")
+    @Insert("insert into app (name, key, chaincode_id, create_date, modify_date, private_key, public_key, active, open)" +
+            " values (#{a.name},#{a.key},#{a.chaincodeId},#{a.createDate},#{a.modifyDate},#{a.privateKey},#{a.publicKey},#{a.active},#{a.open})")
     int add(@Param("a") App app);
 
-    @Update("update app set name=#{a.name}, key=#{a.key}, modify_date=#{a.modifyDate}, active=#{a.active} where rowid=#{a.id}")
+    @Update("update app set name=#{a.name}, modify_date=#{a.modifyDate}, active=#{a.active}, open=#{a.open} where rowid=#{a.id}")
     int update(@Param("a") App app);
 
-    @Update("update app set private_key=#{a.privateKey}, public_key=#{a.publicKey} where rowid=#{a.id}")
+    @Update("update app set key=#{a.key}, private_key=#{a.privateKey}, public_key=#{a.publicKey} where rowid=#{a.id}")
     int updateKey(@Param("a") App app);
 
     @Select("select count(name) from app where chaincode_id=#{id}")
     int count(@Param("id") int id);
 
-    @Select("select name, key, chaincode_id, create_date, modify_date, public_key, active from app where chaincode_id=#{id}")
+    @Select("select key from app where name=#{a.name} and chaincode_id=#{a.chaincodeId}")
+    @Results({
+            @Result(property = "name", column = "name"),
+            @Result(property = "key", column = "key"),
+            @Result(property = "chaincode_id", column = "chaincodeId")
+    })
+    App check(@Param("a") App app);
+
+    @Select("select rowid, name, key, chaincode_id, create_date, modify_date, public_key, active, open from app where chaincode_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "key", column = "key"),
-            @Result(property = "chaincode_id", column = "chaincodeId"),
-            @Result(property = "create_date", column = "createDate"),
-            @Result(property = "modify_date", column = "modifyDate"),
-            @Result(property = "public_key", column = "publicKey"),
+            @Result(property = "chaincodeId", column = "chaincode_id"),
+            @Result(property = "createDate", column = "create_date"),
+            @Result(property = "modifyDate", column = "modify_date"),
+            @Result(property = "publicKey", column = "public_key"),
             @Result(property = "active", column = "active")
     })
     List<App> list(@Param("id") int id);
 
-    @Select("select name, key, chaincode_id, create_date, modify_date, public_key, active from app where rowid=#{id}")
+    @Select("select rowid, name, key, chaincode_id, create_date, modify_date, public_key, active, open from app where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "key", column = "key"),
-            @Result(property = "chaincode_id", column = "chaincodeId"),
-            @Result(property = "create_date", column = "createDate"),
-            @Result(property = "modify_date", column = "modifyDate"),
-            @Result(property = "public_key", column = "publicKey"),
+            @Result(property = "chaincodeId", column = "chaincode_id"),
+            @Result(property = "createDate", column = "create_date"),
+            @Result(property = "modifyDate", column = "modify_date"),
+            @Result(property = "publicKey", column = "public_key"),
             @Result(property = "active", column = "active")
     })
     App get(@Param("id") int id);
