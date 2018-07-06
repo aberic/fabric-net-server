@@ -37,5 +37,6 @@ public class App {
     private String privateKey;
     private String publicKey;
     private boolean active;
+    private boolean open;
 
 }
