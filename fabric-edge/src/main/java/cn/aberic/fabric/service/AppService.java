@@ -26,11 +26,11 @@ import java.util.List;
  */
 public interface AppService {
 
-    int add(App app);
+    int add(App app, int chaincodeId);
 
     int update(App app);
 
-    int updateKey(App app);
+    int updateKey(int id);
 
     List<App> list(int id);
 
