@@ -2,15 +2,14 @@
 <br>
 # Fabric Net Server [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg)](http://www.cnblogs.com/aberic/)
 [![version](https://img.shields.io/badge/version-1.0RC3-green.svg)](https://github.com/aberic/fabric-net-server/tree/1.0-RC3)
-[![apache 2](https://img.shields.io/hexpm/l/plug.svg?longCache=true)](https://github.com/aberic/fabric-sdk-container/blob/master/LICENSE)
+[![apache 2](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-net-server/blob/master/LICENSE)
 [![codebeat badge](https://codebeat.co/badges/92aa24de-8a82-432b-83fb-ec7413615952)](https://codebeat.co/projects/github-com-aberic-fabric-net-server-master)
 [![Join the chat at https://gitter.im/fabric-net-server/Lobby](https://badges.gitter.im/fabric-net-server/Lobby.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <br><br>
 本项目目前提供一套Fabric网络后台服务，包括对已经在Fabric网络中创建好的org、peer、channel、chaincode等进行网络配置，并基于已经新增成功的内容提供[REST API](https://github.com/aberic/fabric-net-server/blob/master/API_DEMO.md)服务，目前已经支持链码安装、实例化、升级、调用、查询以及溯源等功能。
 <br><br>
-## 项目简览
-后台界面综览
-<br>
+## 项目部分视图
+
 ![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/master/img/indexDemo.png "Fabric Net Server")
 <br><br>
 
