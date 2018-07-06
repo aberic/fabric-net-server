@@ -93,6 +93,8 @@
                                         <td>
                                             <a th:href="@{/app/edit(id=${app.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{edit}"></a>
+                                            <a th:href="@{/app/refresh(id=${app.id}, chaincodeId=${chaincodeId})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{refresh}"></a>
                                             <a th:href="@{/app/delete(id=${app.id}, chaincodeId=${chaincodeId})}"
                                                class="btn btn-secondary btn-sm" th:text="#{delete}"></a>
                                         </td>
