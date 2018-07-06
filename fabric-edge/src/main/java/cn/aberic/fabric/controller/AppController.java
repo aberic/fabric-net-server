@@ -89,6 +89,14 @@ public class AppController {
         return new ModelAndView(new RedirectView("list"), map);
     }
 
+    @GetMapping(value = "refresh")
+    public ModelAndView refresh(@RequestParam("id") int id, @RequestParam("chaincodeId") int chaincodeId) {
+        appService.updateKey(id);
+        Map map = new HashMap();
+        map.put("id", chaincodeId);
+        return new ModelAndView(new RedirectView("list"), map);
+    }
+
     @GetMapping(value = "list")
     public ModelAndView list(@RequestParam("id") int chaincodeId) {
         ModelAndView modelAndView = new ModelAndView("apps");
