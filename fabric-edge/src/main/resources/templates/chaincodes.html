@@ -81,14 +81,16 @@
                                         <td>
                                             <a th:href="@{/chaincode/edit(id=${chaincode.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{edit}"></a>
-                                            <a th:href="@{/chaincode/instantiate(chaincodeId=${chaincode.id})}"
+                                            <a th:href="@{/chaincode/instantiate(id=${chaincode.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{instantiate}"></a>
-                                            <a th:href="@{/chaincode/upgrade(chaincodeId=${chaincode.id})}"
+                                            <a th:href="@{/chaincode/upgrade(id=${chaincode.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{upgrade}"></a>
-                                            <a th:href="@{/chaincode/verify(chaincodeId=${chaincode.id})}"
+                                            <a th:href="@{/chaincode/verify(id=${chaincode.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{verify}"></a>
                                             <a th:href="@{/chaincode/delete(id=${chaincode.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{delete}"></a>
+                                            <a th:href="@{/app/list(id=${chaincode.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{app}"></a>
                                         </td>
                                     </tr>
                                     </tbody>
