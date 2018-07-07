@@ -60,11 +60,12 @@
                                     <thead>
                                     <tr>
                                         <th class="w-1">ID</th>
-                                        <th th:text="#{chaincode_name}"></th>
+                                        <th th:text="#{name}"></th>
                                         <th th:text="#{channel_name}"></th>
                                         <th th:text="#{chaincode_version}"></th>
                                         <th th:text="#{chaincode_proposal_wait_time}"></th>
                                         <th th:text="#{chaincode_invoke_wait_time}"></th>
+                                        <th th:text="#{open_visit}"></th>
                                         <th th:text="#{date}"></th>
                                         <th th:text="#{operate}"></th>
                                     </tr>
@@ -77,6 +78,7 @@
                                         <td th:text="${chaincode.version}">版本号</td>
                                         <td th:text="${chaincode.proposalWaitTime}">提案超时时间</td>
                                         <td th:text="${chaincode.invokeWaitTime}">事务等待时间</td>
+                                        <td th:text="${chaincode.open}">允许任意访问网络</td>
                                         <td th:text="${chaincode.date}">时间</td>
                                         <td>
                                             <a th:href="@{/chaincode/edit(id=${chaincode.id})}"
