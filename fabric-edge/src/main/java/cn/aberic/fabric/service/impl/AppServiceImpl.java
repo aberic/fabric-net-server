@@ -17,10 +17,14 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.bean.Key;
 import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.service.AppService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.MathUtil;
+import cn.aberic.fabric.utils.encryption.Utils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,6 +38,8 @@ import java.util.List;
 @Service("appService")
 public class AppServiceImpl implements AppService {
 
+    @Value("${key.dir}")
+    private String keyPath;
     @Resource
     private AppMapper appMapper;
 
@@ -42,12 +48,19 @@ public class AppServiceImpl implements AppService {
         if (null != appMapper.check(app)) {
             return 0;
         }
+        Key key = Utils.obtain().createECCDSAKeyPair(keyPath);
+        if (null == key) {
+             return 0;
+        }
+        app.setPublicKey(key.getPublicKey());
+        app.setPrivateKey(key.getPrivateKey());
         app.setChaincodeId(chaincodeId);
         app.setKey(MathUtil.getRandom8());
-        app.setPublicKey("pub");
-        app.setPrivateKey("pri");
         app.setCreateDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
         app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
+        if (app.isActive()) {
+            CacheUtil.put(app.getKey(), String.valueOf(app.getChaincodeId()));
+        }
         return appMapper.add(app);
     }
 
@@ -62,8 +75,12 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         app.setId(id);
         app.setKey(MathUtil.getRandom8());
-        app.setPublicKey("pub1");
-        app.setPrivateKey("pri1");
+        Key key = Utils.obtain().createECCDSAKeyPair(keyPath);
+        if (null == key) {
+            return 0;
+        }
+        app.setPublicKey(key.getPublicKey());
+        app.setPrivateKey(key.getPrivateKey());
         return appMapper.updateKey(app);
     }
 

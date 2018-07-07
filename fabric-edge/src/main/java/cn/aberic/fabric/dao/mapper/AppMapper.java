@@ -28,11 +28,11 @@ import java.util.List;
 @Mapper
 public interface AppMapper {
 
-    @Insert("insert into app (name, key, chaincode_id, create_date, modify_date, private_key, public_key, active, open)" +
-            " values (#{a.name},#{a.key},#{a.chaincodeId},#{a.createDate},#{a.modifyDate},#{a.privateKey},#{a.publicKey},#{a.active},#{a.open})")
+    @Insert("insert into app (name, key, chaincode_id, create_date, modify_date, private_key, public_key, active)" +
+            " values (#{a.name},#{a.key},#{a.chaincodeId},#{a.createDate},#{a.modifyDate},#{a.privateKey},#{a.publicKey},#{a.active})")
     int add(@Param("a") App app);
 
-    @Update("update app set name=#{a.name}, modify_date=#{a.modifyDate}, active=#{a.active}, open=#{a.open} where rowid=#{a.id}")
+    @Update("update app set name=#{a.name}, modify_date=#{a.modifyDate}, active=#{a.active} where rowid=#{a.id}")
     int update(@Param("a") App app);
 
     @Update("update app set key=#{a.key}, private_key=#{a.privateKey}, public_key=#{a.publicKey} where rowid=#{a.id}")
@@ -49,7 +49,7 @@ public interface AppMapper {
     })
     App check(@Param("a") App app);
 
-    @Select("select rowid, name, key, chaincode_id, create_date, modify_date, public_key, active, open from app where chaincode_id=#{id}")
+    @Select("select rowid, name, key, chaincode_id, create_date, modify_date, public_key, active from app where chaincode_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -62,7 +62,7 @@ public interface AppMapper {
     })
     List<App> list(@Param("id") int id);
 
-    @Select("select rowid, name, key, chaincode_id, create_date, modify_date, public_key, active, open from app where rowid=#{id}")
+    @Select("select rowid, name, key, chaincode_id, create_date, modify_date, public_key, active from app where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
