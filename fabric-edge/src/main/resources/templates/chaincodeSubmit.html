@@ -99,6 +99,16 @@
                                                    th:placeholder="#{chaincode_invoke_wait_time_placeholder}"
                                                    th:field="*{invokeWaitTime}">
                                         </div>
+                                        <div class="form-group">
+                                            <div class="form-label" th:text="#{open_visit}"></div>
+                                            <label class="custom-switch">
+                                                <input type="checkbox" name="custom-switch-checkbox"
+                                                       th:field="*{open}"
+                                                       class="custom-switch-input">
+                                                <span class="custom-switch-indicator"></span>
+                                                <span class="custom-switch-description" th:text="#{open}"></span>
+                                            </label>
+                                        </div>
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
                                                 <button type="submit" class="btn btn-primary ml-auto"
