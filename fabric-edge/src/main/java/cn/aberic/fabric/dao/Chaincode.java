@@ -43,4 +43,5 @@ public class Chaincode {
     private String peerName; // optional
     private String orgName; // optional
     private String leagueName; // optional
+    private boolean open;
 }
