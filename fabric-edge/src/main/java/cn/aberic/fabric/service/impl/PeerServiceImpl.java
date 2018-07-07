@@ -24,6 +24,7 @@ import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.dao.mapper.PeerMapper;
 import cn.aberic.fabric.service.PeerService;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.DeleteUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -87,14 +88,6 @@ public class PeerServiceImpl implements PeerService {
 
     @Override
     public int delete(int id) {
-        List<Channel> channels = channelMapper.list(id);
-        for (Channel channel: channels) {
-            List<Chaincode> chaincodes = chaincodeMapper.list(channel.getId());
-            for (Chaincode chaincode: chaincodes) {
-                chaincodeMapper.delete(chaincode.getId());
-            }
-            channelMapper.delete(channel.getId());
-        }
-        return peerMapper.delete(id);
+        return DeleteUtil.obtain().deletePeer(id, peerMapper, channelMapper, chaincodeMapper);
     }
 }

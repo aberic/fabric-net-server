@@ -20,6 +20,7 @@ import cn.aberic.fabric.dao.*;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.LeagueService;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.DeleteUtil;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -69,27 +70,7 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     public int delete(int id) {
-        List<Org> orgs = orgMapper.list(id);
-        for (Org org: orgs) {
-            List<Peer> peers = peerMapper.list(org.getId());
-            for (Peer peer : peers) {
-                List<Channel> channels = channelMapper.list(peer.getId());
-                for (Channel channel : channels) {
-                    List<Chaincode> chaincodes = chaincodeMapper.list(channel.getId());
-                    for (Chaincode chaincode : chaincodes) {
-                        chaincodeMapper.delete(chaincode.getId());
-                    }
-                    channelMapper.delete(channel.getId());
-                }
-                peerMapper.delete(peer.getId());
-            }
-            List<Orderer> orderers = ordererMapper.list(org.getId());
-            for (Orderer orderer : orderers) {
-                ordererMapper.delete(orderer.getId());
-            }
-            orgMapper.delete(org.getId());
-        }
-        return leagueMapper.delete(id);
+        return DeleteUtil.obtain().deleteLeague(id, leagueMapper, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper);
     }
 
 }

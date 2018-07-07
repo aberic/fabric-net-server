@@ -20,6 +20,7 @@ import cn.aberic.fabric.dao.*;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.DeleteUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.FileUtil;
 import org.springframework.core.env.Environment;
@@ -129,23 +130,7 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public int delete(int id) {
-        List<Peer> peers = peerMapper.list(id);
-        for (Peer peer : peers) {
-            List<Channel> channels = channelMapper.list(peer.getId());
-            for (Channel channel : channels) {
-                List<Chaincode> chaincodes = chaincodeMapper.list(channel.getId());
-                for (Chaincode chaincode : chaincodes) {
-                    chaincodeMapper.delete(chaincode.getId());
-                }
-                channelMapper.delete(channel.getId());
-            }
-            peerMapper.delete(peer.getId());
-        }
-        List<Orderer> orderers = ordererMapper.list(id);
-        for (Orderer orderer : orderers) {
-            ordererMapper.delete(orderer.getId());
-        }
-        return orgMapper.delete(id);
+        return DeleteUtil.obtain().deleteOrg(id, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper);
     }
 
 }

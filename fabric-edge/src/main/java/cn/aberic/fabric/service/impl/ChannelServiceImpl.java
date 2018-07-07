@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.service.ChannelService;
 import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.DeleteUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -86,10 +87,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public int delete(int id) {
-        List<Chaincode> chaincodes = chaincodeMapper.list(id);
-        for (Chaincode chaincode: chaincodes) {
-            chaincodeMapper.delete(chaincode.getId());
-        }
-        return channelMapper.delete(id);
+        return DeleteUtil.obtain().deleteChannel(id, channelMapper, chaincodeMapper);
     }
 }
