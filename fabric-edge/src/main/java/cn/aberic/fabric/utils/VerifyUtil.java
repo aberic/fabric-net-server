@@ -16,6 +16,9 @@
 
 package cn.aberic.fabric.utils;
 
+import cn.aberic.fabric.base.BaseChain;
+import cn.aberic.fabric.dao.mapper.AppMapper;
+import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
@@ -44,6 +47,18 @@ public class VerifyUtil {
                 return 0;
             }
         }
+    }
+
+    /** 判断key有效性 */
+    public static boolean unRequest(BaseChain baseChain, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+        if (!CacheUtil.getChaincodeId(baseChain.getId(), chaincodeMapper)) {
+            if (CacheUtil.getKeyChaincodeId(baseChain.getKey()) == -1 && null != appMapper.getByKey(baseChain.getKey())) {
+                CacheUtil.putKeyChaincodeId(baseChain.getKey(), baseChain.getId());
+            } else {
+                return CacheUtil.getKeyChaincodeId(baseChain.getKey()) != baseChain.getId();
+            }
+        }
+        return false;
     }
 
 }
