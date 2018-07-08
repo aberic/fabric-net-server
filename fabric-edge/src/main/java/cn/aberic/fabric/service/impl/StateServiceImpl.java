@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.StateService;
 import cn.aberic.fabric.utils.FabricHelper;
+import cn.aberic.fabric.utils.VerifyUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,6 +37,8 @@ import java.util.Map;
 @Service("stateService")
 public class StateServiceImpl implements StateService, BaseService {
 
+    @Resource
+    private AppMapper appMapper;
     @Resource
     private OrgMapper orgMapper;
     @Resource
@@ -64,6 +67,9 @@ public class StateServiceImpl implements StateService, BaseService {
 
     private String chainCode(State state, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper, ChainCodeIntent intent) {
+        if (VerifyUtil.unRequest(state, chaincodeMapper, appMapper)) {
+            return responseFail("app key is invalid");
+        }
         List<String> array = state.getStrArray();
         int length = array.size();
         String fcn = null;

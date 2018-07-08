@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.TraceService;
 import cn.aberic.fabric.utils.FabricHelper;
+import cn.aberic.fabric.utils.VerifyUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,8 @@ import java.util.Map;
 @Service("traceService")
 public class TraceServiceImpl implements TraceService, BaseService {
 
+    @Resource
+    private AppMapper appMapper;
     @Resource
     private OrgMapper orgMapper;
     @Resource
@@ -64,9 +67,10 @@ public class TraceServiceImpl implements TraceService, BaseService {
     }
 
     @Override
-    public String queryBlockChainInfo(int id) {
+    public String queryBlockChainInfo(int id, String key) {
         Trace trace = new Trace();
         trace.setId(id);
+        trace.setKey(key);
         return trace(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, TraceIntent.INFO);
     }
 
@@ -76,6 +80,9 @@ public class TraceServiceImpl implements TraceService, BaseService {
 
     private String trace(Trace trace, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
                          OrdererMapper ordererMapper, PeerMapper peerMapper, TraceIntent intent) {
+        if (VerifyUtil.unRequest(trace, chaincodeMapper, appMapper)) {
+            return responseFail("app key is invalid");
+        }
         Map<String, String> resultMap = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
