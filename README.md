@@ -1,7 +1,7 @@
 **注意：** 这是一个依赖于已经部署好的HyperLedger Fabric项目，关于前者搭建部署的方案可以通过参考[从零开始](https://www.cnblogs.com/aberic/category/1148898.html)或购买[开发实战](https://item.jd.com/12381034.html?dist=jd)等途径学习。Fabric环境部署等目前都不在当前项目的支持范围内。
 <br>
 # Fabric Net Server [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg)](http://www.cnblogs.com/aberic/)
-[![version](https://img.shields.io/badge/version-1.0RC4-green.svg)](https://github.com/aberic/fabric-net-server/tree/1.0-RC3)
+[![version](https://img.shields.io/badge/version-1.0RC4-green.svg)](https://github.com/aberic/fabric-net-server/tree/1.0-RC4)
 [![apache 2](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-net-server/blob/master/LICENSE)
 [![codebeat badge](https://codebeat.co/badges/92aa24de-8a82-432b-83fb-ec7413615952)](https://codebeat.co/projects/github-com-aberic-fabric-net-server-master)
 [![Join the chat at https://gitter.im/fabric-net-server/Lobby](https://badges.gitter.im/fabric-net-server/Lobby.svg)](https://gitter.im/fabric-net-server/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
