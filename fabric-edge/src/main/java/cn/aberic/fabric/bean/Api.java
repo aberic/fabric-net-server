@@ -68,6 +68,8 @@ public class Api {
     private String name = "";
     /** 接口意图 */
     private int index = 0;
+    /** 请求app key */
+    private String key = "";
     /** 接口执行参数 */
     private String exec = "";
 
