@@ -50,9 +50,9 @@ public class TraceController {
         return traceService.queryBlockByNumber(trace);
     }
 
-    @GetMapping(value = "info/{id}")
-    public String queryBlockChainInfo(@PathVariable("id") int id) {
-        return traceService.queryBlockChainInfo(id);
+    @GetMapping(value = "info/{id}/{key}")
+    public String queryBlockChainInfo(@PathVariable("id") int id, @PathVariable("key") String key) {
+        return traceService.queryBlockChainInfo(id, key);
     }
 
 }
