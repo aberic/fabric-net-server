@@ -32,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         // 检查每个到来的请求对应的session域中是否有登录标识
         String token = (String) request.getSession().getAttribute("token");
         String username = (String) request.getSession().getAttribute("username");
-        if (!StringUtils.equalsIgnoreCase(token, CacheUtil.get(username))){
+        if (!StringUtils.equalsIgnoreCase(token, CacheUtil.getString(username))){
             response.sendRedirect("/login");
             return false;
         }
