@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.ChaincodeService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.FileUtil;
@@ -127,6 +128,11 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     @Override
     public int update(Chaincode chaincode) {
         FabricHelper.obtain().removeManager(chaincode.getId());
+        if (chaincode.isOpen()) {
+            CacheUtil.putChaincodeId(chaincode.getChannelId(), true);
+        } else {
+            CacheUtil.removeChaincodeId(chaincode.getChannelId());
+        }
         return chaincodeMapper.update(chaincode);
     }
 
