@@ -65,12 +65,12 @@ public class CommonController {
     @GetMapping(value = "index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("index");
-        int leagueCount = 0;
-        int orgCount = 0;
-        int ordererCount = 0;
-        int peerCount = 0;
-        int channelCount = 0;
-        int chaincodeCount = 0;
+        int leagueCount;
+        int orgCount;
+        int ordererCount;
+        int peerCount;
+        int channelCount;
+        int chaincodeCount;
         List<Transaction> tmpTransactions = new ArrayList<>();
         List<Transaction> transactions = new ArrayList<>();
         leagueCount = leagueService.listAll().size();
@@ -85,14 +85,14 @@ public class CommonController {
             List<Chaincode> chaincodes = chaincodeService.listById(channel.getId());
             for (Chaincode chaincode : chaincodes) {
                 try {
-                    JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfo(chaincode.getId()));
+                    JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfoForIndex(chaincode.getId()));
                     int height = blockInfo.containsKey("data") ? blockInfo.getJSONObject("data").getInteger("height") : 0;
                     int entCount = height - 10;
                     for (int num = height - 1; num >= entCount; num--) {
                         Trace trace = new Trace();
                         trace.setId(chaincode.getId());
                         trace.setTrace(String.valueOf(num));
-                        JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumber(trace));
+                        JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberForIndex(trace));
                         JSONArray envelopes = blockMessage.containsKey("data")? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
                         int size = envelopes.size();
                         for (int i = 0; i < size; i++) {
@@ -172,7 +172,7 @@ public class CommonController {
 
     @GetMapping(value = "logout")
     public ModelAndView logout(HttpServletRequest request) {
-        CacheUtil.remove((String) request.getSession().getAttribute("username"));
+        CacheUtil.removeString((String) request.getSession().getAttribute("username"));
         request.getSession().invalidate();
         return new ModelAndView(new RedirectView("login"));
     }
