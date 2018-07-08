@@ -25,7 +25,7 @@ import cn.aberic.fabric.utils.SpringUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.core.env.Environment;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,9 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static cn.aberic.fabric.bean.Api.Intent.INSTANTIATE;
-import static cn.aberic.fabric.bean.Api.Intent.INVOKE;
-import static cn.aberic.fabric.bean.Api.Intent.UPGRADE;
+import static cn.aberic.fabric.bean.Api.Intent.*;
 
 /**
  * 描述：
@@ -65,8 +63,6 @@ public class ChaincodeController {
     private StateService stateService;
     @Resource
     private TraceService traceService;
-    @Resource
-    private Environment env;
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute Chaincode chaincode,
@@ -102,7 +98,8 @@ public class ChaincodeController {
         ModelAndView modelAndView = new ModelAndView("chaincodeResult");
         Api.Intent intent = Api.Intent.get(api.getIndex());
         String result = "";
-        String url = String.format("http://localhost:%s/%s", env.getProperty("server.port"), Objects.requireNonNull(intent).getApiUrl());
+        String url = String.format("http://localhost:port/%s", Objects.requireNonNull(intent).getApiUrl());
+        modelAndView.addObject("url", url);
         switch (intent) {
             case INVOKE:
                 State state = getState(id, api);
@@ -117,9 +114,14 @@ public class ChaincodeController {
                 modelAndView.addObject("method", "POST");
                 break;
             case INFO:
-                result = traceService.queryBlockChainInfo(id);
+                result = traceService.queryBlockChainInfo(id, api.getKey());
                 modelAndView.addObject("jsonStr", "");
                 modelAndView.addObject("method", "GET");
+                if (StringUtils.isNotBlank(api.getKey())) {
+                    modelAndView.addObject("url", String.format("%s/%s", url, api.getKey()));
+                } else {
+                    modelAndView.addObject("url", url);
+                }
                 break;
             case HASH:
                 Trace trace = getTrace(id, api);
@@ -142,7 +144,6 @@ public class ChaincodeController {
         }
         modelAndView.addObject("result", result);
         modelAndView.addObject("api", api);
-        modelAndView.addObject("url", url);
         return modelAndView;
     }
 
@@ -304,6 +305,7 @@ public class ChaincodeController {
     private State getState(int id, Api api) {
         State state = new State();
         state.setId(id);
+        state.setKey(api.getKey());
         state.setStrArray(Arrays.asList(api.getExec().trim().split(",")));
         return state;
     }
@@ -311,6 +313,9 @@ public class ChaincodeController {
     private String formatState(State state) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", state.getId());
+        if (StringUtils.isNotBlank(state.getKey())) {
+            jsonObject.put("key", state.getKey());
+        }
         JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(state.getStrArray()));
         jsonObject.put("strArray", jsonArray);
         return jsonObject.toJSONString();
@@ -319,6 +324,7 @@ public class ChaincodeController {
     private Trace getTrace(int id, Api api) {
         Trace trace = new Trace();
         trace.setId(id);
+        trace.setKey(api.getKey());
         trace.setTrace(api.getExec().trim());
         return trace;
     }
@@ -326,6 +332,9 @@ public class ChaincodeController {
     private String formatTrace(Trace trace) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", trace.getId());
+        if (StringUtils.isNotBlank(trace.getKey())) {
+            jsonObject.put("key", trace.getKey());
+        }
         jsonObject.put("trace", trace.getTrace());
         return jsonObject.toJSONString();
     }
