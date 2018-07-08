@@ -53,17 +53,17 @@ public class TraceServiceImpl implements TraceService, BaseService {
 
     @Override
     public String queryBlockByTransactionID(Trace trace) {
-        return traceByVerify(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, TraceIntent.TRANSACTION);
+        return traceByVerify(trace, TraceIntent.TRANSACTION);
     }
 
     @Override
     public String queryBlockByHash(Trace trace) {
-        return traceByVerify(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, TraceIntent.HASH);
+        return traceByVerify(trace, TraceIntent.HASH);
     }
 
     @Override
     public String queryBlockByNumber(Trace trace) {
-        return traceByVerify(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, TraceIntent.NUMBER);
+        return traceByVerify(trace, TraceIntent.NUMBER);
     }
 
     @Override
@@ -71,35 +71,33 @@ public class TraceServiceImpl implements TraceService, BaseService {
         Trace trace = new Trace();
         trace.setId(id);
         trace.setKey(key);
-        return traceByVerify(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, TraceIntent.INFO);
+        return traceByVerify(trace, TraceIntent.INFO);
     }
 
     @Override
     public String queryBlockByNumberForIndex(Trace trace) {
-        return trace(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, TraceIntent.NUMBER);
+        return trace(trace, TraceIntent.NUMBER);
     }
 
     @Override
     public String queryBlockChainInfoForIndex(int id) {
         Trace trace = new Trace();
         trace.setId(id);
-        return trace(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, TraceIntent.INFO);
+        return trace(trace, TraceIntent.INFO);
     }
 
     enum TraceIntent {
         TRANSACTION, HASH, NUMBER, INFO
     }
 
-    private String traceByVerify(Trace trace, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
-                         OrdererMapper ordererMapper, PeerMapper peerMapper, TraceIntent intent) {
+    private String traceByVerify(Trace trace, TraceIntent intent) {
         if (VerifyUtil.unRequest(trace, chaincodeMapper, appMapper)) {
             return responseFail("app key is invalid");
         }
-        return trace(trace, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, intent);
+        return trace(trace, intent);
     }
 
-    private String trace(Trace trace, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
-                         OrdererMapper ordererMapper, PeerMapper peerMapper, TraceIntent intent) {
+    private String trace(Trace trace, TraceIntent intent) {
         Map<String, String> resultMap = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,

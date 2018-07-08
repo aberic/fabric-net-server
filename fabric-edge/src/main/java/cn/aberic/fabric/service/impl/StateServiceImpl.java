@@ -52,12 +52,12 @@ public class StateServiceImpl implements StateService, BaseService {
 
     @Override
     public String invoke(State state) {
-        return chainCode(state, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INVOKE);
+        return chaincodeByVerify(state, ChainCodeIntent.INVOKE);
     }
 
     @Override
     public String query(State state) {
-        return chainCode(state, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.QUERY);
+        return chaincodeByVerify(state, ChainCodeIntent.QUERY);
     }
 
 
@@ -65,11 +65,14 @@ public class StateServiceImpl implements StateService, BaseService {
         INVOKE, QUERY
     }
 
-    private String chainCode(State state, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
-                             OrdererMapper ordererMapper, PeerMapper peerMapper, ChainCodeIntent intent) {
+    private String chaincodeByVerify(State state, ChainCodeIntent intent) {
         if (VerifyUtil.unRequest(state, chaincodeMapper, appMapper)) {
             return responseFail("app key is invalid");
         }
+        return chaincode(state, intent);
+    }
+
+    private String chaincode(State state, ChainCodeIntent intent) {
         List<String> array = state.getStrArray();
         int length = array.size();
         String fcn = null;
@@ -81,9 +84,13 @@ public class StateServiceImpl implements StateService, BaseService {
                 argArray[i - 1] = array.get(i);
             }
         }
+        return chaincodeExec(state, intent, fcn, argArray);
+    }
+
+    private String chaincodeExec(State state, ChainCodeIntent intent, String fcn, String[] argArray) {
         Map<String, String> resultMap = null;
         try {
-            FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chainCodeMapper, ordererMapper, peerMapper,
+            FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
                     state.getId());
             switch (intent) {
                 case INVOKE:
