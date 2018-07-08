@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.bean;
 
+import cn.aberic.fabric.base.BaseChain;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,8 +28,6 @@ import java.util.List;
  */
 @Setter
 @Getter
-public class State {
-
-    private int id; // required
+public class State extends BaseChain {
     private List<String> strArray; // required
 }

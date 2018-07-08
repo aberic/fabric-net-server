@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Aberic - aberic@qq.com - All Rights Reserved.
+ * Copyright (c) 2018. Aberic - All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package cn.aberic.fabric.bean;
+package cn.aberic.fabric.base;
 
-import cn.aberic.fabric.base.BaseChain;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 作者：Aberic on 2018/6/27 21:16
+ * 作者：Aberic on 2018/7/7 21:48
  * 邮箱：abericyang@gmail.com
  */
 @Setter
 @Getter
-public class Trace extends BaseChain {
-    private String trace; // required
+public class BaseChain {
+    private int id; // required
+    private String key;
 }
