@@ -75,6 +75,19 @@ public interface AppMapper {
     })
     App get(@Param("id") int id);
 
+    @Select("select rowid, name, key, chaincode_id, create_date, modify_date, public_key, active from app where key=#{key}")
+    @Results({
+            @Result(property = "id", column = "rowid"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "key", column = "key"),
+            @Result(property = "chaincodeId", column = "chaincode_id"),
+            @Result(property = "createDate", column = "create_date"),
+            @Result(property = "modifyDate", column = "modify_date"),
+            @Result(property = "publicKey", column = "public_key"),
+            @Result(property = "active", column = "active")
+    })
+    App getByKey(@Param("key") String key);
+
     @Delete("delete from app where rowid=#{id}")
     int delete(@Param("id") int id);
 
