@@ -21,7 +21,6 @@ import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.CommonService;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.MD5Util;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -43,7 +42,7 @@ public class CommonServiceImpl implements CommonService {
         try {
             if (MD5Util.verify(user.getPassword(), userMapper.get(user.getUsername()).getPassword())) {
                 String token = UUID.randomUUID().toString();
-                CacheUtil.put(user.getUsername(), token);
+                CacheUtil.putString(user.getUsername(), token);
                 return token;
             }
         } catch (Exception e) {
