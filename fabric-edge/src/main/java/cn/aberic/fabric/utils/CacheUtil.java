@@ -27,9 +27,11 @@ public class CacheUtil {
     private static Cache<String, String> cacheString = CacheBuilder.newBuilder().maximumSize(10)
             .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
+    /** 存储key，chaincodeId */
     private static Cache<String, Integer> cacheKeyChaincodeId = CacheBuilder.newBuilder().maximumSize(100)
             .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
+    /** 存储chaincodeId，open */
     private static Cache<Integer, Boolean> cacheChaincodeId = CacheBuilder.newBuilder().maximumSize(20)
             .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
