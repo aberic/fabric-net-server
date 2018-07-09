@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.sdk;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.*;
@@ -94,7 +95,7 @@ class IntermediateChaincodeID {
      *
      * @param org 中继组织对象
      */
-    Map<String, String> install(IntermediateOrg org) throws ProposalException, InvalidArgumentException {
+    Map<String, String> install(IntermediateOrg org, String version) throws ProposalException, InvalidArgumentException {
         /// Send transaction proposal to all peers
         InstallProposalRequest installProposalRequest = org.getClient().newInstallProposalRequest();
         installProposalRequest.setChaincodeName(chaincodeName);
@@ -107,7 +108,7 @@ class IntermediateChaincodeID {
         long currentStart = System.currentTimeMillis();
         Collection<ProposalResponse> installProposalResponses = org.getClient().sendInstallProposal(installProposalRequest, org.getChannel().get().getPeers());
         log.info("chaincode install transaction proposal time = " + (System.currentTimeMillis() - currentStart));
-        return toPeerResponse(installProposalResponses, false);
+        return toPeerResponse(installProposalResponses, false, version);
     }
 
     /**
@@ -198,11 +199,12 @@ class IntermediateChaincodeID {
     /**
      * 查询智能合约
      *
-     * @param org  中继组织对象
-     * @param fcn  方法名
-     * @param args 参数数组
+     * @param org     中继组织对象
+     * @param fcn     方法名
+     * @param args    参数数组
+     * @param version Fabric版本号
      */
-    Map<String, String> query(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException {
+    Map<String, String> query(IntermediateOrg org, String fcn, String[] args, String version) throws InvalidArgumentException, ProposalException {
         QueryByChaincodeRequest queryByChaincodeRequest = org.getClient().newQueryProposalRequest();
         queryByChaincodeRequest.setArgs(args);
         queryByChaincodeRequest.setFcn(fcn);
@@ -217,7 +219,7 @@ class IntermediateChaincodeID {
         long currentStart = System.currentTimeMillis();
         Collection<ProposalResponse> queryProposalResponses = org.getChannel().get().queryByChaincode(queryByChaincodeRequest, org.getChannel().get().getPeers());
         log.info("chaincode query transaction proposal time = " + (System.currentTimeMillis() - currentStart));
-        return toPeerResponse(queryProposalResponses, true);
+        return toPeerResponse(queryProposalResponses, true, version);
     }
 
     /**
@@ -283,10 +285,10 @@ class IntermediateChaincodeID {
      * @param proposalResponses 请求返回集合
      * @param checkVerified     是否验证提案
      */
-    private Map<String, String> toPeerResponse(Collection<ProposalResponse> proposalResponses, boolean checkVerified) {
+    private Map<String, String> toPeerResponse(Collection<ProposalResponse> proposalResponses, boolean checkVerified, String version) {
         Map<String, String> resultMap = new HashMap<>();
         for (ProposalResponse proposalResponse : proposalResponses) {
-            if ((checkVerified && !proposalResponse.isVerified()) || proposalResponse.getStatus() != ProposalResponse.Status.SUCCESS) {
+            if ((checkVerified && (!proposalResponse.isVerified() && !StringUtils.equals(version, "1.2"))) || proposalResponse.getStatus() != ProposalResponse.Status.SUCCESS) {
                 String data = String.format("Failed install/query proposal from peer %s status: %s. Messages: %s. Was verified : %s",
                         proposalResponse.getPeer().getName(), proposalResponse.getStatus(), proposalResponse.getMessage(), proposalResponse.isVerified());
                 log.debug(data);

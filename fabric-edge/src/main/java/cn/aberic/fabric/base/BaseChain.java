@@ -28,4 +28,5 @@ import lombok.Setter;
 public class BaseChain {
     private int id; // required
     private String key;
+    private String version;
 }

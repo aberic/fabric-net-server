@@ -70,6 +70,8 @@ public class Api {
     private int index = 0;
     /** 请求app key */
     private String key = "";
+    /** 请求Fabric版本号 */
+    private String version = "";
     /** 接口执行参数 */
     private String exec = "";
 

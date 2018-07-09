@@ -189,7 +189,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                     chaincodeId);
             switch (intent) {
                 case INSTALL:
-                    resultMap = manager.install();
+                    resultMap = manager.install(chainCodeMapper.get(chaincodeId).getVersion());
                     break;
                 case INSTANTIATE:
                     resultMap = manager.instantiate(args);

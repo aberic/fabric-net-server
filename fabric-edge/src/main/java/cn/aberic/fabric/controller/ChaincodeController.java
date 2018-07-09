@@ -22,6 +22,7 @@ import cn.aberic.fabric.bean.Trace;
 import cn.aberic.fabric.dao.*;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.SpringUtil;
+import cn.aberic.fabric.utils.VerifyUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -250,6 +251,7 @@ public class ChaincodeController {
         modelAndView.addObject("intentLittle", SpringUtil.get("verify"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("chaincodeId", chaincodeId);
+        modelAndView.addObject("versions", VerifyUtil.versions());
 
         List<Api> apis = new ArrayList<>();
         Api apiInvoke = new Api(SpringUtil.get("chaincode_invoke"), INVOKE.getIndex());
@@ -306,6 +308,7 @@ public class ChaincodeController {
         State state = new State();
         state.setId(id);
         state.setKey(api.getKey());
+        state.setVersion(api.getVersion());
         state.setStrArray(Arrays.asList(api.getExec().trim().split(",")));
         return state;
     }
@@ -325,6 +328,7 @@ public class ChaincodeController {
         Trace trace = new Trace();
         trace.setId(id);
         trace.setKey(api.getKey());
+        trace.setVersion(api.getVersion());
         trace.setTrace(api.getExec().trim());
         return trace;
     }

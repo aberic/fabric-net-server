@@ -22,6 +22,9 @@ import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * 作者：Aberic on 2018/6/17 18:07
  * 邮箱：abericyang@gmail.com
@@ -59,6 +62,14 @@ public class VerifyUtil {
             }
         }
         return false;
+    }
+
+    public static List<String> versions() {
+        List<String> versions = new LinkedList<>();
+        versions.add("1.0");
+        versions.add("1.1");
+        versions.add("1.2");
+        return versions;
     }
 
 }

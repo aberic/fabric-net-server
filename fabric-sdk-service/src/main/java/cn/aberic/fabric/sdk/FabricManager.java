@@ -39,8 +39,8 @@ public class FabricManager {
     }
 
     /** 安装智能合约 */
-    public Map<String, String> install() throws ProposalException, InvalidArgumentException {
-        return org.getChainCode().install(org);
+    public Map<String, String> install(String version) throws ProposalException, InvalidArgumentException {
+        return org.getChainCode().install(org, version);
     }
 
     /**
@@ -77,8 +77,8 @@ public class FabricManager {
      * @param fcn  方法名
      * @param args 参数数组
      */
-    public Map<String, String> query(String fcn, String[] args) throws InvalidArgumentException, ProposalException {
-        return org.getChainCode().query(org, fcn, args);
+    public Map<String, String> query(String fcn, String[] args, String version) throws InvalidArgumentException, ProposalException {
+        return org.getChainCode().query(org, fcn, args, version);
     }
 
     /**

@@ -97,7 +97,7 @@ public class StateServiceImpl implements StateService, BaseService {
                     resultMap = manager.invoke(fcn, argArray);
                     break;
                 case QUERY:
-                    resultMap = manager.query(fcn, argArray);
+                    resultMap = manager.query(fcn, argArray, state.getVersion());
                     break;
             }
             if (resultMap.get("code").equals("error")) {
