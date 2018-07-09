@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -56,8 +55,6 @@ class IntermediateChaincodeID {
     private ChaincodeID chaincodeID;
     /** 单个提案请求的超时时间以毫秒为单位 */
     private int proposalWaitTime = 200000;
-    /** 事务等待时间以秒为单位 */
-    private int transactionWaitTime = 120;
 
     /** 部署等待时间以秒为单位 */
 //    private int deployWatiTime = 120000;
@@ -229,7 +226,7 @@ class IntermediateChaincodeID {
      * @param proposalResponses 请求返回集合
      * @param org               中继组织对象
      */
-    private Map<String, String> toOrdererResponse(Collection<ProposalResponse> proposalResponses, IntermediateOrg org) throws InvalidArgumentException, UnsupportedEncodingException, InterruptedException, ExecutionException, TimeoutException {
+    private Map<String, String> toOrdererResponse(Collection<ProposalResponse> proposalResponses, IntermediateOrg org) throws InvalidArgumentException, UnsupportedEncodingException {
         Map<String, String> resultMap = new HashMap<>();
         Collection<ProposalResponse> successful = new LinkedList<>();
         Collection<ProposalResponse> failed = new LinkedList<>();
@@ -315,15 +312,6 @@ class IntermediateChaincodeID {
      */
     void setProposalWaitTime(int proposalWaitTime) {
         this.proposalWaitTime = proposalWaitTime;
-    }
-
-    /**
-     * 设置事务等待时间以秒为单位
-     *
-     * @param invokeWaitTime 事务等待时间以秒为单位
-     */
-    void setTransactionWaitTime(int invokeWaitTime) {
-        this.transactionWaitTime = invokeWaitTime;
     }
 
 }

@@ -62,7 +62,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                 StringUtils.isEmpty(chaincode.getPath()) ||
                 StringUtils.isEmpty(chaincode.getVersion()) ||
                 chaincode.getProposalWaitTime() == 0 ||
-                chaincode.getInvokeWaitTime() == 0 || null != chaincodeMapper.check(chaincode)) {
+                null != chaincodeMapper.check(chaincode)) {
             return 0;
         }
         chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
@@ -212,8 +212,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     private boolean verify(Chaincode chaincode) {
         return StringUtils.isEmpty(chaincode.getName()) ||
                 StringUtils.isEmpty(chaincode.getVersion()) ||
-                chaincode.getProposalWaitTime() == 0 ||
-                chaincode.getInvokeWaitTime() == 0;
+                chaincode.getProposalWaitTime() == 0;
     }
 
     private boolean upload(Chaincode chaincode, MultipartFile file){

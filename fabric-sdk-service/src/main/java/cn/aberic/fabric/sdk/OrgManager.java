@@ -103,9 +103,8 @@ public class OrgManager {
      * @param chaincodePolicy  智能合约背书文件路径
      * @param chaincodeVersion 智能合约版本
      * @param proposalWaitTime 单个提案请求的超时时间以毫秒为单位
-     * @param invokeWaitTime   事务等待时间以秒为单位
      */
-    public OrgManager setChainCode(String chaincodeName, String chaincodePath, String chaincodeSource, String chaincodePolicy, String chaincodeVersion, int proposalWaitTime, int invokeWaitTime) {
+    public OrgManager setChainCode(String chaincodeName, String chaincodePath, String chaincodeSource, String chaincodePolicy, String chaincodeVersion, int proposalWaitTime) {
         IntermediateChaincodeID chaincode = new IntermediateChaincodeID();
         chaincode.setChaincodeName(chaincodeName);
         chaincode.setChaincodeSource(chaincodeSource);
@@ -113,7 +112,6 @@ public class OrgManager {
         chaincode.setChaincodePolicy(chaincodePolicy);
         chaincode.setChaincodeVersion(chaincodeVersion);
         chaincode.setProposalWaitTime(proposalWaitTime);
-        chaincode.setTransactionWaitTime(invokeWaitTime);
         orgMap.get(chainCodeId).setChainCode(chaincode);
         return this;
     }

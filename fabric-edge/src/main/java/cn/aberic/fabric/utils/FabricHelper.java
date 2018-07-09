@@ -127,7 +127,7 @@ public class FabricHelper {
                 .setPeers(org.getName(), org.getMspId(), org.getDomainName())
                 .setOrderers(org.getOrdererDomainName())
                 .setChannel(channel.getName())
-                .setChainCode(chainCode.getName(), chainCode.getPath(), chainCode.getSource(), chainCode.getPolicy(), chainCode.getVersion(), chainCode.getProposalWaitTime(), chainCode.getInvokeWaitTime())
+                .setChainCode(chainCode.getName(), chainCode.getPath(), chainCode.getSource(), chainCode.getPolicy(), chainCode.getVersion(), chainCode.getProposalWaitTime())
                 .setBlockListener(map -> {
                     log.debug(map.get("code"));
                     log.debug(map.get("data"));
