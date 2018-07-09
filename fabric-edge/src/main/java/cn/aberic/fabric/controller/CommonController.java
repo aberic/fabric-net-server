@@ -87,7 +87,7 @@ public class CommonController {
                 try {
                     JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfoForIndex(chaincode.getId()));
                     int height = blockInfo.containsKey("data") ? blockInfo.getJSONObject("data").getInteger("height") : 0;
-                    int entCount = height - 10;
+                    int entCount = height >= 10 ? height - 10 : 0;
                     for (int num = height - 1; num >= entCount; num--) {
                         Trace trace = new Trace();
                         trace.setId(chaincode.getId());
