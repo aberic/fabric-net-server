@@ -64,6 +64,7 @@ public class LeagueController {
         modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
+        modelAndView.addObject("versions", leagueService.versions());
         modelAndView.addObject("league", new League());
         return modelAndView;
     }
@@ -74,6 +75,7 @@ public class LeagueController {
         modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
         modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
+        modelAndView.addObject("versions", leagueService.versions());
         modelAndView.addObject("league", leagueService.get(id));
         return modelAndView;
     }

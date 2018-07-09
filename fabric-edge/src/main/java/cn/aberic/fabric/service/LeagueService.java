@@ -35,4 +35,6 @@ public interface LeagueService {
     League get(int id);
 
     int delete(int id);
+
+    List<String> versions();
 }

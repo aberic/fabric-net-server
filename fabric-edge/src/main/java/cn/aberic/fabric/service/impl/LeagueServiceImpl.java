@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service("leagueService")
@@ -71,6 +72,15 @@ public class LeagueServiceImpl implements LeagueService {
     @Override
     public int delete(int id) {
         return DeleteUtil.obtain().deleteLeague(id, leagueMapper, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper);
+    }
+
+    @Override
+    public List<String> versions() {
+        List<String> versions = new LinkedList<>();
+        versions.add("1.0");
+        versions.add("1.1");
+        versions.add("1.2");
+        return versions;
     }
 
 }
