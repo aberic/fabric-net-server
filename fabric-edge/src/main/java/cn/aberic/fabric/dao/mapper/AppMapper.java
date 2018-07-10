@@ -91,4 +91,7 @@ public interface AppMapper {
     @Delete("delete from app where rowid=#{id}")
     int delete(@Param("id") int id);
 
+    @Delete("delete from app where chaincode_id=#{id}")
+    int deleteAll(@Param("id") int id);
+
 }

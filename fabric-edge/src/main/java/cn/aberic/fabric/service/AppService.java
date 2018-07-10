@@ -38,5 +38,7 @@ public interface AppService {
 
     int delete(int id);
 
+    int deleteAll(int id);
+
     int count(int id);
 }

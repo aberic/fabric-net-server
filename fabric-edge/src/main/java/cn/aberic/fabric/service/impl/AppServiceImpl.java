@@ -108,6 +108,11 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
+    public int deleteAll(int id) {
+        return appMapper.deleteAll(id);
+    }
+
+    @Override
     public int count(int id) {
         return appMapper.count(id);
     }

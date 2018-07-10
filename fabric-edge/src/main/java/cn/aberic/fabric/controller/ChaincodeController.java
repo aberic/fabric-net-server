@@ -61,6 +61,8 @@ public class ChaincodeController {
     @Resource
     private ChaincodeService chaincodeService;
     @Resource
+    private AppService appService;
+    @Resource
     private StateService stateService;
     @Resource
     private TraceService traceService;
@@ -277,6 +279,7 @@ public class ChaincodeController {
     @GetMapping(value = "delete")
     public ModelAndView delete(@RequestParam("id") int id) {
         chaincodeService.delete(id);
+        appService.delete(id);
         return new ModelAndView(new RedirectView("list"));
     }
 
