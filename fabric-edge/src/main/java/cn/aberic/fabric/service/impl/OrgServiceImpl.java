@@ -51,6 +51,8 @@ public class OrgServiceImpl implements OrgService {
     private ChannelMapper channelMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
+    @Resource
+    private AppMapper appMapper;
 
 
     @Override
@@ -130,7 +132,7 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public int delete(int id) {
-        return DeleteUtil.obtain().deleteOrg(id, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper);
+        return DeleteUtil.obtain().deleteOrg(id, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper, appMapper);
     }
 
 }

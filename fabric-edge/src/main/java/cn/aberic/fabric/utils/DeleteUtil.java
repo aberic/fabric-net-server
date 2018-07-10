@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.utils;
 
+import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.dao.Peer;
@@ -31,7 +32,7 @@ public class DeleteUtil {
 
     private static DeleteUtil instance;
 
-    public static DeleteUtil obtain(){
+    public static DeleteUtil obtain() {
         if (null == instance) {
             synchronized (DeleteUtil.class) {
                 if (null == instance) {
@@ -42,20 +43,24 @@ public class DeleteUtil {
         return instance;
     }
 
-    public int deleteLeague(int leagueId, LeagueMapper leagueMapper, OrgMapper orgMapper, OrdererMapper ordererMapper, PeerMapper peerMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
+    public int deleteLeague(int leagueId, LeagueMapper leagueMapper, OrgMapper orgMapper,
+                            OrdererMapper ordererMapper, PeerMapper peerMapper,
+                            ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
         List<Org> orgs = orgMapper.list(leagueId);
-        for (Org org: orgs) {
-            if (deleteOrg(org.getId(), orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper) <= 0) {
+        for (Org org : orgs) {
+            if (deleteOrg(org.getId(), orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper, appMapper) <= 0) {
                 return 0;
             }
         }
         return leagueMapper.delete(leagueId);
     }
 
-    public int deleteOrg(int orgId, OrgMapper orgMapper, OrdererMapper ordererMapper, PeerMapper peerMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
+    public int deleteOrg(int orgId, OrgMapper orgMapper, OrdererMapper ordererMapper,
+                         PeerMapper peerMapper, ChannelMapper channelMapper,
+                         ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
         List<Peer> peers = peerMapper.list(orgId);
-        for (Peer peer: peers) {
-            if (deletePeer(peer.getId(), peerMapper, channelMapper, chaincodeMapper) <= 0) {
+        for (Peer peer : peers) {
+            if (deletePeer(peer.getId(), peerMapper, channelMapper, chaincodeMapper, appMapper) <= 0) {
                 return 0;
             }
         }
@@ -65,21 +70,33 @@ public class DeleteUtil {
         return orgMapper.delete(orgId);
     }
 
-    public int deletePeer(int peerId, PeerMapper peerMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
+    public int deletePeer(int peerId, PeerMapper peerMapper, ChannelMapper channelMapper,
+                          ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
         List<Channel> channels = channelMapper.list(peerId);
-        for (Channel channel: channels) {
-            if(deleteChannel(channel.getId(), channelMapper, chaincodeMapper) <= 0){
+        for (Channel channel : channels) {
+            if (deleteChannel(channel.getId(), channelMapper, chaincodeMapper, appMapper) <= 0) {
                 return 0;
             }
         }
         return peerMapper.delete(peerId);
     }
 
-    public int deleteChannel(int channelId, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
-        if (chaincodeMapper.deleteAll(channelId) <= 0) {
-            return 0;
+    public int deleteChannel(int channelId, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+        List<Chaincode> chaincodes = chaincodeMapper.list(channelId);
+        for (Chaincode chaincode : chaincodes) {
+            if (deleteChaincode(chaincode.getId(), chaincodeMapper, appMapper) <= 0) {
+                return 0;
+            }
         }
         return channelMapper.delete(channelId);
+    }
+
+    public int deleteChaincode(int chaincodeId, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+        if (appMapper.deleteAll(chaincodeId) <= 0) {
+            return 0;
+        }
+        FabricHelper.obtain().removeManager(chaincodeId);
+        return chaincodeMapper.delete(chaincodeId);
     }
 
 }

@@ -22,10 +22,7 @@ import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.ChaincodeService;
-import cn.aberic.fabric.utils.CacheUtil;
-import cn.aberic.fabric.utils.DateUtil;
-import cn.aberic.fabric.utils.FabricHelper;
-import cn.aberic.fabric.utils.FileUtil;
+import cn.aberic.fabric.utils.*;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -53,6 +50,8 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     private ChannelMapper channelMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
+    @Resource
+    private AppMapper appMapper;
     @Resource
     private Environment env;
 
@@ -163,8 +162,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
 
     @Override
     public int delete(int id) {
-        FabricHelper.obtain().removeManager(id);
-        return chaincodeMapper.delete(id);
+        return DeleteUtil.obtain().deleteChaincode(id, chaincodeMapper, appMapper);
     }
 
     @Override

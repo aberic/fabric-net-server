@@ -42,6 +42,8 @@ public class LeagueServiceImpl implements LeagueService {
     private ChannelMapper channelMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
+    @Resource
+    private AppMapper appMapper;
 
     @Override
     public int add(League leagueInfo) {
@@ -69,7 +71,7 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     public int delete(int id) {
-        return DeleteUtil.obtain().deleteLeague(id, leagueMapper, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper);
+        return DeleteUtil.obtain().deleteLeague(id, leagueMapper, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper, appMapper);
     }
 
 }

@@ -16,9 +16,8 @@
 
 package cn.aberic.fabric.service.impl;
 
-import cn.aberic.fabric.dao.Chaincode;
-import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.dao.mapper.PeerMapper;
@@ -41,6 +40,8 @@ public class PeerServiceImpl implements PeerService {
     private ChannelMapper channelMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
+    @Resource
+    private AppMapper appMapper;
 
 
     @Override
@@ -88,6 +89,6 @@ public class PeerServiceImpl implements PeerService {
 
     @Override
     public int delete(int id) {
-        return DeleteUtil.obtain().deletePeer(id, peerMapper, channelMapper, chaincodeMapper);
+        return DeleteUtil.obtain().deletePeer(id, peerMapper, channelMapper, chaincodeMapper, appMapper);
     }
 }
