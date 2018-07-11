@@ -153,7 +153,7 @@ public class ChaincodeController {
         Chaincode chaincode = chaincodeService.get(id);
         Channel channel = channelService.get(chaincode.getChannelId());
         Peer peer = peerService.get(channel.getPeerId());
-        Org org = orgService.get(peer.getId());
+        Org org = orgService.get(peer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         chaincode.setLeagueName(league.getName());
         chaincode.setOrgName(org.getName());
