@@ -41,10 +41,6 @@ services:
     - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
     - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
-    networks:
-      default:
-        aliases:
-          - aberic
     ports:
       - 7050:7050
     extra_hosts:

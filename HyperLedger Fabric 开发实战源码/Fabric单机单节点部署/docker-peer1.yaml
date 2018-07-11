@@ -44,7 +44,3 @@ services:
       - 8051:7051
       - 8052:7052
       - 8053:7053
-    networks:
-      default:
-        aliases:
-          - aberic

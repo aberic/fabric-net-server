@@ -74,10 +74,6 @@ services:
       - 7053:7053
     depends_on:
       - couchdb
-    networks:
-      default:
-        aliases:
-          - aberic
     extra_hosts:
      - "orderer0.example.com:172.31.159.130"
      - "orderer1.example.com:172.31.143.22"

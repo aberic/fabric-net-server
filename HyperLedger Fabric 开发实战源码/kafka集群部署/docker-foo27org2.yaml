@@ -18,21 +18,6 @@ services:
     ports:
       - "5984:5984"
 
-  ca:
-    container_name: ca
-    image: hyperledger/fabric-ca
-    environment:
-      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca
-      - FABRIC_CA_SERVER_TLS_ENABLED=false
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/9cb2c6149cf08af7efc4ddd370aeb6f0e875405d47ffc4ee55e53735082a40f4_sk
-    ports:
-      - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.example.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/9cb2c6149cf08af7efc4ddd370aeb6f0e875405d47ffc4ee55e53735082a40f4_sk -b admin:adminpw -d'
-    volumes:
-      - ./crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
-
   foo27.org2.example.com:
     container_name: foo27.org2.example.com
     image: hyperledger/fabric-peer
@@ -79,10 +64,6 @@ services:
       - 7053:7053
     depends_on:
       - couchdb
-    networks:
-      default:
-        aliases:
-          - aberic
     extra_hosts:
      - "orderer0.example.com:172.31.159.130"
      - "orderer1.example.com:172.31.143.22"
