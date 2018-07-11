@@ -11,7 +11,7 @@ identities:  # 列出要在策略中使用的角色
     admin1: {"role": {"name": "admin", "mspId": "Org1MSP"}} # 为admin的角色
     admin2: {"role": {"name": "admin", "mspId": "Org2MSP"}}
 
-policy: # 以分组形式显示一个扁平化背书策略
+policy: # 以分组形式显示一个扁平化的背书策略
     1-of: # 任意一组背书签名均为<n>-of这样的格式，其中<n>可以为2、3、4等任意数字，最终如2-of、3-of等
       - 1-of:
         - signed-by: "user1" # 参考上述对identities的定义
