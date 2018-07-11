@@ -185,7 +185,7 @@ public class ChaincodeController {
         modelAndView.addObject("init", false);
         Chaincode chaincode = chaincodeService.get(id);
         Peer peer = peerService.get(channelService.get(chaincode.getChannelId()).getPeerId());
-        Org org = orgService.get(peer.getId());
+        Org org = orgService.get(peer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         chaincode.setPeerName(peer.getName());
         chaincode.setOrgName(org.getName());
@@ -296,7 +296,7 @@ public class ChaincodeController {
         for (Channel channel : channels) {
             Peer peer = peerService.get(channel.getPeerId());
             channel.setPeerName(peer.getName());
-            Org org = orgService.get(peer.getId());
+            Org org = orgService.get(peer.getOrgId());
             channel.setOrgName(org.getName());
             League league = leagueService.get(org.getLeagueId());
             channel.setLeagueName(league.getName());
@@ -346,7 +346,7 @@ public class ChaincodeController {
     private Chaincode resetChaincode(Chaincode chaincode) {
         Channel channel = channelService.get(chaincode.getChannelId());
         Peer peer = peerService.get(channel.getPeerId());
-        Org org = orgService.get(peer.getId());
+        Org org = orgService.get(peer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         chaincode.setLeagueName(league.getName());
         chaincode.setOrgName(org.getName());
