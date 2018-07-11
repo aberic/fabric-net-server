@@ -53,7 +53,7 @@ public class AppController {
                 appService.update(app);
                 break;
         }
-        Map map = new HashMap();
+        Map<String, Integer> map = new HashMap<>();
         map.put("id", chaincodeId);
         return new ModelAndView(new RedirectView("list"), map);
     }
@@ -84,7 +84,7 @@ public class AppController {
     @GetMapping(value = "delete")
     public ModelAndView delete(@RequestParam("id") int id, @RequestParam("chaincodeId") int chaincodeId) {
         appService.delete(id);
-        Map map = new HashMap();
+        Map<String, Integer> map = new HashMap<>();
         map.put("id", chaincodeId);
         return new ModelAndView(new RedirectView("list"), map);
     }
@@ -92,7 +92,7 @@ public class AppController {
     @GetMapping(value = "refresh")
     public ModelAndView refresh(@RequestParam("id") int id, @RequestParam("chaincodeId") int chaincodeId) {
         appService.updateKey(id);
-        Map map = new HashMap();
+        Map<String, Integer> map = new HashMap<>();
         map.put("id", chaincodeId);
         return new ModelAndView(new RedirectView("list"), map);
     }
