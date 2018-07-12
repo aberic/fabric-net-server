@@ -58,7 +58,7 @@ public class PeerServiceImpl implements PeerService {
 
     @Override
     public int update(Peer peer) {
-        FabricHelper.obtain().removeManager(peerMapper.list(peer.getOrgId()), channelMapper, chaincodeMapper);
+        FabricHelper.obtain().removeManager(channelMapper.list(peer.getId()), chaincodeMapper);
         return peerMapper.update(peer);
     }
 
