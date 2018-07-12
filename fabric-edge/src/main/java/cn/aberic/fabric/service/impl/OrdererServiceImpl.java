@@ -48,7 +48,7 @@ public class OrdererServiceImpl implements OrdererService {
                 StringUtils.isEmpty(orderer.getLocation())) {
             return 0;
         }
-        orderer.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        orderer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return ordererMapper.add(orderer);
     }
 

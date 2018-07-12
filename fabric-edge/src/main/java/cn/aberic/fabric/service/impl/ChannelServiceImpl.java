@@ -52,7 +52,7 @@ public class ChannelServiceImpl implements ChannelService {
             log.debug("had the same channel in this peer");
             return 0;
         }
-        channel.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        channel.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return channelMapper.add(channel);
     }
 

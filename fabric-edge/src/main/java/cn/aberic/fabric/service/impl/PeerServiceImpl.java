@@ -52,7 +52,7 @@ public class PeerServiceImpl implements PeerService {
                 StringUtils.isEmpty(peer.getEventHubLocation())) {
             return 0;
         }
-        peer.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        peer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return peerMapper.add(peer);
     }
 

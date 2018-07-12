@@ -64,7 +64,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                 null != chaincodeMapper.check(chaincode)) {
             return 0;
         }
-        chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        chaincode.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return chaincodeMapper.add(chaincode);
     }
 
@@ -230,7 +230,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         chaincode.setSource(chaincodeSource);
         chaincode.setPath(chaincodePath);
         chaincode.setPolicy(String.format("%s%spolicy.yaml", childrenPath, File.separator));
-        chaincode.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        chaincode.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         try {
             FileUtil.unZipAndSave(file, String.format("%s%ssrc", chaincodeSource, File.separator), childrenPath);
         } catch (IOException e) {

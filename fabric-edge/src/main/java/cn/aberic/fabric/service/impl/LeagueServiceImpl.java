@@ -50,7 +50,7 @@ public class LeagueServiceImpl implements LeagueService {
         if (StringUtils.isEmpty(leagueInfo.getName())) {
             return 0;
         }
-        leagueInfo.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        leagueInfo.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return leagueMapper.add(leagueInfo);
     }
 

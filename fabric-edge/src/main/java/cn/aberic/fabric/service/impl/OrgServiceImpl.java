@@ -65,7 +65,7 @@ public class OrgServiceImpl implements OrgService {
                 null == file) {
             return 0;
         }
-        org.setDate(DateUtil.getCurrent("yyyy年MM月dd日"));
+        org.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         String parentPath = String.format("%s%s%s%s%s",
                 env.getProperty("config.dir"),
                 File.separator,
