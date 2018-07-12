@@ -69,9 +69,6 @@ class IntermediateOrg {
     private IntermediateChaincodeID chaincode;
     /** 事件监听 */
     private BlockListener blockListener;
-
-    /** channel-artifacts所在路径 */
-    private String channelArtifactsPath;
     /** crypto-config所在路径 */
     private String cryptoConfigPath;
 
