@@ -58,22 +58,19 @@ public class FabricHelper {
 
     public void removeManager(List<Peer> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
         for (Peer peer : peers) {
-            List<Channel> channels = channelMapper.list(peer.getId());
-            for (Channel channel : channels) {
-                List<Chaincode> chaincodes = chaincodeMapper.list(channel.getId());
-                for (Chaincode chaincode : chaincodes) {
-                    fabricManagerMap.remove(chaincode.getId());
-                }
-            }
+            removeManager(channelMapper.list(peer.getId()), chaincodeMapper);
         }
     }
 
     public void removeManager(List<Channel> channels, ChaincodeMapper chaincodeMapper) {
         for (Channel channel : channels) {
-            List<Chaincode> chaincodes = chaincodeMapper.list(channel.getId());
-            for (Chaincode chaincode : chaincodes) {
-                fabricManagerMap.remove(chaincode.getId());
-            }
+            removeManager(chaincodeMapper.list(channel.getId()));
+        }
+    }
+
+    public void removeManager(List<Chaincode> chaincodes) {
+        for (Chaincode chaincode : chaincodes) {
+            fabricManagerMap.remove(chaincode.getId());
         }
     }
 
