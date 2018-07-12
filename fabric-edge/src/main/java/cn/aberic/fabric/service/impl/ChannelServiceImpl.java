@@ -58,7 +58,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public int update(Channel channel) {
-        FabricHelper.obtain().removeManager(channelMapper.list(channel.getPeerId()), chaincodeMapper);
+        FabricHelper.obtain().removeManager(chaincodeMapper.list(channel.getId()));
         return channelMapper.update(channel);
     }
 
