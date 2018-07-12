@@ -40,6 +40,7 @@ public class LoginConfiguration implements WebMvcConfigurer {
         loginRegistry.addPathPatterns("/state/*");
         loginRegistry.addPathPatterns("/trace/*");
         loginRegistry.addPathPatterns("/app/*");
+        loginRegistry.addPathPatterns("/ca/*");
         loginRegistry.addPathPatterns("/index");
 
     }
