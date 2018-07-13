@@ -93,6 +93,22 @@ public class FileUtil {
         dest.delete();
     }
 
+    public static void save(MultipartFile skFile, MultipartFile certificateFile, String skPath, String certificatePath) throws IOException {
+        save(skFile, skPath);
+        save(certificateFile, certificatePath);
+    }
+
+    public static void save(MultipartFile file, String path) throws IOException {
+        File dest = new File(path);
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+        if (dest.exists()) {
+            dest.delete();
+        }
+        file.transferTo(dest); //保存文件
+    }
+
     /**
      * 通过递归得到某一路径下所有的目录及其文件并删除所有文件
      *
