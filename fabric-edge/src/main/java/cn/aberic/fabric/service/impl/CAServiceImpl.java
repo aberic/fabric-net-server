@@ -91,7 +91,7 @@ public class CAServiceImpl implements CAService {
     public int update(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
         FabricHelper.obtain().removeManager(channelMapper.list(ca.getPeerId()), chaincodeMapper);
         if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {
-            return caMapper.updateForName(ca);
+            return caMapper.updateWithNoFile(ca);
         }
         return caMapper.update(ca);
     }
