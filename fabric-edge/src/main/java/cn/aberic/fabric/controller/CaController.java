@@ -17,17 +17,18 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.dao.CA;
+import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.service.CAService;
 import cn.aberic.fabric.service.LeagueService;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.service.PeerService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import cn.aberic.fabric.utils.SpringUtil;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -50,6 +51,62 @@ public class CaController {
     @Resource
     private LeagueService leagueService;
 
+    @PostMapping(value = "submit")
+    public ModelAndView submit(@ModelAttribute CA ca,
+                               @RequestParam("intent") String intent,
+                               @RequestParam("skFile") MultipartFile skFile,
+                               @RequestParam("certificateFile") MultipartFile certificateFile,
+                               @RequestParam("id") int id) {
+        switch (intent) {
+            case "add":
+                ca = resetCa(ca);
+                caService.add(ca, skFile, certificateFile);
+                break;
+            case "edit":
+                ca.setId(id);
+                caService.update(ca, skFile, certificateFile);
+                break;
+        }
+        return new ModelAndView(new RedirectView("list"));
+    }
+
+    @GetMapping(value = "add")
+    public ModelAndView add() {
+        ModelAndView modelAndView = new ModelAndView("caSubmit");
+        modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
+        modelAndView.addObject("intent", "add");
+        modelAndView.addObject("ca", new CA());
+        List<Peer> peers = peerService.listAll();
+        for (Peer peer : peers) {
+            Org org = orgService.get(peer.getOrgId());
+            peer.setOrgName(org.getName());
+            League league = leagueService.get(org.getLeagueId());
+            peer.setLeagueName(league.getName());
+        }
+        modelAndView.addObject("peers", peers);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "edit")
+    public ModelAndView edit(@RequestParam("id") int id) {
+        ModelAndView modelAndView = new ModelAndView("caSubmit");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
+        modelAndView.addObject("intent", "edit");
+        CA ca = caService.get(id);
+        Org org = orgService.get(peerService.get(ca.getPeerId()).getOrgId());
+        List<Peer> peers = peerService.listById(org.getId());
+        League league = leagueService.get(orgService.get(org.getId()).getLeagueId());
+        for (Peer peer : peers) {
+            peer.setLeagueName(league.getName());
+            peer.setOrgName(org.getName());
+        }
+        modelAndView.addObject("ca", ca);
+        modelAndView.addObject("peers", peers);
+        return modelAndView;
+    }
+
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("cas");
@@ -63,6 +120,16 @@ public class CaController {
         }
         modelAndView.addObject("cas", cas);
         return modelAndView;
+    }
+
+    private CA resetCa(CA ca) {
+        Peer peer = peerService.get(ca.getPeerId());
+        Org org = orgService.get(peer.getOrgId());
+        League league = leagueService.get(org.getLeagueId());
+        ca.setLeagueName(league.getName());
+        ca.setOrgName(org.getName());
+        ca.setPeerName(peer.getName());
+        return ca;
     }
 
 }
