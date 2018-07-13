@@ -23,11 +23,16 @@ import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.service.CAService;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.FabricHelper;
+import cn.aberic.fabric.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -44,15 +49,38 @@ public class CAServiceImpl implements CAService {
     private ChannelMapper channelMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
+    @Resource
+    private Environment env;
 
     @Override
-    public int add(CA ca) {
-        if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {
-            log.debug("ca cert path is empty");
+    public int add(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
+        if (null == skFile || null == certificateFile) {
+            log.debug("ca cert is null");
             return 0;
         }
         if (null != caMapper.check(ca)) {
             log.debug("had the same ca in this peer");
+            return 0;
+        }
+        String caPath = String.format("%s%s%s%s%s%s%s%s%s%s",
+                env.getProperty("config.dir"),
+                File.separator,
+                ca.getLeagueName(),
+                File.separator,
+                ca.getOrgName(),
+                File.separator,
+                ca.getPeerName(),
+                File.separator,
+                ca.getName(),
+                File.separator);
+        String skPath = String.format("%s%s", caPath, skFile.getOriginalFilename());
+        String certificatePath = String.format("%s%s", caPath, certificateFile.getOriginalFilename());
+        ca.setSkPath(skPath);
+        ca.setCertificatePath(certificatePath);
+        try {
+            FileUtil.save(skFile, certificateFile, skPath, certificatePath);
+        } catch (IOException e) {
+            e.printStackTrace();
             return 0;
         }
         ca.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
@@ -60,7 +88,7 @@ public class CAServiceImpl implements CAService {
     }
 
     @Override
-    public int update(CA ca) {
+    public int update(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
         FabricHelper.obtain().removeManager(channelMapper.list(ca.getPeerId()), chaincodeMapper);
         if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {
             return caMapper.updateForName(ca);
