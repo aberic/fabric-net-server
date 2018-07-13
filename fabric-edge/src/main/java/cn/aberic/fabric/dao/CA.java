@@ -18,6 +18,7 @@ package cn.aberic.fabric.dao;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 作者：Aberic on 2018/7/12 21:02
@@ -25,6 +26,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@ToString
 public class CA {
 
     private int id;
@@ -33,6 +35,7 @@ public class CA {
     private String certificatePath;
     private int peerId;
     private String date; // optional
+    private boolean tls; // required
     private String peerName; // optional
     private String orgName; // optional
     private String leagueName; // optional
