@@ -94,47 +94,28 @@ class FabricStore {
     /**
      * 用给定的名称获取用户
      *
-     * @param name    用户名称（User1）
-     * @param orgName 组织名称（Org1）
-     * @return 用户
-     */
-    IntermediateUser getMember(String name, String orgName) {
-        // 尝试从缓存中获取User状态
-        IntermediateUser user = members.get(IntermediateUser.getKeyForFabricStoreName(name, orgName));
-        if (null != user) {
-            return user;
-        }
-        // 创建User，并尝试从键值存储中恢复它的状态(如果找到的话)
-        user = new IntermediateUser(name, orgName, this);
-        members.put(IntermediateUser.getKeyForFabricStoreName(name, orgName), user);
-        return user;
-    }
-
-    /**
-     * 用给定的名称获取用户
-     *
      * @param name            用户名称（User1）
-     * @param org             组织名称（Org1）
      * @param mspId           会员id
-     * @param privateKeyFile  私钥
-     * @param certificateFile 证书
+     * @param skPath          带有节点签名密钥的PEM文件——sk路径
+     * @param certificatePath 带有节点的X.509证书的PEM文件——certificate路径
      * @return user 用户
      */
-    IntermediateUser getMember(String name, String org, String mspId, File privateKeyFile, File certificateFile) throws IOException {
+    IntermediateUser getMember(String name, String mspId, String skPath, String certificatePath) throws IOException {
         // 尝试从缓存中获取User状态
-        IntermediateUser user = members.get(IntermediateUser.getKeyForFabricStoreName(name, org));
+        IntermediateUser user = members.get(IntermediateUser.getKeyForFabricStoreName(name, skPath, certificatePath));
         if (null != user) {
             System.out.println("尝试从缓存中获取User状态 User = " + user);
             return user;
         }
         // 创建User，并尝试从键值存储中恢复它的状态(如果找到的话)
-        user = new IntermediateUser(name, org, this);
+        user = new IntermediateUser(name, skPath, certificatePath);
+        user.setFabricStore(this);
         user.setMspId(mspId);
-        String certificate = new String(IOUtils.toByteArray(new FileInputStream(certificateFile)), "UTF-8");
-        PrivateKey privateKey = getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(privateKeyFile)));
+        String certificate = new String(IOUtils.toByteArray(new FileInputStream(new File(certificatePath))), "UTF-8");
+        PrivateKey privateKey = getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(new File(skPath))));
         user.setEnrollment(new StoreEnrollment(privateKey, certificate));
         user.saveState();
-        members.put(IntermediateUser.getKeyForFabricStoreName(name, org), user);
+        members.put(IntermediateUser.getKeyForFabricStoreName(name, skPath, certificatePath), user);
         return user;
     }
 
@@ -150,8 +131,6 @@ class FabricStore {
         try (PEMParser pemParser = new PEMParser(pemReader)) {
             pemPair = (PrivateKeyInfo) pemParser.readObject();
         }
-//        PrivateKey privateKey = new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME).getPrivateKey(pemPair);
-//        return privateKey;
         return new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME).getPrivateKey(pemPair);
     }
 
