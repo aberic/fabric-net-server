@@ -24,6 +24,7 @@ import cn.aberic.fabric.service.OrdererService;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -50,14 +51,16 @@ public class OrdererController {
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute Orderer orderer,
                                @RequestParam("intent") String intent,
+                               @RequestParam("serverCrtFile") MultipartFile serverCrtFile,
                                @RequestParam("id") int id) {
         switch (intent) {
             case "add":
-                ordererService.add(orderer);
+                orderer = resetOrderer(orderer);
+                ordererService.add(orderer, serverCrtFile);
                 break;
             case "edit":
                 orderer.setId(id);
-                ordererService.update(orderer);
+                ordererService.update(orderer, serverCrtFile);
                 break;
         }
         return new ModelAndView(new RedirectView("list"));
@@ -114,6 +117,14 @@ public class OrdererController {
             org.setLeagueName(leagueService.get(org.getLeagueId()).getName());
         }
         return orgs;
+    }
+
+    private Orderer resetOrderer(Orderer orderer) {
+        Org org = orgService.get(orderer.getOrgId());
+        League league = leagueService.get(org.getLeagueId());
+        orderer.setLeagueName(league.getName());
+        orderer.setOrgName(org.getName());
+        return orderer;
     }
 
 }

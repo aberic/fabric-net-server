@@ -25,6 +25,7 @@ import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.service.PeerService;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -53,14 +54,16 @@ public class PeerController {
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute Peer peer,
                                @RequestParam("intent") String intent,
+                               @RequestParam("serverCrtFile") MultipartFile serverCrtFile,
                                @RequestParam("id") int id) {
         switch (intent) {
             case "add":
-                peerService.add(peer);
+                peer = resetPeer(peer);
+                peerService.add(peer, serverCrtFile);
                 break;
             case "edit":
                 peer.setId(id);
-                peerService.update(peer);
+                peerService.update(peer, serverCrtFile);
                 break;
         }
         return new ModelAndView(new RedirectView("list"));
@@ -118,6 +121,14 @@ public class PeerController {
             org.setLeagueName(leagueService.get(org.getLeagueId()).getName());
         }
         return orgs;
+    }
+
+    private Peer resetPeer(Peer peer) {
+        Org org = orgService.get(peer.getOrgId());
+        League league = leagueService.get(org.getLeagueId());
+        peer.setLeagueName(league.getName());
+        peer.setOrgName(org.getName());
+        return peer;
     }
 
 }
