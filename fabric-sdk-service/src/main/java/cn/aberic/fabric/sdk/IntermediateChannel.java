@@ -32,7 +32,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,8 +70,7 @@ class IntermediateChannel {
 
         int sizeOrderers = org.getOrderers().size();
         for (int i = 0; i < sizeOrderers; i++) {
-            File ordererCert = Paths.get(org.getCryptoConfigPath(), "/ordererOrganizations", org.getOrdererDomainName(), "orderers", org.getOrderers().get(i).getOrdererName(),
-                    "tls/server.crt").toFile();
+            File ordererCert = new File(org.getOrderers().get(i).getServerCrtPath());
             if (!ordererCert.exists()) {
                 throw new RuntimeException(
                         String.format("Missing cert file for: %s. Could not find at location: %s", org.getOrderers().get(i).getOrdererName(), ordererCert.getAbsolutePath()));
@@ -93,8 +91,7 @@ class IntermediateChannel {
 
         int sizePeer = org.getPeers().size();
         for (int i = 0; i < sizePeer; i++) {
-            File peerCert = Paths.get(org.getCryptoConfigPath(), "/peerOrganizations", org.getOrgDomainName(), "peers", org.getPeers().get(i).getPeerName(), "tls/server.crt")
-                    .toFile();
+            File peerCert = new File(org.getPeers().get(i).getServerCrtPath());
             if (!peerCert.exists()) {
                 throw new RuntimeException(String.format("Missing cert file for: %s. Could not find at location: %s", org.getPeers().get(i).getPeerName(), peerCert.getAbsolutePath()));
             }
@@ -147,8 +144,7 @@ class IntermediateChannel {
      * @param peer 中继节点信息
      */
     Map<String, String> joinPeer(IntermediatePeer peer) throws InvalidArgumentException, ProposalException {
-        File peerCert = Paths.get(org.getCryptoConfigPath(), "/peerOrganizations", org.getOrgDomainName(), "peers", peer.getPeerName(), "tls/server.crt")
-                .toFile();
+        File peerCert = new File(org.getPeers().get(0).getServerCrtPath());
         if (!peerCert.exists()) {
             throw new RuntimeException(String.format("Missing cert file for: %s. Could not find at location: %s", peer.getPeerName(), peerCert.getAbsolutePath()));
         }
