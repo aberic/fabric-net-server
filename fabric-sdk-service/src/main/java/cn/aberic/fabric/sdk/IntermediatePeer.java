@@ -34,6 +34,8 @@ class IntermediatePeer {
     private String peerEventHubLocation; // grpc://110.131.116.21:7053
     /** 当前peer是否增加Event事件处理 */
     private boolean addEventHub;
+    /** tls请求证书 */
+    private String serverCrtPath;
 
     /**
      * 初始化中继Peer对象
@@ -44,12 +46,13 @@ class IntermediatePeer {
      * @param peerEventHubLocation 当前指定的组织节点事件监听访问地址
      * @param isEventListener      当前peer是否增加Event事件处理
      */
-    IntermediatePeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener) {
+    IntermediatePeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
         this.peerName = peerName;
         this.peerEventHubName = peerEventHubName;
         this.peerLocation = peerLocation;
         this.peerEventHubLocation = peerEventHubLocation;
         this.addEventHub = isEventListener;
+        this.serverCrtPath = serverCrtPath;
     }
 
     /**
@@ -115,4 +118,7 @@ class IntermediatePeer {
         return addEventHub;
     }
 
+    String getServerCrtPath() {
+        return serverCrtPath;
+    }
 }
