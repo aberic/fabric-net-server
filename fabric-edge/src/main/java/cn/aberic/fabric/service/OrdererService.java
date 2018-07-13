@@ -17,6 +17,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.dao.Orderer;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ import java.util.List;
  */
 public interface OrdererService {
 
-     int add(Orderer orderer);
+     int add(Orderer orderer, MultipartFile serverCrtFile);
 
-     int update(Orderer orderer);
+     int update(Orderer orderer, MultipartFile serverCrtFile);
 
      List<Orderer> listAll();
 
