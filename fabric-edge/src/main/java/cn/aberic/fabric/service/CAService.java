@@ -17,6 +17,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.dao.CA;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ import java.util.List;
  */
 public interface CAService {
 
-    int add(CA ca);
+    int add(CA ca, MultipartFile skFile, MultipartFile certificateFile);
 
-    int update(CA ca);
+    int update(CA ca, MultipartFile skFile, MultipartFile certificateFile);
 
     List<CA> listAll();
 
