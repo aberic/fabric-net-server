@@ -55,6 +55,8 @@ public class ChaincodeController {
     @Resource
     private PeerService peerService;
     @Resource
+    private CAService caService;
+    @Resource
     private OrgService orgService;
     @Resource
     private LeagueService leagueService;
@@ -104,18 +106,18 @@ public class ChaincodeController {
         switch (intent) {
             case INVOKE:
                 State state = getState(id, api);
-                result = stateService.invoke(state);
+                result = stateService.invoke(state, caService.get(api.getCaId()));
                 modelAndView.addObject("jsonStr", formatState(state));
                 modelAndView.addObject("method", "POST");
                 break;
             case QUERY:
                 state = getState(id, api);
-                result = stateService.query(state);
+                result = stateService.query(state, caService.get(api.getCaId()));
                 modelAndView.addObject("jsonStr", formatState(state));
                 modelAndView.addObject("method", "POST");
                 break;
             case INFO:
-                result = traceService.queryBlockChainInfo(id, api.getKey());
+                result = traceService.queryBlockChainInfo(id, api.getKey(), caService.get(api.getCaId()));
                 modelAndView.addObject("jsonStr", "");
                 modelAndView.addObject("method", "GET");
                 if (StringUtils.isNotBlank(api.getKey())) {
@@ -126,19 +128,19 @@ public class ChaincodeController {
                 break;
             case HASH:
                 Trace trace = getTrace(id, api);
-                result = traceService.queryBlockByHash(trace);
+                result = traceService.queryBlockByHash(trace, caService.get(api.getCaId()));
                 modelAndView.addObject("jsonStr", formatTrace(trace));
                 modelAndView.addObject("method", "POST");
                 break;
             case NUMBER:
                 trace = getTrace(id, api);
-                result = traceService.queryBlockByNumber(trace);
+                result = traceService.queryBlockByNumber(trace, caService.get(api.getCaId()));
                 modelAndView.addObject("jsonStr", formatTrace(trace));
                 modelAndView.addObject("method", "POST");
                 break;
             case TXID:
                 trace = getTrace(id, api);
-                result = traceService.queryBlockByTransactionID(trace);
+                result = traceService.queryBlockByTransactionID(trace, caService.get(api.getCaId()));
                 modelAndView.addObject("jsonStr", formatTrace(trace));
                 modelAndView.addObject("method", "POST");
                 break;
@@ -267,9 +269,12 @@ public class ChaincodeController {
         apis.add(apiTxid);
         apis.add(apiNumber);
 
+        List<CA> cas = caService.listById(channelService.get(chaincodeService.get(chaincodeId).getChannelId()).getPeerId());
+
         Api apiIntent = new Api();
 
         modelAndView.addObject("apis", apis);
+        modelAndView.addObject("cas", cas);
         modelAndView.addObject("apiIntent", apiIntent);
         return modelAndView;
     }
