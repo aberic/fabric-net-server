@@ -28,13 +28,14 @@ import java.util.List;
 @Mapper
 public interface CAMapper {
 
-    @Insert("insert into ca (name,sk_path,certificate_path,peer_id,date) values (#{c.name},#{c.skPath},#{c.certificatePath},#{c.peerId},#{c.date})")
+    @Insert("insert into ca (name,sk_path,certificate_path,tls,peer_id,date) values " +
+            "(#{c.name},#{c.skPath},#{c.certificatePath},#{c.tls},#{c.peerId},#{c.date})")
     int add(@Param("c") CA ca);
 
-    @Update("update ca set name=#{c.name},sk_path=#{c.skPath},certificate_path=#{c.certificatePath} where rowid=#{c.id}")
+    @Update("update ca set name=#{c.name},sk_path=#{c.skPath},certificate_path=#{c.certificatePath},tls=#{c.tls} where rowid=#{c.id}")
     int update(@Param("c") CA ca);
 
-    @Update("update ca set name=#{c.name} where rowid=#{c.id}")
+    @Update("update ca set name=#{c.name},tls=#{c.tls} where rowid=#{c.id}")
     int updateForName(@Param("c") CA ca);
 
     @Select("select count(name) from ca where peer_id=#{id}")
@@ -49,45 +50,49 @@ public interface CAMapper {
     @Delete("delete from ca where peer_id=#{peerId}")
     int deleteAll(@Param("peerId") int peerId);
 
-    @Select("select rowid,name,sk_path,certificate_path,peer_id,date from ca where name=#{c.name} and peer_id=#{c.peerId}")
+    @Select("select rowid,name,sk_path,certificate_path,tls,peer_id,date from ca where name=#{c.name} and peer_id=#{c.peerId}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
+            @Result(property = "tls", column = "tls"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
     CA check(@Param("c") CA ca);
 
-    @Select("select rowid,name,sk_path,certificate_path,peer_id,date from ca where rowid=#{id}")
+    @Select("select rowid,name,sk_path,certificate_path,tls,peer_id,date from ca where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
+            @Result(property = "tls", column = "tls"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
     CA get(@Param("id") int id);
 
-    @Select("select rowid,name,sk_path,certificate_path,peer_id,date from ca where peer_id=#{id}")
+    @Select("select rowid,name,sk_path,certificate_path,tls,peer_id,date from ca where peer_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
+            @Result(property = "tls", column = "tls"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
     List<CA> list(@Param("id") int id);
 
-    @Select("select rowid,name,sk_path,certificate_path,peer_id,date from ca")
+    @Select("select rowid,name,sk_path,certificate_path,tls,peer_id,date from ca")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
+            @Result(property = "tls", column = "tls"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
