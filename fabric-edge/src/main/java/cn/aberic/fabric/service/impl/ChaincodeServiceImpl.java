@@ -18,6 +18,7 @@ package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.bean.Api;
+import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.Chaincode;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
@@ -80,7 +81,8 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             return responseFailJson("chaincode add fail");
         }
         chaincode.setId(chaincodeMapper.check(chaincode).getId());
-        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
+        // TODO
+        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.INSTALL, new String[]{});
         if (jsonResult.getInteger("code") == BaseService.FAIL) {
             delete(chaincode.getId());
             return jsonResult;
@@ -100,7 +102,8 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         if (chaincodeMapper.updateForUpgrade(chaincode) <= 0) {
             return responseFailJson("chaincode updateForUpgrade fail");
         }
-        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTALL, new String[]{});
+        // TODO
+        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.INSTALL, new String[]{});
         if (jsonResult.getInteger("code") == BaseService.FAIL) {
             delete(chaincode.getId());
             return jsonResult;
@@ -111,7 +114,8 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         for (int i = 0; i < size; i++) {
             args[i] = strArray.get(i);
         }
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.UPGRADE, args);
+        // TODO
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.UPGRADE, args);
     }
 
     @Override
@@ -121,7 +125,8 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         for (int i = 0; i < size; i++) {
             args[i] = strArray.get(i);
         }
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ChainCodeIntent.INSTANTIATE, args);
+        // TODO
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.INSTANTIATE, args);
     }
 
     @Override
@@ -180,11 +185,11 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     }
 
     private JSONObject chainCode(int chaincodeId, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
-                             OrdererMapper ordererMapper, PeerMapper peerMapper, ChainCodeIntent intent, String[] args) {
+                                 OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, ChainCodeIntent intent, String[] args) {
         Map<String, String> resultMap = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chainCodeMapper, ordererMapper, peerMapper,
-                    chaincodeId);
+                    ca, chaincodeId);
             switch (intent) {
                 case INSTALL:
                     resultMap = manager.install(chainCodeMapper.get(chaincodeId).getVersion());
