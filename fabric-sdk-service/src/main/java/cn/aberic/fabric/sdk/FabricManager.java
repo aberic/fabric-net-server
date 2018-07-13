@@ -117,8 +117,8 @@ public class FabricManager {
      * @param peerEventHubLocation 当前指定的组织节点事件监听访问地址
      * @param isEventListener      当前peer是否增加Event事件处理
      */
-    public Map<String, String> joinPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener) throws ProposalException, InvalidArgumentException {
-        return org.getChannel().joinPeer(new IntermediatePeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener));
+    public Map<String, String> joinPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) throws ProposalException, InvalidArgumentException {
+        return org.getChannel().joinPeer(new IntermediatePeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath));
     }
 
     /** 查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash */
