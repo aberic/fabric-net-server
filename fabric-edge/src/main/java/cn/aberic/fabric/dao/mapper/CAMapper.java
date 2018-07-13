@@ -36,7 +36,7 @@ public interface CAMapper {
     int update(@Param("c") CA ca);
 
     @Update("update ca set name=#{c.name},tls=#{c.tls} where rowid=#{c.id}")
-    int updateForName(@Param("c") CA ca);
+    int updateWithNoFile(@Param("c") CA ca);
 
     @Select("select count(name) from ca where peer_id=#{id}")
     int count(@Param("id") int id);
