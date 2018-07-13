@@ -79,12 +79,7 @@ public class FabricHelper {
     }
 
     public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
-                             OrdererMapper ordererMapper, PeerMapper peerMapper) throws Exception {
-        return get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, -1);
-    }
-
-    public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
-                             OrdererMapper ordererMapper, PeerMapper peerMapper, int chaincodeId) throws Exception {
+                             OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, int chaincodeId) throws Exception {
         if (chaincodeId == -1) {
             chaincodeId = this.chainCodeId;
         } else {
@@ -107,7 +102,7 @@ public class FabricHelper {
                 Org org = orgMapper.get(orgId);
                 log.debug(String.format("org = %s", org.toString()));
                 if (orderers.size() != 0 && peers.size() != 0) {
-                    fabricManager = createFabricManager(org, channel, chaincode, orderers, peers);
+                    fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca);
                     fabricManagerMap.put(chaincodeId, fabricManager);
                 }
             }
@@ -116,12 +111,12 @@ public class FabricHelper {
     }
 
 
-    private FabricManager createFabricManager(Org org, Channel channel, Chaincode chainCode, List<Orderer> orderers, List<Peer> peers) throws Exception {
+    private FabricManager createFabricManager(Org org, Channel channel, Chaincode chainCode, List<Orderer> orderers, List<Peer> peers, CA ca) throws Exception {
         OrgManager orgManager = new OrgManager();
         orgManager
                 .init(chainCodeId, org.isTls())
-                .setUser(org.getUsername(), org.getCryptoConfigDir())
                 .setPeers(org.getName(), org.getMspId(), org.getDomainName())
+                .setUser(ca.getName(), ca.getSkPath(), ca.getCertificatePath())
                 .setOrderers(org.getOrdererDomainName())
                 .setChannel(channel.getName())
                 .setChainCode(chainCode.getName(), chainCode.getPath(), chainCode.getSource(), chainCode.getPolicy(), chainCode.getVersion(), chainCode.getProposalWaitTime())
@@ -130,13 +125,13 @@ public class FabricHelper {
                     log.debug(map.get("data"));
                 });
         for (Orderer orderer : orderers) {
-            orgManager.addOrderer(orderer.getName(), orderer.getLocation());
+            orgManager.addOrderer(orderer.getName(), orderer.getLocation(), orderer.getServerCrtPath());
         }
         for (Peer peer : peers) {
-            orgManager.addPeer(peer.getName(), peer.getEventHubName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener());
+            orgManager.addPeer(peer.getName(), peer.getEventHubName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener(), peer.getServerCrtPath());
         }
         orgManager.add();
-        return orgManager.use(chainCodeId);
+        return orgManager.use(chainCodeId, ca.getName());
     }
 
 }
