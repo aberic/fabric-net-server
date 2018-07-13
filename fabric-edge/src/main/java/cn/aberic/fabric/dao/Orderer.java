@@ -32,7 +32,9 @@ public class Orderer {
     private int id; // required
     private String name; // required
     private String location; // required
+    private String serverCrtPath;
     private int orgId; // required
+    private String leagueName;
     private String orgName; // required
     private String date; // required
 
