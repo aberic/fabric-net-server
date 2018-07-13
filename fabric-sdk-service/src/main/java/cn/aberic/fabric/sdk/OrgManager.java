@@ -32,10 +32,14 @@ import java.util.Map;
 public class OrgManager {
 
     private Map<Integer, IntermediateOrg> orgMap;
+    private FabricStore fabricStore;
     private int chainCodeId;
 
     public OrgManager() {
         orgMap = new LinkedHashMap<>();
+        // java.io.tmpdir : C:\Users\aberic\AppData\Local\Temp\
+        File storeFile = new File(String.format("%s/HFCStore.properties", System.getProperty("java.io.tmpdir")));
+        fabricStore = new FabricStore(storeFile);
     }
 
     /**
@@ -62,13 +66,14 @@ public class OrgManager {
      * 也可以是一个已经在服务器生成好用户相关证书文件的用户，在没有特殊操作需求的情况下，一般channelArtifactsPath设置为null即可）
      *
      * @param username         用户名
-     * @param cryptoConfigPath 用户/节点组织/排序服务证书文件路径
+     * @param skPath          带有节点签名密钥的PEM文件——sk路径
+     * @param certificatePath 带有节点的X.509证书的PEM文件——certificate路径
      *
      * @return self
      */
-    public OrgManager setUser(@Nonnull String username, @Nonnull String cryptoConfigPath) {
-        orgMap.get(chainCodeId).setUsername(username);
-        orgMap.get(chainCodeId).setCryptoConfigPath(cryptoConfigPath);
+    public OrgManager setUser(@Nonnull String username, @Nonnull String skPath, @Nonnull String certificatePath) {
+        IntermediateUser user = new IntermediateUser(username, skPath, certificatePath);
+        orgMap.get(chainCodeId).addUser(user, fabricStore);
         return this;
     }
 
@@ -77,8 +82,8 @@ public class OrgManager {
         return this;
     }
 
-    public OrgManager addOrderer(String name, String location) {
-        orgMap.get(chainCodeId).addOrderer(name, location);
+    public OrgManager addOrderer(String name, String location, String serverCrtPath) {
+        orgMap.get(chainCodeId).addOrderer(name, location, serverCrtPath);
         return this;
     }
 
@@ -89,8 +94,8 @@ public class OrgManager {
         return this;
     }
 
-    public OrgManager addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener) {
-        orgMap.get(chainCodeId).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener);
+    public OrgManager addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
+        orgMap.get(chainCodeId).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath);
         return this;
     }
 
@@ -162,12 +167,10 @@ public class OrgManager {
         }
     }
 
-    public FabricManager use(int chainCodeId) throws Exception {
+    public FabricManager use(int chainCodeId, String username) throws Exception {
         IntermediateOrg org = orgMap.get(chainCodeId);
-        // java.io.tmpdir : C:\Users\aberic\AppData\Local\Temp\
-        File storeFile = new File(String.format("%s/HFCStore%s.properties", System.getProperty("java.io.tmpdir"), chainCodeId));
-        FabricStore fabricStore = new FabricStore(storeFile);
-        org.init(fabricStore);
+//        org.init(fabricStore);
+        org.setUsername(username);
         org.setClient(HFClient.createNewInstance());
         org.getChannel().init(org);
         return new FabricManager(org);
