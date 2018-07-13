@@ -57,9 +57,6 @@ class IntermediateChaincodeID {
     /** 单个提案请求的超时时间以毫秒为单位 */
     private int proposalWaitTime = 200000;
 
-    /** 部署等待时间以秒为单位 */
-//    private int deployWatiTime = 120000;
-
     void setChaincodeName(String chaincodeName) {
         this.chaincodeName = chaincodeName;
         setChaincodeID();
