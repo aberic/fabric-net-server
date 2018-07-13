@@ -27,11 +27,14 @@ class IntermediateOrderer {
     private String ordererName;
     /** orderer 排序服务器的访问地址 */
     private String ordererLocation;
+    /** tls请求证书 */
+    private String serverCrtPath;
 
-    IntermediateOrderer(String ordererName, String ordererLocation) {
+    IntermediateOrderer(String ordererName, String ordererLocation, String serverCrtPath) {
         super();
         this.ordererName = ordererName;
         this.ordererLocation = ordererLocation;
+        this.serverCrtPath = serverCrtPath;
     }
 
     String getOrdererName() {
@@ -46,4 +49,7 @@ class IntermediateOrderer {
         return ordererLocation;
     }
 
+    String getServerCrtPath() {
+        return serverCrtPath;
+    }
 }
