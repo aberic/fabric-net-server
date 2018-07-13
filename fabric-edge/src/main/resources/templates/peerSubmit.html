@@ -45,7 +45,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <form class="card" th:action="@{submit}" th:method="post" th:object="${peer}">
+                        <form class="card" enctype="multipart/form-data" th:action="@{submit}" th:method="post"
+                              th:object="${peer}">
                             <div class="card-header">
                                 <h3 class="card-title" th:text="${intentLittle}"></h3>
                             </div>
@@ -89,6 +90,20 @@
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{peer_event_hub_location_placeholder}"
                                                    th:field="*{eventHubLocation}">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-label" th:text="#{peer_server_crt}"></div>
+                                            <div class="custom-file">
+                                                <input id="server-crt-file" type="file" class="custom-file-input"
+                                                       name="serverCrtFile" onchange="getServerCrtFileName()">
+                                                <label id="server-crt-file-label" class="custom-file-label"
+                                                       th:text="#{peer_server_crt_upload}"></label>
+                                                <script>
+                                                    function getServerCrtFileName() {
+                                                        document.getElementById("server-crt-file-label").innerText = $("#server-crt-file").val();
+                                                    }
+                                                </script>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-label" th:text="#{peer_event_hub_listen}"></div>
