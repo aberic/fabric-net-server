@@ -28,13 +28,18 @@ import java.util.List;
 @Mapper
 public interface PeerMapper {
 
-    @Insert("insert into peer (name,event_hub_name,location,event_hub_location,event_listener,org_id,date) " +
-            "values (#{p.name},#{p.eventHubName},#{p.location},#{p.eventHubLocation},#{p.eventListener},#{p.orgId},#{p.date})")
+    @Insert("insert into peer (name,event_hub_name,location,event_hub_location,event_listener,server_crt_path,org_id,date) " +
+            "values (#{p.name},#{p.eventHubName},#{p.location},#{p.eventHubLocation},#{p.eventListener},#{p.serverCrtPath},#{p.orgId},#{p.date})")
     int add(@Param("p") Peer peer);
 
     @Update("update peer set name=#{p.name}, event_hub_name=#{p.eventHubName}, location=#{p.location}" +
-            ", event_hub_location=#{p.eventHubLocation}, event_listener=#{p.eventListener} where rowid=#{p.id}")
+            ", event_hub_location=#{p.eventHubLocation}, event_listener=#{p.eventListener}" +
+            ", server_crt_path=#{p.serverCrtPath} where rowid=#{p.id}")
     int update(@Param("p") Peer peer);
+
+    @Update("update peer set name=#{p.name}, event_hub_name=#{p.eventHubName}, location=#{p.location}" +
+            ", event_hub_location=#{p.eventHubLocation}, event_listener=#{p.eventListener} where rowid=#{p.id}")
+    int updateWithNoFile(@Param("p") Peer peer);
 
     @Select("select count(name) from peer where org_id=#{id}")
     int count(@Param("id") int id);
@@ -48,7 +53,7 @@ public interface PeerMapper {
     @Delete("delete from peer where org_id=#{orgId}")
     int deleteAll(@Param("orgId") int orgId);
 
-    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id,date from peer where rowid=#{id}")
+    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,server_crt_path,org_id,date from peer where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -56,12 +61,13 @@ public interface PeerMapper {
             @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "eventListener", column = "event_listener"),
+            @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })
     Peer get(@Param("id") int id);
 
-    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id,date from peer where org_id=#{id}")
+    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,server_crt_path,org_id,date from peer where org_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -69,12 +75,13 @@ public interface PeerMapper {
             @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "eventListener", column = "event_listener"),
+            @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })
     List<Peer> list(@Param("id") int id);
 
-    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,org_id,date from peer")
+    @Select("select rowid,name,event_hub_name,location,event_hub_location,event_listener,server_crt_path,org_id,date from peer")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
@@ -82,6 +89,7 @@ public interface PeerMapper {
             @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "eventListener", column = "event_listener"),
+            @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })

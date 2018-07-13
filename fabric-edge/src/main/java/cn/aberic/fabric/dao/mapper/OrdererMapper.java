@@ -28,11 +28,14 @@ import java.util.List;
 @Mapper
 public interface OrdererMapper {
 
-    @Insert("insert into orderer (name,location,org_id,date) values (#{o.name},#{o.location},#{o.orgId},#{o.date})")
+    @Insert("insert into orderer (name,location,server_crt_path,org_id,date) values (#{o.name},#{o.location},#{o.serverCrtPath},#{o.orgId},#{o.date})")
     int add(@Param("o") Orderer orderer);
 
-    @Update("update orderer set name=#{o.name}, location=#{o.location} where rowid=#{o.id}")
+    @Update("update orderer set name=#{o.name}, location=#{o.location}, server_crt_path=#{o.serverCrtPath} where rowid=#{o.id}")
     int update(@Param("o") Orderer orderer);
+
+    @Update("update orderer set name=#{o.name}, location=#{o.location} where rowid=#{o.id}")
+    int updateWithNoFile(@Param("o") Orderer orderer);
 
     @Select("select count(name) from orderer where org_id=#{id}")
     int count(@Param("id") int id);
@@ -46,31 +49,34 @@ public interface OrdererMapper {
     @Delete("delete from orderer where org_id=#{orgId}")
     int deleteAll(@Param("orgId") int orgId);
 
-    @Select("select rowid,name,location,org_id,date from orderer where rowid=#{id}")
+    @Select("select rowid,name,location,server_crt_path,org_id,date from orderer where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "location", column = "location"),
+            @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })
     Orderer get(@Param("id") int id);
 
-    @Select("select rowid,name,location,org_id,date from orderer where org_id=#{id}")
+    @Select("select rowid,name,location,server_crt_path,org_id,date from orderer where org_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "location", column = "location"),
+            @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })
     List<Orderer> list(@Param("id") int id);
 
-    @Select("select rowid,name,location,org_id,date from orderer")
+    @Select("select rowid,name,location,server_crt_path,org_id,date from orderer")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "location", column = "location"),
+            @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "orgId", column = "org_id"),
             @Result(property = "date", column = "date")
     })
