@@ -18,6 +18,7 @@ package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.bean.State;
+import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.StateService;
@@ -51,13 +52,13 @@ public class StateServiceImpl implements StateService, BaseService {
     private ChaincodeMapper chaincodeMapper;
 
     @Override
-    public String invoke(State state) {
-        return chaincodeByVerify(state, ChainCodeIntent.INVOKE);
+    public String invoke(State state, CA ca) {
+        return chaincodeByVerify(state, ChainCodeIntent.INVOKE, ca);
     }
 
     @Override
-    public String query(State state) {
-        return chaincodeByVerify(state, ChainCodeIntent.QUERY);
+    public String query(State state, CA ca) {
+        return chaincodeByVerify(state, ChainCodeIntent.QUERY, ca);
     }
 
 
@@ -65,14 +66,14 @@ public class StateServiceImpl implements StateService, BaseService {
         INVOKE, QUERY
     }
 
-    private String chaincodeByVerify(State state, ChainCodeIntent intent) {
+    private String chaincodeByVerify(State state, ChainCodeIntent intent, CA ca) {
         if (VerifyUtil.unRequest(state, chaincodeMapper, appMapper)) {
             return responseFail("app key is invalid");
         }
-        return chaincode(state, intent);
+        return chaincode(state, intent, ca);
     }
 
-    private String chaincode(State state, ChainCodeIntent intent) {
+    private String chaincode(State state, ChainCodeIntent intent, CA ca) {
         List<String> array = state.getStrArray();
         int length = array.size();
         String fcn = null;
@@ -84,14 +85,14 @@ public class StateServiceImpl implements StateService, BaseService {
                 argArray[i - 1] = array.get(i);
             }
         }
-        return chaincodeExec(state, intent, fcn, argArray);
+        return chaincodeExec(state, intent, ca, fcn, argArray);
     }
 
-    private String chaincodeExec(State state, ChainCodeIntent intent, String fcn, String[] argArray) {
+    private String chaincodeExec(State state, ChainCodeIntent intent, CA ca, String fcn, String[] argArray) {
         Map<String, String> resultMap = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
-                    state.getId());
+                    ca, state.getId());
             switch (intent) {
                 case INVOKE:
                     resultMap = manager.invoke(fcn, argArray);

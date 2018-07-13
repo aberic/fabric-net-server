@@ -17,6 +17,7 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.bean.State;
+import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.service.StateService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,12 +38,12 @@ public class StateController {
 
     @PostMapping(value = "invoke")
     public String invoke(@RequestBody State state) {
-        return stateService.invoke(state);
+        return stateService.invoke(state, new CA());
     }
 
     @PostMapping(value = "query")
     public String query(@RequestBody State state) {
-        return stateService.query(state);
+        return stateService.query(state, new CA());
     }
 
 }

@@ -17,6 +17,7 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.bean.Trace;
+import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.service.TraceService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,22 +38,22 @@ public class TraceController {
 
     @PostMapping(value = "txid")
     public String queryBlockByTransactionID(@RequestBody Trace trace) {
-        return traceService.queryBlockByTransactionID(trace);
+        return traceService.queryBlockByTransactionID(trace, new CA());
     }
 
     @PostMapping(value = "hash")
     public String queryBlockByHash(@RequestBody Trace trace) {
-        return traceService.queryBlockByHash(trace);
+        return traceService.queryBlockByHash(trace, new CA());
     }
 
     @PostMapping(value = "number")
     public String queryBlockByNumber(@RequestBody Trace trace) {
-        return traceService.queryBlockByNumber(trace);
+        return traceService.queryBlockByNumber(trace, new CA());
     }
 
     @GetMapping(value = "info/{id}/{key}")
     public String queryBlockChainInfo(@PathVariable("id") int id, @PathVariable("key") String key) {
-        return traceService.queryBlockChainInfo(id, key);
+        return traceService.queryBlockChainInfo(id, key, new CA());
     }
 
 }

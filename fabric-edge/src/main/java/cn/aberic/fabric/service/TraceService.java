@@ -17,6 +17,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.bean.Trace;
+import cn.aberic.fabric.dao.CA;
 
 /**
  * 作者：Aberic on 2018/6/27 21:59
@@ -24,13 +25,13 @@ import cn.aberic.fabric.bean.Trace;
  */
 public interface TraceService {
 
-    String queryBlockByTransactionID(Trace trace);
+    String queryBlockByTransactionID(Trace trace, CA ca);
 
-    String queryBlockByHash(Trace trace);
+    String queryBlockByHash(Trace trace, CA ca);
 
-    String queryBlockByNumber(Trace trace);
+    String queryBlockByNumber(Trace trace, CA ca);
 
-    String queryBlockChainInfo(int id, String key);
+    String queryBlockChainInfo(int id, String key, CA ca);
 
     String queryBlockByNumberForIndex(Trace trace);
 

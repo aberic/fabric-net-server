@@ -18,6 +18,7 @@ package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.bean.Trace;
+import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.TraceService;
@@ -52,56 +53,56 @@ public class TraceServiceImpl implements TraceService, BaseService {
     private ChaincodeMapper chaincodeMapper;
 
     @Override
-    public String queryBlockByTransactionID(Trace trace) {
-        return traceByVerify(trace, TraceIntent.TRANSACTION);
+    public String queryBlockByTransactionID(Trace trace, CA ca) {
+        return traceByVerify(trace, TraceIntent.TRANSACTION, ca);
     }
 
     @Override
-    public String queryBlockByHash(Trace trace) {
-        return traceByVerify(trace, TraceIntent.HASH);
+    public String queryBlockByHash(Trace trace, CA ca) {
+        return traceByVerify(trace, TraceIntent.HASH, ca);
     }
 
     @Override
-    public String queryBlockByNumber(Trace trace) {
-        return traceByVerify(trace, TraceIntent.NUMBER);
+    public String queryBlockByNumber(Trace trace, CA ca) {
+        return traceByVerify(trace, TraceIntent.NUMBER, ca);
     }
 
     @Override
-    public String queryBlockChainInfo(int id, String key) {
+    public String queryBlockChainInfo(int id, String key, CA ca) {
         Trace trace = new Trace();
         trace.setId(id);
         trace.setKey(key);
-        return traceByVerify(trace, TraceIntent.INFO);
+        return traceByVerify(trace, TraceIntent.INFO, ca);
     }
 
     @Override
     public String queryBlockByNumberForIndex(Trace trace) {
-        return trace(trace, TraceIntent.NUMBER);
+        return trace(trace, TraceIntent.NUMBER, new CA());
     }
 
     @Override
     public String queryBlockChainInfoForIndex(int id) {
         Trace trace = new Trace();
         trace.setId(id);
-        return trace(trace, TraceIntent.INFO);
+        return trace(trace, TraceIntent.INFO, new CA());
     }
 
     enum TraceIntent {
         TRANSACTION, HASH, NUMBER, INFO
     }
 
-    private String traceByVerify(Trace trace, TraceIntent intent) {
+    private String traceByVerify(Trace trace, TraceIntent intent, CA ca) {
         if (VerifyUtil.unRequest(trace, chaincodeMapper, appMapper)) {
             return responseFail("app key is invalid");
         }
-        return trace(trace, intent);
+        return trace(trace, intent, ca);
     }
 
-    private String trace(Trace trace, TraceIntent intent) {
+    private String trace(Trace trace, TraceIntent intent, CA ca) {
         Map<String, String> resultMap = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
-                    trace.getId());
+                    ca, trace.getId());
             switch (intent) {
                 case TRANSACTION:
                     resultMap = manager.queryBlockByTransactionID(trace.getTrace());
