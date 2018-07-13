@@ -27,7 +27,6 @@ import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,26 +68,10 @@ class IntermediateOrg {
     private IntermediateChaincodeID chaincode;
     /** 事件监听 */
     private BlockListener blockListener;
-    /** crypto-config所在路径 */
-    private String cryptoConfigPath;
 
     private HFClient client;
 
     private Map<String, User> userMap = new HashMap<>();
-
-    void init(FabricStore fabricStore) throws Exception {
-        setPeerAdmin(fabricStore);
-    }
-
-    private void setPeerAdmin(FabricStore fabricStore) throws IOException {
-        File skFile = Paths.get(cryptoConfigPath, "/peerOrganizations/", orgDomainName, String.format("/users/%s@%s/msp/keystore", "Admin", orgDomainName)).toFile();
-        File certificateFile = Paths.get(cryptoConfigPath, "/peerOrganizations/", getOrgDomainName(),
-                String.format("/users/%s@%s/msp/signcerts/%s@%s-cert.pem", "Admin", orgDomainName, "Admin", orgDomainName)).toFile();
-        log.debug("skFile = " + skFile.getAbsolutePath());
-        log.debug("certificateFile = " + certificateFile.getAbsolutePath());
-        // 一个特殊的用户，可以创建通道，连接对等点，并安装链码
-        addUser(fabricStore.getMember(username, orgName, orgMSPID, findFileSk(skFile), certificateFile));
-    }
 
     /**
      * 设置CA默认请求用户名或指定的带密码参数的请求用户名
@@ -108,8 +91,8 @@ class IntermediateOrg {
     }
 
     /** 新增排序服务器 */
-    void addOrderer(String name, String location) {
-        orderers.add(new IntermediateOrderer(name, location));
+    void addOrderer(String name, String location, String serverCrtPath) {
+        orderers.add(new IntermediateOrderer(name, location, serverCrtPath));
     }
 
     /** 获取排序服务器集合 */
@@ -139,8 +122,8 @@ class IntermediateOrg {
     }
 
     /** 新增节点服务器 */
-    void addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener) {
-        peers.add(new IntermediatePeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener));
+    void addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
+        peers.add(new IntermediatePeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath));
     }
 
     /** 获取排序服务器集合 */
@@ -162,14 +145,6 @@ class IntermediateOrg {
 
     IntermediateChaincodeID getChainCode() {
         return chaincode;
-    }
-
-    void setCryptoConfigPath(String cryptoConfigPath) {
-        this.cryptoConfigPath = cryptoConfigPath;
-    }
-
-    String getCryptoConfigPath() {
-        return cryptoConfigPath;
     }
 
     void setBlockListener(BlockListener blockListener) {
@@ -198,8 +173,12 @@ class IntermediateOrg {
         return openTLS;
     }
 
-    private void addUser(IntermediateUser user) {
-        userMap.put(user.getName(), user);
+    void addUser(IntermediateUser user, FabricStore fabricStore) {
+        try {
+            userMap.put(user.getName(), fabricStore.getMember(user.getName(), orgMSPID, user.getSkPath(), user.getCertificatePath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     User getUser() {
