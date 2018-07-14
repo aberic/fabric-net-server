@@ -17,7 +17,6 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.CAMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
