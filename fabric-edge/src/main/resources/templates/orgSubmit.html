@@ -45,7 +45,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <form class="card" enctype="multipart/form-data" th:action="@{submit}" th:method="post"
+                        <form class="card" th:action="@{submit}" th:method="post"
                               th:object="${orgVO}">
                             <div class="card-header">
                                 <h3 class="card-title" th:text="${intentLittle}"></h3>
@@ -97,19 +97,6 @@
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{org_username_placeholder}"
                                                    th:field="*{username}">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-label" th:text="#{org_crypto_config}"></div>
-                                            <div class="custom-file">
-                                                <input id="crypto-file" type="file" class="custom-file-input"
-                                                       name="file" onchange="getFileName()">
-                                                <label id="crypto-file-label" class="custom-file-label" th:text="#{org_crypto_config_upload}"></label>
-                                                <script>
-                                                    function getFileName() {
-                                                        document.getElementById("crypto-file-label").innerText = $("#crypto-file").val();
-                                                    }
-                                                </script>
-                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-label">TLS</div>

@@ -16,23 +16,18 @@
 
 package cn.aberic.fabric.service.impl;
 
-import cn.aberic.fabric.dao.*;
+import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.DeleteUtil;
 import cn.aberic.fabric.utils.FabricHelper;
-import cn.aberic.fabric.utils.FileUtil;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 @Service("orgService")
 public class OrgServiceImpl implements OrgService {
@@ -56,51 +51,20 @@ public class OrgServiceImpl implements OrgService {
 
 
     @Override
-    public int add(Org org, MultipartFile file) {
+    public int add(Org org) {
         if (StringUtils.isEmpty(org.getName()) ||
                 StringUtils.isEmpty(org.getMspId()) ||
                 StringUtils.isEmpty(org.getDomainName()) ||
                 StringUtils.isEmpty(org.getOrdererDomainName()) ||
-                StringUtils.isEmpty(org.getUsername()) ||
-                null == file) {
+                StringUtils.isEmpty(org.getUsername())) {
             return 0;
         }
         org.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
-        String parentPath = String.format("%s%s%s%s%s",
-                env.getProperty("config.dir"),
-                File.separator,
-                leagueMapper.get(org.getLeagueId()).getName(),
-                File.separator,
-                org.getName());
-        String childrenPath = parentPath + File.separator + Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
-        org.setCryptoConfigDir(childrenPath);
-        try {
-            FileUtil.unZipAndSave(file, parentPath, childrenPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 0;
-        }
         return orgMapper.add(org);
     }
 
     @Override
-    public int update(Org org, MultipartFile file) {
-        if (null != file) {
-            String parentPath = String.format("%s%s%s%s%s",
-                    env.getProperty("config.dir"),
-                    File.separator,
-                    leagueMapper.get(org.getLeagueId()).getName(),
-                    File.separator,
-                    org.getName());
-            String childrenPath = parentPath + File.separator + Objects.requireNonNull(file.getOriginalFilename()).split("\\.")[0];
-            org.setCryptoConfigDir(childrenPath);
-            try {
-                FileUtil.unZipAndSave(file, parentPath, childrenPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return 0;
-            }
-        }
+    public int update(Org org) {
         FabricHelper.obtain().removeManager(peerMapper.list(org.getId()), channelMapper, chaincodeMapper);
         return orgMapper.update(org);
     }

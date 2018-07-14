@@ -27,9 +27,9 @@ import java.util.List;
  */
 public interface OrgService {
 
-    int add(Org org, MultipartFile file);
+    int add(Org org);
 
-    int update(Org org, MultipartFile file);
+    int update(Org org);
 
     List<Org> listAll();
 
