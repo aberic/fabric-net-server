@@ -63,6 +63,7 @@ public class CaController {
                 caService.add(ca, skFile, certificateFile);
                 break;
             case "edit":
+                ca = resetCa(ca);
                 ca.setId(id);
                 caService.update(ca, skFile, certificateFile);
                 break;

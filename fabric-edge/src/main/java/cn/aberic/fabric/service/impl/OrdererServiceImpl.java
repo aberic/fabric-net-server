@@ -61,21 +61,7 @@ public class OrdererServiceImpl implements OrdererService {
             log.debug("orderer tls server.crt is null");
             return 0;
         }
-        String ordererTlsPath = String.format("%s%s%s%s%s%s%s%s",
-                env.getProperty("config.dir"),
-                File.separator,
-                orderer.getLeagueName(),
-                File.separator,
-                orderer.getOrgName(),
-                File.separator,
-                orderer.getName(),
-                File.separator);
-        String serverCrtPath = String.format("%s%s", ordererTlsPath, serverCrtFile.getOriginalFilename());
-        orderer.setServerCrtPath(serverCrtPath);
-        try {
-            FileUtil.save(serverCrtFile, serverCrtPath);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (saveFileFail(orderer, serverCrtFile)) {
             return 0;
         }
         orderer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
@@ -87,6 +73,9 @@ public class OrdererServiceImpl implements OrdererService {
         FabricHelper.obtain().removeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
         if (null == serverCrtFile) {
             return ordererMapper.updateWithNoFile(orderer);
+        }
+        if (saveFileFail(orderer, serverCrtFile)) {
+            return 0;
         }
         return ordererMapper.update(orderer);
     }
@@ -120,4 +109,26 @@ public class OrdererServiceImpl implements OrdererService {
     public int delete(int id) {
         return ordererMapper.delete(id);
     }
+
+    private boolean saveFileFail(Orderer orderer, MultipartFile serverCrtFile) {
+        String ordererTlsPath = String.format("%s%s%s%s%s%s%s%s",
+                env.getProperty("config.dir"),
+                File.separator,
+                orderer.getLeagueName(),
+                File.separator,
+                orderer.getOrgName(),
+                File.separator,
+                orderer.getName(),
+                File.separator);
+        String serverCrtPath = String.format("%s%s", ordererTlsPath, serverCrtFile.getOriginalFilename());
+        orderer.setServerCrtPath(serverCrtPath);
+        try {
+            FileUtil.save(serverCrtFile, serverCrtPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -64,21 +64,7 @@ public class PeerServiceImpl implements PeerService {
             log.debug("peer tls server.crt is null");
             return 0;
         }
-        String peerTlsPath = String.format("%s%s%s%s%s%s%s%s",
-                env.getProperty("config.dir"),
-                File.separator,
-                peer.getLeagueName(),
-                File.separator,
-                peer.getOrgName(),
-                File.separator,
-                peer.getName(),
-                File.separator);
-        String serverCrtPath = String.format("%s%s", peerTlsPath, serverCrtFile.getOriginalFilename());
-        peer.setServerCrtPath(serverCrtPath);
-        try {
-            FileUtil.save(serverCrtFile, serverCrtPath);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (saveFileFail(peer, serverCrtFile)) {
             return 0;
         }
         peer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
@@ -89,9 +75,12 @@ public class PeerServiceImpl implements PeerService {
     public int update(Peer peer, MultipartFile serverCrtFile) {
         FabricHelper.obtain().removeManager(channelMapper.list(peer.getId()), chaincodeMapper);
         if (null == serverCrtFile) {
-            return peerMapper.update(peer);
+            return peerMapper.updateWithNoFile(peer);
         }
-        return peerMapper.updateWithNoFile(peer);
+        if (saveFileFail(peer, serverCrtFile)) {
+            return 0;
+        }
+        return peerMapper.update(peer);
     }
 
     @Override
@@ -122,5 +111,26 @@ public class PeerServiceImpl implements PeerService {
     @Override
     public int delete(int id) {
         return DeleteUtil.obtain().deletePeer(id, peerMapper, channelMapper, chaincodeMapper, appMapper);
+    }
+
+    private boolean saveFileFail(Peer peer, MultipartFile serverCrtFile) {
+        String peerTlsPath = String.format("%s%s%s%s%s%s%s%s",
+                env.getProperty("config.dir"),
+                File.separator,
+                peer.getLeagueName(),
+                File.separator,
+                peer.getOrgName(),
+                File.separator,
+                peer.getName(),
+                File.separator);
+        String serverCrtPath = String.format("%s%s", peerTlsPath, serverCrtFile.getOriginalFilename());
+        peer.setServerCrtPath(serverCrtPath);
+        try {
+            FileUtil.save(serverCrtFile, serverCrtPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return true;
+        }
+        return false;
     }
 }

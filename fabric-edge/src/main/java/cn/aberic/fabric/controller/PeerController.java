@@ -62,6 +62,7 @@ public class PeerController {
                 peerService.add(peer, serverCrtFile);
                 break;
             case "edit":
+                peer = resetPeer(peer);
                 peer.setId(id);
                 peerService.update(peer, serverCrtFile);
                 break;

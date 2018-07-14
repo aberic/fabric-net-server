@@ -17,6 +17,7 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.CA;
+import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.CAMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
@@ -62,25 +63,7 @@ public class CAServiceImpl implements CAService {
             log.debug("had the same ca in this peer");
             return 0;
         }
-        String caPath = String.format("%s%s%s%s%s%s%s%s%s%s",
-                env.getProperty("config.dir"),
-                File.separator,
-                ca.getLeagueName(),
-                File.separator,
-                ca.getOrgName(),
-                File.separator,
-                ca.getPeerName(),
-                File.separator,
-                ca.getName(),
-                File.separator);
-        String skPath = String.format("%s%s", caPath, skFile.getOriginalFilename());
-        String certificatePath = String.format("%s%s", caPath, certificateFile.getOriginalFilename());
-        ca.setSkPath(skPath);
-        ca.setCertificatePath(certificatePath);
-        try {
-            FileUtil.save(skFile, certificateFile, skPath, certificatePath);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (saveFileFail(ca, skFile, certificateFile)) {
             return 0;
         }
         ca.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
@@ -92,6 +75,9 @@ public class CAServiceImpl implements CAService {
         FabricHelper.obtain().removeManager(channelMapper.list(ca.getPeerId()), chaincodeMapper);
         if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {
             return caMapper.updateWithNoFile(ca);
+        }
+        if (saveFileFail(ca, skFile, certificateFile)) {
+            return 0;
         }
         return caMapper.update(ca);
     }
@@ -125,5 +111,30 @@ public class CAServiceImpl implements CAService {
     public int delete(int id) {
         FabricHelper.obtain().removeManager(channelMapper.list(caMapper.get(id).getPeerId()), chaincodeMapper);
         return caMapper.delete(id);
+    }
+
+    private boolean saveFileFail(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
+        String caPath = String.format("%s%s%s%s%s%s%s%s%s%s",
+                env.getProperty("config.dir"),
+                File.separator,
+                ca.getLeagueName(),
+                File.separator,
+                ca.getOrgName(),
+                File.separator,
+                ca.getPeerName(),
+                File.separator,
+                ca.getName(),
+                File.separator);
+        String skPath = String.format("%s%s", caPath, skFile.getOriginalFilename());
+        String certificatePath = String.format("%s%s", caPath, certificateFile.getOriginalFilename());
+        ca.setSkPath(skPath);
+        ca.setCertificatePath(certificatePath);
+        try {
+            FileUtil.save(skFile, certificateFile, skPath, certificatePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return true;
+        }
+        return false;
     }
 }

@@ -59,6 +59,7 @@ public class OrdererController {
                 ordererService.add(orderer, serverCrtFile);
                 break;
             case "edit":
+                orderer = resetOrderer(orderer);
                 orderer.setId(id);
                 ordererService.update(orderer, serverCrtFile);
                 break;
