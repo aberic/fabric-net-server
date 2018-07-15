@@ -37,10 +37,12 @@ public class Chaincode {
     private String version; // required
     private int proposalWaitTime = 90000; // required
     private int channelId; // required
+    private String cc; // optional
     private String date; // optional
+    private String flag;
     private String channelName; // optional
     private String peerName; // optional
     private String orgName; // optional
     private String leagueName; // optional
-    private boolean open;
+
 }
