@@ -68,6 +68,7 @@
                                                    th:placeholder="#{chaincode_name_placeholder}"
                                                    th:field="*{name}">
                                             <input type="hidden" name="intent" th:value="${intent}"/>
+                                            <input type="hidden" name="cc" th:value="${chaincode.cc}"/>
                                             <input type="hidden" name="id" th:value="${chaincode.id}"/>
                                             <input type="hidden" name="init" th:value="${init}"/>
                                         </div>
@@ -91,16 +92,6 @@
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{chaincode_proposal_wait_time_placeholder}"
                                                    th:field="*{proposalWaitTime}">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-label" th:text="#{open_visit}"></div>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox"
-                                                       th:field="*{open}"
-                                                       class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description" th:text="#{open}"></span>
-                                            </label>
                                         </div>
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
