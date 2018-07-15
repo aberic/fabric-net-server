@@ -17,13 +17,12 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.mapper.CAMapper;
-import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
-import cn.aberic.fabric.dao.mapper.ChannelMapper;
+import cn.aberic.fabric.dao.League;
+import cn.aberic.fabric.dao.Org;
+import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.CAService;
-import cn.aberic.fabric.utils.DateUtil;
-import cn.aberic.fabric.utils.FabricHelper;
-import cn.aberic.fabric.utils.FileUtil;
+import cn.aberic.fabric.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
@@ -43,6 +42,12 @@ import java.util.List;
 @Service("caService")
 public class CAServiceImpl implements CAService {
 
+    @Resource
+    private LeagueMapper leagueMapper;
+    @Resource
+    private OrgMapper orgMapper;
+    @Resource
+    private PeerMapper peerMapper;
     @Resource
     private CAMapper caMapper;
     @Resource
@@ -65,6 +70,7 @@ public class CAServiceImpl implements CAService {
         if (saveFileFail(ca, skFile, certificateFile)) {
             return 0;
         }
+        ca = resetCa(ca);
         ca.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return caMapper.add(ca);
     }
@@ -72,6 +78,8 @@ public class CAServiceImpl implements CAService {
     @Override
     public int update(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
         FabricHelper.obtain().removeManager(channelMapper.list(ca.getPeerId()), chaincodeMapper);
+        CacheUtil.removeFlagCA(ca.getFlag());
+        ca = resetCa(ca);
         if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {
             return caMapper.updateWithNoFile(ca);
         }
@@ -94,6 +102,11 @@ public class CAServiceImpl implements CAService {
     @Override
     public CA get(int id) {
         return caMapper.get(id);
+    }
+
+    @Override
+    public CA getByFlag(String flag) {
+        return caMapper.getByFlag(flag);
     }
 
     @Override
@@ -136,4 +149,16 @@ public class CAServiceImpl implements CAService {
         }
         return false;
     }
+
+    private CA resetCa(CA ca) {
+        Peer peer = peerMapper.get(ca.getPeerId());
+        Org org = orgMapper.get(peer.getOrgId());
+        League league = leagueMapper.get(org.getLeagueId());
+        ca.setLeagueName(league.getName());
+        ca.setOrgName(org.getName());
+        ca.setPeerName(peer.getName());
+        ca.setFlag(MD5Util.md516(league.getName() + org.getName() + peer.getName() + ca.getName()));
+        return ca;
+    }
+
 }
