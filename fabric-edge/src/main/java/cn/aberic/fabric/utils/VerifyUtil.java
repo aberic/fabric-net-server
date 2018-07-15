@@ -21,6 +21,7 @@ import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,15 +54,20 @@ public class VerifyUtil {
     }
 
     /** 判断key有效性 */
-    public static boolean unRequest(BaseChain baseChain, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
-        if (!CacheUtil.getChaincodeId(baseChain.getId(), chaincodeMapper)) {
-            if (CacheUtil.getKeyChaincodeId(baseChain.getKey()) == -1 && null != appMapper.getByKey(baseChain.getKey())) {
-                CacheUtil.putKeyChaincodeId(baseChain.getKey(), baseChain.getId());
-            } else {
-                return CacheUtil.getKeyChaincodeId(baseChain.getKey()) != baseChain.getId();
+    public static String getCc(BaseChain baseChain, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+        String cc = null;
+        if (CacheUtil.getAppBool(baseChain.getKey(), appMapper)) {
+            cc = CacheUtil.getString(baseChain.getKey());
+            if (StringUtils.isEmpty(cc)) {
+                try {
+                    cc = chaincodeMapper.get(appMapper.getByKey(baseChain.getKey()).getChaincodeId()).getCc();
+                    CacheUtil.putString(baseChain.getKey(), cc);
+                } catch (Exception e) {
+                    cc = null;
+                }
             }
         }
-        return false;
+        return cc;
     }
 
     public static List<String> versions() {
