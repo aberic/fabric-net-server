@@ -19,6 +19,7 @@ package cn.aberic.fabric.service.impl;
 import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.LeagueService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.DeleteUtil;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,8 @@ public class LeagueServiceImpl implements LeagueService {
     private OrgMapper orgMapper;
     @Resource
     private PeerMapper peerMapper;
+    @Resource
+    private CAMapper caMapper;
     @Resource
     private OrdererMapper ordererMapper;
     @Resource
@@ -56,6 +59,7 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     public int update(League leagueInfo) {
+        CacheUtil.removeFlagCA(leagueInfo.getId(), peerMapper, caMapper);
         return leagueMapper.update(leagueInfo);
     }
 
