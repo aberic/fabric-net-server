@@ -54,6 +54,14 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-12">
                                         <div class="form-group">
+                                            <label for="ca" class="form-label" th:text="#{ca}"></label>
+                                            <select id="ca" class="form-control custom-select"
+                                                    th:field="*{flag}">
+                                                <option th:each="ca: ${cas}" th:value="${ca.flag}"
+                                                        th:text="${ca.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="form-label" th:text="#{chaincode_api_params}"></label>
                                             <textarea class="form-control" rows="10"
                                                       th:placeholder="#{chaincode_api_params_placeholder}"

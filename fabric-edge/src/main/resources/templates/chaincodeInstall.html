@@ -62,6 +62,14 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="ca" class="form-label" th:text="#{ca}"></label>
+                                            <select id="ca" class="form-control custom-select"
+                                                    th:field="*{flag}">
+                                                <option th:each="ca: ${cas}" th:value="${ca.flag}"
+                                                        th:text="${ca.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="form-label" th:text="#{chaincode_name}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"

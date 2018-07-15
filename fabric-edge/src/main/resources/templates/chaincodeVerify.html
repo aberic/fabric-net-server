@@ -63,14 +63,6 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-12">
                                         <div class="form-group">
-                                            <label for="league-name" class="form-label" th:text="#{league_version}"></label>
-                                            <select id="league-name" class="form-control custom-select"
-                                                    th:field="*{version}">
-                                                <option th:each="v: ${versions}" th:value="${v}"
-                                                        th:text="${v}"></option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="api" class="form-label" th:text="#{chaincode_list}"></label>
                                             <select id="api" class="form-control custom-select"
                                                     th:field="*{index}">
@@ -79,10 +71,10 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="ca" class="form-label" th:text="#{cas}"></label>
+                                            <label for="ca" class="form-label" th:text="#{ca}"></label>
                                             <select id="ca" class="form-control custom-select"
-                                                    th:field="*{caId}">
-                                                <option th:each="ca: ${cas}" th:value="${ca.id}"
+                                                    th:field="*{flag}">
+                                                <option th:each="ca: ${cas}" th:value="${ca.flag}"
                                                         th:text="${ca.name}"></option>
                                             </select>
                                         </div>
