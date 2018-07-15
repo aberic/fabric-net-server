@@ -22,8 +22,10 @@ import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.StateService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.VerifyUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,6 +41,8 @@ import java.util.Map;
 public class StateServiceImpl implements StateService, BaseService {
 
     @Resource
+    private LeagueMapper leagueMapper;
+    @Resource
     private AppMapper appMapper;
     @Resource
     private OrgMapper orgMapper;
@@ -47,18 +51,20 @@ public class StateServiceImpl implements StateService, BaseService {
     @Resource
     private PeerMapper peerMapper;
     @Resource
+    private CAMapper caMapper;
+    @Resource
     private ChannelMapper channelMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
 
     @Override
-    public String invoke(State state, CA ca) {
-        return chaincodeByVerify(state, ChainCodeIntent.INVOKE, ca);
+    public String invoke(State state) {
+        return chaincode(state, ChainCodeIntent.INVOKE, CacheUtil.getFlagCA(state.getFlag(), caMapper));
     }
 
     @Override
-    public String query(State state, CA ca) {
-        return chaincodeByVerify(state, ChainCodeIntent.QUERY, ca);
+    public String query(State state) {
+        return chaincode(state, ChainCodeIntent.QUERY, CacheUtil.getFlagCA(state.getFlag(), caMapper));
     }
 
 
@@ -66,14 +72,11 @@ public class StateServiceImpl implements StateService, BaseService {
         INVOKE, QUERY
     }
 
-    private String chaincodeByVerify(State state, ChainCodeIntent intent, CA ca) {
-        if (VerifyUtil.unRequest(state, chaincodeMapper, appMapper)) {
-            return responseFail("app key is invalid");
-        }
-        return chaincode(state, intent, ca);
-    }
-
     private String chaincode(State state, ChainCodeIntent intent, CA ca) {
+        String cc = VerifyUtil.getCc(state, chaincodeMapper, appMapper);
+        if (StringUtils.isEmpty(cc)) {
+            return responseFail("Request failed：app key is invalid");
+        }
         List<String> array = state.getStrArray();
         int length = array.size();
         String fcn = null;
@@ -85,20 +88,23 @@ public class StateServiceImpl implements StateService, BaseService {
                 argArray[i - 1] = array.get(i);
             }
         }
-        return chaincodeExec(state, intent, ca, fcn, argArray);
+        return chaincodeExec(intent, ca, cc, fcn, argArray);
     }
 
-    private String chaincodeExec(State state, ChainCodeIntent intent, CA ca, String fcn, String[] argArray) {
+    private String chaincodeExec(ChainCodeIntent intent, CA ca, String cc, String fcn, String[] argArray) {
         Map<String, String> resultMap = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
-                    ca, state.getId());
+                    ca, cc);
             switch (intent) {
                 case INVOKE:
                     resultMap = manager.invoke(fcn, argArray);
                     break;
                 case QUERY:
-                    resultMap = manager.query(fcn, argArray, state.getVersion());
+                    if (StringUtils.isEmpty(CacheUtil.getString(cc))) {
+                        CacheUtil.putString(cc, leagueMapper.get(orgMapper.get(peerMapper.get(ca.getPeerId()).getOrgId()).getLeagueId()).getVersion());
+                    }
+                    resultMap = manager.query(fcn, argArray, CacheUtil.getString(cc));
                     break;
             }
             if (resultMap.get("code").equals("error")) {
