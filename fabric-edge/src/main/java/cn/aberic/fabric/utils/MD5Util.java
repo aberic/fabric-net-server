@@ -21,6 +21,18 @@ import org.apache.commons.codec.digest.DigestUtils;
 public class MD5Util {
 
     /**
+     * 将字符串md5散列值24位
+     *
+     * @param content
+     *            散列值内容
+     * @return 散列值结果
+     */
+    public static String md516(String content) {
+        String str = md5(content);
+        return str.substring(8, 24);
+    }
+
+    /**
      * MD5方法
      *
      * @param text 明文
