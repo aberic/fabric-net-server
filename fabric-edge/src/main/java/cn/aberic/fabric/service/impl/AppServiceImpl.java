@@ -19,6 +19,7 @@ package cn.aberic.fabric.service.impl;
 import cn.aberic.fabric.bean.App;
 import cn.aberic.fabric.bean.Key;
 import cn.aberic.fabric.dao.mapper.AppMapper;
+import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.service.AppService;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
@@ -39,9 +40,11 @@ public class AppServiceImpl implements AppService {
 
     @Resource
     private AppMapper appMapper;
+    @Resource
+    private ChaincodeMapper chaincodeMapper;
 
     @Override
-    public int add(App app, int chaincodeId) {
+    public int add(App app) {
         if (null != appMapper.check(app)) {
             return 0;
         }
@@ -51,12 +54,11 @@ public class AppServiceImpl implements AppService {
         }
         app.setPublicKey(key.getPublicKey());
         app.setPrivateKey(key.getPrivateKey());
-        app.setChaincodeId(chaincodeId);
         app.setKey(MathUtil.getRandom8());
         app.setCreateDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
         app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
         if (app.isActive()) {
-            CacheUtil.putKeyChaincodeId(app.getKey(), app.getChaincodeId());
+            CacheUtil.putString(app.getKey(), chaincodeMapper.get(app.getChaincodeId()).getCc());
         }
         return appMapper.add(app);
     }
@@ -64,11 +66,7 @@ public class AppServiceImpl implements AppService {
     @Override
     public int update(App app) {
         app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
-        if (app.isActive()) {
-            CacheUtil.putKeyChaincodeId(app.getKey(), app.getChaincodeId());
-        } else {
-            CacheUtil.removeString(app.getKey());
-        }
+        CacheUtil.removeAppBool(app.getKey());
         return appMapper.update(app);
     }
 
@@ -76,10 +74,10 @@ public class AppServiceImpl implements AppService {
     public int updateKey(int id) {
         App app = new App();
         app.setId(id);
-        CacheUtil.removeKeyChaincodeId(appMapper.get(id).getKey());
+        CacheUtil.removeString(appMapper.get(id).getKey());
         app.setKey(MathUtil.getRandom8());
         if (app.isActive()) {
-            CacheUtil.putKeyChaincodeId(app.getKey(), app.getChaincodeId());
+            CacheUtil.putString(app.getKey(), chaincodeMapper.get(app.getChaincodeId()).getCc());
         } else {
             CacheUtil.removeString(app.getKey());
         }
