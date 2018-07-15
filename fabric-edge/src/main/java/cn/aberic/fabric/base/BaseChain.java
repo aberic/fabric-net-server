@@ -26,7 +26,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class BaseChain {
-    private int id; // required
     private String key;
+    private String flag;
+    private int channelId;
     private String version;
 }
