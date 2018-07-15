@@ -76,8 +76,9 @@
                                                    th:placeholder="#{app_name_placeholder}"
                                                    th:field="*{name}">
                                             <input type="hidden" name="intent" th:value="${intent}"/>
-                                            <input type="hidden" name="chaincodeId" th:value="${chaincodeId}"/>
+                                            <input type="hidden" name="chaincodeId" th:value="${app.chaincodeId}"/>
                                             <input type="hidden" name="id" th:value="${app.id}"/>
+                                            <input type="hidden" name="key" th:value="${app.key}"/>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-label" th:text="#{active}"></div>
