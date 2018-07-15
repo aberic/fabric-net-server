@@ -43,18 +43,17 @@ public class AppController {
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute App app,
-                               @RequestParam("intent") String intent,
-                               @RequestParam("chaincodeId") int chaincodeId) {
+                               @RequestParam("intent") String intent) {
         switch (intent) {
             case "add":
-                appService.add(app, chaincodeId);
+                appService.add(app);
                 break;
             case "edit":
                 appService.update(app);
                 break;
         }
         Map<String, Integer> map = new HashMap<>();
-        map.put("id", chaincodeId);
+        map.put("id", app.getChaincodeId());
         return new ModelAndView(new RedirectView("list"), map);
     }
 
@@ -64,8 +63,9 @@ public class AppController {
         modelAndView.addObject("intentLittle", SpringUtil.get("new_app"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
-        modelAndView.addObject("app", new App());
-        modelAndView.addObject("chaincodeId", chaincodeId);
+        App app = new App();
+        app.setChaincodeId(chaincodeId);
+        modelAndView.addObject("app", app);
         return modelAndView;
     }
 
@@ -77,7 +77,6 @@ public class AppController {
         modelAndView.addObject("intent", "edit");
         App app = appService.get(id);
         modelAndView.addObject("app", app);
-        modelAndView.addObject("chaincodeId", app.getChaincodeId());
         return modelAndView;
     }
 
