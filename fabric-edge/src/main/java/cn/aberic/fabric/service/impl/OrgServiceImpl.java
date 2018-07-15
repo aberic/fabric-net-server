@@ -22,7 +22,6 @@ import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.DeleteUtil;
 import cn.aberic.fabric.utils.FabricHelper;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -34,10 +33,6 @@ public class OrgServiceImpl implements OrgService {
 
     @Resource
     private OrgMapper orgMapper;
-    @Resource
-    private Environment env;
-    @Resource
-    private LeagueMapper leagueMapper;
     @Resource
     private PeerMapper peerMapper;
     @Resource
