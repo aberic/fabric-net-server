@@ -18,8 +18,7 @@ package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.bean.Api;
-import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.Chaincode;
+import cn.aberic.fabric.dao.*;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.ChaincodeService;
@@ -42,11 +41,15 @@ import java.util.Objects;
 public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
 
     @Resource
+    private LeagueMapper leagueMapper;
+    @Resource
     private OrgMapper orgMapper;
     @Resource
     private OrdererMapper ordererMapper;
     @Resource
     private PeerMapper peerMapper;
+    @Resource
+    private CAMapper caMapper;
     @Resource
     private ChannelMapper channelMapper;
     @Resource
@@ -65,6 +68,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                 null != chaincodeMapper.check(chaincode)) {
             return 0;
         }
+        chaincode.setCc(createCC(chaincode));
         chaincode.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return chaincodeMapper.add(chaincode);
     }
@@ -77,12 +81,12 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         if (!upload(chaincode, file)){
             return responseFailJson("source unzip fail");
         }
+        chaincode.setCc(createCC(chaincode));
         if (chaincodeMapper.add(chaincode) <= 0) {
             return responseFailJson("chaincode add fail");
         }
         chaincode.setId(chaincodeMapper.check(chaincode).getId());
-        // TODO
-        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.INSTALL, new String[]{});
+        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, caMapper.getByFlag(chaincode.getFlag()), ChainCodeIntent.INSTALL, new String[]{});
         if (jsonResult.getInteger("code") == BaseService.FAIL) {
             delete(chaincode.getId());
             return jsonResult;
@@ -98,12 +102,12 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         if (!upload(chaincode, file)){
             return responseFailJson("source unzip fail");
         }
-        FabricHelper.obtain().removeManager(chaincode.getId());
+        FabricHelper.obtain().removeManager(chaincode.getCc());
         if (chaincodeMapper.updateForUpgrade(chaincode) <= 0) {
             return responseFailJson("chaincode updateForUpgrade fail");
         }
-        // TODO
-        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.INSTALL, new String[]{});
+        CA ca = caMapper.getByFlag(chaincode.getFlag());
+        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ca, ChainCodeIntent.INSTALL, new String[]{});
         if (jsonResult.getInteger("code") == BaseService.FAIL) {
             delete(chaincode.getId());
             return jsonResult;
@@ -114,8 +118,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         for (int i = 0; i < size; i++) {
             args[i] = strArray.get(i);
         }
-        // TODO
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.UPGRADE, args);
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ca, ChainCodeIntent.UPGRADE, args);
     }
 
     @Override
@@ -126,17 +129,13 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             args[i] = strArray.get(i);
         }
         // TODO
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, new CA(), ChainCodeIntent.INSTANTIATE, args);
+        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, caMapper.getByFlag(chaincode.getFlag()), ChainCodeIntent.INSTANTIATE, args);
     }
 
     @Override
     public int update(Chaincode chaincode) {
-        FabricHelper.obtain().removeManager(chaincode.getId());
-        if (chaincode.isOpen()) {
-            CacheUtil.putChaincodeId(chaincode.getChannelId(), true);
-        } else {
-            CacheUtil.removeChaincodeId(chaincode.getChannelId());
-        }
+        chaincode.setCc(createCC(chaincode));
+        FabricHelper.obtain().removeManager(chaincode.getCc());
         return chaincodeMapper.update(chaincode);
     }
 
@@ -174,7 +173,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     public int deleteAll(int channelId) {
         List<Chaincode> chaincodes = chaincodeMapper.list(channelId);
         for (Chaincode chaincode : chaincodes) {
-            FabricHelper.obtain().removeManager(chaincode.getId());
+            FabricHelper.obtain().removeManager(chaincode.getCc());
             chaincodeMapper.delete(chaincode.getId());
         }
         return 0;
@@ -189,7 +188,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         Map<String, String> resultMap = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chainCodeMapper, ordererMapper, peerMapper,
-                    ca, chaincodeId);
+                    ca, chainCodeMapper.get(chaincodeId).getCc());
             switch (intent) {
                 case INSTALL:
                     resultMap = manager.install(chainCodeMapper.get(chaincodeId).getVersion());
@@ -243,5 +242,13 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             return false;
         }
         return true;
+    }
+
+    private String createCC(Chaincode chaincode){
+        Channel channel = channelMapper.get(chaincode.getChannelId());
+        Peer peer = peerMapper.get(channel.getPeerId());
+        Org org = orgMapper.get(peer.getOrgId());
+        League league = leagueMapper.get(org.getLeagueId());
+        return MD5Util.md5(league.getName() + org.getName() + peer.getName() + channel.getName() + chaincode.getName());
     }
 }
