@@ -34,12 +34,10 @@ import java.util.Map;
 @Slf4j
 public class FabricHelper {
 
-    /** 当前正在运行的智能合约Id */
-    private int chainCodeId;
-
     private static FabricHelper instance;
 
-    private final Map<Integer, FabricManager> fabricManagerMap;
+    private final Map<Integer, FabricManager> channelManagerMap;
+    private final Map<String, FabricManager> chaincodeManagerMap;
 
     public static FabricHelper obtain() {
         if (null == instance) {
@@ -53,7 +51,8 @@ public class FabricHelper {
     }
 
     private FabricHelper() {
-        fabricManagerMap = new LinkedHashMap<>();
+        channelManagerMap = new LinkedHashMap<>();
+        chaincodeManagerMap = new LinkedHashMap<>();
     }
 
     public void removeManager(List<Peer> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
@@ -70,27 +69,21 @@ public class FabricHelper {
 
     public void removeManager(List<Chaincode> chaincodes) {
         for (Chaincode chaincode : chaincodes) {
-            fabricManagerMap.remove(chaincode.getId());
+            chaincodeManagerMap.remove(chaincode.getCc());
         }
     }
 
-    public void removeManager(int chainCodeId) {
-        fabricManagerMap.remove(chainCodeId);
+    public void removeManager(String cc) {
+        chaincodeManagerMap.remove(cc);
     }
 
     public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
-                             OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, int chaincodeId) throws Exception {
-        if (chaincodeId == -1) {
-            chaincodeId = this.chainCodeId;
-        } else {
-            this.chainCodeId = chaincodeId;
-        }
-
+                             OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, String cc) throws Exception {
         // 尝试从缓存中获取fabricManager
-        FabricManager fabricManager = fabricManagerMap.get(chaincodeId);
+        FabricManager fabricManager = chaincodeManagerMap.get(MD5Util.md516(cc + (null != ca ? ca.getFlag() : "")));
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
-            synchronized (fabricManagerMap) {
-                Chaincode chaincode = chaincodeMapper.get(chaincodeId);
+            synchronized (chaincodeManagerMap) {
+                Chaincode chaincode = chaincodeMapper.getByCC(cc);
                 log.debug(String.format("chaincode = %s", chaincode.toString()));
                 Channel channel = channelMapper.get(chaincode.getChannelId());
                 log.debug(String.format("channel = %s", channel.toString()));
@@ -102,8 +95,31 @@ public class FabricHelper {
                 Org org = orgMapper.get(orgId);
                 log.debug(String.format("org = %s", org.toString()));
                 if (orderers.size() != 0 && peers.size() != 0) {
-                    fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca);
-                    fabricManagerMap.put(chaincodeId, fabricManager);
+                    fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca, cc);
+                    chaincodeManagerMap.put(MD5Util.md516(cc + ca.getFlag()), fabricManager);
+                }
+            }
+        }
+        return fabricManager;
+    }
+
+    public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper,
+                             OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, int channelId) throws Exception {
+        // 尝试从缓存中获取fabricManager
+        FabricManager fabricManager = channelManagerMap.get(channelId);
+        Channel channel = channelMapper.get(channelId);
+        log.debug(String.format("channel = %s", channel.toString()));
+        Peer peer = peerMapper.get(channel.getPeerId());
+        log.debug(String.format("peer = %s", peer.toString()));
+        int orgId = peer.getOrgId();
+        List<Peer> peers = peerMapper.list(orgId);
+        List<Orderer> orderers = ordererMapper.list(orgId);
+        Org org = orgMapper.get(orgId);
+        if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
+            synchronized (channelManagerMap) {
+                if (orderers.size() != 0 && peers.size() != 0) {
+                    fabricManager = createFabricManager(org, channel, null, orderers, peers, ca, String.valueOf(channelId));
+                    channelManagerMap.put(channelId, fabricManager);
                 }
             }
         }
@@ -111,15 +127,20 @@ public class FabricHelper {
     }
 
 
-    private FabricManager createFabricManager(Org org, Channel channel, Chaincode chainCode, List<Orderer> orderers, List<Peer> peers, CA ca) throws Exception {
+    private FabricManager createFabricManager(Org org, Channel channel, Chaincode chaincode, List<Orderer> orderers, List<Peer> peers, CA ca, String cacheName) throws Exception {
         OrgManager orgManager = new OrgManager();
         orgManager
-                .init(chainCodeId, org.isTls())
+                .init(cacheName, org.isTls())
                 .setPeers(org.getName(), org.getMspId(), org.getDomainName())
                 .setUser(ca.getName(), ca.getSkPath(), ca.getCertificatePath())
                 .setOrderers(org.getOrdererDomainName())
                 .setChannel(channel.getName())
-                .setChainCode(chainCode.getName(), chainCode.getPath(), chainCode.getSource(), chainCode.getPolicy(), chainCode.getVersion(), chainCode.getProposalWaitTime())
+                .setChainCode(null == chaincode ? "" : chaincode.getName(),
+                        null == chaincode ? "" : chaincode.getPath(),
+                        null == chaincode ? "" : chaincode.getSource(),
+                        null == chaincode ? "" : chaincode.getPolicy(),
+                        null == chaincode ? "" : chaincode.getVersion(),
+                        null == chaincode ? 0 : chaincode.getProposalWaitTime())
                 .setBlockListener(map -> {
                     log.debug(map.get("code"));
                     log.debug(map.get("data"));
@@ -131,7 +152,7 @@ public class FabricHelper {
             orgManager.addPeer(peer.getName(), peer.getEventHubName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener(), peer.getServerCrtPath());
         }
         orgManager.add();
-        return orgManager.use(chainCodeId, ca.getName());
+        return orgManager.use(cacheName, ca.getName());
     }
 
 }
