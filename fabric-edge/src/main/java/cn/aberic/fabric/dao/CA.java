@@ -33,6 +33,7 @@ public class CA {
     private String name;
     private String skPath;
     private String certificatePath;
+    private String flag; // optional
     private int peerId;
     private String date; // optional
     private boolean tls; // required
