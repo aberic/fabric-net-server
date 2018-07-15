@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Aberic - aberic@qq.com - All Rights Reserved.
+ * Copyright (c) 2018. Aberic - All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package cn.aberic.fabric.configuration;
+package cn.aberic.fabric.interceptor;
 
-import cn.aberic.fabric.interceptor.LoginInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -27,9 +27,7 @@ public class LoginConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册拦截器
-        LoginInterceptor loginInterceptor = new LoginInterceptor();
-        InterceptorRegistration loginRegistry = registry.addInterceptor(loginInterceptor);
+        InterceptorRegistration loginRegistry = registry.addInterceptor(loginInterceptor());
         // 拦截路径
         loginRegistry.addPathPatterns("/league/*");
         loginRegistry.addPathPatterns("/org/*");
@@ -37,12 +35,16 @@ public class LoginConfiguration implements WebMvcConfigurer {
         loginRegistry.addPathPatterns("/peer/*");
         loginRegistry.addPathPatterns("/channel/*");
         loginRegistry.addPathPatterns("/chaincode/*");
-        loginRegistry.addPathPatterns("/state/*");
-        loginRegistry.addPathPatterns("/trace/*");
         loginRegistry.addPathPatterns("/app/*");
         loginRegistry.addPathPatterns("/ca/*");
         loginRegistry.addPathPatterns("/index");
 
+    }
+
+    // 注册拦截器
+    @Bean
+    LoginInterceptor loginInterceptor() {
+        return new LoginInterceptor();
     }
 
 }
