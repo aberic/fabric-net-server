@@ -37,6 +37,8 @@ public interface CAService {
 
     CA get(int id);
 
+    CA getByFlag(String flag);
+
     int countById(int id);
 
     int count();
