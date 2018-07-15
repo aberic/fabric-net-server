@@ -25,15 +25,15 @@ import cn.aberic.fabric.dao.CA;
  */
 public interface TraceService {
 
-    String queryBlockByTransactionID(Trace trace, CA ca);
+    String queryBlockByTransactionID(Trace trace);
 
-    String queryBlockByHash(Trace trace, CA ca);
+    String queryBlockByHash(Trace trace);
 
-    String queryBlockByNumber(Trace trace, CA ca);
+    String queryBlockByNumber(Trace trace);
 
-    String queryBlockChainInfo(int id, String key, CA ca);
+    String queryBlockChainInfo(String cc, String key, CA ca);
 
     String queryBlockByNumberForIndex(Trace trace);
 
-    String queryBlockChainInfoForIndex(int id);
+    String queryBlockChainInfoForIndex(int channelId);
 }

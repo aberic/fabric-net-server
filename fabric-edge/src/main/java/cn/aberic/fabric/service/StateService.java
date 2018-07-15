@@ -25,8 +25,8 @@ import cn.aberic.fabric.dao.CA;
  */
 public interface StateService {
 
-    String invoke(State state, CA ca);
+    String invoke(State state);
 
-    String query(State state, CA ca);
+    String query(State state);
 
 }
