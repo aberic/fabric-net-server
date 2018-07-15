@@ -17,15 +17,9 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.Peer;
-import cn.aberic.fabric.dao.mapper.AppMapper;
-import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
-import cn.aberic.fabric.dao.mapper.ChannelMapper;
-import cn.aberic.fabric.dao.mapper.PeerMapper;
+import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.PeerService;
-import cn.aberic.fabric.utils.DateUtil;
-import cn.aberic.fabric.utils.DeleteUtil;
-import cn.aberic.fabric.utils.FabricHelper;
-import cn.aberic.fabric.utils.FileUtil;
+import cn.aberic.fabric.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -43,6 +37,8 @@ public class PeerServiceImpl implements PeerService {
 
     @Resource
     private PeerMapper peerMapper;
+    @Resource
+    private CAMapper caMapper;
     @Resource
     private ChannelMapper channelMapper;
     @Resource
@@ -74,6 +70,7 @@ public class PeerServiceImpl implements PeerService {
     @Override
     public int update(Peer peer, MultipartFile serverCrtFile) {
         FabricHelper.obtain().removeManager(channelMapper.list(peer.getId()), chaincodeMapper);
+        CacheUtil.removeFlagCA(peer.getId(), caMapper);
         if (null == serverCrtFile) {
             return peerMapper.updateWithNoFile(peer);
         }
