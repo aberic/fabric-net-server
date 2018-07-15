@@ -38,22 +38,22 @@ public class TraceController {
 
     @PostMapping(value = "txid")
     public String queryBlockByTransactionID(@RequestBody Trace trace) {
-        return traceService.queryBlockByTransactionID(trace, new CA());
+        return traceService.queryBlockByTransactionID(trace);
     }
 
     @PostMapping(value = "hash")
     public String queryBlockByHash(@RequestBody Trace trace) {
-        return traceService.queryBlockByHash(trace, new CA());
+        return traceService.queryBlockByHash(trace);
     }
 
     @PostMapping(value = "number")
     public String queryBlockByNumber(@RequestBody Trace trace) {
-        return traceService.queryBlockByNumber(trace, new CA());
+        return traceService.queryBlockByNumber(trace);
     }
 
-    @GetMapping(value = "info/{id}/{key}")
-    public String queryBlockChainInfo(@PathVariable("id") int id, @PathVariable("key") String key) {
-        return traceService.queryBlockChainInfo(id, key, new CA());
+    @GetMapping(value = "info/{cc}/{key}")
+    public String queryBlockChainInfo(@PathVariable("cc") String cc, @PathVariable("key") String key) {
+        return traceService.queryBlockChainInfo(cc, key, new CA());
     }
 
 }
