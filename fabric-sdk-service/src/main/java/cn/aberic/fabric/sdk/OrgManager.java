@@ -31,9 +31,9 @@ import java.util.Map;
  */
 public class OrgManager {
 
-    private Map<Integer, IntermediateOrg> orgMap;
+    private Map<String, IntermediateOrg> orgMap;
     private FabricStore fabricStore;
-    private int chainCodeId;
+    private String cc;
 
     public OrgManager() {
         orgMap = new LinkedHashMap<>();
@@ -45,19 +45,19 @@ public class OrgManager {
     /**
      * 初始化组织名称，该对象的必须首次调用方法
      *
-     * @param chainCodeId 组织Hash
+     * @param cc 组织Hash
      * @param openTLS     设置是否开启TLS
      *
      * @return self
      */
-    public OrgManager init(int chainCodeId, boolean openTLS) {
-        this.chainCodeId = chainCodeId;
-        if (orgMap.get(chainCodeId) != null) {
-            throw new RuntimeException(String.format("OrgManager had the same id of %s", chainCodeId));
+    public OrgManager init(String cc, boolean openTLS) {
+        this.cc = cc;
+        if (orgMap.get(cc) != null) {
+            throw new RuntimeException(String.format("OrgManager had the same cc of %s", cc));
         } else {
-            orgMap.put(chainCodeId, new IntermediateOrg());
+            orgMap.put(cc, new IntermediateOrg());
         }
-        orgMap.get(chainCodeId).openTLS(openTLS);
+        orgMap.get(cc).openTLS(openTLS);
         return this;
     }
 
@@ -73,29 +73,29 @@ public class OrgManager {
      */
     public OrgManager setUser(@Nonnull String username, @Nonnull String skPath, @Nonnull String certificatePath) {
         IntermediateUser user = new IntermediateUser(username, skPath, certificatePath);
-        orgMap.get(chainCodeId).addUser(user, fabricStore);
+        orgMap.get(cc).addUser(user, fabricStore);
         return this;
     }
 
     public OrgManager setOrderers(String ordererDomainName) {
-        orgMap.get(chainCodeId).setOrdererDomainName(ordererDomainName);
+        orgMap.get(cc).setOrdererDomainName(ordererDomainName);
         return this;
     }
 
     public OrgManager addOrderer(String name, String location, String serverCrtPath) {
-        orgMap.get(chainCodeId).addOrderer(name, location, serverCrtPath);
+        orgMap.get(cc).addOrderer(name, location, serverCrtPath);
         return this;
     }
 
     public OrgManager setPeers(String orgName, String orgMSPID, String orgDomainName) {
-        orgMap.get(chainCodeId).setOrgName(orgName);
-        orgMap.get(chainCodeId).setOrgMSPID(orgMSPID);
-        orgMap.get(chainCodeId).setOrgDomainName(orgDomainName);
+        orgMap.get(cc).setOrgName(orgName);
+        orgMap.get(cc).setOrgMSPID(orgMSPID);
+        orgMap.get(cc).setOrgDomainName(orgDomainName);
         return this;
     }
 
     public OrgManager addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
-        orgMap.get(chainCodeId).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath);
+        orgMap.get(cc).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath);
         return this;
     }
 
@@ -117,7 +117,7 @@ public class OrgManager {
         chaincode.setChaincodePolicy(chaincodePolicy);
         chaincode.setChaincodeVersion(chaincodeVersion);
         chaincode.setProposalWaitTime(proposalWaitTime);
-        orgMap.get(chainCodeId).setChainCode(chaincode);
+        orgMap.get(cc).setChainCode(chaincode);
         return this;
     }
 
@@ -131,7 +131,7 @@ public class OrgManager {
     public OrgManager setChannel(String channelName) {
         IntermediateChannel channel = new IntermediateChannel();
         channel.setChannelName(channelName);
-        orgMap.get(chainCodeId).setChannel(channel);
+        orgMap.get(cc).setChannel(channel);
         return this;
     }
 
@@ -141,34 +141,34 @@ public class OrgManager {
      * @param blockListener BlockListener
      */
     public OrgManager setBlockListener(BlockListener blockListener) {
-        orgMap.get(chainCodeId).setBlockListener(blockListener);
+        orgMap.get(cc).setBlockListener(blockListener);
         return this;
     }
 
     public void add() {
-        if (orgMap.get(chainCodeId).getPeers().size() == 0) {
+        if (orgMap.get(cc).getPeers().size() == 0) {
             throw new RuntimeException("peers is null or peers size is 0");
         }
-        if (orgMap.get(chainCodeId).getOrderers().size() == 0) {
+        if (orgMap.get(cc).getOrderers().size() == 0) {
             throw new RuntimeException("orderers is null or orderers size is 0");
         }
-        if (orgMap.get(chainCodeId).getChainCode() == null) {
+        if (orgMap.get(cc).getChainCode() == null) {
             throw new RuntimeException("chaincode must be instantiated");
         }
 
         // 根据TLS开启状态循环确认Peer节点各服务的请求grpc协议
-        for (int i = 0; i < orgMap.get(chainCodeId).getPeers().size(); i++) {
-            orgMap.get(chainCodeId).getPeers().get(i).setPeerLocation(grpcTLSify(orgMap.get(chainCodeId).openTLS(), orgMap.get(chainCodeId).getPeers().get(i).getPeerLocation()));
-            orgMap.get(chainCodeId).getPeers().get(i).setPeerEventHubLocation(grpcTLSify(orgMap.get(chainCodeId).openTLS(), orgMap.get(chainCodeId).getPeers().get(i).getPeerEventHubLocation()));
+        for (int i = 0; i < orgMap.get(cc).getPeers().size(); i++) {
+            orgMap.get(cc).getPeers().get(i).setPeerLocation(grpcTLSify(orgMap.get(cc).openTLS(), orgMap.get(cc).getPeers().get(i).getPeerLocation()));
+            orgMap.get(cc).getPeers().get(i).setPeerEventHubLocation(grpcTLSify(orgMap.get(cc).openTLS(), orgMap.get(cc).getPeers().get(i).getPeerEventHubLocation()));
         }
         // 根据TLS开启状态循环确认Orderer节点各服务的请求grpc协议
-        for (int i = 0; i < orgMap.get(chainCodeId).getOrderers().size(); i++) {
-            orgMap.get(chainCodeId).getOrderers().get(i).setOrdererLocation(grpcTLSify(orgMap.get(chainCodeId).openTLS(), orgMap.get(chainCodeId).getOrderers().get(i).getOrdererLocation()));
+        for (int i = 0; i < orgMap.get(cc).getOrderers().size(); i++) {
+            orgMap.get(cc).getOrderers().get(i).setOrdererLocation(grpcTLSify(orgMap.get(cc).openTLS(), orgMap.get(cc).getOrderers().get(i).getOrdererLocation()));
         }
     }
 
-    public FabricManager use(int chainCodeId, String username) throws Exception {
-        IntermediateOrg org = orgMap.get(chainCodeId);
+    public FabricManager use(String cc, String username) throws Exception {
+        IntermediateOrg org = orgMap.get(cc);
 //        org.init(fabricStore);
         org.setUsername(username);
         org.setClient(HFClient.createNewInstance());
