@@ -38,12 +38,12 @@ public class StateController {
 
     @PostMapping(value = "invoke")
     public String invoke(@RequestBody State state) {
-        return stateService.invoke(state, new CA());
+        return stateService.invoke(state);
     }
 
     @PostMapping(value = "query")
     public String query(@RequestBody State state) {
-        return stateService.query(state, new CA());
+        return stateService.query(state);
     }
 
 }
