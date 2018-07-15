@@ -55,16 +55,12 @@ public class CaController {
     public ModelAndView submit(@ModelAttribute CA ca,
                                @RequestParam("intent") String intent,
                                @RequestParam("skFile") MultipartFile skFile,
-                               @RequestParam("certificateFile") MultipartFile certificateFile,
-                               @RequestParam("id") int id) {
+                               @RequestParam("certificateFile") MultipartFile certificateFile) {
         switch (intent) {
             case "add":
-                ca = resetCa(ca);
                 caService.add(ca, skFile, certificateFile);
                 break;
             case "edit":
-                ca = resetCa(ca);
-                ca.setId(id);
                 caService.update(ca, skFile, certificateFile);
                 break;
         }
@@ -123,14 +119,10 @@ public class CaController {
         return modelAndView;
     }
 
-    private CA resetCa(CA ca) {
-        Peer peer = peerService.get(ca.getPeerId());
-        Org org = orgService.get(peer.getOrgId());
-        League league = leagueService.get(org.getLeagueId());
-        ca.setLeagueName(league.getName());
-        ca.setOrgName(org.getName());
-        ca.setPeerName(peer.getName());
-        return ca;
+    @GetMapping(value = "delete")
+    public ModelAndView delete(@RequestParam("id") int id) {
+        caService.delete(id);
+        return new ModelAndView(new RedirectView("list"));
     }
 
 }
