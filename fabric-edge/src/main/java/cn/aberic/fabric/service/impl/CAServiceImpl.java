@@ -154,6 +154,7 @@ public class CAServiceImpl implements CAService {
         Peer peer = peerMapper.get(ca.getPeerId());
         Org org = orgMapper.get(peer.getOrgId());
         League league = leagueMapper.get(org.getLeagueId());
+        ca.setName(String.format("%s-%s", ca.getName(), ca.getPeerId()));
         ca.setLeagueName(league.getName());
         ca.setOrgName(org.getName());
         ca.setPeerName(peer.getName());
