@@ -55,9 +55,13 @@ public class CommonController {
     @Resource
     private PeerService peerService;
     @Resource
+    private CAService caService;
+    @Resource
     private ChannelService channelService;
     @Resource
     private ChaincodeService chaincodeService;
+    @Resource
+    private AppService appService;
     @Resource
     private TraceService traceService;
 
@@ -68,16 +72,20 @@ public class CommonController {
         int orgCount;
         int ordererCount;
         int peerCount;
+        int caCount;
         int channelCount;
         int chaincodeCount;
+        int appCount;
         List<Transaction> tmpTransactions = new ArrayList<>();
         List<Transaction> transactions = new ArrayList<>();
         leagueCount = leagueService.listAll().size();
         orgCount = orgService.count();
         ordererCount = ordererService.count();
         peerCount = peerService.count();
+        caCount = caService.count();
         channelCount = channelService.count();
         chaincodeCount = chaincodeService.count();
+        appCount = appService.count();
 
         List<Channel> channels = channelService.listAll();
         for (Channel channel : channels) {
@@ -134,8 +142,10 @@ public class CommonController {
         modelAndView.addObject("orgCount", orgCount);
         modelAndView.addObject("ordererCount", ordererCount);
         modelAndView.addObject("peerCount", peerCount);
+        modelAndView.addObject("caCount", caCount);
         modelAndView.addObject("channelCount", channelCount);
         modelAndView.addObject("chaincodeCount", chaincodeCount);
+        modelAndView.addObject("appCount", appCount);
         modelAndView.addObject("transactions", transactions);
 
         return modelAndView;
