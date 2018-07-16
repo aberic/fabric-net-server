@@ -38,6 +38,7 @@ public class FabricHelper {
 
     private final Map<Integer, FabricManager> channelManagerMap;
     private final Map<String, FabricManager> chaincodeManagerMap;
+    private final Map<String, String> ccCAFlagMap;
 
     public static FabricHelper obtain() {
         if (null == instance) {
@@ -53,28 +54,35 @@ public class FabricHelper {
     private FabricHelper() {
         channelManagerMap = new LinkedHashMap<>();
         chaincodeManagerMap = new LinkedHashMap<>();
+        ccCAFlagMap = new LinkedHashMap<>();
     }
 
-    public void removeManager(List<Peer> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
+    public void removeChaincodeManager(List<Peer> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
         for (Peer peer : peers) {
-            removeManager(channelMapper.list(peer.getId()), chaincodeMapper);
+            removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
         }
     }
 
-    public void removeManager(List<Channel> channels, ChaincodeMapper chaincodeMapper) {
+    public void removeChaincodeManager(List<Channel> channels, ChaincodeMapper chaincodeMapper) {
         for (Channel channel : channels) {
-            removeManager(chaincodeMapper.list(channel.getId()));
+            removeChaincodeManager(chaincodeMapper.list(channel.getId()));
+            removeChannelManager(channel.getId());
         }
     }
 
-    public void removeManager(List<Chaincode> chaincodes) {
+    public void removeChaincodeManager(List<Chaincode> chaincodes) {
         for (Chaincode chaincode : chaincodes) {
             chaincodeManagerMap.remove(chaincode.getCc());
         }
     }
 
-    public void removeManager(String cc) {
-        chaincodeManagerMap.remove(cc);
+    public void removeChaincodeManager(String cc) {
+        chaincodeManagerMap.remove(MD5Util.md516(cc + ccCAFlagMap.get(cc)));
+        ccCAFlagMap.remove(cc);
+    }
+
+    private void removeChannelManager(int channelId) {
+        channelManagerMap.remove(channelId);
     }
 
     public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
@@ -97,6 +105,7 @@ public class FabricHelper {
                 if (orderers.size() != 0 && peers.size() != 0) {
                     fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca, cc);
                     chaincodeManagerMap.put(MD5Util.md516(cc + ca.getFlag()), fabricManager);
+                    ccCAFlagMap.put(cc, ca.getFlag());
                 }
             }
         }
