@@ -69,7 +69,7 @@ public class PeerServiceImpl implements PeerService {
 
     @Override
     public int update(Peer peer, MultipartFile serverCrtFile) {
-        FabricHelper.obtain().removeManager(channelMapper.list(peer.getId()), chaincodeMapper);
+        FabricHelper.obtain().removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
         CacheUtil.removeFlagCA(peer.getId(), caMapper);
         if (null == serverCrtFile) {
             return peerMapper.updateWithNoFile(peer);

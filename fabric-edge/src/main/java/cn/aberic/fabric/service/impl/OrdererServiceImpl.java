@@ -70,7 +70,7 @@ public class OrdererServiceImpl implements OrdererService {
 
     @Override
     public int update(Orderer orderer, MultipartFile serverCrtFile) {
-        FabricHelper.obtain().removeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
+        FabricHelper.obtain().removeChaincodeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
         if (null == serverCrtFile) {
             return ordererMapper.updateWithNoFile(orderer);
         }

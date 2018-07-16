@@ -61,7 +61,7 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public int update(Org org) {
-        FabricHelper.obtain().removeManager(peerMapper.list(org.getId()), channelMapper, chaincodeMapper);
+        FabricHelper.obtain().removeChaincodeManager(peerMapper.list(org.getId()), channelMapper, chaincodeMapper);
         return orgMapper.update(org);
     }
 

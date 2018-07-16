@@ -102,7 +102,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         if (!upload(chaincode, file)){
             return responseFailJson("source unzip fail");
         }
-        FabricHelper.obtain().removeManager(chaincode.getCc());
+        FabricHelper.obtain().removeChaincodeManager(chaincode.getCc());
         if (chaincodeMapper.updateForUpgrade(chaincode) <= 0) {
             return responseFailJson("chaincode updateForUpgrade fail");
         }
@@ -135,7 +135,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     @Override
     public int update(Chaincode chaincode) {
         chaincode.setCc(createCC(chaincode));
-        FabricHelper.obtain().removeManager(chaincode.getCc());
+        FabricHelper.obtain().removeChaincodeManager(chaincode.getCc());
         return chaincodeMapper.update(chaincode);
     }
 
@@ -173,7 +173,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     public int deleteAll(int channelId) {
         List<Chaincode> chaincodes = chaincodeMapper.list(channelId);
         for (Chaincode chaincode : chaincodes) {
-            FabricHelper.obtain().removeManager(chaincode.getCc());
+            FabricHelper.obtain().removeChaincodeManager(chaincode.getCc());
             chaincodeMapper.delete(chaincode.getId());
         }
         return 0;
