@@ -67,17 +67,17 @@ public class CAServiceImpl implements CAService {
             log.debug("had the same ca in this peer");
             return 0;
         }
+        ca = resetCa(ca);
         if (saveFileFail(ca, skFile, certificateFile)) {
             return 0;
         }
-        ca = resetCa(ca);
         ca.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return caMapper.add(ca);
     }
 
     @Override
     public int update(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
-        FabricHelper.obtain().removeManager(channelMapper.list(ca.getPeerId()), chaincodeMapper);
+        FabricHelper.obtain().removeChaincodeManager(channelMapper.list(ca.getPeerId()), chaincodeMapper);
         CacheUtil.removeFlagCA(ca.getFlag());
         ca = resetCa(ca);
         if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {
@@ -121,7 +121,7 @@ public class CAServiceImpl implements CAService {
 
     @Override
     public int delete(int id) {
-        FabricHelper.obtain().removeManager(channelMapper.list(caMapper.get(id).getPeerId()), chaincodeMapper);
+        FabricHelper.obtain().removeChaincodeManager(channelMapper.list(caMapper.get(id).getPeerId()), chaincodeMapper);
         return caMapper.delete(id);
     }
 
@@ -154,7 +154,7 @@ public class CAServiceImpl implements CAService {
         Peer peer = peerMapper.get(ca.getPeerId());
         Org org = orgMapper.get(peer.getOrgId());
         League league = leagueMapper.get(org.getLeagueId());
-        ca.setName(String.format("%s-%s", ca.getName(), ca.getPeerId()));
+        // ca.setName(String.format("%s-%s", ca.getName(), ca.getPeerId()));
         ca.setLeagueName(league.getName());
         ca.setOrgName(org.getName());
         ca.setPeerName(peer.getName());
