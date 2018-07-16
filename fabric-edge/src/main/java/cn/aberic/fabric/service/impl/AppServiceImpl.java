@@ -111,7 +111,12 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public int count(int id) {
-        return appMapper.count(id);
+    public int countById(int id) {
+        return appMapper.countById(id);
+    }
+
+    @Override
+    public int count() {
+        return appMapper.count();
     }
 }
