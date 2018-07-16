@@ -39,7 +39,10 @@ public interface AppMapper {
     int updateKey(@Param("a") App app);
 
     @Select("select count(name) from app where chaincode_id=#{id}")
-    int count(@Param("id") int id);
+    int countById(@Param("id") int id);
+
+    @Select("select count(name) from app")
+    int count();
 
     @Select("select key from app where name=#{a.name} and chaincode_id=#{a.chaincodeId}")
     @Results({
