@@ -75,7 +75,7 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     public int delete(int id) {
-        return DeleteUtil.obtain().deleteLeague(id, leagueMapper, orgMapper, ordererMapper, peerMapper, channelMapper, chaincodeMapper, appMapper);
+        return DeleteUtil.obtain().deleteLeague(id, leagueMapper, orgMapper, ordererMapper, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper);
     }
 
 }
