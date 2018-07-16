@@ -28,12 +28,12 @@ import java.util.List;
 @Mapper
 public interface OrgMapper {
 
-    @Insert("insert into org (name,tls,username,msp_id,domain_name,orderer_domain_name,league_id,date)" +
-            "values (#{o.name},#{o.tls},#{o.username},#{o.mspId},#{o.domainName}," +
+    @Insert("insert into org (name,tls,msp_id,domain_name,orderer_domain_name,league_id,date)" +
+            "values (#{o.name},#{o.tls},#{o.mspId},#{o.domainName}," +
             "#{o.ordererDomainName},#{o.leagueId},#{o.date})")
     int add(@Param("o") Org org);
 
-    @Update("update org set name=#{o.name}, tls=#{o.tls}, username=#{o.username}, msp_id=#{o.mspId}, " +
+    @Update("update org set name=#{o.name}, tls=#{o.tls}, msp_id=#{o.mspId}, " +
             "domain_name=#{o.domainName}, orderer_domain_name=#{o.ordererDomainName}, league_id=#{o.leagueId}" +
             " where rowid=#{o.id}")
     int update(@Param("o") Org org);
@@ -50,12 +50,11 @@ public interface OrgMapper {
     @Delete("delete from org where league_id=#{leagueId}")
     int deleteAll(@Param("leagueId") int leagueId);
 
-    @Select("select rowid,name,tls,username,msp_id,domain_name,orderer_domain_name,league_id,date from org where rowid=#{id}")
+    @Select("select rowid,name,tls,msp_id,domain_name,orderer_domain_name,league_id,date from org where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "tls", column = "tls"),
-            @Result(property = "username", column = "username"),
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "domainName", column = "domain_name"),
             @Result(property = "ordererDomainName", column = "orderer_domain_name"),
@@ -64,12 +63,11 @@ public interface OrgMapper {
     })
     Org get(@Param("id") int id);
 
-    @Select("select rowid,name,tls,username,msp_id,domain_name,orderer_domain_name,league_id,date from org where league_id=#{id}")
+    @Select("select rowid,name,tls,msp_id,domain_name,orderer_domain_name,league_id,date from org where league_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "tls", column = "tls"),
-            @Result(property = "username", column = "username"),
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "domainName", column = "domain_name"),
             @Result(property = "ordererDomainName", column = "orderer_domain_name"),
@@ -78,12 +76,11 @@ public interface OrgMapper {
     })
     List<Org> list(@Param("id") int id);
 
-    @Select("select rowid,name,tls,username,msp_id,domain_name,orderer_domain_name,league_id,date from org")
+    @Select("select rowid,name,tls,msp_id,domain_name,orderer_domain_name,league_id,date from org")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
             @Result(property = "tls", column = "tls"),
-            @Result(property = "username", column = "username"),
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "domainName", column = "domain_name"),
             @Result(property = "ordererDomainName", column = "orderer_domain_name"),
