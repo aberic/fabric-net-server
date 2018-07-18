@@ -151,8 +151,8 @@ public class FabricHelper {
                         null == chaincode ? "" : chaincode.getVersion(),
                         null == chaincode ? 0 : chaincode.getProposalWaitTime())
                 .setBlockListener(jsonObject -> {
-                    log.debug(String.valueOf(jsonObject.getInteger("code")));
-                    log.debug(jsonObject.getJSONObject("data").toJSONString());
+                    log.debug(String.format("code = %s", String.valueOf(jsonObject.getInteger("code"))));
+                    log.debug(String.format("data = %s", jsonObject.getJSONObject("data").toJSONString()));
                 });
         for (Orderer orderer : orderers) {
             orgManager.addOrderer(orderer.getName(), orderer.getLocation(), orderer.getServerCrtPath());
