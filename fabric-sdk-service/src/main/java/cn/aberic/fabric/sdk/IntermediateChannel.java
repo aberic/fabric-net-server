@@ -71,13 +71,15 @@ class IntermediateChannel {
 
         int sizeOrderers = org.getOrderers().size();
         for (int i = 0; i < sizeOrderers; i++) {
-            File ordererCert = new File(org.getOrderers().get(i).getServerCrtPath());
-            if (!ordererCert.exists()) {
-                throw new RuntimeException(
-                        String.format("Missing cert file for: %s. Could not find at location: %s", org.getOrderers().get(i).getOrdererName(), ordererCert.getAbsolutePath()));
-            }
             Properties ordererProperties = new Properties();
-            ordererProperties.setProperty("pemFile", ordererCert.getAbsolutePath());
+            if (org.openTLS()) {
+                File ordererCert = new File(org.getOrderers().get(i).getServerCrtPath());
+                if (!ordererCert.exists()) {
+                    throw new RuntimeException(
+                            String.format("Missing cert file for: %s. Could not find at location: %s", org.getOrderers().get(i).getOrdererName(), ordererCert.getAbsolutePath()));
+                }
+                ordererProperties.setProperty("pemFile", ordererCert.getAbsolutePath());
+            }
             ordererProperties.setProperty("hostnameOverride", org.getOrderers().get(i).getOrdererName());
             ordererProperties.setProperty("sslProvider", "openSSL");
             ordererProperties.setProperty("negotiationType", "TLS");
@@ -92,12 +94,15 @@ class IntermediateChannel {
 
         int sizePeer = org.getPeers().size();
         for (int i = 0; i < sizePeer; i++) {
-            File peerCert = new File(org.getPeers().get(i).getServerCrtPath());
-            if (!peerCert.exists()) {
-                throw new RuntimeException(String.format("Missing cert file for: %s. Could not find at location: %s", org.getPeers().get(i).getPeerName(), peerCert.getAbsolutePath()));
-            }
             Properties peerProperties = new Properties();
-            peerProperties.setProperty("pemFile", peerCert.getAbsolutePath());
+            if (org.openTLS()) {
+                File peerCert = new File(org.getPeers().get(i).getServerCrtPath());
+                if (!peerCert.exists()) {
+                    throw new RuntimeException(
+                            String.format("Missing cert file for: %s. Could not find at location: %s", org.getPeers().get(i).getPeerName(), peerCert.getAbsolutePath()));
+                }
+                peerProperties.setProperty("pemFile", peerCert.getAbsolutePath());
+            }
             // ret.setProperty("trustServerCertificate", "true"); //testing
             // environment only NOT FOR PRODUCTION!
             peerProperties.setProperty("hostnameOverride", org.getPeers().get(i).getPeerName());
@@ -145,12 +150,15 @@ class IntermediateChannel {
      * @param peer 中继节点信息
      */
     JSONObject joinPeer(IntermediatePeer peer) throws InvalidArgumentException, ProposalException {
-        File peerCert = new File(org.getPeers().get(0).getServerCrtPath());
-        if (!peerCert.exists()) {
-            throw new RuntimeException(String.format("Missing cert file for: %s. Could not find at location: %s", peer.getPeerName(), peerCert.getAbsolutePath()));
-        }
         Properties peerProperties = new Properties();
-        peerProperties.setProperty("pemFile", peerCert.getAbsolutePath());
+        if (org.openTLS()) {
+            File peerCert = new File(org.getPeers().get(0).getServerCrtPath());
+            if (!peerCert.exists()) {
+                throw new RuntimeException(
+                        String.format("Missing cert file for: %s. Could not find at location: %s", peer.getPeerName(), peerCert.getAbsolutePath()));
+            }
+            peerProperties.setProperty("pemFile", peerCert.getAbsolutePath());
+        }
         // ret.setProperty("trustServerCertificate", "true"); //testing
         // environment only NOT FOR PRODUCTION!
         peerProperties.setProperty("hostnameOverride", peer.getPeerName());
