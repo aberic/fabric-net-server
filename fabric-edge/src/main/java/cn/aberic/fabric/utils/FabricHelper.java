@@ -150,9 +150,9 @@ public class FabricHelper {
                         null == chaincode ? "" : chaincode.getPolicy(),
                         null == chaincode ? "" : chaincode.getVersion(),
                         null == chaincode ? 0 : chaincode.getProposalWaitTime())
-                .setBlockListener(map -> {
-                    log.debug(map.get("code"));
-                    log.debug(map.get("data"));
+                .setBlockListener(jsonObject -> {
+                    log.debug(String.valueOf(jsonObject.getInteger("code")));
+                    log.debug(jsonObject.getJSONObject("data").toJSONString());
                 });
         for (Orderer orderer : orderers) {
             orgManager.addOrderer(orderer.getName(), orderer.getLocation(), orderer.getServerCrtPath());

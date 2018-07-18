@@ -34,7 +34,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service("chaincodeService")
@@ -185,26 +184,22 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
 
     private JSONObject chainCode(int chaincodeId, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
                                  OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, ChainCodeIntent intent, String[] args) {
-        Map<String, String> resultMap = null;
+        JSONObject jsonObject = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chainCodeMapper, ordererMapper, peerMapper,
                     ca, chainCodeMapper.get(chaincodeId).getCc());
             switch (intent) {
                 case INSTALL:
-                    resultMap = manager.install(chainCodeMapper.get(chaincodeId).getVersion());
+                    jsonObject = manager.install(chainCodeMapper.get(chaincodeId).getVersion());
                     break;
                 case INSTANTIATE:
-                    resultMap = manager.instantiate(args);
+                    jsonObject = manager.instantiate(args);
                     break;
                 case UPGRADE:
-                    resultMap = manager.upgrade(args);
+                    jsonObject = manager.upgrade(args);
                     break;
             }
-            if (resultMap.get("code").equals("error")) {
-                return responseFailJson(resultMap.get("data"));
-            } else {
-                return responseSuccessJson(resultMap.get("data"), resultMap.get("txid"));
-            }
+            return jsonObject;
         } catch (Exception e) {
             e.printStackTrace();
             return responseFailJson(String.format("Request failed： %s", e.getMessage()));

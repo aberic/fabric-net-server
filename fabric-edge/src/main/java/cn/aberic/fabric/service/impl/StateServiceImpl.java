@@ -25,12 +25,12 @@ import cn.aberic.fabric.service.StateService;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.VerifyUtil;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 描述：
@@ -92,26 +92,22 @@ public class StateServiceImpl implements StateService, BaseService {
     }
 
     private String chaincodeExec(ChainCodeIntent intent, CA ca, String cc, String fcn, String[] argArray) {
-        Map<String, String> resultMap = null;
+        JSONObject jsonObject = null;
         try {
             FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
                     ca, cc);
             switch (intent) {
                 case INVOKE:
-                    resultMap = manager.invoke(fcn, argArray);
+                    jsonObject = manager.invoke(fcn, argArray);
                     break;
                 case QUERY:
                     if (StringUtils.isEmpty(CacheUtil.getString(cc))) {
                         CacheUtil.putString(cc, leagueMapper.get(orgMapper.get(peerMapper.get(ca.getPeerId()).getOrgId()).getLeagueId()).getVersion());
                     }
-                    resultMap = manager.query(fcn, argArray, CacheUtil.getString(cc));
+                    jsonObject = manager.query(fcn, argArray, CacheUtil.getString(cc));
                     break;
             }
-            if (resultMap.get("code").equals("error")) {
-                return responseFail(resultMap.get("data"));
-            } else {
-                return responseSuccess(resultMap.get("data"), resultMap.get("txid"));
-            }
+            return jsonObject.toJSONString();
         } catch (Exception e) {
             e.printStackTrace();
             return responseFail(String.format("Request failed： %s", e.getMessage()));

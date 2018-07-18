@@ -34,7 +34,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * 描述：
@@ -125,22 +124,22 @@ public class TraceServiceImpl implements TraceService, BaseService {
     }
 
     private String trace(FabricManager manager, Trace trace, TraceIntent intent) throws ProposalException, IOException, InvalidArgumentException, DecoderException {
-        Map<String, String> resultMap = null;
+        JSONObject jsonObject = null;
         switch (intent) {
             case TRANSACTION:
-                resultMap = manager.queryBlockByTransactionID(trace.getTrace());
+                jsonObject = manager.queryBlockByTransactionID(trace.getTrace());
                 break;
             case HASH:
-                resultMap = manager.queryBlockByHash(Hex.decodeHex(trace.getTrace().toCharArray()));
+                jsonObject = manager.queryBlockByHash(Hex.decodeHex(trace.getTrace().toCharArray()));
                 break;
             case NUMBER:
-                resultMap = manager.queryBlockByNumber(Long.valueOf(trace.getTrace()));
+                jsonObject = manager.queryBlockByNumber(Long.valueOf(trace.getTrace()));
                 break;
             case INFO:
-                resultMap = manager.getBlockchainInfo();
+                jsonObject = manager.getBlockchainInfo();
                 break;
         }
-        return responseSuccess(JSONObject.parseObject(resultMap.get("data")));
+        return jsonObject.toJSONString();
     }
 
 }
