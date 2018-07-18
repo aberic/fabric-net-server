@@ -101,6 +101,9 @@ public class CacheUtil {
             return cacheAppBool.getIfPresent(key);
         } catch (Exception e) {
             App app = appMapper.getByKey(key);
+            if (null == app) {
+                return false;
+            }
             boolean flag = app.isActive();
             if (flag) {
                 putAppBool(key, true);
