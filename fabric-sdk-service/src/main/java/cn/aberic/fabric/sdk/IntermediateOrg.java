@@ -24,7 +24,6 @@ import org.hyperledger.fabric.sdk.exception.CryptoException;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -44,17 +43,11 @@ class IntermediateOrg {
     /** 执行SDK的Fabric用户名 */
     private String username;
 
-    /** orderer 排序服务器所在根域名，如：example.com */
-    private String ordererDomainName;
     /** orderer 排序服务器集合 */
     private List<IntermediateOrderer> orderers = new LinkedList<>();
 
-    /** 当前指定的组织名称，如：Org1 */
-    private String orgName;
     /** 当前指定的组织名称，如：Org1MSP */
     private String orgMSPID;
-    /** 当前指定的组织所在根域名，如：org1.example.com */
-    private String orgDomainName;
     /** orderer 排序服务器集合 */
     private List<IntermediatePeer> peers = new LinkedList<>();
 
@@ -82,14 +75,6 @@ class IntermediateOrg {
         this.username = username;
     }
 
-    String getOrdererDomainName() {
-        return ordererDomainName;
-    }
-
-    void setOrdererDomainName(String ordererDomainName) {
-        this.ordererDomainName = ordererDomainName;
-    }
-
     /** 新增排序服务器 */
     void addOrderer(String name, String location, String serverCrtPath) {
         orderers.add(new IntermediateOrderer(name, location, serverCrtPath));
@@ -100,10 +85,6 @@ class IntermediateOrg {
         return orderers;
     }
 
-    void setOrgName(String orgName) {
-        this.orgName = orgName;
-    }
-
     /**
      * 设置会员id信息并将用户状态更新至存储配置对象
      *
@@ -111,14 +92,6 @@ class IntermediateOrg {
      */
     void setOrgMSPID(String orgMSPID) {
         this.orgMSPID = orgMSPID;
-    }
-
-    String getOrgDomainName() {
-        return orgDomainName;
-    }
-
-    void setOrgDomainName(String orgDomainName) {
-        this.orgDomainName = orgDomainName;
     }
 
     /** 新增节点服务器 */
@@ -196,20 +169,4 @@ class IntermediateOrg {
         return client;
     }
 
-    /**
-     * 从指定路径中获取后缀为 _sk 的文件，且该路径下有且仅有该文件
-     *
-     * @param directory 指定路径
-     * @return File
-     */
-    private File findFileSk(File directory) {
-        File[] matches = directory.listFiles((dir, name) -> name.endsWith("_sk"));
-        if (null == matches) {
-            throw new RuntimeException(String.format("Matches returned null does %s directory exist?", directory.getAbsoluteFile().getName()));
-        }
-        if (matches.length != 1) {
-            throw new RuntimeException(String.format("Expected in %s only 1 sk file but found %d", directory.getAbsoluteFile().getName(), matches.length));
-        }
-        return matches[0];
-    }
 }

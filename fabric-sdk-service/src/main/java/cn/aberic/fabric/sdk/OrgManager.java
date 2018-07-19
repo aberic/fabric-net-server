@@ -50,13 +50,14 @@ public class OrgManager {
      *
      * @return self
      */
-    public OrgManager init(String cc, boolean openTLS) {
+    public OrgManager init(String cc, String orgMSPID, boolean openTLS) {
         this.cc = cc;
         if (orgMap.get(cc) != null) {
             throw new RuntimeException(String.format("OrgManager had the same cc of %s", cc));
         } else {
             orgMap.put(cc, new IntermediateOrg());
         }
+        orgMap.get(cc).setOrgMSPID(orgMSPID);
         orgMap.get(cc).openTLS(openTLS);
         return this;
     }
@@ -77,26 +78,12 @@ public class OrgManager {
         return this;
     }
 
-    public OrgManager setOrderers(String ordererDomainName) {
-        orgMap.get(cc).setOrdererDomainName(ordererDomainName);
-        return this;
-    }
-
-    public OrgManager addOrderer(String name, String location, String serverCrtPath) {
+    public void addOrderer(String name, String location, String serverCrtPath) {
         orgMap.get(cc).addOrderer(name, location, serverCrtPath);
-        return this;
     }
 
-    public OrgManager setPeers(String orgName, String orgMSPID, String orgDomainName) {
-        orgMap.get(cc).setOrgName(orgName);
-        orgMap.get(cc).setOrgMSPID(orgMSPID);
-        orgMap.get(cc).setOrgDomainName(orgDomainName);
-        return this;
-    }
-
-    public OrgManager addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
+    public void addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
         orgMap.get(cc).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath);
-        return this;
     }
 
     /**
@@ -140,9 +127,8 @@ public class OrgManager {
      *
      * @param blockListener BlockListener
      */
-    public OrgManager setBlockListener(BlockListener blockListener) {
+    public void setBlockListener(BlockListener blockListener) {
         orgMap.get(cc).setBlockListener(blockListener);
-        return this;
     }
 
     public void add() {
