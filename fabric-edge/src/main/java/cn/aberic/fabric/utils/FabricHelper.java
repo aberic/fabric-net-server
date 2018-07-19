@@ -102,7 +102,7 @@ public class FabricHelper {
                 List<Orderer> orderers = ordererMapper.list(orgId);
                 Org org = orgMapper.get(orgId);
                 log.debug(String.format("org = %s", org.toString()));
-                if (orderers.size() != 0 && peers.size() != 0) {
+                if (orderers.size() != 0 && peers.size() != 0 && null != ca) {
                     fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca, cc);
                     chaincodeManagerMap.put(MD5Util.md516(cc + ca.getFlag()), fabricManager);
                     ccCAFlagMap.put(cc, ca.getFlag());
@@ -139,10 +139,8 @@ public class FabricHelper {
     private FabricManager createFabricManager(Org org, Channel channel, Chaincode chaincode, List<Orderer> orderers, List<Peer> peers, CA ca, String cacheName) throws Exception {
         OrgManager orgManager = new OrgManager();
         orgManager
-                .init(cacheName, org.isTls())
-                .setPeers(org.getName(), org.getMspId(), org.getDomainName())
+                .init(cacheName, org.getMspId(), org.isTls())
                 .setUser(ca.getName(), ca.getSkPath(), ca.getCertificatePath())
-                .setOrderers(org.getOrdererDomainName())
                 .setChannel(channel.getName())
                 .setChainCode(null == chaincode ? "" : chaincode.getName(),
                         null == chaincode ? "" : chaincode.getPath(),
