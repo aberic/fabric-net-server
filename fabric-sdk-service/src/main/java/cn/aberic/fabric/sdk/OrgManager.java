@@ -59,6 +59,7 @@ public class OrgManager {
         }
         orgMap.get(cc).setOrgMSPID(orgMSPID);
         orgMap.get(cc).openTLS(openTLS);
+        orgMap.get(cc).setFabricStore(fabricStore);
         return this;
     }
 

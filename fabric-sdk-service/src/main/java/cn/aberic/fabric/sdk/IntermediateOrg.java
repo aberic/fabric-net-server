@@ -39,32 +39,33 @@ import java.util.Map;
 class IntermediateOrg {
 
     private Logger log = LogManager.getLogger(IntermediateOrg.class);
-
     /** 执行SDK的Fabric用户名 */
     private String username;
-
     /** orderer 排序服务器集合 */
     private List<IntermediateOrderer> orderers = new LinkedList<>();
-
     /** 当前指定的组织名称，如：Org1MSP */
     private String orgMSPID;
     /** orderer 排序服务器集合 */
     private List<IntermediatePeer> peers = new LinkedList<>();
-
     /** 是否开启TLS访问 */
     private boolean openTLS;
-
     /** 频道对象 */
     private IntermediateChannel channel;
-
     /** 智能合约对象 */
     private IntermediateChaincodeID chaincode;
     /** 事件监听 */
     private BlockListener blockListener;
-
     private HFClient client;
-
     private Map<String, User> userMap = new HashMap<>();
+    private FabricStore fabricStore;
+
+    FabricStore getFabricStore() {
+        return fabricStore;
+    }
+
+    void setFabricStore(FabricStore fabricStore) {
+        this.fabricStore = fabricStore;
+    }
 
     /**
      * 设置CA默认请求用户名或指定的带密码参数的请求用户名
@@ -73,6 +74,10 @@ class IntermediateOrg {
      */
     void setUsername(String username) {
         this.username = username;
+    }
+
+    String getUsername() {
+        return username;
     }
 
     /** 新增排序服务器 */
@@ -154,7 +159,7 @@ class IntermediateOrg {
         }
     }
 
-    User getUser() {
+    User getUser(String username) {
         return userMap.get(username);
     }
 

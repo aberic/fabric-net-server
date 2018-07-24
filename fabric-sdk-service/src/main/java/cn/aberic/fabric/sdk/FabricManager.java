@@ -17,6 +17,8 @@
 package cn.aberic.fabric.sdk;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.binary.StringUtils;
+import org.hyperledger.fabric.sdk.User;
 import org.hyperledger.fabric.sdk.exception.ChaincodeEndorsementPolicyParseException;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
@@ -36,6 +38,19 @@ public class FabricManager {
 
     FabricManager(IntermediateOrg org) {
         this.org = org;
+    }
+
+    public void setUser(String username, String skPath, String certificatePath) throws InvalidArgumentException {
+        if (StringUtils.equals(username, org.getUsername())) {
+            return;
+        }
+        User user = org.getUser(username);
+        if (null == user) {
+            IntermediateUser intermediateUser = new IntermediateUser(username, skPath, certificatePath);
+            org.setUsername(username);
+            org.addUser(intermediateUser, org.getFabricStore());
+        }
+        org.getClient().setUserContext(org.getUser(username));
     }
 
     /** 安装智能合约 */
