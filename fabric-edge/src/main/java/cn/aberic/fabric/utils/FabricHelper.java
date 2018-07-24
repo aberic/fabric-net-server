@@ -38,7 +38,6 @@ public class FabricHelper {
 
     private final Map<Integer, FabricManager> channelManagerMap;
     private final Map<String, FabricManager> chaincodeManagerMap;
-    private final Map<String, String> ccCAFlagMap;
 
     public static FabricHelper obtain() {
         if (null == instance) {
@@ -54,7 +53,6 @@ public class FabricHelper {
     private FabricHelper() {
         channelManagerMap = new LinkedHashMap<>();
         chaincodeManagerMap = new LinkedHashMap<>();
-        ccCAFlagMap = new LinkedHashMap<>();
     }
 
     public void removeChaincodeManager(List<Peer> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
@@ -77,8 +75,7 @@ public class FabricHelper {
     }
 
     public void removeChaincodeManager(String cc) {
-        chaincodeManagerMap.remove(MD5Util.md516(cc + ccCAFlagMap.get(cc)));
-        ccCAFlagMap.remove(cc);
+        chaincodeManagerMap.remove(cc);
     }
 
     private void removeChannelManager(int channelId) {
@@ -88,7 +85,7 @@ public class FabricHelper {
     public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, String cc) throws Exception {
         // 尝试从缓存中获取fabricManager
-        FabricManager fabricManager = chaincodeManagerMap.get(MD5Util.md516(cc + (null != ca ? ca.getFlag() : "")));
+        FabricManager fabricManager = chaincodeManagerMap.get(cc);
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
             synchronized (chaincodeManagerMap) {
                 Chaincode chaincode = chaincodeMapper.getByCC(cc);
@@ -104,11 +101,13 @@ public class FabricHelper {
                 log.debug(String.format("org = %s", org.toString()));
                 if (orderers.size() != 0 && peers.size() != 0 && null != ca) {
                     fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca, cc);
-                    chaincodeManagerMap.put(MD5Util.md516(cc + ca.getFlag()), fabricManager);
-                    ccCAFlagMap.put(cc, ca.getFlag());
+                    chaincodeManagerMap.put(cc, fabricManager);
                 }
             }
         }
+        assert ca != null;
+        assert fabricManager != null;
+        fabricManager.setUser(ca.getName(), ca.getSkPath(), ca.getCertificatePath());
         return fabricManager;
     }
 
@@ -116,16 +115,16 @@ public class FabricHelper {
                              OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, int channelId) throws Exception {
         // 尝试从缓存中获取fabricManager
         FabricManager fabricManager = channelManagerMap.get(channelId);
-        Channel channel = channelMapper.get(channelId);
-        log.debug(String.format("channel = %s", channel.toString()));
-        Peer peer = peerMapper.get(channel.getPeerId());
-        log.debug(String.format("peer = %s", peer.toString()));
-        int orgId = peer.getOrgId();
-        List<Peer> peers = peerMapper.list(orgId);
-        List<Orderer> orderers = ordererMapper.list(orgId);
-        Org org = orgMapper.get(orgId);
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
             synchronized (channelManagerMap) {
+                Channel channel = channelMapper.get(channelId);
+                log.debug(String.format("channel = %s", channel.toString()));
+                Peer peer = peerMapper.get(channel.getPeerId());
+                log.debug(String.format("peer = %s", peer.toString()));
+                int orgId = peer.getOrgId();
+                List<Peer> peers = peerMapper.list(orgId);
+                List<Orderer> orderers = ordererMapper.list(orgId);
+                Org org = orgMapper.get(orgId);
                 if (orderers.size() != 0 && peers.size() != 0) {
                     fabricManager = createFabricManager(org, channel, null, orderers, peers, ca, String.valueOf(channelId));
                     channelManagerMap.put(channelId, fabricManager);
@@ -134,7 +133,6 @@ public class FabricHelper {
         }
         return fabricManager;
     }
-
 
     private FabricManager createFabricManager(Org org, Channel channel, Chaincode chaincode, List<Orderer> orderers, List<Peer> peers, CA ca, String cacheName) throws Exception {
         OrgManager orgManager = new OrgManager();
