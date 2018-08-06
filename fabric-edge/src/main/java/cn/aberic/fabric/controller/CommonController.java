@@ -92,26 +92,30 @@ public class CommonController {
             try {
                 JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfoForIndex(channel.getId()));
                 int height = blockInfo.containsKey("data") ? blockInfo.getJSONObject("data").getInteger("height") : 0;
-                int entCount = height >= 10 ? height - 10 : 0;
-                for (int num = height - 1; num >= entCount; num--) {
+                for (int num = 1; num <= 10; num++) {
+                    int heightCount = height - num;
+                    if (heightCount < 0) {
+                        break;
+                    }
                     Trace trace = new Trace();
                     trace.setChannelId(channel.getId());
-                    trace.setTrace(String.valueOf(num));
+                    trace.setTrace(String.valueOf(heightCount));
                     JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberForIndex(trace));
                     JSONArray envelopes = blockMessage.containsKey("data")? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
+                    int txCount = 0;
                     int size = envelopes.size();
                     for (int i = 0; i < size; i++) {
-                        Transaction transaction = new Transaction();
-                        transaction.setNum(num);
                         JSONObject envelope = envelopes.getJSONObject(i);
-                        transaction.setTxCount(envelope.containsKey("transactionEnvelopeInfo") ? envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount") : 0);
-                        transaction.setChannelName(envelope.getString("channelId"));
-                        transaction.setCreateMSPID(envelope.getString("createMSPID"));
-                        transaction.setDate(envelope.getString("timestamp"));
-                        tmpTransactions.add(transaction);
+                        txCount += envelope.containsKey("transactionEnvelopeInfo") ? envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount") : 0;
                     }
+                    Transaction transaction = new Transaction();
+                    transaction.setNum(heightCount);
+                    transaction.setTxCount(txCount);
+                    transaction.setChannelName(channel.getName());
+                    transaction.setCalculatedBlockHash(blockMessage.getJSONObject("data").getString("calculatedBlockHash"));
+                    transaction.setDate(envelopes.getJSONObject(0).getString("timestamp"));
+                    tmpTransactions.add(transaction);
                 }
-                break;
             } catch (Exception e) {
                 e.printStackTrace();
             }

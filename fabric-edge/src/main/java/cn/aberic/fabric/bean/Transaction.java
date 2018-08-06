@@ -33,7 +33,7 @@ public class Transaction {
     private int num;
     private int txCount;
     private String channelName;
-    private String createMSPID;
+    private String calculatedBlockHash;
     private String date;
 
 }
