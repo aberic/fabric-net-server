@@ -13,6 +13,6 @@ services:
     environment:
       - USERNAME=admin
       - PASSWORD=password
-    command: bash /home/init-edge.sh
+    command: bash /home/fns.sh
     ports:
       - 8080:8080
