@@ -38,6 +38,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 /**
  * 描述：中继频道对象
@@ -132,6 +133,12 @@ class IntermediateChannel {
                     org.getBlockListener().received(getFailFromString(e.getMessage()));
                 }
             });
+//            channel.registerChaincodeEventListener(Pattern.compile(".*"), Pattern.compile(Pattern.quote(EXPECTED_EVENT_NAME), new ChaincodeEventListener() {
+//                @Override
+//                public void received(String s, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
+//
+//                }
+//            });
         }
     }
 
