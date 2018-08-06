@@ -21,9 +21,9 @@ import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.PeerService;
 import cn.aberic.fabric.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -56,12 +56,10 @@ public class PeerServiceImpl implements PeerService {
                 StringUtils.isEmpty(peer.getEventHubLocation())) {
             return 0;
         }
-        if (null == serverCrtFile) {
-            log.debug("peer tls server.crt is null");
-            return 0;
-        }
-        if (saveFileFail(peer, serverCrtFile)) {
-            return 0;
+        if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename())) {
+            if (saveFileFail(peer, serverCrtFile)) {
+                return 0;
+            }
         }
         peer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return peerMapper.add(peer);

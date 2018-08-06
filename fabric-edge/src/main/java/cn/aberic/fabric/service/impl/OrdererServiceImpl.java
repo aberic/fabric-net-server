@@ -28,7 +28,7 @@ import cn.aberic.fabric.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -57,12 +57,10 @@ public class OrdererServiceImpl implements OrdererService {
                 StringUtils.isEmpty(orderer.getLocation())) {
             return 0;
         }
-        if (null == serverCrtFile) {
-            log.debug("orderer tls server.crt is null");
-            return 0;
-        }
-        if (saveFileFail(orderer, serverCrtFile)) {
-            return 0;
+        if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename())) {
+            if (saveFileFail(orderer, serverCrtFile)) {
+                return 0;
+            }
         }
         orderer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return ordererMapper.add(orderer);
