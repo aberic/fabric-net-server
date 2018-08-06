@@ -145,16 +145,18 @@ public class FabricHelper {
                         null == chaincode ? "" : chaincode.getSource(),
                         null == chaincode ? "" : chaincode.getPolicy(),
                         null == chaincode ? "" : chaincode.getVersion(),
-                        null == chaincode ? 0 : chaincode.getProposalWaitTime())
-                .setBlockListener(jsonObject -> {
-                    log.debug(String.format("code = %s", String.valueOf(jsonObject.getInteger("code"))));
-                    log.debug(String.format("data = %s", jsonObject.getJSONObject("data").toJSONString()));
-                });
+                        null == chaincode ? 0 : chaincode.getProposalWaitTime());
         for (Orderer orderer : orderers) {
             orgManager.addOrderer(orderer.getName(), orderer.getLocation(), orderer.getServerCrtPath());
         }
         for (Peer peer : peers) {
             orgManager.addPeer(peer.getName(), peer.getEventHubName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener(), peer.getServerCrtPath());
+            if (peer.isEventListener()) {
+                orgManager.setBlockListener(jsonObject -> {
+                    log.debug(String.format("code = %s", String.valueOf(jsonObject.getInteger("code"))));
+                    log.debug(String.format("data = %s", jsonObject.getJSONObject("data").toJSONString()));
+                });
+            }
         }
         orgManager.add();
         return orgManager.use(cacheName, ca.getName());
