@@ -80,11 +80,11 @@ public class OrgManager {
     }
 
     public void addOrderer(String name, String location, String serverCrtPath) {
-        orgMap.get(cc).addOrderer(name, location, serverCrtPath);
+        orgMap.get(cc).addOrderer(name, String.format("%s%s", "grpc://", location), serverCrtPath);
     }
 
     public void addPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
-        orgMap.get(cc).addPeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath);
+        orgMap.get(cc).addPeer(peerName, peerEventHubName, String.format("%s%s", "grpc://", peerLocation), String.format("%s%s", "grpc://", peerEventHubLocation), isEventListener, serverCrtPath);
     }
 
     /**
