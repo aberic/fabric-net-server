@@ -33,8 +33,6 @@ public class Org {
     private String name; // required
     private boolean tls; // required
     private String mspId; // required
-    private String domainName; // required
-    private String ordererDomainName; // required
     private int leagueId; // required
     private String leagueName; // required
     private String date; // required
