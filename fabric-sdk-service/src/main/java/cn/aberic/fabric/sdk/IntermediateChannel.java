@@ -28,6 +28,7 @@ import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.BlockInfo.EnvelopeInfo;
 import org.hyperledger.fabric.sdk.BlockInfo.EnvelopeType;
 import org.hyperledger.fabric.sdk.BlockInfo.TransactionEnvelopeInfo;
+import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
 import org.hyperledger.fabric.sdk.exception.TransactionException;
@@ -133,12 +134,19 @@ class IntermediateChannel {
                     org.getBlockListener().received(getFailFromString(e.getMessage()));
                 }
             });
-//            channel.registerChaincodeEventListener(Pattern.compile(".*"), Pattern.compile(Pattern.quote(EXPECTED_EVENT_NAME), new ChaincodeEventListener() {
-//                @Override
-//                public void received(String s, BlockEvent blockEvent, ChaincodeEvent chaincodeEvent) {
-//
-//                }
-//            });
+        }
+        if (null != org.getChaincodeEventListener()) {
+            String[] eventNames = org.getEventNames().split(",");
+            for (String eventName: eventNames) {
+                channel.registerChaincodeEventListener(Pattern.compile(".*"), Pattern.compile(Pattern.quote(eventName)), (handle, blockEvent, chaincodeEvent) -> {
+                    try {
+                        org.getChaincodeEventListener().received(handle, execBlockInfo(blockEvent), chaincodeEvent.getEventName(), chaincodeEvent.getChaincodeId(), chaincodeEvent.getTxId());
+                    } catch (IOException | InvalidArgumentException e) {
+                        e.printStackTrace();
+                        org.getChaincodeEventListener().received(handle, getFailFromString(e.getMessage()), chaincodeEvent.getEventName(), chaincodeEvent.getChaincodeId(), chaincodeEvent.getTxId());
+                    }
+                });
+            }
         }
     }
 

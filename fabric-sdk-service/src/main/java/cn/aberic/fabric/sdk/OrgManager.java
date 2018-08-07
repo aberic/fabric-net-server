@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * 描述：组织生成器
@@ -130,6 +131,10 @@ public class OrgManager {
      */
     public void setBlockListener(BlockListener blockListener) {
         orgMap.get(cc).setBlockListener(blockListener);
+    }
+
+    public void setChaincodeEventListener(String eventNames, ChaincodeEventListener chaincodeEventListener) {
+        orgMap.get(cc).setChaincodeEventListener(eventNames, chaincodeEventListener);
     }
 
     public void add() {

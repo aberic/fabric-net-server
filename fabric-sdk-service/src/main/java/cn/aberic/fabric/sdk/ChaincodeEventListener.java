@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.sdk;
 
-import java.util.regex.Pattern;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 作者：Aberic on 2018/8/6 23:05
@@ -24,5 +24,10 @@ import java.util.regex.Pattern;
  */
 public interface ChaincodeEventListener {
 
-    void received(Pattern chaincodeId, Pattern eventName, ChaincodeEventListener chaincodeEventListener);
+    /**
+     * 收到一个chaincode事件。ChaincodeEventListener不应该存在太长时间，因为它们会占用线程资源。
+     * @param handle 处理产生此事件的链码事件监听器的句柄
+     * @param jsonObject blockEvent包含链码事件的块事件信息
+     */
+    void received(String handle, JSONObject jsonObject, String eventName, String chaincodeId, String txId);
 }

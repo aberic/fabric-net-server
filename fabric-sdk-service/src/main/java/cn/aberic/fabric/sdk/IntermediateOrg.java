@@ -53,8 +53,10 @@ class IntermediateOrg {
     private IntermediateChannel channel;
     /** 智能合约对象 */
     private IntermediateChaincodeID chaincode;
+    private String eventNames;
     /** 事件监听 */
     private BlockListener blockListener;
+    private ChaincodeEventListener chaincodeEventListener;
     private HFClient client;
     private Map<String, User> userMap = new HashMap<>();
     private FabricStore fabricStore;
@@ -131,6 +133,19 @@ class IntermediateOrg {
 
     BlockListener getBlockListener() {
         return blockListener;
+    }
+
+    void setChaincodeEventListener(String eventNames, ChaincodeEventListener chaincodeEventListener) {
+        this.eventNames = eventNames;
+        this.chaincodeEventListener = chaincodeEventListener;
+    }
+
+    ChaincodeEventListener getChaincodeEventListener() {
+        return chaincodeEventListener;
+    }
+
+    public String getEventNames() {
+        return eventNames;
     }
 
     /**
