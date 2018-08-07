@@ -127,13 +127,12 @@ public class FabricManager {
      * Peer加入频道
      *
      * @param peerName             当前指定的组织节点域名
-     * @param peerEventHubName     当前指定的组织节点事件域名
      * @param peerLocation         当前指定的组织节点访问地址
      * @param peerEventHubLocation 当前指定的组织节点事件监听访问地址
      * @param isEventListener      当前peer是否增加Event事件处理
      */
-    public JSONObject joinPeer(String peerName, String peerEventHubName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) throws ProposalException, InvalidArgumentException {
-        return org.getChannel().joinPeer(new IntermediatePeer(peerName, peerEventHubName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath));
+    public JSONObject joinPeer(String peerName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) throws ProposalException, InvalidArgumentException {
+        return org.getChannel().joinPeer(new IntermediatePeer(peerName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath));
     }
 
     /** 查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash */

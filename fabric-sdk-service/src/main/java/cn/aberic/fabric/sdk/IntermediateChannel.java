@@ -115,7 +115,7 @@ class IntermediateChannel {
             // channel.joinPeer(client.newPeer(peers.get().get(i).getPeerName(), fabricOrg.getPeerLocation(peers.get().get(i).getPeerName()), peerProperties));
             channel.addPeer(client.newPeer(org.getPeers().get(i).getPeerName(), org.getPeers().get(i).getPeerLocation(), peerProperties));
             if (org.getPeers().get(i).isAddEventHub()) {
-                channel.addEventHub(client.newEventHub(org.getPeers().get(i).getPeerEventHubName(), org.getPeers().get(i).getPeerEventHubLocation(), peerProperties));
+                channel.addEventHub(client.newEventHub(org.getPeers().get(i).getPeerName(), org.getPeers().get(i).getPeerEventHubLocation(), peerProperties));
             }
         }
 
@@ -183,7 +183,7 @@ class IntermediateChannel {
         }
         channel.joinPeer(fabricPeer);
         if (peer.isAddEventHub()) {
-            channel.addEventHub(org.getClient().newEventHub(peer.getPeerEventHubName(), peer.getPeerEventHubLocation(), peerProperties));
+            channel.addEventHub(org.getClient().newEventHub(peer.getPeerName(), peer.getPeerEventHubLocation(), peerProperties));
         }
         return getSuccessFromString();
     }
