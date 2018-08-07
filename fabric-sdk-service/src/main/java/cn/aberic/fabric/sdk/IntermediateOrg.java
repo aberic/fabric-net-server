@@ -102,8 +102,8 @@ class IntermediateOrg {
     }
 
     /** 新增节点服务器 */
-    void addPeer(String peerName, String peerLocation, String peerEventHubLocation, boolean isEventListener, String serverCrtPath) {
-        peers.add(new IntermediatePeer(peerName, peerLocation, peerEventHubLocation, isEventListener, serverCrtPath));
+    void addPeer(String peerName, String peerLocation, String peerEventHubLocation, String serverCrtPath) {
+        peers.add(new IntermediatePeer(peerName, peerLocation, peerEventHubLocation, serverCrtPath));
     }
 
     /** 获取排序服务器集合 */

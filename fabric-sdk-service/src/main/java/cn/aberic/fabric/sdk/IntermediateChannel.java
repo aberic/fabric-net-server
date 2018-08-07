@@ -28,7 +28,6 @@ import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.BlockInfo.EnvelopeInfo;
 import org.hyperledger.fabric.sdk.BlockInfo.EnvelopeType;
 import org.hyperledger.fabric.sdk.BlockInfo.TransactionEnvelopeInfo;
-import org.hyperledger.fabric.sdk.ChaincodeEventListener;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
 import org.hyperledger.fabric.sdk.exception.TransactionException;
@@ -115,7 +114,7 @@ class IntermediateChannel {
             // 如果未加入频道，该方法执行加入。如果已加入频道，则执行下一行方面新增Peer
             // channel.joinPeer(client.newPeer(peers.get().get(i).getPeerName(), fabricOrg.getPeerLocation(peers.get().get(i).getPeerName()), peerProperties));
             channel.addPeer(client.newPeer(org.getPeers().get(i).getPeerName(), org.getPeers().get(i).getPeerLocation(), peerProperties));
-            if (org.getPeers().get(i).isAddEventHub()) {
+            if (null != org.getPeers().get(i).getPeerEventHubLocation() && !org.getPeers().get(i).getPeerEventHubLocation().isEmpty()) {
                 channel.addEventHub(client.newEventHub(org.getPeers().get(i).getPeerName(), org.getPeers().get(i).getPeerEventHubLocation(), peerProperties));
             }
         }
@@ -137,7 +136,7 @@ class IntermediateChannel {
         }
         if (null != org.getChaincodeEventListener()) {
             String[] eventNames = org.getEventNames().split(",");
-            for (String eventName: eventNames) {
+            for (String eventName : eventNames) {
                 channel.registerChaincodeEventListener(Pattern.compile(".*"), Pattern.compile(Pattern.quote(eventName)), (handle, blockEvent, chaincodeEvent) -> {
                     try {
                         org.getChaincodeEventListener().received(handle, execBlockInfo(blockEvent), chaincodeEvent.getEventName(), chaincodeEvent.getChaincodeId(), chaincodeEvent.getTxId());
@@ -190,7 +189,7 @@ class IntermediateChannel {
             }
         }
         channel.joinPeer(fabricPeer);
-        if (peer.isAddEventHub()) {
+        if (null != peer.getPeerEventHubLocation() && !peer.getPeerEventHubLocation().isEmpty()) {
             channel.addEventHub(org.getClient().newEventHub(peer.getPeerName(), peer.getPeerEventHubLocation(), peerProperties));
         }
         return getSuccessFromString();
