@@ -1,7 +1,7 @@
 **注意：** 这是一个依赖于已经部署好的HyperLedger Fabric项目，关于前者搭建部署的方案可以通过参考[从零开始](https://www.cnblogs.com/aberic/category/1148898.html)或购买[开发实战](https://item.jd.com/12381034.html?dist=jd)等途径学习。Fabric环境部署等目前都不在当前项目的支持范围内。
 <br>
 # Fabric Net Server [![fabric-sdk image](https://img.shields.io/badge/made%20by-aberic-orange.svg)](http://www.cnblogs.com/aberic/)
-[![version](https://img.shields.io/badge/version-1.0RC6-green.svg)](https://github.com/aberic/fabric-net-server/tree/1.0-RC6)
+[![version](https://img.shields.io/badge/version-1.0RC5-green.svg)](https://github.com/aberic/fabric-net-server/tree/1.0-RC5)
 [![apache 2](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/aberic/fabric-net-server/blob/master/LICENSE)
 <br><br>
 本项目目前提供一套Fabric网络后台服务，包括对已经在Fabric网络中创建好的org、peer、channel、chaincode等进行网络配置，并基于已经新增成功的内容提供[REST API](https://github.com/aberic/fabric-net-server/blob/master/API_DEMO.md)服务，目前已经支持链码安装、实例化、升级、调用、查询以及溯源等功能。
