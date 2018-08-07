@@ -148,7 +148,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title" th:text="#{transactions}"></h3>
+                                <h3 class="card-title" th:text="#{blocks}"></h3>
                             </div>
                             <div class="table-responsive">
                                 <table class="table card-table table-vcenter text-nowrap">
@@ -156,7 +156,7 @@
                                     <tr>
                                         <th class="w-1">No.</th>
                                         <th th:text="#{blockHeight}"></th>
-                                        <th th:text="#{txCount}"></th>
+                                        <th th:text="#{peerName}"></th>
                                         <th th:text="#{channel_name}"></th>
                                         <th th:text="#{calculatedBlockHash}"></th>
                                         <th th:text="#{date}"></th>
@@ -166,7 +166,7 @@
                                     <tr th:each="transaction : ${transactions}">
                                         <td><span class="text-muted" th:text="${transaction.index}">序号</span></td>
                                         <td th:text="${transaction.num}">区块高度</td>
-                                        <td th:text="${transaction.txCount}">交易数</td>
+                                        <td th:text="${transaction.peerName}">节点名称</td>
                                         <td th:text="${transaction.channelName}">通道名称</td>
                                         <td th:text="${transaction.calculatedBlockHash}">当前hash</td>
                                         <td th:text="${transaction.date}">时间</td>

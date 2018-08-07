@@ -25,13 +25,13 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class Transaction {
+public class Block {
 
     /** 序号，无实际意义 */
     private int index;
     /** 块高度 */
     private int num;
-    private int txCount;
+    private String peerName;
     private String channelName;
     private String calculatedBlockHash;
     private String date;

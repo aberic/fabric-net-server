@@ -17,7 +17,7 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.bean.Transaction;
+import cn.aberic.fabric.bean.Block;
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.service.*;
@@ -76,8 +76,7 @@ public class CommonController {
         int channelCount;
         int chaincodeCount;
         int appCount;
-        List<Transaction> tmpTransactions = new ArrayList<>();
-        List<Transaction> transactions = new ArrayList<>();
+        List<Block> transactions = new ArrayList<>();
         leagueCount = leagueService.listAll().size();
         orgCount = orgService.count();
         ordererCount = ordererService.count();
@@ -92,36 +91,25 @@ public class CommonController {
             try {
                 JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfoForIndex(channel.getId()));
                 int height = blockInfo.containsKey("data") ? blockInfo.getJSONObject("data").getInteger("height") : 0;
-                for (int num = 1; num <= 10; num++) {
-                    int heightCount = height - num;
-                    if (heightCount < 0) {
-                        break;
-                    }
-                    Trace trace = new Trace();
-                    trace.setChannelId(channel.getId());
-                    trace.setTrace(String.valueOf(heightCount));
-                    JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberForIndex(trace));
-                    JSONArray envelopes = blockMessage.containsKey("data")? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
-                    int txCount = 0;
-                    int size = envelopes.size();
-                    for (int i = 0; i < size; i++) {
-                        JSONObject envelope = envelopes.getJSONObject(i);
-                        txCount += envelope.containsKey("transactionEnvelopeInfo") ? envelope.getJSONObject("transactionEnvelopeInfo").getInteger("txCount") : 0;
-                    }
-                    Transaction transaction = new Transaction();
-                    transaction.setNum(heightCount);
-                    transaction.setTxCount(txCount);
-                    transaction.setChannelName(channel.getName());
-                    transaction.setCalculatedBlockHash(blockMessage.getJSONObject("data").getString("calculatedBlockHash"));
-                    transaction.setDate(envelopes.getJSONObject(0).getString("timestamp"));
-                    tmpTransactions.add(transaction);
-                }
+
+                Trace trace = new Trace();
+                trace.setChannelId(channel.getId());
+                trace.setTrace(String.valueOf(height - 1));
+                JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberForIndex(trace));
+                JSONArray envelopes = blockMessage.containsKey("data") ? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
+
+                Block transaction = new Block();
+                transaction.setNum(height);
+                transaction.setPeerName(peerService.get(channel.getPeerId()).getName());
+                transaction.setChannelName(channel.getName());
+                transaction.setCalculatedBlockHash(blockMessage.getJSONObject("data").getString("calculatedBlockHash"));
+                transaction.setDate(envelopes.getJSONObject(0).getString("timestamp"));
+                transactions.add(transaction);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        // transactions.sort(Comparator.comparing(Transaction::getDate));
-        tmpTransactions.sort((t1, t2) -> {
+        transactions.sort((t1, t2) -> {
             try {
                 long td1 = DateUtil.str2Date(t1.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
                 long td2 = DateUtil.str2Date(t2.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
@@ -131,17 +119,6 @@ public class CommonController {
             }
             return 0;
         });
-        int size = tmpTransactions.size() > 10 ? 10 : tmpTransactions.size();
-        for (int i = 10; i > 0; i--) {
-            if (i > size) {
-                modelAndView.addObject(String.format("transaction%s", 10 - i), 0);
-            } else if (i <= size) {
-                Transaction transaction = tmpTransactions.get(size - i);
-                transaction.setIndex(size - i + 1);
-                transactions.add(transaction);
-                modelAndView.addObject(String.format("transaction%s", 10 - i), transaction.getTxCount());
-            }
-        }
         modelAndView.addObject("leagueCount", leagueCount);
         modelAndView.addObject("orgCount", orgCount);
         modelAndView.addObject("ordererCount", ordererCount);
