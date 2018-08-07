@@ -21,7 +21,9 @@ import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.sdk.OrgManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,12 +153,15 @@ public class FabricHelper {
         }
         for (Peer peer : peers) {
             orgManager.addPeer(peer.getName(), peer.getEventHubName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener(), peer.getServerCrtPath());
-            if (peer.isEventListener()) {
-                orgManager.setBlockListener(jsonObject -> {
-                    log.debug(String.format("code = %s", String.valueOf(jsonObject.getInteger("code"))));
-                    log.debug(String.format("data = %s", jsonObject.getJSONObject("data").toJSONString()));
-                });
-            }
+        }
+        if (channel.isBlockListener() && StringUtils.isNotEmpty(channel.getCallbackLocation())) {
+            orgManager.setBlockListener(jsonObject -> {
+                try {
+                    HttpUtil.post(channel.getCallbackLocation(), jsonObject.toJSONString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         orgManager.add();
         return orgManager.use(cacheName, ca.getName());
