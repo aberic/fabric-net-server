@@ -97,6 +97,30 @@
                                                       th:placeholder="#{chaincode_api_params_placeholder}"
                                                       th:field="*{exec}"></textarea>
                                         </div>
+                                        <div class="form-group">
+                                            <div class="form-label" th:text="#{chaincode_event_listen}"></div>
+                                            <label class="custom-switch">
+                                                <input type="checkbox" name="custom-switch-checkbox"
+                                                       th:field="*{chaincodeEventListener}"
+                                                       class="custom-switch-input">
+                                                <span class="custom-switch-indicator"></span>
+                                                <span class="custom-switch-description" th:text="#{open}"></span>
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" th:text="#{chaincode_callback_location}"></label>
+                                            <input type="text" class="form-control is-valid"
+                                                   name="example-text-input-valid"
+                                                   th:placeholder="#{chaincode_callback_location_placeholder}"
+                                                   th:field="*{callbackLocation}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" th:text="#{chaincode_events}"></label>
+                                            <input type="text" class="form-control is-valid"
+                                                   name="example-text-input-valid"
+                                                   th:placeholder="#{chaincode_events_placeholder}"
+                                                   th:field="*{events}">
+                                        </div>
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
                                                 <button type="submit" class="btn btn-primary ml-auto"
