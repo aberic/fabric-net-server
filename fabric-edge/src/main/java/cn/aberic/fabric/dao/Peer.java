@@ -31,7 +31,6 @@ public class Peer {
 
     private int id; // required
     private String name; // required
-    private String eventHubName; // required
     private String location; // required
     private String eventHubLocation; // required
     private boolean eventListener; // required

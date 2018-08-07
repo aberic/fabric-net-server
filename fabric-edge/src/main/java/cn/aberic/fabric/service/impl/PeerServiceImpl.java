@@ -52,7 +52,6 @@ public class PeerServiceImpl implements PeerService {
     public int add(Peer peer, MultipartFile serverCrtFile) {
         if (StringUtils.isEmpty(peer.getName()) ||
                 StringUtils.isEmpty(peer.getLocation()) ||
-                StringUtils.isEmpty(peer.getEventHubName()) ||
                 StringUtils.isEmpty(peer.getEventHubLocation())) {
             return 0;
         }

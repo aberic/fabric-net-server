@@ -152,7 +152,7 @@ public class FabricHelper {
             orgManager.addOrderer(orderer.getName(), orderer.getLocation(), orderer.getServerCrtPath());
         }
         for (Peer peer : peers) {
-            orgManager.addPeer(peer.getName(), peer.getEventHubName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener(), peer.getServerCrtPath());
+            orgManager.addPeer(peer.getName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener(), peer.getServerCrtPath());
         }
         if (channel.isBlockListener() && StringUtils.isNotEmpty(channel.getCallbackLocation())) {
             orgManager.setBlockListener(jsonObject -> {
