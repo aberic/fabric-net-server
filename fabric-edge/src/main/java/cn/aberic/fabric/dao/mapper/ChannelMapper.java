@@ -28,10 +28,12 @@ import java.util.List;
 @Mapper
 public interface ChannelMapper {
 
-    @Insert("insert into channel (name,peer_id,date) values (#{c.name},#{c.peerId},#{c.date})")
+    @Insert("insert into channel (name,block_listener,callback_location,peer_id,date) values " +
+            "(#{c.name},#{c.blockListener},#{c.callbackLocation},#{c.peerId},#{c.date})")
     int add(@Param("c") Channel channel);
 
-    @Update("update channel set name=#{c.name} where rowid=#{c.id}")
+    @Update("update channel set name=#{c.name}, block_listener=#{c.blockListener}, " +
+            "callback_location=#{c.callbackLocation} where rowid=#{c.id}")
     int update(@Param("c") Channel channel);
 
     @Select("select count(name) from channel where peer_id=#{id}")
@@ -46,37 +48,45 @@ public interface ChannelMapper {
     @Delete("delete from channel where peer_id=#{peerId}")
     int deleteAll(@Param("peerId") int peerId);
 
-    @Select("select rowid,name,peer_id,date from channel where name=#{c.name} and peer_id=#{c.peerId}")
+    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel where name=#{c.name} and peer_id=#{c.peerId}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
+            @Result(property = "blockListener", column = "block_listener"),
+            @Result(property = "callbackLocation", column = "callback_location"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
     Channel check(@Param("c") Channel channel);
 
-    @Select("select rowid,name,peer_id,date from channel where rowid=#{id}")
+    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
+            @Result(property = "blockListener", column = "block_listener"),
+            @Result(property = "callbackLocation", column = "callback_location"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
     Channel get(@Param("id") int id);
 
-    @Select("select rowid,name,peer_id,date from channel where peer_id=#{id}")
+    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel where peer_id=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
+            @Result(property = "blockListener", column = "block_listener"),
+            @Result(property = "callbackLocation", column = "callback_location"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
     List<Channel> list(@Param("id") int id);
 
-    @Select("select rowid,name,peer_id,date from channel")
+    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
+            @Result(property = "blockListener", column = "block_listener"),
+            @Result(property = "callbackLocation", column = "callback_location"),
             @Result(property = "peerId", column = "peer_id"),
             @Result(property = "date", column = "date")
     })
