@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.sdk;
 
-import com.sun.istack.internal.NotNull;
+import java.util.regex.Pattern;
 
 /**
  * 作者：Aberic on 2018/8/6 23:05
@@ -24,5 +24,5 @@ import com.sun.istack.internal.NotNull;
  */
 public interface ChaincodeEventListener {
 
-    void received(@NotNull java.util.regex.Pattern chaincodeId, @NotNull java.util.regex.Pattern eventName, @NotNull org.hyperledger.fabric.sdk.ChaincodeEventListener chaincodeEventListener);
+    void received(Pattern chaincodeId, Pattern eventName, ChaincodeEventListener chaincodeEventListener);
 }
