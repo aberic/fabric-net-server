@@ -154,10 +154,30 @@ public class FabricHelper {
         for (Peer peer : peers) {
             orgManager.addPeer(peer.getName(), peer.getLocation(), peer.getEventHubLocation(), peer.isEventListener(), peer.getServerCrtPath());
         }
-        if (channel.isBlockListener() && StringUtils.isNotEmpty(channel.getCallbackLocation())) {
+        if (channel.isBlockListener() && StringUtils.isNotEmpty(channel.getCallbackLocation()) && null == chaincode) {
             orgManager.setBlockListener(jsonObject -> {
                 try {
                     HttpUtil.post(channel.getCallbackLocation(), jsonObject.toJSONString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        if (null != chaincode && chaincode.isChaincodeEventListener() && StringUtils.isNotEmpty(chaincode.getCallbackLocation())
+                && StringUtils.isNotEmpty(chaincode.getEvents())) {
+            orgManager.setChaincodeEventListener(chaincode.getEvents(), (handle, jsonObject, eventName, chaincodeId, txId) -> {
+                log.debug(String.format("handle = %s", handle));
+                log.debug(String.format("eventName = %s", eventName));
+                log.debug(String.format("chaincodeId = %s", chaincodeId));
+                log.debug(String.format("txId = %s", txId));
+                log.debug(String.format("code = %s", String.valueOf(jsonObject.getInteger("code"))));
+                log.debug(String.format("data = %s", jsonObject.getJSONObject("data").toJSONString()));
+                try {
+                    jsonObject.put("handle", handle);
+                    jsonObject.put("eventName", eventName);
+                    jsonObject.put("chaincodeId", chaincodeId);
+                    jsonObject.put("txId", txId);
+                    HttpUtil.post(chaincode.getCallbackLocation(), jsonObject.toJSONString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

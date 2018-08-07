@@ -38,6 +38,9 @@ public class Chaincode {
     private int proposalWaitTime = 90000; // required
     private int channelId; // required
     private String cc; // optional
+    private boolean chaincodeEventListener; // required
+    private String callbackLocation; // required
+    private String events;
     private String date; // optional
     private String flag;
     private String channelName; // optional
