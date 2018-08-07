@@ -33,7 +33,6 @@ public class Peer {
     private String name; // required
     private String location; // required
     private String eventHubLocation; // required
-    private boolean eventListener; // required
     private int orgId; // required
     private String serverCrtPath;
     private String orgName; // required
