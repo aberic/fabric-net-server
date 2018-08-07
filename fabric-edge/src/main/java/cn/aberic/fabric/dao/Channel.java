@@ -31,6 +31,8 @@ public class Channel {
 
     private int id; // required
     private String name; // required
+    private boolean blockListener; // required
+    private String callbackLocation; // required
     private int peerId; // required
     private String date; // optional
     private String peerName; // optional
