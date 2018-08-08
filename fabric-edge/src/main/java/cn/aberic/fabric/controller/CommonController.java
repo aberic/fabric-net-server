@@ -76,7 +76,7 @@ public class CommonController {
         int channelCount;
         int chaincodeCount;
         int appCount;
-        List<Block> transactions = new ArrayList<>();
+        List<Block> blocks = new ArrayList<>();
         leagueCount = leagueService.listAll().size();
         orgCount = orgService.count();
         ordererCount = ordererService.count();
@@ -98,18 +98,18 @@ public class CommonController {
                 JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberForIndex(trace));
                 JSONArray envelopes = blockMessage.containsKey("data") ? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
 
-                Block transaction = new Block();
-                transaction.setNum(height);
-                transaction.setPeerName(peerService.get(channel.getPeerId()).getName());
-                transaction.setChannelName(channel.getName());
-                transaction.setCalculatedBlockHash(blockMessage.getJSONObject("data").getString("calculatedBlockHash"));
-                transaction.setDate(envelopes.getJSONObject(0).getString("timestamp"));
-                transactions.add(transaction);
+                Block block = new Block();
+                block.setNum(height);
+                block.setPeerName(peerService.get(channel.getPeerId()).getName());
+                block.setChannelName(channel.getName());
+                block.setCalculatedBlockHash(blockMessage.getJSONObject("data").getString("calculatedBlockHash"));
+                block.setDate(envelopes.getJSONObject(0).getString("timestamp"));
+                blocks.add(block);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        transactions.sort((t1, t2) -> {
+        blocks.sort((t1, t2) -> {
             try {
                 long td1 = DateUtil.str2Date(t1.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
                 long td2 = DateUtil.str2Date(t2.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
@@ -119,6 +119,9 @@ public class CommonController {
             }
             return 0;
         });
+        for (int i = 0; i < blocks.size(); i++) {
+            blocks.get(i).setIndex(i + 1);
+        }
         modelAndView.addObject("leagueCount", leagueCount);
         modelAndView.addObject("orgCount", orgCount);
         modelAndView.addObject("ordererCount", ordererCount);
@@ -127,7 +130,7 @@ public class CommonController {
         modelAndView.addObject("channelCount", channelCount);
         modelAndView.addObject("chaincodeCount", chaincodeCount);
         modelAndView.addObject("appCount", appCount);
-        modelAndView.addObject("transactions", transactions);
+        modelAndView.addObject("blocks", blocks);
 
         return modelAndView;
     }

@@ -163,13 +163,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="transaction : ${transactions}">
-                                        <td><span class="text-muted" th:text="${transaction.index}">序号</span></td>
-                                        <td th:text="${transaction.num}">区块高度</td>
-                                        <td th:text="${transaction.peerName}">节点名称</td>
-                                        <td th:text="${transaction.channelName}">通道名称</td>
-                                        <td th:text="${transaction.calculatedBlockHash}">当前hash</td>
-                                        <td th:text="${transaction.date}">时间</td>
+                                    <tr th:each="block : ${blocks}">
+                                        <td><span class="text-muted" th:text="${block.index}">序号</span></td>
+                                        <td th:text="${block.num}">区块高度</td>
+                                        <td th:text="${block.peerName}">节点名称</td>
+                                        <td th:text="${block.channelName}">通道名称</td>
+                                        <td th:text="${block.calculatedBlockHash}">当前hash</td>
+                                        <td th:text="${block.date}">时间</td>
                                     </tr>
                                     </tbody>
                                 </table>
