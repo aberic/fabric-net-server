@@ -49,8 +49,7 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public int add(Org org) {
-        if (StringUtils.isEmpty(org.getName()) ||
-                StringUtils.isEmpty(org.getMspId())) {
+        if (StringUtils.isEmpty(org.getMspId())) {
             return 0;
         }
         org.setDate(DateUtil.getCurrent("yyyy-MM-dd"));

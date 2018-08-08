@@ -30,7 +30,6 @@ import lombok.ToString;
 public class Org {
 
     private int id; // required
-    private String name; // required
     private boolean tls; // required
     private String mspId; // required
     private int leagueId; // required

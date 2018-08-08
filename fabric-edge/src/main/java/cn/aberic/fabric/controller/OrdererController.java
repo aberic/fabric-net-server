@@ -106,7 +106,7 @@ public class OrdererController {
         ModelAndView modelAndView = new ModelAndView("orderers");
         List<Orderer> orderers = ordererService.listAll();
         for (Orderer orderer : orderers) {
-            orderer.setOrgName(orgService.get(orderer.getOrgId()).getName());
+            orderer.setOrgName(orgService.get(orderer.getOrgId()).getMspId());
         }
         modelAndView.addObject("orderers", orderers);
         return modelAndView;
@@ -124,7 +124,7 @@ public class OrdererController {
         Org org = orgService.get(orderer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         orderer.setLeagueName(league.getName());
-        orderer.setOrgName(org.getName());
+        orderer.setOrgName(org.getMspId());
         return orderer;
     }
 

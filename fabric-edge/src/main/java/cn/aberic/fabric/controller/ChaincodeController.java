@@ -153,7 +153,7 @@ public class ChaincodeController {
         Org org = orgService.get(peer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         chaincode.setLeagueName(league.getName());
-        chaincode.setOrgName(org.getName());
+        chaincode.setOrgName(org.getMspId());
         chaincode.setPeerName(peer.getName());
         chaincode.setChannelName(channel.getName());
         chaincode.setFlag(api.getFlag());
@@ -186,12 +186,12 @@ public class ChaincodeController {
         Org org = orgService.get(peer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         chaincode.setPeerName(peer.getName());
-        chaincode.setOrgName(org.getName());
+        chaincode.setOrgName(org.getMspId());
         chaincode.setLeagueName(league.getName());
         List<Channel> channels = channelService.listById(peer.getId());
         for (Channel channel : channels) {
             channel.setPeerName(peer.getName());
-            channel.setOrgName(org.getName());
+            channel.setOrgName(org.getMspId());
             channel.setLeagueName(league.getName());
         }
         modelAndView.addObject("chaincode", chaincode);
@@ -300,7 +300,7 @@ public class ChaincodeController {
             Peer peer = peerService.get(channel.getPeerId());
             channel.setPeerName(peer.getName());
             Org org = orgService.get(peer.getOrgId());
-            channel.setOrgName(org.getName());
+            channel.setOrgName(org.getMspId());
             League league = leagueService.get(org.getLeagueId());
             channel.setLeagueName(league.getName());
         }
@@ -356,7 +356,7 @@ public class ChaincodeController {
         Org org = orgService.get(peer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         chaincode.setLeagueName(league.getName());
-        chaincode.setOrgName(org.getName());
+        chaincode.setOrgName(org.getMspId());
         chaincode.setPeerName(peer.getName());
         chaincode.setChannelName(channel.getName());
         return chaincode;

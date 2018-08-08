@@ -244,6 +244,6 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         Peer peer = peerMapper.get(channel.getPeerId());
         Org org = orgMapper.get(peer.getOrgId());
         League league = leagueMapper.get(org.getLeagueId());
-        return MD5Util.md5(league.getName() + org.getName() + peer.getName() + channel.getName() + chaincode.getName());
+        return MD5Util.md5(league.getName() + org.getMspId() + peer.getName() + channel.getName() + chaincode.getName());
     }
 }

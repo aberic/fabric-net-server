@@ -156,9 +156,9 @@ public class CAServiceImpl implements CAService {
         League league = leagueMapper.get(org.getLeagueId());
         // ca.setName(String.format("%s-%s", ca.getName(), ca.getPeerId()));
         ca.setLeagueName(league.getName());
-        ca.setOrgName(org.getName());
+        ca.setOrgName(org.getMspId());
         ca.setPeerName(peer.getName());
-        ca.setFlag(MD5Util.md516(league.getName() + org.getName() + peer.getName() + ca.getName()));
+        ca.setFlag(MD5Util.md516(league.getName() + org.getMspId() + peer.getName() + ca.getName()));
         return ca;
     }
 

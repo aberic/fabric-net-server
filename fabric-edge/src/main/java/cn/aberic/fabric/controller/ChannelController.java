@@ -76,7 +76,7 @@ public class ChannelController {
         List<Peer> peers = peerService.listAll();
         for (Peer peer : peers) {
             Org org = orgService.get(peer.getOrgId());
-            peer.setOrgName(org.getName());
+            peer.setOrgName(org.getMspId());
             League league = leagueService.get(org.getLeagueId());
             peer.setLeagueName(league.getName());
         }
@@ -92,13 +92,13 @@ public class ChannelController {
         modelAndView.addObject("intent", "edit");
         Channel channel = channelService.get(id);
         Org org = orgService.get(peerService.get(channel.getPeerId()).getOrgId());
-        channel.setOrgName(org.getName());
+        channel.setOrgName(org.getMspId());
         List<Peer> peers = peerService.listById(org.getId());
         League league = leagueService.get(orgService.get(org.getId()).getLeagueId());
         channel.setLeagueName(league.getName());
         for (Peer peer : peers) {
             peer.setLeagueName(league.getName());
-            peer.setOrgName(org.getName());
+            peer.setOrgName(org.getMspId());
         }
         modelAndView.addObject("channel", channel);
         modelAndView.addObject("peers", peers);

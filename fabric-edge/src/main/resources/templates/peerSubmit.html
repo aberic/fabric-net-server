@@ -58,7 +58,7 @@
                                             <select id="league-name" class="form-control custom-select"
                                                     th:field="*{orgId}">
                                                 <option th:each="org: ${orgs}" th:value="${org.id}"
-                                                        th:text="${org.leagueName}+'-'+${org.name}"></option>
+                                                        th:text="${org.leagueName}+'-'+${org.mspId}"></option>
                                             </select>
                                         </div>
                                         <div class="form-group">

@@ -62,20 +62,13 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label" th:text="#{org_name}"></label>
-                                            <input type="text" class="form-control is-valid"
-                                                   name="example-text-input-valid"
-                                                   th:placeholder="#{org_name_placeholder}"
-                                                   th:field="*{name}">
-                                            <input type="hidden" name="intent" th:value="${intent}"/>
-                                            <input type="hidden" name="id" th:value="${orgVO.id}"/>
-                                        </div>
-                                        <div class="form-group">
                                             <label class="form-label" th:text="#{org_msp_id}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{org_msp_id_placeholder}"
                                                    th:field="*{mspId}">
+                                            <input type="hidden" name="intent" th:value="${intent}"/>
+                                            <input type="hidden" name="id" th:value="${orgVO.id}"/>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-label">TLS</div>

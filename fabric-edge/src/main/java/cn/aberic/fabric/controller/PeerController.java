@@ -109,7 +109,7 @@ public class PeerController {
         ModelAndView modelAndView = new ModelAndView("peers");
         List<Peer> peers = peerService.listAll();
         for (Peer peer : peers) {
-            peer.setOrgName(orgService.get(peer.getOrgId()).getName());
+            peer.setOrgName(orgService.get(peer.getOrgId()).getMspId());
             peer.setChannelCount(channelService.countById(peer.getId()));
         }
         modelAndView.addObject("peers", peers);
@@ -128,7 +128,7 @@ public class PeerController {
         Org org = orgService.get(peer.getOrgId());
         League league = leagueService.get(org.getLeagueId());
         peer.setLeagueName(league.getName());
-        peer.setOrgName(org.getName());
+        peer.setOrgName(org.getMspId());
         return peer;
     }
 

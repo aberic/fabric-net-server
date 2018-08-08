@@ -77,7 +77,7 @@ public class CaController {
         List<Peer> peers = peerService.listAll();
         for (Peer peer : peers) {
             Org org = orgService.get(peer.getOrgId());
-            peer.setOrgName(org.getName());
+            peer.setOrgName(org.getMspId());
             League league = leagueService.get(org.getLeagueId());
             peer.setLeagueName(league.getName());
         }
@@ -97,7 +97,7 @@ public class CaController {
         League league = leagueService.get(orgService.get(org.getId()).getLeagueId());
         for (Peer peer : peers) {
             peer.setLeagueName(league.getName());
-            peer.setOrgName(org.getName());
+            peer.setOrgName(org.getMspId());
         }
         modelAndView.addObject("ca", ca);
         modelAndView.addObject("peers", peers);
@@ -112,7 +112,7 @@ public class CaController {
             Peer peer = peerService.get(ca.getPeerId());
             Org org = orgService.get(peer.getOrgId());
             ca.setPeerName(peer.getName());
-            ca.setOrgName(org.getName());
+            ca.setOrgName(org.getMspId());
             ca.setLeagueName(leagueService.get(org.getLeagueId()).getName());
         }
         modelAndView.addObject("cas", cas);
