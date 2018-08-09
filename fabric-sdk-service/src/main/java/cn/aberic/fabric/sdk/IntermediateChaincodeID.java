@@ -18,7 +18,6 @@ package cn.aberic.fabric.sdk;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hyperledger.fabric.sdk.*;
@@ -30,8 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -94,7 +91,7 @@ class IntermediateChaincodeID {
      *
      * @param org 中继组织对象
      */
-    JSONObject install(IntermediateOrg org, String version) throws ProposalException, InvalidArgumentException {
+    JSONObject install(IntermediateOrg org) throws ProposalException, InvalidArgumentException {
         /// Send transaction proposal to all peers
         InstallProposalRequest installProposalRequest = org.getClient().newInstallProposalRequest();
         installProposalRequest.setChaincodeName(chaincodeName);
@@ -107,7 +104,7 @@ class IntermediateChaincodeID {
         long currentStart = System.currentTimeMillis();
         Collection<ProposalResponse> installProposalResponses = org.getClient().sendInstallProposal(installProposalRequest, org.getChannel().get().getPeers());
         log.info("chaincode install transaction proposal time = " + (System.currentTimeMillis() - currentStart));
-        return toPeerResponse(installProposalResponses, false, version);
+        return toPeerResponse(installProposalResponses, false);
     }
 
     /**
@@ -116,7 +113,7 @@ class IntermediateChaincodeID {
      * @param org  中继组织对象
      * @param args 初始化参数数组
      */
-    JSONObject instantiate(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException, InterruptedException, ExecutionException, TimeoutException {
+    JSONObject instantiate(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException {
         /// Send transaction proposal to all peers
         InstantiateProposalRequest instantiateProposalRequest = org.getClient().newInstantiationProposalRequest();
         instantiateProposalRequest.setChaincodeID(chaincodeID);
@@ -145,7 +142,7 @@ class IntermediateChaincodeID {
      * @param org  中继组织对象
      * @param args 初始化参数数组
      */
-    JSONObject upgrade(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException, InterruptedException, ExecutionException, TimeoutException {
+    JSONObject upgrade(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException {
         /// Send transaction proposal to all peers
         UpgradeProposalRequest upgradeProposalRequest = org.getClient().newUpgradeProposalRequest();
         upgradeProposalRequest.setChaincodeID(chaincodeID);
@@ -175,7 +172,7 @@ class IntermediateChaincodeID {
      * @param fcn  方法名
      * @param args 参数数组
      */
-    JSONObject invoke(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException, IOException, InterruptedException, ExecutionException, TimeoutException {
+    JSONObject invoke(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException, IOException {
         /// Send transaction proposal to all peers
         TransactionProposalRequest transactionProposalRequest = org.getClient().newTransactionProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
@@ -201,9 +198,8 @@ class IntermediateChaincodeID {
      * @param org     中继组织对象
      * @param fcn     方法名
      * @param args    参数数组
-     * @param version Fabric版本号
      */
-    JSONObject query(IntermediateOrg org, String fcn, String[] args, String version) throws InvalidArgumentException, ProposalException {
+    JSONObject query(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException {
         QueryByChaincodeRequest queryByChaincodeRequest = org.getClient().newQueryProposalRequest();
         queryByChaincodeRequest.setArgs(args);
         queryByChaincodeRequest.setFcn(fcn);
@@ -218,7 +214,7 @@ class IntermediateChaincodeID {
         long currentStart = System.currentTimeMillis();
         Collection<ProposalResponse> queryProposalResponses = org.getChannel().get().queryByChaincode(queryByChaincodeRequest, org.getChannel().get().getPeers());
         log.info("chaincode query transaction proposal time = " + (System.currentTimeMillis() - currentStart));
-        return toPeerResponse(queryProposalResponses, true, version);
+        return toPeerResponse(queryProposalResponses, true);
     }
 
     /**
@@ -284,10 +280,10 @@ class IntermediateChaincodeID {
      * @param proposalResponses 请求返回集合
      * @param checkVerified     是否验证提案
      */
-    private JSONObject toPeerResponse(Collection<ProposalResponse> proposalResponses, boolean checkVerified, String version) {
+    private JSONObject toPeerResponse(Collection<ProposalResponse> proposalResponses, boolean checkVerified) {
         JSONObject jsonObject = new JSONObject();
         for (ProposalResponse proposalResponse : proposalResponses) {
-            if ((checkVerified && (!proposalResponse.isVerified() && !StringUtils.equals(version, "1.2"))) || proposalResponse.getStatus() != ProposalResponse.Status.SUCCESS) {
+            if ((checkVerified && !proposalResponse.isVerified()) || proposalResponse.getStatus() != ProposalResponse.Status.SUCCESS) {
                 String data = String.format("Failed install/query proposal from peer %s status: %s. Messages: %s. Was verified : %s",
                         proposalResponse.getPeer().getName(), proposalResponse.getStatus(), proposalResponse.getMessage(), proposalResponse.isVerified());
                 log.debug(data);
@@ -315,7 +311,7 @@ class IntermediateChaincodeID {
         this.proposalWaitTime = proposalWaitTime;
     }
 
-    JSONObject parseResult(String result) {
+    private JSONObject parseResult(String result) {
         JSONObject jsonObject = new JSONObject();
         int jsonVerify = isJSONValid(result);
         switch (jsonVerify) {
