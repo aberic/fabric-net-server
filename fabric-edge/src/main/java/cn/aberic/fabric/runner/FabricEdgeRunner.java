@@ -57,10 +57,10 @@ public class FabricEdgeRunner implements ApplicationRunner {
 
     private void addUser() {
         User user = new User();
-//        user.setUsername(username);
-//        user.setPassword(MD5Util.md5(password));
-        user.setUsername(System.getenv("USERNAME"));
-        user.setPassword(MD5Util.md5(System.getenv("PASSWORD")));
+        user.setUsername("admin");
+        user.setPassword(MD5Util.md5("admin123"));
+//        user.setUsername(System.getenv("USERNAME"));
+//        user.setPassword(MD5Util.md5(System.getenv("PASSWORD")));
         userService.init(user);
     }
 }

@@ -77,6 +77,7 @@
                                             <a th:href="@{/org/edit(id=${org.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{edit}"></a>
                                             <a th:href="@{/org/delete(id=${org.id})}"
+                                               onclick="return doDelete()"
                                                class="btn btn-secondary btn-sm" th:text="#{delete}"></a>
                                         </td>
                                     </tr>
@@ -93,5 +94,10 @@
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
 </body>
-
+<script>
+    function doDelete(){
+        var c = confirm("是否删除？")
+        return c
+    }
+</script>
 </html>
