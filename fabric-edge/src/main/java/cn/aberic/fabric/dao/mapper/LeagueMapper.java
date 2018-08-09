@@ -28,30 +28,28 @@ import java.util.List;
 @Mapper
 public interface LeagueMapper {
 
-    @Insert("insert into league  (name,date,version) values (#{l.name},#{l.date},#{l.version})")
+    @Insert("insert into league  (name,date) values (#{l.name},#{l.date})")
     int add(@Param("l") League league);
 
-    @Update("update league set name=#{l.name},version=#{l.version} where rowid=#{l.id}")
+    @Update("update league set name=#{l.name} where rowid=#{l.id}")
     int update(@Param("l") League league);
 
     @Delete("delete from league where rowid=#{id}")
     int delete(@Param("id") int id);
 
-    @Select("select rowid,name,date,version from league where rowid=#{id}")
+    @Select("select rowid,name,date from league where rowid=#{id}")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
-            @Result(property = "date", column = "date"),
-            @Result(property = "version", column = "version")
+            @Result(property = "date", column = "date")
     })
     League get(@Param("id") int id);
 
-    @Select("select rowid,name,date,version from league")
+    @Select("select rowid,name,date from league")
     @Results({
             @Result(property = "id", column = "rowid"),
             @Result(property = "name", column = "name"),
-            @Result(property = "date", column = "date"),
-            @Result(property = "version", column = "version")
+            @Result(property = "date", column = "date")
     })
     List<League> listAll();
 

@@ -20,7 +20,6 @@ import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.service.LeagueService;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.SpringUtil;
-import cn.aberic.fabric.utils.VerifyUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -65,7 +64,6 @@ public class LeagueController {
         modelAndView.addObject("intentLittle", SpringUtil.get("enter"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
-        modelAndView.addObject("versions", VerifyUtil.versions());
         modelAndView.addObject("league", new League());
         return modelAndView;
     }
@@ -76,7 +74,6 @@ public class LeagueController {
         modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
         modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
-        modelAndView.addObject("versions", VerifyUtil.versions());
         modelAndView.addObject("league", leagueService.get(id));
         return modelAndView;
     }

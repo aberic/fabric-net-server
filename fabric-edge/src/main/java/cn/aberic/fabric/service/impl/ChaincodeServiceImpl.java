@@ -190,7 +190,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
                     ca, chainCodeMapper.get(chaincodeId).getCc());
             switch (intent) {
                 case INSTALL:
-                    jsonObject = manager.install(chainCodeMapper.get(chaincodeId).getVersion());
+                    jsonObject = manager.install();
                     break;
                 case INSTANTIATE:
                     jsonObject = manager.instantiate(args);

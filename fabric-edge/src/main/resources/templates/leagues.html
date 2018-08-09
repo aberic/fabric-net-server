@@ -59,7 +59,6 @@
                                         <th class="w-1">ID</th>
                                         <th th:text="#{name}"></th>
                                         <th th:text="#{org_count}"></th>
-                                        <th th:text="#{league_version}"></th>
                                         <th th:text="#{date}"></th>
                                         <th th:text="#{operate}"></th>
                                     </tr>
@@ -71,7 +70,6 @@
                                         </td>
                                         <td class="text-inherit" th:text="${league.name}">联盟名称</td>
                                         <td th:text="${league.orgCount}">组织数量</td>
-                                        <td th:text="${league.version}">Fabric版本</td>
                                         <td th:text="${league.date}">时间</td>
                                         <td>
                                             <a th:href="@{/league/edit(id=${league.id})}"

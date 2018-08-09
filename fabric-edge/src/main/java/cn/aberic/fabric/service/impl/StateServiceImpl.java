@@ -41,8 +41,6 @@ import java.util.List;
 public class StateServiceImpl implements StateService, BaseService {
 
     @Resource
-    private LeagueMapper leagueMapper;
-    @Resource
     private AppMapper appMapper;
     @Resource
     private OrgMapper orgMapper;
@@ -101,10 +99,7 @@ public class StateServiceImpl implements StateService, BaseService {
                     jsonObject = manager.invoke(fcn, argArray);
                     break;
                 case QUERY:
-                    if (StringUtils.isEmpty(CacheUtil.getString(cc))) {
-                        CacheUtil.putString(cc, leagueMapper.get(orgMapper.get(peerMapper.get(ca.getPeerId()).getOrgId()).getLeagueId()).getVersion());
-                    }
-                    jsonObject = manager.query(fcn, argArray, CacheUtil.getString(cc));
+                    jsonObject = manager.query(fcn, argArray);
                     break;
             }
             return jsonObject.toJSONString();
