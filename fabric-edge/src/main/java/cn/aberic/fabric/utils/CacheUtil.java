@@ -42,9 +42,11 @@ public class CacheUtil {
     private static Cache<String, Boolean> cacheAppBool = CacheBuilder.newBuilder().maximumSize(20)
             .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
+    /** 存储 cc，fabric-manager*/
     private static Cache<String, FabricManager> cacheStringFabric = CacheBuilder.newBuilder().maximumSize(10)
             .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
+    /** 存储 channelId，fabric-manager*/
     private static Cache<Integer, FabricManager> cacheIntegerFabric = CacheBuilder.newBuilder().maximumSize(10)
             .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
