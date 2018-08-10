@@ -31,24 +31,24 @@ import java.util.concurrent.TimeUnit;
 
 public class CacheUtil {
 
-    private static Cache<String, String> cacheString = CacheBuilder.newBuilder().maximumSize(10)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<String, String> cacheString = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     /** 存储 flag，ca */
-    private static Cache<String, CA> cacheFlagCA = CacheBuilder.newBuilder().maximumSize(20)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<String, CA> cacheFlagCA = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     /** 存储 app，bool */
-    private static Cache<String, Boolean> cacheAppBool = CacheBuilder.newBuilder().maximumSize(20)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<String, Boolean> cacheAppBool = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     /** 存储 cc，fabric-manager*/
-    private static Cache<String, FabricManager> cacheStringFabric = CacheBuilder.newBuilder().maximumSize(10)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<String, FabricManager> cacheStringFabric = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     /** 存储 channelId，fabric-manager*/
-    private static Cache<Integer, FabricManager> cacheIntegerFabric = CacheBuilder.newBuilder().maximumSize(10)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<Integer, FabricManager> cacheIntegerFabric = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     public static void putString(String key, String value) {
         cacheString.put(key, value);
