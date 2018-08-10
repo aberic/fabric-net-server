@@ -34,17 +34,17 @@ public interface UserMapper {
     @Update("update user set password=#{u.password} where username=#{u.username}")
     int update(@Param("u")User user);
 
-    @Select("select rowid,username,password from user where username=#{username}")
+    @Select("select id,username,password from user where username=#{username}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "username", column = "username"),
             @Result(property = "password", column = "password")
     })
     User get(@Param("username") String username);
 
-    @Select("select rowid,username,password from user")
+    @Select("select id,username,password from user")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "username", column = "username"),
             @Result(property = "password", column = "password")
     })

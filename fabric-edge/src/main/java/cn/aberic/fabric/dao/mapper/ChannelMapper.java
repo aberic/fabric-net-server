@@ -33,7 +33,7 @@ public interface ChannelMapper {
     int add(@Param("c") Channel channel);
 
     @Update("update channel set name=#{c.name}, block_listener=#{c.blockListener}, " +
-            "callback_location=#{c.callbackLocation} where rowid=#{c.id}")
+            "callback_location=#{c.callbackLocation} where id=#{c.id}")
     int update(@Param("c") Channel channel);
 
     @Select("select count(name) from channel where peer_id=#{id}")
@@ -42,15 +42,15 @@ public interface ChannelMapper {
     @Select("select count(name) from channel")
     int countAll();
 
-    @Delete("delete from channel where rowid=#{id}")
+    @Delete("delete from channel where id=#{id}")
     int delete(@Param("id") int id);
 
     @Delete("delete from channel where peer_id=#{peerId}")
     int deleteAll(@Param("peerId") int peerId);
 
-    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel where name=#{c.name} and peer_id=#{c.peerId}")
+    @Select("select id,name,block_listener,callback_location,peer_id,date from channel where name=#{c.name} and peer_id=#{c.peerId}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "blockListener", column = "block_listener"),
             @Result(property = "callbackLocation", column = "callback_location"),
@@ -59,9 +59,9 @@ public interface ChannelMapper {
     })
     Channel check(@Param("c") Channel channel);
 
-    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel where rowid=#{id}")
+    @Select("select id,name,block_listener,callback_location,peer_id,date from channel where id=#{id}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "blockListener", column = "block_listener"),
             @Result(property = "callbackLocation", column = "callback_location"),
@@ -70,9 +70,9 @@ public interface ChannelMapper {
     })
     Channel get(@Param("id") int id);
 
-    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel where peer_id=#{id}")
+    @Select("select id,name,block_listener,callback_location,peer_id,date from channel where peer_id=#{id}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "blockListener", column = "block_listener"),
             @Result(property = "callbackLocation", column = "callback_location"),
@@ -81,9 +81,9 @@ public interface ChannelMapper {
     })
     List<Channel> list(@Param("id") int id);
 
-    @Select("select rowid,name,block_listener,callback_location,peer_id,date from channel")
+    @Select("select id,name,block_listener,callback_location,peer_id,date from channel")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "blockListener", column = "block_listener"),
             @Result(property = "callbackLocation", column = "callback_location"),
