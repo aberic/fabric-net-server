@@ -64,6 +64,8 @@ public class CommonController {
     private AppService appService;
     @Resource
     private TraceService traceService;
+    @Resource
+    private BlockService blockService;
 
     @GetMapping(value = "index")
     public ModelAndView index() {
@@ -122,6 +124,7 @@ public class CommonController {
         for (int i = 0; i < blocks.size(); i++) {
             blocks.get(i).setIndex(i + 1);
         }
+
         modelAndView.addObject("leagueCount", leagueCount);
         modelAndView.addObject("orgCount", orgCount);
         modelAndView.addObject("ordererCount", ordererCount);
@@ -131,6 +134,12 @@ public class CommonController {
         modelAndView.addObject("chaincodeCount", chaincodeCount);
         modelAndView.addObject("appCount", appCount);
         modelAndView.addObject("blocks", blocks);
+        //中间统计模块开始
+        modelAndView.addObject("channelPercents", blockService.getChannelPercents(channels));
+        modelAndView.addObject("channelBlockList", blockService.getChannelBlockLists(channels));
+        modelAndView.addObject("dayStatistics", blockService.getDayStatistics());
+        modelAndView.addObject("platform", blockService.getPlatform());
+        //中间统计模块结束
 
         return modelAndView;
     }
