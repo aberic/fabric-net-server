@@ -48,10 +48,16 @@ public class BlockServiceImpl implements BlockService {
     public List<ChannelPercent> getChannelPercents(List<Channel> channels) {
         List<ChannelPercent> channelPercents = new LinkedList<>();
         for (Channel channel: channels) {
+            int txCount = 0;
+            try {
+                txCount = blockMapper.countTxByChannelId(channel.getId());
+            } catch (Exception ignored) {
+
+            }
             ChannelPercent channelPercent = new ChannelPercent();
             channelPercent.setName(channel.getName());
             channelPercent.setBlockPercent(blockMapper.countByChannelId(channel.getId()));
-            channelPercent.setTxPercent(blockMapper.countTxByChannelId(channel.getId()));
+            channelPercent.setTxPercent(txCount);
             channelPercents.add(channelPercent);
         }
         return channelPercents;
@@ -89,23 +95,45 @@ public class BlockServiceImpl implements BlockService {
     public DayStatistics getDayStatistics() {
         int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd"));
         int todayBlocks = blockMapper.countByDate(today);
-        int todayTxs = blockMapper.countTxByDate(today);
+        int todayTxs = 0;
+        int allTxs = 0;
+        try {
+            todayTxs = blockMapper.countTxByDate(today);
+        } catch (Exception ignored) {
+
+        }
+        try {
+            allTxs = blockMapper.countTx();
+        } catch (Exception ignored) {
+
+        }
         int allBlocks = blockMapper.count();
-        int allTxs = blockMapper.countTx();
         DayStatistics dayStatistics = new DayStatistics();
         dayStatistics.setBlockCount(todayBlocks);
         dayStatistics.setTxCount(todayTxs);
-        dayStatistics.setBlockPercent((1 - todayBlocks/allBlocks) * 100);
-        dayStatistics.setTxPercent((1 - todayTxs/allTxs) * 100);
+        dayStatistics.setBlockPercent(todayBlocks == 0 ? 0 : (1 - todayBlocks/allBlocks) * 100);
+        dayStatistics.setTxPercent(todayTxs == 0 ? 0 : (1 - todayTxs/allTxs) * 100);
         return dayStatistics;
     }
 
     @Override
     public Platform getPlatform() {
+        int txCount = 0;
+        int rwSetCount = 0;
+        try {
+            txCount = blockMapper.countTx();
+        } catch (Exception ignored) {
+
+        }
+        try {
+            rwSetCount = blockMapper.countRWSet();
+        } catch (Exception ignored) {
+
+        }
         Platform platform = new Platform();
         platform.setBlockCount(blockMapper.count());
-        platform.setTxCount(blockMapper.countTx());
-        platform.setRwSetCount(blockMapper.countRWSet());
+        platform.setTxCount(txCount);
+        platform.setRwSetCount(rwSetCount);
         return platform;
     }
 
