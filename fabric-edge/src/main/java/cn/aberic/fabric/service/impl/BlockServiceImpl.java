@@ -1,0 +1,112 @@
+/*
+ * Copyright (c) 2018. Aberic - All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package cn.aberic.fabric.service.impl;
+
+import cn.aberic.fabric.bean.*;
+import cn.aberic.fabric.dao.Block;
+import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.mapper.BlockMapper;
+import cn.aberic.fabric.service.BlockService;
+import cn.aberic.fabric.utils.DateUtil;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * 描述：
+ *
+ * @author : Aberic 【2018-08-10 16:24】
+ */
+@Service("blockService")
+public class BlockServiceImpl implements BlockService {
+
+    @Resource
+    private BlockMapper blockMapper;
+
+    @Override
+    public int add(Block block) {
+        return blockMapper.add(block);
+    }
+
+    @Override
+    public List<ChannelPercent> getChannelPercents(List<Channel> channels) {
+        List<ChannelPercent> channelPercents = new LinkedList<>();
+        for (Channel channel: channels) {
+            ChannelPercent channelPercent = new ChannelPercent();
+            channelPercent.setName(channel.getName());
+            channelPercent.setBlockPercent(blockMapper.countByChannelId(channel.getId()));
+            channelPercent.setTxPercent(blockMapper.countTxByChannelId(channel.getId()));
+            channelPercents.add(channelPercent);
+        }
+        return channelPercents;
+    }
+
+    @Override
+    public List<ChannelBlockList> getChannelBlockLists(List<Channel> channels) {
+        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd"));
+        List<ChannelBlockList> channelBlockLists = new LinkedList<>();
+        List<ChannelBlock> channelBlocks = new LinkedList<>();
+        for (Channel channel: channels) {
+            int zeroCount = 0;
+            for (int i = 0; i < 20; i++) {
+                int date = today - i;
+                int blockCount = blockMapper.countByChannelIdAndDate(channel.getId(), date);
+                if (blockCount == 0) {
+                    zeroCount++;
+                }
+                ChannelBlock channelBlock = new ChannelBlock();
+                channelBlock.setName(channel.getName());
+                channelBlock.setBlocks(blockCount);
+                channelBlock.setDate(String.valueOf(date));
+                channelBlocks.add(channelBlock);
+            }
+            ChannelBlockList channelBlockList = new ChannelBlockList();
+            channelBlockList.setChannelBlocks(channelBlocks);
+            channelBlockList.setZeroCount(zeroCount);
+            channelBlockLists.add(channelBlockList);
+        }
+        channelBlockLists.sort((t1, t2) -> Math.toIntExact(t2.getZeroCount() - t1.getZeroCount()));
+        return channelBlockLists;
+    }
+
+    @Override
+    public DayStatistics getDayStatistics() {
+        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd"));
+        int todayBlocks = blockMapper.countByDate(today);
+        int todayTxs = blockMapper.countTxByDate(today);
+        int allBlocks = blockMapper.count();
+        int allTxs = blockMapper.countTx();
+        DayStatistics dayStatistics = new DayStatistics();
+        dayStatistics.setBlockCount(todayBlocks);
+        dayStatistics.setTxCount(todayTxs);
+        dayStatistics.setBlockPercent((1 - todayBlocks/allBlocks) * 100);
+        dayStatistics.setTxPercent((1 - todayTxs/allTxs) * 100);
+        return dayStatistics;
+    }
+
+    @Override
+    public Platform getPlatform() {
+        Platform platform = new Platform();
+        platform.setBlockCount(blockMapper.count());
+        platform.setTxCount(blockMapper.countTx());
+        platform.setRwSetCount(blockMapper.countRWSet());
+        return platform;
+    }
+
+}

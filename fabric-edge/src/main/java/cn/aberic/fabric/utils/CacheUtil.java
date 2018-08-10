@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.dao.mapper.CAMapper;
 import cn.aberic.fabric.dao.mapper.PeerMapper;
+import cn.aberic.fabric.sdk.FabricManager;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -30,16 +31,24 @@ import java.util.concurrent.TimeUnit;
 
 public class CacheUtil {
 
-    private static Cache<String, String> cacheString = CacheBuilder.newBuilder().maximumSize(10)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<String, String> cacheString = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     /** 存储 flag，ca */
-    private static Cache<String, CA> cacheFlagCA = CacheBuilder.newBuilder().maximumSize(20)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<String, CA> cacheFlagCA = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     /** 存储 app，bool */
-    private static Cache<String, Boolean> cacheAppBool = CacheBuilder.newBuilder().maximumSize(20)
-            .expireAfterAccess(30, TimeUnit.MINUTES).build();
+    private static Cache<String, Boolean> cacheAppBool = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
+
+    /** 存储 cc，fabric-manager*/
+    private static Cache<String, FabricManager> cacheStringFabric = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
+
+    /** 存储 channelId，fabric-manager*/
+    private static Cache<Integer, FabricManager> cacheIntegerFabric = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     public static void putString(String key, String value) {
         cacheString.put(key, value);
@@ -116,6 +125,39 @@ public class CacheUtil {
 
     public static void removeAppBool(String key) {
         cacheAppBool.invalidate(key);
+    }
+
+
+    public static void putStringFabric(String key, FabricManager value) {
+        cacheStringFabric.put(key, value);
+    }
+
+    public static FabricManager getStringFabric(String key) {
+        try {
+            return cacheStringFabric.getIfPresent(key);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void removeStringFabric(String key) {
+        cacheStringFabric.invalidate(key);
+    }
+
+    public static void putIntegerFabric(int key, FabricManager value) {
+        cacheIntegerFabric.put(key, value);
+    }
+
+    public static FabricManager getIntegerFabric(int key) {
+        try {
+            return cacheIntegerFabric.getIfPresent(key);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void removeIntegerFabric(int key) {
+        cacheIntegerFabric.invalidate(key);
     }
 
 }

@@ -24,9 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 描述：
@@ -37,9 +35,6 @@ import java.util.Map;
 public class FabricHelper {
 
     private static FabricHelper instance;
-
-    private final Map<Integer, FabricManager> channelManagerMap;
-    private final Map<String, FabricManager> chaincodeManagerMap;
 
     public static FabricHelper obtain() {
         if (null == instance) {
@@ -53,8 +48,6 @@ public class FabricHelper {
     }
 
     private FabricHelper() {
-        channelManagerMap = new LinkedHashMap<>();
-        chaincodeManagerMap = new LinkedHashMap<>();
     }
 
     public void removeChaincodeManager(List<Peer> peers, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper) {
@@ -72,24 +65,24 @@ public class FabricHelper {
 
     public void removeChaincodeManager(List<Chaincode> chaincodes) {
         for (Chaincode chaincode : chaincodes) {
-            chaincodeManagerMap.remove(chaincode.getCc());
+            CacheUtil.removeStringFabric(chaincode.getCc());
         }
     }
 
     public void removeChaincodeManager(String cc) {
-        chaincodeManagerMap.remove(cc);
+        CacheUtil.removeStringFabric(cc);
     }
 
     private void removeChannelManager(int channelId) {
-        channelManagerMap.remove(channelId);
+        CacheUtil.removeIntegerFabric(channelId);
     }
 
     public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, String cc) throws Exception {
         // 尝试从缓存中获取fabricManager
-        FabricManager fabricManager = chaincodeManagerMap.get(cc);
+        FabricManager fabricManager = CacheUtil.getStringFabric(cc);
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
-            synchronized (chaincodeManagerMap) {
+            synchronized (CacheUtil.class) {
                 Chaincode chaincode = chaincodeMapper.getByCC(cc);
                 log.debug(String.format("chaincode = %s", chaincode.toString()));
                 Channel channel = channelMapper.get(chaincode.getChannelId());
@@ -103,7 +96,7 @@ public class FabricHelper {
                 log.debug(String.format("org = %s", org.toString()));
                 if (orderers.size() != 0 && peers.size() != 0 && null != ca) {
                     fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca, cc);
-                    chaincodeManagerMap.put(cc, fabricManager);
+                    CacheUtil.putStringFabric(cc, fabricManager);
                 }
             }
         }
@@ -116,9 +109,9 @@ public class FabricHelper {
     public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, int channelId) throws Exception {
         // 尝试从缓存中获取fabricManager
-        FabricManager fabricManager = channelManagerMap.get(channelId);
+        FabricManager fabricManager = CacheUtil.getIntegerFabric(channelId);
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
-            synchronized (channelManagerMap) {
+            synchronized (CacheUtil.class) {
                 Channel channel = channelMapper.get(channelId);
                 log.debug(String.format("channel = %s", channel.toString()));
                 Peer peer = peerMapper.get(channel.getPeerId());
@@ -129,7 +122,7 @@ public class FabricHelper {
                 Org org = orgMapper.get(orgId);
                 if (orderers.size() != 0 && peers.size() != 0) {
                     fabricManager = createFabricManager(org, channel, null, orderers, peers, ca, String.valueOf(channelId));
-                    channelManagerMap.put(channelId, fabricManager);
+                    CacheUtil.putIntegerFabric(channelId, fabricManager);
                 }
             }
         }

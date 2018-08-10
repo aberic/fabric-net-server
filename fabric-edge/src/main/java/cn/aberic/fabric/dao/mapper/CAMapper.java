@@ -32,10 +32,10 @@ public interface CAMapper {
             "(#{c.name},#{c.skPath},#{c.certificatePath},#{c.tls},#{c.flag},#{c.peerId},#{c.date})")
     int add(@Param("c") CA ca);
 
-    @Update("update ca set name=#{c.name},sk_path=#{c.skPath},certificate_path=#{c.certificatePath},tls=#{c.tls},flag=#{c.flag} where rowid=#{c.id}")
+    @Update("update ca set name=#{c.name},sk_path=#{c.skPath},certificate_path=#{c.certificatePath},tls=#{c.tls},flag=#{c.flag} where id=#{c.id}")
     int update(@Param("c") CA ca);
 
-    @Update("update ca set name=#{c.name},tls=#{c.tls},flag=#{c.flag} where rowid=#{c.id}")
+    @Update("update ca set name=#{c.name},tls=#{c.tls},flag=#{c.flag} where id=#{c.id}")
     int updateWithNoFile(@Param("c") CA ca);
 
     @Select("select count(name) from ca where peer_id=#{id}")
@@ -44,15 +44,15 @@ public interface CAMapper {
     @Select("select count(name) from ca")
     int countAll();
 
-    @Delete("delete from ca where rowid=#{id}")
+    @Delete("delete from ca where id=#{id}")
     int delete(@Param("id") int id);
 
     @Delete("delete from ca where peer_id=#{peerId}")
     int deleteAll(@Param("peerId") int peerId);
 
-    @Select("select rowid,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where name=#{c.name} and peer_id=#{c.peerId}")
+    @Select("select id,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where name=#{c.name} and peer_id=#{c.peerId}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
@@ -63,9 +63,9 @@ public interface CAMapper {
     })
     CA check(@Param("c") CA ca);
 
-    @Select("select rowid,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where rowid=#{id}")
+    @Select("select id,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where id=#{id}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
@@ -76,9 +76,9 @@ public interface CAMapper {
     })
     CA get(@Param("id") int id);
 
-    @Select("select rowid,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where flag=#{flag}")
+    @Select("select id,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where flag=#{flag}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
@@ -89,9 +89,9 @@ public interface CAMapper {
     })
     CA getByFlag(@Param("flag") String flag);
 
-    @Select("select rowid,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where peer_id=#{id}")
+    @Select("select id,name,sk_path,certificate_path,tls,flag,peer_id,date from ca where peer_id=#{id}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),
@@ -102,9 +102,9 @@ public interface CAMapper {
     })
     List<CA> list(@Param("id") int id);
 
-    @Select("select rowid,name,sk_path,certificate_path,tls,flag,peer_id,date from ca")
+    @Select("select id,name,sk_path,certificate_path,tls,flag,peer_id,date from ca")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
             @Result(property = "skPath", column = "sk_path"),
             @Result(property = "certificatePath", column = "certificate_path"),

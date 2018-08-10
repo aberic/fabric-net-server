@@ -33,7 +33,7 @@ public interface OrgMapper {
     int add(@Param("o") Org org);
 
     @Update("update org set tls=#{o.tls}, msp_id=#{o.mspId}, league_id=#{o.leagueId}" +
-            " where rowid=#{o.id}")
+            " where id=#{o.id}")
     int update(@Param("o") Org org);
 
     @Select("select count(msp_id) from org where league_id=#{id}")
@@ -42,15 +42,15 @@ public interface OrgMapper {
     @Select("select count(msp_id) from org")
     int countAll();
 
-    @Delete("delete from org where rowid=#{id}")
+    @Delete("delete from org where id=#{id}")
     int delete(@Param("id") int id);
 
     @Delete("delete from org where league_id=#{leagueId}")
     int deleteAll(@Param("leagueId") int leagueId);
 
-    @Select("select rowid,tls,msp_id,league_id,date from org where rowid=#{id}")
+    @Select("select id,tls,msp_id,league_id,date from org where id=#{id}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "tls", column = "tls"),
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "leagueId", column = "league_id"),
@@ -58,9 +58,9 @@ public interface OrgMapper {
     })
     Org get(@Param("id") int id);
 
-    @Select("select rowid,tls,msp_id,league_id,date from org where league_id=#{id}")
+    @Select("select id,tls,msp_id,league_id,date from org where league_id=#{id}")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "tls", column = "tls"),
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "leagueId", column = "league_id"),
@@ -68,9 +68,9 @@ public interface OrgMapper {
     })
     List<Org> list(@Param("id") int id);
 
-    @Select("select rowid,tls,msp_id,league_id,date from org")
+    @Select("select id,tls,msp_id,league_id,date from org")
     @Results({
-            @Result(property = "id", column = "rowid"),
+            @Result(property = "id", column = "id"),
             @Result(property = "tls", column = "tls"),
             @Result(property = "mspId", column = "msp_id"),
             @Result(property = "leagueId", column = "league_id"),
