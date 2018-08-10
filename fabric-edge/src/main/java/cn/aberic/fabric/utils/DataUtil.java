@@ -16,11 +16,9 @@
 
 package cn.aberic.fabric.utils;
 
-import cn.aberic.fabric.bean.Block;
-import cn.aberic.fabric.bean.Trace;
+import cn.aberic.fabric.bean.*;
 import cn.aberic.fabric.dao.Channel;
-import cn.aberic.fabric.service.PeerService;
-import cn.aberic.fabric.service.TraceService;
+import cn.aberic.fabric.service.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -47,7 +45,45 @@ public class DataUtil {
         return instance;
     }
 
-    public List<Block> home(List<Channel> channels, PeerService peerService, TraceService traceService) {
+    public Home home(LeagueService leagueService, OrgService orgService, OrdererService ordererService,
+                     PeerService peerService, CAService caService, ChannelService channelService,
+                     ChaincodeService chaincodeService, AppService appService, TraceService traceService,
+                     BlockService blockService) {
+        int leagueCount  = leagueService.listAll().size();
+        int orgCount = orgService.count();
+        int ordererCount = ordererService.count();
+        int peerCount = peerService.count();
+        int caCount = caService.count();
+        int channelCount = channelService.count();
+        int chaincodeCount = chaincodeService.count();
+        int appCount = appService.count();
+        List<Channel> channels = channelService.listAll();
+        List<Block> blocks = blocks(channels, peerService, traceService);
+        List<ChannelPercent> channelPercents = blockService.getChannelPercents(channels);
+        List<ChannelBlockList> channelBlockLists = blockService.getChannelBlockLists(channels);
+        DayStatistics dayStatistics = blockService.getDayStatistics();
+        Platform platform = blockService.getPlatform();
+
+        Home home = new Home();
+        home.setLeagueCount(leagueCount);
+        home.setOrgCount(orgCount);
+        home.setOrdererCount(ordererCount);
+        home.setPeerCount(peerCount);
+        home.setCaCount(caCount);
+        home.setChannelCount(channelCount);
+        home.setChaincodeCount(chaincodeCount);
+        home.setAppCount(appCount);
+        home.setChannels(channels);
+        home.setBlocks(blocks);
+        home.setChannelPercents(channelPercents);
+        home.setChannelBlockLists(channelBlockLists);
+        home.setDayStatistics(dayStatistics);
+        home.setPlatform(platform);
+        CacheUtil.putHome(home);
+        return home;
+    }
+
+    private List<Block> blocks(List<Channel> channels, PeerService peerService, TraceService traceService) {
         List<Block> blocks = new ArrayList<>();
         for (Channel channel : channels) {
             try {
@@ -84,7 +120,6 @@ public class DataUtil {
         for (int i = 0; i < blocks.size(); i++) {
             blocks.get(i).setIndex(i + 1);
         }
-        CacheUtil.putHome(blocks);
         return blocks;
     }
 }

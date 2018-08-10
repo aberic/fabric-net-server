@@ -17,7 +17,7 @@
 package cn.aberic.fabric.utils;
 
 import cn.aberic.fabric.bean.App;
-import cn.aberic.fabric.bean.Block;
+import cn.aberic.fabric.bean.Home;
 import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.AppMapper;
@@ -52,7 +52,7 @@ public class CacheUtil {
             .expireAfterAccess(12, TimeUnit.HOURS).build();
 
     /** 存储 channelId，fabric-manager*/
-    private static Cache<String, List<Block>> cacheHome = CacheBuilder.newBuilder().maximumSize(1)
+    private static Cache<String, Home> cacheHome = CacheBuilder.newBuilder().maximumSize(1)
             .expireAfterAccess(5, TimeUnit.MINUTES).build();
 
     public static void putString(String key, String value) {
@@ -165,11 +165,11 @@ public class CacheUtil {
         cacheIntegerFabric.invalidate(key);
     }
 
-    public static void putHome(List<Block> value) {
+    public static void putHome(Home value) {
         cacheHome.put("do-home-cache", value);
     }
 
-    public static List<Block> getHome() {
+    public static Home getHome() {
         try {
             return cacheHome.getIfPresent("do-home-cache");
         } catch (Exception e) {

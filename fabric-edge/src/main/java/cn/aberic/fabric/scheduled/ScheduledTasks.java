@@ -16,17 +16,13 @@
 
 package cn.aberic.fabric.scheduled;
 
-import cn.aberic.fabric.dao.Channel;
-import cn.aberic.fabric.service.ChannelService;
-import cn.aberic.fabric.service.PeerService;
-import cn.aberic.fabric.service.TraceService;
+import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.DataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 描述：
@@ -38,18 +34,34 @@ import java.util.List;
 public class ScheduledTasks {
 
     @Resource
+    private LeagueService leagueService;
+    @Resource
+    private OrgService orgService;
+    @Resource
+    private OrdererService ordererService;
+    @Resource
     private PeerService peerService;
+    @Resource
+    private CAService caService;
     @Resource
     private ChannelService channelService;
     @Resource
+    private ChaincodeService chaincodeService;
+    @Resource
+    private AppService appService;
+    @Resource
     private TraceService traceService;
+    @Resource
+    private BlockService blockService;
 
     //fixedDelay = x 表示当前方法执行完毕x ms后，Spring scheduling会再次调用该方法
     @Scheduled(fixedDelay = 15000)
     public void homeUpgrade() {
-        List<Channel> channels = channelService.listAll();
-        DataUtil.obtain().home(channels, peerService, traceService);
-        log.info("===home upgrade===");
+        log.debug("===============>>>>>>>>>>home upgrade start<<<<<<<<<<===============");
+        DataUtil.obtain().home(leagueService, orgService, ordererService,
+                peerService, caService, channelService, chaincodeService,
+                appService, traceService, blockService);
+        log.debug("===============>>>>>>>>>>home upgrade end<<<<<<<<<<===============");
     }
 
 }

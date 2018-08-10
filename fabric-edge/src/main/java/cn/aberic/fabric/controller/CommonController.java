@@ -16,8 +16,7 @@
 
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.bean.Block;
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.bean.Home;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.CacheUtil;
@@ -28,7 +27,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 描述：
@@ -65,44 +63,29 @@ public class CommonController {
     @GetMapping(value = "index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("index");
-        int leagueCount;
-        int orgCount;
-        int ordererCount;
-        int peerCount;
-        int caCount;
-        int channelCount;
-        int chaincodeCount;
-        int appCount;
-        leagueCount = leagueService.listAll().size();
-        orgCount = orgService.count();
-        ordererCount = ordererService.count();
-        peerCount = peerService.count();
-        caCount = caService.count();
-        channelCount = channelService.count();
-        chaincodeCount = chaincodeService.count();
-        appCount = appService.count();
 
-        List<Channel> channels = channelService.listAll();
-
-        List<Block> blocks = CacheUtil.getHome();
-        if (null == blocks) {
-            blocks = DataUtil.obtain().home(channels, peerService, traceService);
+        Home home = CacheUtil.getHome();
+        if (null == home) {
+            home = DataUtil.obtain().home(leagueService, orgService, ordererService,
+                    peerService, caService, channelService, chaincodeService,
+                    appService, traceService, blockService);
+            CacheUtil.putHome(home);
         }
 
-        modelAndView.addObject("leagueCount", leagueCount);
-        modelAndView.addObject("orgCount", orgCount);
-        modelAndView.addObject("ordererCount", ordererCount);
-        modelAndView.addObject("peerCount", peerCount);
-        modelAndView.addObject("caCount", caCount);
-        modelAndView.addObject("channelCount", channelCount);
-        modelAndView.addObject("chaincodeCount", chaincodeCount);
-        modelAndView.addObject("appCount", appCount);
-        modelAndView.addObject("blocks", blocks);
+        modelAndView.addObject("leagueCount", home.getLeagueCount());
+        modelAndView.addObject("orgCount", home.getOrgCount());
+        modelAndView.addObject("ordererCount", home.getOrdererCount());
+        modelAndView.addObject("peerCount", home.getPeerCount());
+        modelAndView.addObject("caCount", home.getCaCount());
+        modelAndView.addObject("channelCount", home.getChannelCount());
+        modelAndView.addObject("chaincodeCount", home.getChaincodeCount());
+        modelAndView.addObject("appCount", home.getAppCount());
+        modelAndView.addObject("blocks", home.getBlocks());
         //中间统计模块开始
-        modelAndView.addObject("channelPercents", blockService.getChannelPercents(channels));
-        modelAndView.addObject("channelBlockList", blockService.getChannelBlockLists(channels));
-        modelAndView.addObject("dayStatistics", blockService.getDayStatistics());
-        modelAndView.addObject("platform", blockService.getPlatform());
+        modelAndView.addObject("channelPercents", home.getChannelPercents());
+        modelAndView.addObject("channelBlockList", home.getChannelBlockLists());
+        modelAndView.addObject("dayStatistics", home.getDayStatistics());
+        modelAndView.addObject("platform", home.getPlatform());
         //中间统计模块结束
 
         return modelAndView;
