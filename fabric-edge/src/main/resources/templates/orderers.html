@@ -75,6 +75,7 @@
                                             <a th:href="@{/orderer/edit(id=${orderer.id})}"
                                                class="btn btn-secondary btn-sm" th:text="#{edit}"></a>
                                             <a th:href="@{/orderer/delete(id=${orderer.id})}"
+                                               onclick="return doDelete()"
                                                class="btn btn-secondary btn-sm" th:text="#{delete}"></a>
                                         </td>
                                     </tr>
@@ -90,6 +91,12 @@
     <div th:include="fns_footer :: footer"></div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+<script>
+    function doDelete(){
+        var c = confirm("是否删除？")
+        return c
+    }
+</script>
 </body>
 
 </html>

@@ -94,11 +94,13 @@
                                             <a th:href="@{/app/refresh(id=${app.id}, chaincodeId=${chaincodeId})}"
                                                class="btn btn-secondary btn-sm" th:text="#{refresh}"></a>
                                             <a th:href="@{/app/delete(id=${app.id}, chaincodeId=${chaincodeId})}"
+                                               onclick="return doDelete()"
                                                class="btn btn-secondary btn-sm" th:text="#{delete}"></a>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>
@@ -109,6 +111,12 @@
     <div th:include="fns_footer :: footer"></div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+<script>
+    function doDelete(){
+        var c = confirm("是否删除？")
+        return c
+    }
+</script>
 </body>
 
 </html>
