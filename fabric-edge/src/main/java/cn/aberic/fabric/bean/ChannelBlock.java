@@ -28,7 +28,6 @@ import lombok.Setter;
 @Getter
 public class ChannelBlock {
 
-    private String name;
     private int blocks;
     private String date;
 

@@ -77,12 +77,12 @@ public class BlockServiceImpl implements BlockService {
                     zeroCount++;
                 }
                 ChannelBlock channelBlock = new ChannelBlock();
-                channelBlock.setName(channel.getName());
                 channelBlock.setBlocks(blockCount);
                 channelBlock.setDate(String.valueOf(date));
                 channelBlocks.add(channelBlock);
             }
             ChannelBlockList channelBlockList = new ChannelBlockList();
+            channelBlockList.setName(channel.getName());
             channelBlockList.setChannelBlocks(channelBlocks);
             channelBlockList.setZeroCount(zeroCount);
             channelBlockLists.add(channelBlockList);
