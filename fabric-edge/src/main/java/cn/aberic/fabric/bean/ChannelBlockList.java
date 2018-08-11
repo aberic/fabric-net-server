@@ -31,6 +31,7 @@ import java.util.List;
 public class ChannelBlockList {
 
     private int zeroCount;
+    private String name;
     private List<ChannelBlock> channelBlocks;
 
 }
