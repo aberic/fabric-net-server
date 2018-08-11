@@ -192,16 +192,16 @@
                             <div class="card-header">
                                 <h3 class="card-title" th:text="通道区块交易曲线"> </h3>
                             </div>
-                            <div id="chart-development-activity" th:json-data="${channelPercents}" style="height: 10rem"></div>
+                            <div id="chart-development-activity" th:json-data="${channelBlockLists}" style="height: 10rem"></div>
                             <div class="table-responsive">
                                 <!-- -->
                                 <table class="table card-table table-striped table-vcenter">
                                     <thead>
                                     <tr>
-                                        <th colspan="2">User</th>
-                                        <th>Commit</th>
-                                        <th>Date</th>
-                                        <th></th>
+                                        <th colspan="2">HEIGHT</th>
+                                        <th>CHANNEL NAME</th>
+                                        <th>TXS</th>
+                                        <th>DATE</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -221,6 +221,7 @@
                     </div>
 
                     <div class="col-md-6">
+                        <div hidden th:percentData="${channelPercents}" id="percentData"></div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="card">
@@ -243,30 +244,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="h5">平台今日区块数</div>
-                                        <div class="display-4 font-weight-bold mb-4">62</div>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-red" style="width: 28%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <div class="h5">平台今日交易量</div>
-                                        <div class="display-4 font-weight-bold mb-4">$652</div>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-green" style="width: 84%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="row">-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<div class="card">-->
+                                    <!--<div class="card-body text-center">-->
+                                        <!--<div class="h5">平台今日区块数</div>-->
+                                        <!--<div class="display-4 font-weight-bold mb-4">62</div>-->
+                                        <!--<div class="progress progress-sm">-->
+                                            <!--<div class="progress-bar bg-red" style="width: 28%"></div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<div class="card">-->
+                                    <!--<div class="card-body text-center">-->
+                                        <!--<div class="h5">平台今日交易量</div>-->
+                                        <!--<div class="display-4 font-weight-bold mb-4">$652</div>-->
+                                        <!--<div class="progress progress-sm">-->
+                                            <!--<div class="progress-bar bg-green" style="width: 84%"></div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
                     </div>
 
                 </div>
@@ -315,11 +316,13 @@
                 initChannelTradeChart()
 
 
+                var channelPercentsStr = $("#percentData").attr("percentData");
+                var channelPercents = JSON.parse(channelPercentsStr);
                 //区块通道比
-                chart2()
+                chart2(channelPercents)
 
 
-                chart3()
+                chart3(channelPercents)
 
 
 
@@ -329,18 +332,29 @@
 
             //    通道区块交易曲线
             var initChannelTradeChart = function () {
-
                 var channelPercentsStr = $("#chart-development-activity").attr("json-data")
-
                 var channelPercents = JSON.parse(channelPercentsStr);
+                let array = [];
+
+                for (let v of channelPercents){
+                    let a = []
+                    a.push(v.name)
+                    for (let c of v.channelBlocks){
+                        if(c.blocks){
+                            a.push(c.blocks)
+                        }
+                    }
+                    array.push(a)
+                }
 
                 var chart = c3.generate({
                     bindto: '#chart-development-activity', // id of chart wrapper
                     data: {
-                        columns: [
-                            // each columns data
-                            ['data1', 0, 5, 1, 2, 7, 5, 6, 8, 24, 7, 12, 5, 6, 3, 2, 2, 6, 30, 10, 10, 15, 14, 47, 65, 55]
-                        ],
+                        columns: array,
+//                                [
+//                            // each columns data
+//                            ['data1', 0, 5, 1, 2, 7, 5, 6, 8, 24, 7, 12, 5, 6, 3, 2, 2, 6, 30, 10, 10, 15, 14, 47, 65, 55]
+//                        ],
                         type: 'area', // default type of chart
                         groups: [
                             ['data1', 'data2', 'data3']
@@ -401,15 +415,21 @@
 
 
             //通道区块比
-            var chart2 = function () {
+            var chart2 = function (data) {
+
+                let array = []
+                for(let c of data){
+                    let val = []
+                    val.push(c.name)
+                    val.push(c.blockPercent)
+                    array.push(val)
+                }
+
+
                 var chart = c3.generate({
                     bindto: '#chart-donut', // id of chart wrapper
                     data: {
-                        columns: [
-                            // each columns data
-                            ['data1', 63],
-                            ['data2', 37]
-                        ],
+                        columns: array,
                         type: 'donut', // default type of chart
                         colors: {
                             'data1': tabler.colors["green"],
@@ -434,17 +454,19 @@
 
 
             //通道交易比
-            var chart3 = function () {
+            var chart3 = function (data) {
+                let array = []
+                for(let c of data){
+                    let val = []
+                    val.push(c.name)
+                    val.push(c.txPercent)
+                    array.push(val)
+                }
+
                 var chart = c3.generate({
                     bindto: '#chart-pie', // id of chart wrapper
                     data: {
-                        columns: [
-                            // each columns data
-                            ['data1', 63],
-                            ['data2', 44],
-                            ['data3', 12],
-                            ['data4', 14]
-                        ],
+                        columns: array,
                         type: 'pie', // default type of chart
                         colors: {
                             'data1': tabler.colors["blue-darker"],
