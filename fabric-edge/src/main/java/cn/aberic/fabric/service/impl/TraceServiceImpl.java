@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.TraceService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.VerifyUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -60,17 +61,17 @@ public class TraceServiceImpl implements TraceService, BaseService {
 
     @Override
     public String queryBlockByTransactionID(Trace trace) {
-        return traceCC(trace, TraceIntent.TRANSACTION, caMapper.getByFlag(trace.getFlag()));
+        return traceCC(trace, TraceIntent.TRANSACTION, CacheUtil.getFlagCA(trace.getFlag(), caMapper));
     }
 
     @Override
     public String queryBlockByHash(Trace trace) {
-        return traceCC(trace, TraceIntent.HASH, caMapper.getByFlag(trace.getFlag()));
+        return traceCC(trace, TraceIntent.HASH, CacheUtil.getFlagCA(trace.getFlag(), caMapper));
     }
 
     @Override
     public String queryBlockByNumber(Trace trace) {
-        return traceCC(trace, TraceIntent.NUMBER, caMapper.getByFlag(trace.getFlag()));
+        return traceCC(trace, TraceIntent.NUMBER, CacheUtil.getFlagCA(trace.getFlag(), caMapper));
     }
 
     @Override
