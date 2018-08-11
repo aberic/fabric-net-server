@@ -17,6 +17,7 @@
 package cn.aberic.fabric.scheduled;
 
 import cn.aberic.fabric.service.*;
+import cn.aberic.fabric.utils.BlockUtil;
 import cn.aberic.fabric.utils.DataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -62,6 +63,13 @@ public class ScheduledTasks {
                 peerService, caService, channelService, chaincodeService,
                 appService, traceService, blockService);
         log.debug("===============>>>>>>>>>>home upgrade end<<<<<<<<<<===============");
+    }
+
+    @Scheduled(fixedDelay = 60000)
+    public void checkChannel() {
+        log.debug("===============>>>>>>>>>>check channel<<<<<<<<<<===============");
+        BlockUtil.obtain().checkChannel(channelService, caService, blockService, traceService, channelService.listAll());
+        log.debug("===============>>>>>>>>>>check channel<<<<<<<<<<===============");
     }
 
 }
