@@ -122,19 +122,19 @@ public class ChaincodeController {
                 modelAndView.addObject("url", String.format("%s/%s/%s", url, cc, api.getKey()));
                 break;
             case HASH:
-                Trace trace = getTrace(id, api);
+                Trace trace = getTrace(api);
                 result = traceService.queryBlockByHash(trace);
                 modelAndView.addObject("jsonStr", formatTrace(trace));
                 modelAndView.addObject("method", "POST");
                 break;
             case NUMBER:
-                trace = getTrace(id, api);
+                trace = getTrace(api);
                 result = traceService.queryBlockByNumber(trace);
                 modelAndView.addObject("jsonStr", formatTrace(trace));
                 modelAndView.addObject("method", "POST");
                 break;
             case TXID:
-                trace = getTrace(id, api);
+                trace = getTrace(api);
                 result = traceService.queryBlockByTransactionID(trace);
                 modelAndView.addObject("jsonStr", formatTrace(trace));
                 modelAndView.addObject("method", "POST");
@@ -329,10 +329,8 @@ public class ChaincodeController {
         return jsonObject.toJSONString();
     }
 
-    private Trace getTrace(int id, Api api) {
-        Chaincode chaincode = chaincodeService.get(id);
+    private Trace getTrace(Api api) {
         Trace trace = new Trace();
-        trace.setChannelId(chaincode.getChannelId());
         trace.setFlag(api.getFlag());
         trace.setKey(api.getKey());
         trace.setVersion(api.getVersion());

@@ -29,10 +29,10 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface BlockMapper {
 
-    @Insert("insert into block (channel_id,data_hash,calculated_hash,previous_hash," +
+    @Insert("insert into block (channel_id,height,data_hash,calculated_hash,previous_hash," +
             "envelope_count,tx_count,r_w_set_count,timestamp,calculate_date,create_date) " +
             "values " +
-            "(#{b.channelId},#{b.dataHash},#{b.calculatedHash},#{b.previousHash},#{b.envelopeCount}," +
+            "(#{b.channelId},#{b.height},#{b.dataHash},#{b.calculatedHash},#{b.previousHash},#{b.envelopeCount}," +
             "#{b.txCount},#{b.rwSetCount},#{b.timestamp},#{b.calculateDate},#{b.createDate})")
     int add(@Param("b")Block block);
 
@@ -62,5 +62,8 @@ public interface BlockMapper {
 
     @Select("select sum(r_w_set_count) from block where channel_id=#{channelId}")
     int countRWSetByChannelId(@Param("channelId") int channelId);
+
+    @Select("select height from block where channel_id=#{channelId} order by id desc limit 1")
+    int getRequestHeightByChannelId(@Param("channelId") int channelId);
 
 }
