@@ -94,6 +94,11 @@ public class TraceServiceImpl implements TraceService, BaseService {
         return trace(trace, TraceIntent.INFO, caMapper.list(channelMapper.get(channelId).getPeerId()).get(0));
     }
 
+    @Override
+    public String queryBlockByNumberWithCa(Trace trace, CA ca) {
+        return trace(trace, TraceIntent.NUMBER, ca);
+    }
+
     enum TraceIntent {
         TRANSACTION, HASH, NUMBER, INFO
     }
@@ -119,7 +124,7 @@ public class TraceServiceImpl implements TraceService, BaseService {
                     ca, trace.getChannelId());
             return trace(manager, trace, intent);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return responseFail(String.format("Request failed： %s", e.getMessage()));
         }
     }
