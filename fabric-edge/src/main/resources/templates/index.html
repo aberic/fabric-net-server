@@ -143,6 +143,46 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card p-3">
+                            <div class="d-flex align-items-center">
+                                <span class="stamp stamp-md bg-blue mr-3">
+                                  <ion-icon name="cube"></ion-icon>
+                                </span>
+                                <div>
+                                    <h4 class="m-0" th:text="${platform.blockCount}"></h4>
+                                    <small class="text-muted">平台区块总数</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card p-3">
+                            <div class="d-flex align-items-center">
+                                <span class="stamp stamp-md bg-green mr-3">
+                                  <ion-icon name="done-all"></ion-icon>
+                                </span>
+                                <div>
+                                    <h4 class="m-0" th:text="${platform.txCount}"></h4>
+                                    <small class="text-muted">平台总交易量</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card p-3">
+                            <div class="d-flex align-items-center">
+                                <span class="stamp stamp-md bg-red mr-3">
+                                  <ion-icon name="list-box"></ion-icon>
+                                </span>
+                                <div>
+                                    <h4 class="m-0" th:text="${platform.rwSetCount}"></h4>
+                                    <small class="text-muted">平台区块读写集总数</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row row-cards row-deck">
                     <div class="col-12">
