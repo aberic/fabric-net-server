@@ -17,6 +17,7 @@
 package cn.aberic.fabric.utils;
 
 import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.bean.Home;
 import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.AppMapper;
@@ -49,6 +50,10 @@ public class CacheUtil {
     /** 存储 channelId，fabric-manager*/
     private static Cache<Integer, FabricManager> cacheIntegerFabric = CacheBuilder.newBuilder().maximumSize(1000)
             .expireAfterAccess(12, TimeUnit.HOURS).build();
+
+    /** 存储 channelId，fabric-manager*/
+    private static Cache<String, Home> cacheHome = CacheBuilder.newBuilder().maximumSize(1)
+            .expireAfterAccess(5, TimeUnit.MINUTES).build();
 
     public static void putString(String key, String value) {
         cacheString.put(key, value);
@@ -128,11 +133,11 @@ public class CacheUtil {
     }
 
 
-    public static void putStringFabric(String key, FabricManager value) {
+    static void putStringFabric(String key, FabricManager value) {
         cacheStringFabric.put(key, value);
     }
 
-    public static FabricManager getStringFabric(String key) {
+    static FabricManager getStringFabric(String key) {
         try {
             return cacheStringFabric.getIfPresent(key);
         } catch (Exception e) {
@@ -140,15 +145,15 @@ public class CacheUtil {
         }
     }
 
-    public static void removeStringFabric(String key) {
+    static void removeStringFabric(String key) {
         cacheStringFabric.invalidate(key);
     }
 
-    public static void putIntegerFabric(int key, FabricManager value) {
+    static void putIntegerFabric(int key, FabricManager value) {
         cacheIntegerFabric.put(key, value);
     }
 
-    public static FabricManager getIntegerFabric(int key) {
+    static FabricManager getIntegerFabric(int key) {
         try {
             return cacheIntegerFabric.getIfPresent(key);
         } catch (Exception e) {
@@ -156,8 +161,20 @@ public class CacheUtil {
         }
     }
 
-    public static void removeIntegerFabric(int key) {
+    static void removeIntegerFabric(int key) {
         cacheIntegerFabric.invalidate(key);
+    }
+
+    public static void putHome(Home value) {
+        cacheHome.put("do-home-cache", value);
+    }
+
+    public static Home getHome() {
+        try {
+            return cacheHome.getIfPresent("do-home-cache");
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
