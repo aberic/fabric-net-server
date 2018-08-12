@@ -58,18 +58,18 @@ public class ScheduledTasks {
     //fixedDelay = x 表示当前方法执行完毕x ms后，Spring scheduling会再次调用该方法
     @Scheduled(fixedDelay = 15000)
     public void homeUpgrade() {
-        log.debug("===============>>>>>>>>>>home upgrade start<<<<<<<<<<===============");
+        log.info("===============>>>>>>>>>> home upgrade start <<<<<<<<<<===============");
         DataUtil.obtain().home(leagueService, orgService, ordererService,
                 peerService, caService, channelService, chaincodeService,
-                appService, traceService, blockService);
-        log.debug("===============>>>>>>>>>>home upgrade end<<<<<<<<<<===============");
+                appService, blockService);
+        log.info("===============>>>>>>>>>> home upgrade end   <<<<<<<<<<===============");
     }
 
     @Scheduled(fixedDelay = 60000)
     public void checkChannel() {
-        log.debug("===============>>>>>>>>>>check channel<<<<<<<<<<===============");
+        log.info("===============>>>>>>>>>> check channel start <<<<<<<<<<===============");
         BlockUtil.obtain().checkChannel(channelService, caService, blockService, traceService, channelService.listAll());
-        log.debug("===============>>>>>>>>>>check channel<<<<<<<<<<===============");
+        log.info("===============>>>>>>>>>> check channel end   <<<<<<<<<<===============");
     }
 
 }

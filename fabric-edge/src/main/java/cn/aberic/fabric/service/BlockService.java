@@ -39,6 +39,6 @@ public interface BlockService {
 
     Platform getPlatform();
 
-    int getRequestHeightByChannelId(int channelId);
+    Block getByChannelId(int channelId);
 
 }
