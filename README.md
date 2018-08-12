@@ -15,7 +15,7 @@
 ## 项目简览
 后台界面综览
 <br>
-![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/master/img/indexDemo.png "Fabric Net Server")
+![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/1.0-RC3/img/indexDemo.png "Fabric Net Server")
 <br><br>
 
 ## 资源
