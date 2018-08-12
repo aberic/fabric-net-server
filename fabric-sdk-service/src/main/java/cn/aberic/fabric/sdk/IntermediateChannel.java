@@ -68,7 +68,7 @@ class IntermediateChannel {
         client.setUserContext(org.getUser(org.getUsername()));
         // client.setUserContext(org.getUser());
         channel = client.newChannel(channelName);
-        log.debug("Get Chain " + channelName);
+        log.info("Get Chain " + channelName);
 
         int sizeOrderers = org.getOrderers().size();
         for (int i = 0; i < sizeOrderers; i++) {
@@ -119,7 +119,7 @@ class IntermediateChannel {
             }
         }
 
-        log.debug("channel.isInitialized() = " + channel.isInitialized());
+        log.info("channel.isInitialized() = " + channel.isInitialized());
         if (!channel.isInitialized()) {
             channel.initialize();
         }
