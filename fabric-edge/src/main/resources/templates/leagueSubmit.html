@@ -55,16 +55,20 @@
                                         <div class="form-group">
                                             <label class="form-label" th:text="#{league_name}"></label>
                                             <input type="text" class="form-control is-valid"
+                                                   id="name"
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{league_name_placeholder}"
+                                                   onblur="checkName()"
                                                    th:field="*{name}">
                                             <input type="hidden" name="intent" th:value="${intent}"/>
                                             <input type="hidden" name="id" th:value="${league.id}"/>
                                         </div>
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
-                                                <button type="submit" class="btn btn-primary ml-auto"
-                                                        th:text="${submit}">
+                                                <button type="submit" id="submitBtn" class="btn btn-primary ml-auto"
+                                                        th:text="${submit}"
+                                                        onsubmit="return check()"
+                                                >
                                                 </button>
                                             </div>
                                         </div>
@@ -80,6 +84,34 @@
     <div th:include="fns_footer :: footer"></div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+<script>
+
+
+
+    function checkName(){
+        if($("#name").val()==""){
+            $("#name").addClass("is-invalid")
+            if($("[name='nameError']").length==0){
+                $("#name").parent().append('<div name="nameError" class="invalid-feedback">名称不能为空</div>')
+            }
+            return false;
+        }else{
+            $("#name").removeClass("is-invalid")
+            $("[name='nameError']").remove();
+            return true
+        }
+    }
+
+    require(['c3', 'jquery'], function (c3, $) {
+
+
+        $(document).ready(function () {
+            $("#submitBtn").click(function(){
+                 return checkName()
+            })
+        })
+    });
+</script>
 </body>
 
 </html>

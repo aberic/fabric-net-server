@@ -150,9 +150,10 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title" th:text="通道区块交易曲线"> </h3>
+                                <h3 class="card-title" th:text="通道区块交易曲线"></h3>
                             </div>
-                            <div id="chart-development-activity" th:json-data="${channelBlockLists}" style="height: 10rem"></div>
+                            <div id="chart-development-activity" th:json-data="${channelBlockLists}"
+                                 style="height: 10rem"></div>
                             <div class="table-responsive">
                                 <!-- -->
                                 <table class="table card-table table-striped table-vcenter">
@@ -209,9 +210,11 @@
                                 <div class="card">
                                     <div class="card-body text-center">
                                         <div class="h5">平台今日区块数</div>
-                                        <div class="display-4 font-weight-bold mb-4" th:text="${dayStatistics.blockCount}"></div>
+                                        <div class="display-4 font-weight-bold mb-4"
+                                             th:text="${dayStatistics.blockCount}"></div>
                                         <div class="progress progress-sm">
-                                            <div class="progress-bar bg-red" th:styleappend="${'width:'+dayStatistics.blockPercent+'%'}"></div>
+                                            <div class="progress-bar bg-red"
+                                                 th:styleappend="${'width:'+dayStatistics.blockPercent+'%'}"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -220,9 +223,11 @@
                                 <div class="card">
                                     <div class="card-body text-center">
                                         <div class="h5">平台今日交易量</div>
-                                        <div class="display-4 font-weight-bold mb-4" th:text="${dayStatistics.txCount}"></div>
+                                        <div class="display-4 font-weight-bold mb-4"
+                                             th:text="${dayStatistics.txCount}"></div>
                                         <div class="progress progress-sm">
-                                            <div class="progress-bar bg-green"  th:styleappend="${'width:'+dayStatistics.txPercent+'%'}"></div>
+                                            <div class="progress-bar bg-green"
+                                                 th:styleappend="${'width:'+dayStatistics.txPercent+'%'}"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -230,9 +235,7 @@
                         </div>
                     </div>
 
-                </div>
 
-                <div class="row row-cards row-deck">
                     <div class="col-sm-6 col-lg-4">
                         <div class="card p-3">
                             <div class="d-flex align-items-center">
@@ -272,8 +275,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row row-cards row-deck">
+
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
@@ -306,9 +308,11 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div th:include="fns_footer :: footer"></div>
+    </div>
     </div>
     <script>
 
