@@ -70,8 +70,8 @@ public class BlockServiceImpl implements BlockService {
     public List<ChannelBlockList> getChannelBlockLists(List<Channel> channels) {
         int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd"));
         List<ChannelBlockList> channelBlockLists = new LinkedList<>();
-        List<ChannelBlock> channelBlocks = new LinkedList<>();
         for (Channel channel : channels) {
+            List<ChannelBlock> channelBlocks = new LinkedList<>();
             int zeroCount = 0;
             for (int i = 0; i < 20; i++) {
                 int date = today - i;
