@@ -58,13 +58,6 @@ public class BlockUtil {
         return instance;
     }
 
-    public void initChannelBlock(ChannelService channelService, CAService caService, BlockService blockService, TraceService traceService) {
-        channels.addAll(channelService.listAll());
-        for (Channel channel : channels) {
-            execChannel(channelService, caService, blockService, traceService, channel.getId());
-        }
-    }
-
     public void checkChannel(ChannelService channelService, CAService caService, BlockService blockService, TraceService traceService, List<Channel> channels) {
         for (Channel channel : channels) {
             boolean hadOne = false;
