@@ -17,6 +17,8 @@
 package cn.aberic.fabric.sdk;
 
 import io.netty.util.internal.StringUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bouncycastle.util.encoders.Hex;
 import org.hyperledger.fabric.sdk.Enrollment;
 import org.hyperledger.fabric.sdk.User;
@@ -32,6 +34,8 @@ import java.util.Set;
 class IntermediateUser implements User, Serializable {
 
     private static final long serialVersionUID = 5695080465408336815L;
+
+    private static Logger log = LogManager.getLogger(IntermediateUser.class);
 
     /** 名称 */
     private String name;
@@ -266,7 +270,8 @@ class IntermediateUser implements User, Serializable {
      * @return 类似user.Org1User1.Org1
      */
     static String getKeyForFabricStoreName(String name, String org) {
-        System.out.println("toKeyValStoreName = " + "user." + name + org);
+        // System.out.println("toKeyValStoreName = " + "user." + name + org);
+        log.info("toKeyValStoreName = " + "user." + name + org);
         return "user." + name + org;
     }
 
@@ -280,7 +285,8 @@ class IntermediateUser implements User, Serializable {
      * @return 类似user.Org1User1.Org1
      */
     static String getKeyForFabricStoreName(String name, String skPath, String certificatePath) {
-        System.out.println(String.format("toKeyValStoreName = user.%s%s%s", name, skPath, certificatePath));
+        // System.out.println(String.format("toKeyValStoreName = user.%s%s%s", name, skPath, certificatePath));
+        log.info(String.format("toKeyValStoreName = user.%s%s%s", name, skPath, certificatePath));
         return String.format("user.%s%s%s", name, skPath, certificatePath);
     }
 

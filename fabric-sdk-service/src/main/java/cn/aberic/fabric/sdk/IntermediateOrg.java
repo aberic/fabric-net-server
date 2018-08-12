@@ -180,9 +180,9 @@ class IntermediateOrg {
 
     void setClient(HFClient client) throws CryptoException, InvalidArgumentException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         this.client = client;
-        log.debug("Create instance of HFClient");
+        log.info("Create instance of HFClient");
         client.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
-        log.debug("Set Crypto Suite of HFClient");
+        log.info("Set Crypto Suite of HFClient");
     }
 
     HFClient getClient() {

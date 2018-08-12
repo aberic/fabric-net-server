@@ -141,7 +141,7 @@ public class CommonController {
         List channelBlocklists = blockService.getChannelBlockLists(channels);
         List channelPercents = blockService.getChannelPercents(channels);
 
-        JSONArray channelBlockLists = new JSONArray(channelBlocklists);
+        JSONArray channelBlockLists = new JSONArray(channjelBlocklists);
         JSONArray channelPercentLists = new JSONArray(channelPercents);
 
         modelAndView.addObject("channelPercents", channelPercentLists.toJSONString());
