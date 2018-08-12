@@ -10,7 +10,7 @@
 <br><br>
 ## 项目部分视图
 
-![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/master/img/indexDemo.png "Fabric Net Server")
+![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/1.0-RC5/img/indexDemo.png "Fabric Net Server")
 <br><br>
 
 ## 资源
