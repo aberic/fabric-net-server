@@ -75,7 +75,7 @@ public class BlockUtil {
 
     private void execChannel(ChannelService channelService, CAService caService, BlockService blockService, TraceService traceService, int channelId) {
         ThreadFNSPool.obtain().submitFixed(() -> {
-            int height = blockService.getRequestHeightByChannelId(channelId);
+            int height = blockService.getByChannelId(channelId).getHeight();
             height = height == -1 ? 0 : height + 1;
             CA ca = caService.listById(channelService.get(channelId).getPeerId()).get(0);
             while (isAlive) {
@@ -88,7 +88,7 @@ public class BlockUtil {
                             insert(blockService);
                         }
                         try {
-                            Thread.sleep(600000);
+                            Thread.sleep(60000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

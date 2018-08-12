@@ -19,9 +19,6 @@ package cn.aberic.fabric.utils;
 import cn.aberic.fabric.bean.*;
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.service.*;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +44,7 @@ public class DataUtil {
 
     public Home home(LeagueService leagueService, OrgService orgService, OrdererService ordererService,
                      PeerService peerService, CAService caService, ChannelService channelService,
-                     ChaincodeService chaincodeService, AppService appService, TraceService traceService,
-                     BlockService blockService) {
+                     ChaincodeService chaincodeService, AppService appService, BlockService blockService) {
         int leagueCount  = leagueService.listAll().size();
         int orgCount = orgService.count();
         int ordererCount = ordererService.count();
@@ -57,8 +53,11 @@ public class DataUtil {
         int channelCount = channelService.count();
         int chaincodeCount = chaincodeService.count();
         int appCount = appService.count();
+
         List<Channel> channels = channelService.listAll();
-        List<Block> blocks = blocks(channels, peerService, traceService);
+
+        List<Block> blocks = blocks(channels, peerService, blockService);
+
         List<ChannelPercent> channelPercents = blockService.getChannelPercents(channels);
         List<ChannelBlockList> channelBlockLists = blockService.getChannelBlockLists(channels);
         DayStatistics dayStatistics = blockService.getDayStatistics();
@@ -83,29 +82,17 @@ public class DataUtil {
         return home;
     }
 
-    private List<Block> blocks(List<Channel> channels, PeerService peerService, TraceService traceService) {
+    private List<Block> blocks(List<Channel> channels, PeerService peerService, BlockService blockService) {
         List<Block> blocks = new ArrayList<>();
         for (Channel channel : channels) {
-            try {
-                JSONObject blockInfo = JSON.parseObject(traceService.queryBlockChainInfoForIndex(channel.getId()));
-                int height = blockInfo.containsKey("data") ? blockInfo.getJSONObject("data").getInteger("height") : 0;
-
-                Trace trace = new Trace();
-                trace.setChannelId(channel.getId());
-                trace.setTrace(String.valueOf(height - 1));
-                JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberForIndex(trace));
-                JSONArray envelopes = blockMessage.containsKey("data") ? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
-
-                Block block = new Block();
-                block.setNum(height);
-                block.setPeerName(peerService.get(channel.getPeerId()).getName());
-                block.setChannelName(channel.getName());
-                block.setCalculatedBlockHash(blockMessage.getJSONObject("data").getString("calculatedBlockHash"));
-                block.setDate(envelopes.getJSONObject(0).getString("timestamp"));
-                blocks.add(block);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            cn.aberic.fabric.dao.Block blockDao = blockService.getByChannelId(channel.getId());
+            Block block = new Block();
+            block.setNum(blockDao.getHeight());
+            block.setPeerName(peerService.get(channel.getPeerId()).getName());
+            block.setChannelName(channel.getName());
+            block.setCalculatedBlockHash(blockDao.getCalculatedHash());
+            block.setDate(blockDao.getTimestamp());
+            blocks.add(block);
         }
         blocks.sort((t1, t2) -> {
             try {

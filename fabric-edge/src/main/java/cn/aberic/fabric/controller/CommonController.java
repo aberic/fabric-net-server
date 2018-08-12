@@ -56,8 +56,6 @@ public class CommonController {
     @Resource
     private AppService appService;
     @Resource
-    private TraceService traceService;
-    @Resource
     private BlockService blockService;
 
     @GetMapping(value = "index")
@@ -68,7 +66,7 @@ public class CommonController {
         if (null == home) {
             home = DataUtil.obtain().home(leagueService, orgService, ordererService,
                     peerService, caService, channelService, chaincodeService,
-                    appService, traceService, blockService);
+                    appService, blockService);
             CacheUtil.putHome(home);
         }
 

@@ -138,14 +138,8 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
-    public int getRequestHeightByChannelId(int channelId) {
-        int id = -1;
-        try {
-            id = blockMapper.getRequestHeightByChannelId(channelId);
-        } catch (Exception ignored) {
-
-        }
-        return id;
+    public Block getByChannelId(int channelId) {
+        return blockMapper.getByChannelId(channelId);
     }
 
 }
