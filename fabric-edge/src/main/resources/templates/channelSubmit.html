@@ -65,6 +65,8 @@
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{channel_name_placeholder}"
+                                                   id="name"
+                                                   onblur="check('name')"
                                                    th:field="*{name}">
                                             <input type="hidden" name="intent" th:value="${intent}"/>
                                             <input type="hidden" name="id" th:value="${channel.id}"/>
@@ -89,6 +91,7 @@
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
                                                 <button type="submit" class="btn btn-primary ml-auto"
+                                                        id="submitBtn"
                                                         th:text="${submit}">
                                                 </button>
                                             </div>
@@ -105,6 +108,40 @@
     <div th:include="fns_footer :: footer"></div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+
+
+<script>
+    function check(idStr){
+        var that = $("#"+idStr)
+        var parent = that.parent()
+        if(that.val().trim()==""){
+            var msg;
+            if(idStr=="name"){
+                msg = "名称不能为空"
+            }
+            that.addClass("is-invalid")
+            if(parent.children("[name='nameError']").length==0){
+                parent.append('<div name="nameError" class="invalid-feedback">'+msg+'</div>')
+            }
+            return false;
+        }else{
+            that.removeClass("is-invalid")
+            parent.children("[name='nameError']").remove();
+            return true
+        }
+    }
+
+    require(['c3', 'jquery'], function (c3, $) {
+
+        $(document).ready(function () {
+            $("#submitBtn").click(function(){
+                return check("name")
+            })
+        })
+    });
+</script>
+
+
 </body>
 
 </html>

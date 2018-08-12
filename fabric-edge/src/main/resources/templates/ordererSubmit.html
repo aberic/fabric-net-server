@@ -61,23 +61,28 @@
                                                         th:text="${orgVO.leagueName}+'-'+${orgVO.mspId}"></option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="nameDiv">
                                             <label class="form-label" th:text="#{orderer_name}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{orderer_name_placeholder}"
-                                                   th:field="*{name}">
+                                                   th:field="*{name}"
+                                                   id="name"
+                                                   onblur="check('name')"
+                                            >
                                             <input type="hidden" name="intent" th:value="${intent}"/>
                                             <input type="hidden" name="id" th:value="${orderer.id}"/>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group"  id="locationDiv">
                                             <label class="form-label" th:text="#{orderer_location}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
+                                                   id="location"
+                                                   onblur="check('location')"
                                                    th:placeholder="#{orderer_location_placeholder}"
                                                    th:field="*{location}">
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" >
                                             <div class="form-label" th:text="#{orderer_server_crt}"></div>
                                             <div class="custom-file">
                                                 <input id="server-crt-file" type="file" class="custom-file-input"
@@ -94,6 +99,7 @@
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
                                                 <button type="submit" class="btn btn-primary ml-auto"
+                                                        id="submitBtn"
                                                         th:text="${submit}">
                                                 </button>
                                             </div>
@@ -110,6 +116,42 @@
     <div th:include="fns_footer :: footer"></div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+
+
+<script>
+    function check(idStr){
+        var that = $("#"+idStr)
+        var parent = that.parent()
+        if(that.val().trim()==""){
+            var msg;
+            if(idStr=="name"){
+                msg = "服务名称不能为空"
+            }else if(idStr=="location"){
+                msg="访问地址不能为空"
+            }
+
+            that.addClass("is-invalid")
+            if(parent.children("[name='nameError']").length==0){
+                parent.append('<div name="nameError" class="invalid-feedback">'+msg+'</div>')
+            }
+            return false;
+        }else{
+            that.removeClass("is-invalid")
+            parent.children("[name='nameError']").remove();
+            return true
+        }
+    }
+
+    require(['c3', 'jquery'], function (c3, $) {
+
+        $(document).ready(function () {
+            $("#submitBtn").click(function(){
+                return check("name") && check("location")
+            })
+        })
+    });
+</script>
+
 </body>
 
 </html>

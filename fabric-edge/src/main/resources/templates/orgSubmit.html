@@ -65,6 +65,8 @@
                                             <label class="form-label" th:text="#{org_msp_id}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
+                                                   id="mspId"
+                                                   onblur="checkName()"
                                                    th:placeholder="#{org_msp_id_placeholder}"
                                                    th:field="*{mspId}">
                                             <input type="hidden" name="intent" th:value="${intent}"/>
@@ -81,7 +83,7 @@
                                         </div>
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
-                                                <button type="submit" class="btn btn-primary ml-auto"
+                                                <button type="submit" id="submitBtn" class="btn btn-primary ml-auto"
                                                         th:text="${submit}">
                                                 </button>
                                             </div>
@@ -98,6 +100,38 @@
     <div th:include="fns_footer :: footer"></div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+
+<script>
+
+
+
+    function checkName(){
+        var idStr = "#mspId"
+
+
+        if($(idStr).val()==""){
+            $(idStr).addClass("is-invalid")
+            if($("[name='nameError']").length==0){
+                $(idStr).parent().append('<div name="nameError" class="invalid-feedback">组织id不能为空</div>')
+            }
+            return false;
+        }else{
+            $(idStr).removeClass("is-invalid")
+            $("[name='nameError']").remove();
+            return true
+        }
+    }
+
+    require(['c3', 'jquery'], function (c3, $) {
+
+        $(document).ready(function () {
+            $("#submitBtn").click(function(){
+                return checkName()
+            })
+        })
+    });
+</script>
+
 </body>
 
 </html>
