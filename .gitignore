@@ -2,3 +2,4 @@
 **/*.iml
 .idea/
 .DS_Store
+/fabric-edge/src/test/
