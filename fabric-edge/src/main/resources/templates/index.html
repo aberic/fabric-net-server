@@ -159,21 +159,18 @@
                                 <table class="table card-table table-striped table-vcenter">
                                     <thead>
                                     <tr>
-                                        <th colspan="2">HEIGHT</th>
-                                        <th>CHANNEL NAME</th>
-                                        <th>TXS</th>
-                                        <th>DATE</th>
+                                        <th th:text="#{blockHeight}"></th>
+                                        <th th:text="#{channel_name}"></th>
+                                        <th th:text="#{tx_count}"></th>
+                                        <th th:text="#{date}"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td class="w-1"><span class="avatar"
-                                                              style="background-image: url(./demo/faces/male/9.jpg)"></span>
-                                        </td>
-                                        <td>Ronald Bradley</td>
-                                        <td>Initial commit</td>
-                                        <td class="text-nowrap">May 6, 2018</td>
-                                        <td class="w-1"><a href="#" class="icon"><i class="fe fe-trash"></i></a></td>
+                                    <tr th:each="blockDao : ${blockDaos}">
+                                        <td th:text="${blockDao.height}">blockHeight</td>
+                                        <td th:text="${blockDao.channelName}">channel_name</td>
+                                        <td th:text="${blockDao.txCount}">tx_count</td>
+                                        <td class="text-nowrap" th:text="${blockDao.timestamp}">date</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -182,6 +179,7 @@
                     </div>
 
                     <div class="col-md-6">
+                        <div class="alert alert-primary">Are you in trouble? <a href="https://github.com/aberic/fabric-net-server/wiki" class="alert-link">Read our documentation</a> with code samples.</div>
                         <div hidden th:percentData="${channelPercents}" id="percentData"></div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -313,7 +311,8 @@
         </div>
         <div th:include="fns_footer :: footer"></div>
     </div>
-    </div>
+</div>
+<script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
     <script>
 
         require(['c3', 'jquery'], function (c3, $) {

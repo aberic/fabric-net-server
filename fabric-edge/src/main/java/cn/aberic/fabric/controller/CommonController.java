@@ -21,14 +21,13 @@ import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DataUtil;
-import com.alibaba.fastjson.JSONArray;
+import org.json.JSONArray;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 描述：
@@ -82,17 +81,9 @@ public class CommonController {
         modelAndView.addObject("appCount", home.getAppCount());
         modelAndView.addObject("blocks", home.getBlocks());
         //中间统计模块开始
-        List channelBlocklists = home.getChannelBlockLists();
-        List channelPercents = home.getChannelPercents();
-
-        JSONArray channelBlockLists = new JSONArray(channelBlocklists);
-        JSONArray channelPercentLists = new JSONArray(channelPercents);
-
-        modelAndView.addObject("channelPercents", channelPercentLists.toJSONString());
-        modelAndView.addObject("channelBlockLists", channelBlockLists.toJSONString());
-
-//        modelAndView.addObject("channelPercents", home.getChannelPercents());
-//        modelAndView.addObject("channelBlockList", home.getChannelBlockLists());
+        modelAndView.addObject("channelPercents", new JSONArray(home.getChannelPercents()).toString());
+        modelAndView.addObject("channelBlockLists", new JSONArray(home.getChannelBlockLists()).toString());
+        modelAndView.addObject("blockDaos", home.getBlockDaos());
         modelAndView.addObject("dayStatistics", home.getDayStatistics());
         modelAndView.addObject("platform", home.getPlatform());
         //中间统计模块结束

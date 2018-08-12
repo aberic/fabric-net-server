@@ -20,6 +20,7 @@ import cn.aberic.fabric.bean.*;
 import cn.aberic.fabric.dao.Block;
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.mapper.BlockMapper;
+import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.service.BlockService;
 import cn.aberic.fabric.utils.DateUtil;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class BlockServiceImpl implements BlockService {
 
     @Resource
     private BlockMapper blockMapper;
+    @Resource
+    private ChannelMapper channelMapper;
 
     @Override
     public int add(Block block) {
@@ -47,7 +50,7 @@ public class BlockServiceImpl implements BlockService {
     @Override
     public List<ChannelPercent> getChannelPercents(List<Channel> channels) {
         List<ChannelPercent> channelPercents = new LinkedList<>();
-        for (Channel channel: channels) {
+        for (Channel channel : channels) {
             int txCount = 0;
             try {
                 txCount = blockMapper.countTxByChannelId(channel.getId());
@@ -68,7 +71,7 @@ public class BlockServiceImpl implements BlockService {
         int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd"));
         List<ChannelBlockList> channelBlockLists = new LinkedList<>();
         List<ChannelBlock> channelBlocks = new LinkedList<>();
-        for (Channel channel: channels) {
+        for (Channel channel : channels) {
             int zeroCount = 0;
             for (int i = 0; i < 20; i++) {
                 int date = today - i;
@@ -111,8 +114,8 @@ public class BlockServiceImpl implements BlockService {
         DayStatistics dayStatistics = new DayStatistics();
         dayStatistics.setBlockCount(todayBlocks);
         dayStatistics.setTxCount(todayTxs);
-        dayStatistics.setBlockPercent(todayBlocks == 0 ? 0 : (1 - todayBlocks/allBlocks) * 100);
-        dayStatistics.setTxPercent(todayTxs == 0 ? 0 : (1 - todayTxs/allTxs) * 100);
+        dayStatistics.setBlockPercent(todayBlocks == 0 ? 0 : (1 - todayBlocks / allBlocks) * 100);
+        dayStatistics.setTxPercent(todayTxs == 0 ? 0 : (1 - todayTxs / allTxs) * 100);
         return dayStatistics;
     }
 
@@ -140,6 +143,28 @@ public class BlockServiceImpl implements BlockService {
     @Override
     public Block getByChannelId(int channelId) {
         return blockMapper.getByChannelId(channelId);
+    }
+
+    @Override
+    public List<Block> getLimit(int limit) {
+        List<Block> blocks = new LinkedList<>();
+        List<Channel> channels = channelMapper.listAll();
+        for (Channel channel : channels) {
+            List<Block> blockTmps = blockMapper.getLimit(channel.getId(), limit);
+            for (Block block : blockTmps) {
+                block.setChannelName(channel.getName());
+            }
+            blocks.addAll(blockTmps);
+        }
+        blocks.sort((o1, o2) -> {
+            try {
+                return (int) DateUtil.str2Date(o2.getTimestamp(), "yyyy/MM/dd HH:mm:ss").getTime() - (int) DateUtil.str2Date(o1.getTimestamp(), "yyyy/MM/dd HH:mm:ss").getTime();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return 0;
+            }
+        });
+        return blocks.subList(0, 6);
     }
 
 }
