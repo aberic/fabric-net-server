@@ -20,7 +20,6 @@ import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.PeerService;
 import cn.aberic.fabric.utils.*;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
 @Service("peerService")
 public class PeerServiceImpl implements PeerService {
 

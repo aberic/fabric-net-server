@@ -25,10 +25,9 @@ import cn.aberic.fabric.service.OrdererService;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.FileUtil;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -36,7 +35,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
 @Service("ordererService")
 public class OrdererServiceImpl implements OrdererService {
 
