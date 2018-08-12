@@ -6,9 +6,13 @@
 <br><br>
 本项目目前提供一套Fabric网络后台服务，包括对已经在Fabric网络中创建好的org、peer、channel、chaincode等进行网络配置，并基于已经新增成功的内容提供[REST API](https://github.com/aberic/fabric-net-server/blob/master/API_DEMO.md)服务，目前已经支持链码安装、实例化、升级、调用、查询以及溯源等功能。
 <br><br>
+在Branch或Tags中的代码较为稳定，master的代码较新且会及时修复已知bug，但master中会不时添加一些新特性进去，从而导致功能的不稳定。
+<br><br>
+以下项目部分视图基本上都是跟随上一版或当前master的，参考更准确的界面视图需进入对应的Branch或Tags中查阅。
+<br><br>
 ## 项目部分视图
 
-![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/1.0-RC6/img/home.jpg "Fabric Net Server")
+![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/master/img/home.jpg "Fabric Net Server")
 <br><br>
 
 ## 资源
