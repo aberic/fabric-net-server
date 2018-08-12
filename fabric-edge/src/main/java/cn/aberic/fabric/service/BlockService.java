@@ -41,4 +41,6 @@ public interface BlockService {
 
     Block getByChannelId(int channelId);
 
+    List<Block> getLimit(int limit);
+
 }

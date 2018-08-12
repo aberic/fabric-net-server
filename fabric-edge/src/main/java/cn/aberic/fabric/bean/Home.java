@@ -42,6 +42,7 @@ public class Home {
     List<Block> blocks;
     List<ChannelPercent> channelPercents;
     List<ChannelBlockList> channelBlockLists;
+    List<cn.aberic.fabric.dao.Block> blockDaos;
     DayStatistics dayStatistics;
     Platform platform;
 }

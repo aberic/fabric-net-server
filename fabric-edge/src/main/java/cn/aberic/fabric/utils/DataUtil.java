@@ -55,9 +55,8 @@ public class DataUtil {
         int appCount = appService.count();
 
         List<Channel> channels = channelService.listAll();
-
         List<Block> blocks = blocks(channels, peerService, blockService);
-
+        List<cn.aberic.fabric.dao.Block> blockDaos = blockService.getLimit(6);
         List<ChannelPercent> channelPercents = blockService.getChannelPercents(channels);
         List<ChannelBlockList> channelBlockLists = blockService.getChannelBlockLists(channels);
         DayStatistics dayStatistics = blockService.getDayStatistics();
@@ -76,6 +75,7 @@ public class DataUtil {
         home.setBlocks(blocks);
         home.setChannelPercents(channelPercents);
         home.setChannelBlockLists(channelBlockLists);
+        home.setBlockDaos(blockDaos);
         home.setDayStatistics(dayStatistics);
         home.setPlatform(platform);
         CacheUtil.putHome(home);

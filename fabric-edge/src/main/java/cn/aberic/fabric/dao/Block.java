@@ -32,6 +32,7 @@ public class Block {
 
     private int id;
     private int channelId;
+    private String channelName;
     private int height;
     private String dataHash;
     private String calculatedHash;

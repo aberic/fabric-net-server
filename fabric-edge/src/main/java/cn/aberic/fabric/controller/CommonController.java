@@ -83,6 +83,7 @@ public class CommonController {
         //中间统计模块开始
         modelAndView.addObject("channelPercents", new JSONArray(home.getChannelPercents()).toString());
         modelAndView.addObject("channelBlockLists", new JSONArray(home.getChannelBlockLists()).toString());
+        modelAndView.addObject("blockDaos", home.getBlockDaos());
         modelAndView.addObject("dayStatistics", home.getDayStatistics());
         modelAndView.addObject("platform", home.getPlatform());
         //中间统计模块结束

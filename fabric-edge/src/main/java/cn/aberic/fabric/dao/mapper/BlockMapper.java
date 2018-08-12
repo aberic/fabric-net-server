@@ -17,10 +17,9 @@
 package cn.aberic.fabric.dao.mapper;
 
 import cn.aberic.fabric.dao.Block;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * 作者：Aberic on 2018/8/9 21:01
@@ -65,6 +64,32 @@ public interface BlockMapper {
 
     @Select("select channel_id,height,data_hash,calculated_hash,previous_hash,envelope_count,tx_count,r_w_set_count," +
             "timestamp,calculate_date,create_date from block where channel_id=#{channelId} order by id desc limit 1")
+    @Results({
+            @Result(property = "channelId", column = "channel_id"),
+            @Result(property = "dataHash", column = "data_hash"),
+            @Result(property = "calculatedHash", column = "calculated_hash"),
+            @Result(property = "previousHash", column = "previous_hash"),
+            @Result(property = "envelopeCount", column = "envelope_count"),
+            @Result(property = "txCount", column = "tx_count"),
+            @Result(property = "rwSetCount", column = "r_w_set_count"),
+            @Result(property = "calculateDate", column = "calculate_date"),
+            @Result(property = "createDate", column = "create_date")
+    })
     Block getByChannelId(@Param("channelId") int channelId);
+
+    @Select("select channel_id,height,data_hash,calculated_hash,previous_hash,envelope_count,tx_count,r_w_set_count," +
+            "timestamp,calculate_date,create_date from block where channel_id=#{channelId} order by id desc limit #{limit}")
+    @Results({
+            @Result(property = "channelId", column = "channel_id"),
+            @Result(property = "dataHash", column = "data_hash"),
+            @Result(property = "calculatedHash", column = "calculated_hash"),
+            @Result(property = "previousHash", column = "previous_hash"),
+            @Result(property = "envelopeCount", column = "envelope_count"),
+            @Result(property = "txCount", column = "tx_count"),
+            @Result(property = "rwSetCount", column = "r_w_set_count"),
+            @Result(property = "calculateDate", column = "calculate_date"),
+            @Result(property = "createDate", column = "create_date")
+    })
+    List<Block> getLimit(@Param("channelId") int channelId, @Param("limit") int limit);
 
 }
