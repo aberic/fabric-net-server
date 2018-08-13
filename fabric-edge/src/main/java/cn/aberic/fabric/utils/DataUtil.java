@@ -91,15 +91,15 @@ public class DataUtil {
             cn.aberic.fabric.dao.Block blockDao = blockService.getByChannelId(channel.getId());
             double totalHeight = channel.getHeight() - 1;
             double nowHeight = blockDao.getHeight();
-            double percent = nowHeight >= totalHeight ? 1 : nowHeight/totalHeight;
+            double percent = nowHeight > totalHeight ? 2 : nowHeight/totalHeight;
             Block block = new Block();
             block.setNum((int)nowHeight);
             block.setPeerName(peerService.get(channel.getPeerId()).getName());
             block.setChannelName(channel.getName());
             block.setCalculatedBlockHash(blockDao.getCalculatedHash());
             block.setDate(blockDao.getTimestamp());
-            block.setPercent(percent);
-            block.setPercentStr(String.valueOf((int)(percent * 100)) + "%");
+            block.setPercent(percent == 2 ? 0 : percent);
+            block.setPercentStr(percent == 2 ? "--" : String.valueOf((int)(percent * 100)) + "%");
             blocks.add(block);
         }
         blocks.sort((t1, t2) -> {
