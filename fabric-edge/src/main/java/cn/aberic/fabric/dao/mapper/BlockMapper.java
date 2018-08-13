@@ -92,4 +92,7 @@ public interface BlockMapper {
     })
     List<Block> getLimit(@Param("channelId") int channelId, @Param("limit") int limit);
 
+    @Delete("delete from block where channel_id=#{channelId}")
+    int deleteByChannelId(@Param("channelId") int channelId);
+
 }

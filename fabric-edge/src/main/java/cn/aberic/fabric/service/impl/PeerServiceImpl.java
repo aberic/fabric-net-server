@@ -44,6 +44,8 @@ public class PeerServiceImpl implements PeerService {
     @Resource
     private AppMapper appMapper;
     @Resource
+    private BlockMapper blockMapper;
+    @Resource
     private Environment env;
 
     @Override
@@ -102,7 +104,7 @@ public class PeerServiceImpl implements PeerService {
 
     @Override
     public int delete(int id) {
-        return DeleteUtil.obtain().deletePeer(id, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper);
+        return DeleteUtil.obtain().deletePeer(id, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
     }
 
     private boolean saveFileFail(Peer peer, MultipartFile serverCrtFile) {

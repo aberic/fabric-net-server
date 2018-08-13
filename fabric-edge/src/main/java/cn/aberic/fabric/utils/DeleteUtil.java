@@ -45,36 +45,37 @@ public class DeleteUtil {
 
     public int deleteLeague(int leagueId, LeagueMapper leagueMapper, OrgMapper orgMapper,
                             OrdererMapper ordererMapper, PeerMapper peerMapper, CAMapper caMapper,
-                            ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+                            ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         List<Org> orgs = orgMapper.list(leagueId);
         for (Org org : orgs) {
-            deleteOrg(org.getId(), orgMapper, ordererMapper, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper);
+            deleteOrg(org.getId(), orgMapper, ordererMapper, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
         }
         return leagueMapper.delete(leagueId);
     }
 
     public int deleteOrg(int orgId, OrgMapper orgMapper, OrdererMapper ordererMapper,
                          PeerMapper peerMapper, CAMapper caMapper, ChannelMapper channelMapper,
-                         ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+                         ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         List<Peer> peers = peerMapper.list(orgId);
         for (Peer peer : peers) {
-            deletePeer(peer.getId(), peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper);
+            deletePeer(peer.getId(), peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
         }
         ordererMapper.deleteAll(orgId);
         return orgMapper.delete(orgId);
     }
 
     public int deletePeer(int peerId, PeerMapper peerMapper, CAMapper caMapper, ChannelMapper channelMapper,
-                          ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+                          ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         List<Channel> channels = channelMapper.list(peerId);
         for (Channel channel : channels) {
-            deleteChannel(channel.getId(), channelMapper, chaincodeMapper, appMapper);
+            deleteChannel(channel.getId(), channelMapper, chaincodeMapper, appMapper, blockMapper);
         }
         caMapper.deleteAll(peerId);
         return peerMapper.delete(peerId);
     }
 
-    public int deleteChannel(int channelId, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
+    public int deleteChannel(int channelId, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
+        blockMapper.deleteByChannelId(channelId);
         List<Chaincode> chaincodes = chaincodeMapper.list(channelId);
         for (Chaincode chaincode : chaincodes) {
             deleteChaincode(chaincode.getId(), chaincodeMapper, appMapper);

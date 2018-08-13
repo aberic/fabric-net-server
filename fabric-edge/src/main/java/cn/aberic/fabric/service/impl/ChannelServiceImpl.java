@@ -18,6 +18,7 @@ package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.mapper.AppMapper;
+import cn.aberic.fabric.dao.mapper.BlockMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.service.ChannelService;
@@ -41,6 +42,8 @@ public class ChannelServiceImpl implements ChannelService {
     private ChaincodeMapper chaincodeMapper;
     @Resource
     private AppMapper appMapper;
+    @Resource
+    private BlockMapper blockMapper;
 
     @Override
     public int add(Channel channel) {
@@ -94,6 +97,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public int delete(int id) {
-        return DeleteUtil.obtain().deleteChannel(id, channelMapper, chaincodeMapper, appMapper);
+        return DeleteUtil.obtain().deleteChannel(id, channelMapper, chaincodeMapper, appMapper, blockMapper);
     }
 }
