@@ -63,6 +63,11 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
+    public int updateHeight(int id, int height) {
+        return channelMapper.updateHeight(id, height);
+    }
+
+    @Override
     public List<Channel> listAll() {
         return channelMapper.listAll();
     }

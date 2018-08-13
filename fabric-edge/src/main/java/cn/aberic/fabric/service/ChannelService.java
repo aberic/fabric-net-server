@@ -30,6 +30,8 @@ public interface ChannelService {
 
     int update(Channel channel);
 
+    int updateHeight(int id, int height);
+
     List<Channel> listAll();
 
     List<Channel> listById(int id);

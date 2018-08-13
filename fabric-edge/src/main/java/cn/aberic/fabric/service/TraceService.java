@@ -38,4 +38,6 @@ public interface TraceService {
     String queryBlockChainInfoForIndex(int channelId);
 
     String queryBlockByNumberWithCa(Trace trace, CA ca);
+
+    String queryBlockInfoWithCa(Trace trace, CA ca);
 }

@@ -99,6 +99,11 @@ public class TraceServiceImpl implements TraceService, BaseService {
         return trace(trace, TraceIntent.NUMBER, ca);
     }
 
+    @Override
+    public String queryBlockInfoWithCa(Trace trace, CA ca) {
+        return trace(trace, TraceIntent.INFO, ca);
+    }
+
     enum TraceIntent {
         TRANSACTION, HASH, NUMBER, INFO
     }

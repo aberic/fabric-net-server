@@ -150,7 +150,7 @@
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title" th:text="通道区块交易曲线"></h3>
+                                <h3 class="card-title" th:text="#{platform_channel_block_tx_rate}"></h3>
                             </div>
                             <div id="chart-development-activity" th:json-data="${channelBlockLists}"
                                  style="height: 10rem"></div>
@@ -179,13 +179,16 @@
                     </div>
 
                     <div class="col-md-6">
-                        <div class="alert alert-primary">Are you in trouble? <a href="https://github.com/aberic/fabric-net-server/wiki" class="alert-link">Read our documentation</a> with code samples.</div>
+                        <div class="alert alert-primary">Are you in trouble? <a
+                                href="https://github.com/aberic/fabric-net-server/wiki" class="alert-link">Read our
+                            documentation</a> with code samples.
+                        </div>
                         <div hidden th:percentData="${channelPercents}" id="percentData"></div>
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">区块通道比</h3>
+                                        <h3 class="card-title" th:text="#{platform_channel_block_rate}"></h3>
                                     </div>
                                     <div class="card-body">
                                         <div id="chart-donut" style="height: 12rem;"></div>
@@ -195,7 +198,7 @@
                             <div class="col-sm-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">通道交易比</h3>
+                                        <h3 class="card-title" th:text="#{platform_channel_tx_rate}"></h3>
                                     </div>
                                     <div class="card-body">
                                         <div id="chart-pie" style="height: 12rem;"></div>
@@ -207,7 +210,7 @@
                             <div class="col-sm-6">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <div class="h5">平台今日区块数</div>
+                                        <div class="h5" th:text="#{platform_block_count_today}"></div>
                                         <div class="display-4 font-weight-bold mb-4"
                                              th:text="${dayStatistics.blockCount}"></div>
                                         <div class="progress progress-sm">
@@ -220,7 +223,7 @@
                             <div class="col-sm-6">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <div class="h5">平台今日交易量</div>
+                                        <div class="h5" th:text="#{platform_tx_count_today}"></div>
                                         <div class="display-4 font-weight-bold mb-4"
                                              th:text="${dayStatistics.txCount}"></div>
                                         <div class="progress progress-sm">
@@ -242,7 +245,7 @@
                                 </span>
                                 <div>
                                     <h4 class="m-0" th:text="${platform.blockCount}"></h4>
-                                    <small class="text-muted">平台区块总数</small>
+                                    <small class="text-muted" th:text="#{platform_block_count}"></small>
                                 </div>
                             </div>
                         </div>
@@ -255,7 +258,7 @@
                                 </span>
                                 <div>
                                     <h4 class="m-0" th:text="${platform.txCount}"></h4>
-                                    <small class="text-muted">平台总交易量</small>
+                                    <small class="text-muted" th:text="#{platform_tx_count}"></small>
                                 </div>
                             </div>
                         </div>
@@ -268,7 +271,7 @@
                                 </span>
                                 <div>
                                     <h4 class="m-0" th:text="${platform.rwSetCount}"></h4>
-                                    <small class="text-muted">平台区块读写集总数</small>
+                                    <small class="text-muted" th:text="#{platform_rw_count}"></small>
                                 </div>
                             </div>
                         </div>
@@ -289,6 +292,7 @@
                                         <th th:text="#{channel_name}"></th>
                                         <th th:text="#{calculatedBlockHash}"></th>
                                         <th th:text="#{date}"></th>
+                                        <th th:text="#{block_sync_rate}"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -298,7 +302,12 @@
                                         <td th:text="${block.peerName}">节点名称</td>
                                         <td th:text="${block.channelName}">通道名称</td>
                                         <td th:text="${block.calculatedBlockHash}">当前hash</td>
-                                        <td th:text="${block.date}">时间</td>
+                                        <td th:text="${block.date}">日期</td>
+                                        <td class="text-center">
+                                            <div class="mx-auto chart-circle chart-circle-xs" th:data-value="${block.percent}" data-thickness="3" data-color="blue">
+                                                <div class="chart-circle-value" th:text="${block.percentStr}"></div>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -313,194 +322,192 @@
     </div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
-    <script>
+<script>
 
-        require(['c3', 'jquery'], function (c3, $) {
-            $(document).ready(function () {
-                //通道区块交易曲线
-                initChannelTradeChart()
-
-
-                var channelPercentsStr = $("#percentData").attr("percentData");
-                var channelPercents = JSON.parse(channelPercentsStr);
-                //区块通道比
-                chart2(channelPercents)
+    require(['c3', 'jquery'], function (c3, $) {
+        $(document).ready(function () {
+            //通道区块交易曲线
+            initChannelTradeChart()
 
 
-                chart3(channelPercents)
+            var channelPercentsStr = $("#percentData").attr("percentData");
+            var channelPercents = JSON.parse(channelPercentsStr);
+            //区块通道比
+            chart2(channelPercents)
 
 
+            chart3(channelPercents)
 
 
-            });
+        });
 
 
-            //    通道区块交易曲线
-            var initChannelTradeChart = function () {
-                var channelPercentsStr = $("#chart-development-activity").attr("json-data")
-                var channelPercents = JSON.parse(channelPercentsStr);
-                let array = [];
+        //    通道区块交易曲线
+        var initChannelTradeChart = function () {
+            var channelPercentsStr = $("#chart-development-activity").attr("json-data")
+            var channelPercents = JSON.parse(channelPercentsStr);
+            let array = [];
 
-                for (let v of channelPercents){
-                    let a = []
-                    a.push(v.name)
-                    for (let c of v.channelBlocks){
-                        if(c.blocks){
-                            a.push(c.blocks)
-                        }
+            for (let v of channelPercents) {
+                let a = []
+                a.push(v.name)
+                for (let c of v.channelBlocks) {
+                    if (c.blocks) {
+                        a.push(c.blocks)
                     }
-                    array.push(a)
                 }
+                array.push(a)
+            }
 
-                var chart = c3.generate({
-                    bindto: '#chart-development-activity', // id of chart wrapper
-                    data: {
-                        columns: array,
+            var chart = c3.generate({
+                bindto: '#chart-development-activity', // id of chart wrapper
+                data: {
+                    columns: array,
 //                                [
 //                            // each columns data
 //                            ['data1', 0, 5, 1, 2, 7, 5, 6, 8, 24, 7, 12, 5, 6, 3, 2, 2, 6, 30, 10, 10, 15, 14, 47, 65, 55]
 //                        ],
-                        type: 'area', // default type of chart
-                        groups: [
-                            ['data1', 'data2', 'data3']
-                        ],
-                        colors: {
-                            'data1': tabler.colors["blue"]
+                    type: 'area', // default type of chart
+                    groups: [
+                        ['data1', 'data2', 'data3']
+                    ],
+                    colors: {
+                        'data1': tabler.colors["blue"]
+                    },
+                    names: {
+                        // name of each serie
+                        'data1': 'channel1'
+                    }
+                },
+                axis: {
+                    y: {
+                        padding: {
+                            bottom: 0,
                         },
-                        names: {
-                            // name of each serie
-                            'data1': 'channel1'
+                        show: false,
+                        tick: {
+                            outer: false
                         }
                     },
-                    axis: {
-                        y: {
-                            padding: {
-                                bottom: 0,
-                            },
-                            show: false,
-                            tick: {
-                                outer: false
-                            }
+                    x: {
+                        padding: {
+                            left: 0,
+                            right: 0
                         },
-                        x: {
-                            padding: {
-                                left: 0,
-                                right: 0
-                            },
-                            show: false
-                        }
-                    },
-                    legend: {
-                        position: 'inset',
-                        padding: 0,
-                        inset: {
-                            anchor: 'top-left',
-                            x: 20,
-                            y: 8,
-                            step: 10
-                        }
-                    },
-                    tooltip: {
-                        format: {
-                            title: function (x) {
-                                return '';
-                            }
-                        }
-                    },
-                    padding: {
-                        bottom: 0,
-                        left: -1,
-                        right: -1
-                    },
-                    point: {
                         show: false
                     }
-                });
-            }
-
-
-            //通道区块比
-            var chart2 = function (data) {
-
-                let array = []
-                for(let c of data){
-                    let val = []
-                    val.push(c.name)
-                    val.push(c.blockPercent)
-                    array.push(val)
-                }
-
-
-                var chart = c3.generate({
-                    bindto: '#chart-donut', // id of chart wrapper
-                    data: {
-                        columns: array,
-                        type: 'donut', // default type of chart
-                        colors: {
-                            'data1': tabler.colors["green"],
-                            'data2': tabler.colors["green-light"]
-                        },
-                        names: {
-                            // name of each serie
-                            'data1': 'Maximum',
-                            'data2': 'Minimum'
+                },
+                legend: {
+                    position: 'inset',
+                    padding: 0,
+                    inset: {
+                        anchor: 'top-left',
+                        x: 20,
+                        y: 8,
+                        step: 10
+                    }
+                },
+                tooltip: {
+                    format: {
+                        title: function (x) {
+                            return '';
                         }
-                    },
-                    axis: {},
-                    legend: {
-                        show: false, //hide legend
-                    },
-                    padding: {
-                        bottom: 0,
-                        top: 0
-                    },
-                });
-            }
-
-
-            //通道交易比
-            var chart3 = function (data) {
-                let array = []
-                for(let c of data){
-                    let val = []
-                    val.push(c.name)
-                    val.push(c.txPercent)
-                    array.push(val)
+                    }
+                },
+                padding: {
+                    bottom: 0,
+                    left: -1,
+                    right: -1
+                },
+                point: {
+                    show: false
                 }
+            });
+        }
 
-                var chart = c3.generate({
-                    bindto: '#chart-pie', // id of chart wrapper
-                    data: {
-                        columns: array,
-                        type: 'pie', // default type of chart
-                        colors: {
-                            'data1': tabler.colors["blue-darker"],
-                            'data2': tabler.colors["blue"],
-                            'data3': tabler.colors["blue-light"],
-                            'data4': tabler.colors["blue-lighter"]
-                        },
-                        names: {
-                            // name of each serie
-                            'data1': 'A',
-                            'data2': 'B',
-                            'data3': 'C',
-                            'data4': 'D'
-                        }
-                    },
-                    axis: {},
-                    legend: {
-                        show: false, //hide legend
-                    },
-                    padding: {
-                        bottom: 0,
-                        top: 0
-                    },
-                });
+
+        //通道区块比
+        var chart2 = function (data) {
+
+            let array = []
+            for (let c of data) {
+                let val = []
+                val.push(c.name)
+                val.push(c.blockPercent)
+                array.push(val)
             }
-        })
 
 
-    </script>
+            var chart = c3.generate({
+                bindto: '#chart-donut', // id of chart wrapper
+                data: {
+                    columns: array,
+                    type: 'donut', // default type of chart
+                    colors: {
+                        'data1': tabler.colors["green"],
+                        'data2': tabler.colors["green-light"]
+                    },
+                    names: {
+                        // name of each serie
+                        'data1': 'Maximum',
+                        'data2': 'Minimum'
+                    }
+                },
+                axis: {},
+                legend: {
+                    show: false, //hide legend
+                },
+                padding: {
+                    bottom: 0,
+                    top: 0
+                },
+            });
+        }
+
+
+        //通道交易比
+        var chart3 = function (data) {
+            let array = []
+            for (let c of data) {
+                let val = []
+                val.push(c.name)
+                val.push(c.txPercent)
+                array.push(val)
+            }
+
+            var chart = c3.generate({
+                bindto: '#chart-pie', // id of chart wrapper
+                data: {
+                    columns: array,
+                    type: 'pie', // default type of chart
+                    colors: {
+                        'data1': tabler.colors["blue-darker"],
+                        'data2': tabler.colors["blue"],
+                        'data3': tabler.colors["blue-light"],
+                        'data4': tabler.colors["blue-lighter"]
+                    },
+                    names: {
+                        // name of each serie
+                        'data1': 'A',
+                        'data2': 'B',
+                        'data3': 'C',
+                        'data4': 'D'
+                    }
+                },
+                axis: {},
+                legend: {
+                    show: false, //hide legend
+                },
+                padding: {
+                    bottom: 0,
+                    top: 0
+                },
+            });
+        }
+    })
+
+
+</script>
 </body>
 
 </html>

@@ -28,6 +28,7 @@ import cn.aberic.fabric.utils.pool.ThreadFNSPool;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -37,6 +38,7 @@ import java.util.List;
  * 作者：Aberic on 2018/8/11 00:26
  * 邮箱：abericyang@gmail.com
  */
+@Slf4j
 public class BlockUtil {
 
     private static BlockUtil instance;
@@ -69,6 +71,14 @@ public class BlockUtil {
             if (!hadOne) {
                 this.channels.add(channel);
                 execChannel(channelService, caService, blockService, traceService, channel.getId());
+            }
+            CA ca = caService.listById(channel.getPeerId()).get(0);
+            Trace trace = new Trace();
+            trace.setChannelId(channel.getId());
+            JSONObject blockMessage = JSON.parseObject(traceService.queryBlockInfoWithCa(trace, ca));
+            int code = blockMessage.containsKey("code") ? blockMessage.getInteger("code") : 9999;
+            if (code == 200) {
+                channelService.updateHeight(channel.getId(), blockMessage.getJSONObject("data").getInteger("height"));
             }
         }
     }
@@ -155,6 +165,7 @@ public class BlockUtil {
                     Thread.sleep(1000);
                 }
             }
+            log.info(String.format("exec block data for number %s", height));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -163,6 +174,7 @@ public class BlockUtil {
     }
 
     private void insert(BlockService blockService) {
+        log.info(String.format("insert block data now blockList %s", blocks.size()));
         for (Block block : blocks) {
             blockService.add(block);
         }

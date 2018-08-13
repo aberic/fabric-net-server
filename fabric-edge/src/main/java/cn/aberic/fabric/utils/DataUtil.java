@@ -45,7 +45,7 @@ public class DataUtil {
     public Home home(LeagueService leagueService, OrgService orgService, OrdererService ordererService,
                      PeerService peerService, CAService caService, ChannelService channelService,
                      ChaincodeService chaincodeService, AppService appService, BlockService blockService) {
-        int leagueCount  = leagueService.listAll().size();
+        int leagueCount = leagueService.listAll().size();
         int orgCount = orgService.count();
         int ordererCount = ordererService.count();
         int peerCount = peerService.count();
@@ -86,12 +86,17 @@ public class DataUtil {
         List<Block> blocks = new ArrayList<>();
         for (Channel channel : channels) {
             cn.aberic.fabric.dao.Block blockDao = blockService.getByChannelId(channel.getId());
+            double totalHeight = channel.getHeight() - 1;
+            double nowHeight = blockDao.getHeight();
+            double percent = nowHeight >= totalHeight ? 1 : nowHeight/totalHeight;
             Block block = new Block();
-            block.setNum(blockDao.getHeight());
+            block.setNum((int)nowHeight);
             block.setPeerName(peerService.get(channel.getPeerId()).getName());
             block.setChannelName(channel.getName());
             block.setCalculatedBlockHash(blockDao.getCalculatedHash());
             block.setDate(blockDao.getTimestamp());
+            block.setPercent(percent);
+            block.setPercentStr(String.valueOf((int)(percent * 100)) + "%");
             blocks.add(block);
         }
         blocks.sort((t1, t2) -> {
@@ -109,4 +114,5 @@ public class DataUtil {
         }
         return blocks;
     }
+
 }

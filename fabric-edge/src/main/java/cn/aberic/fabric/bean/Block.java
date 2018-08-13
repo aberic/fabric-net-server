@@ -35,5 +35,7 @@ public class Block {
     private String channelName;
     private String calculatedBlockHash;
     private String date;
+    private double percent;
+    private String percentStr;
 
 }

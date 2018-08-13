@@ -36,6 +36,9 @@ public interface ChannelMapper {
             "callback_location=#{c.callbackLocation} where id=#{c.id}")
     int update(@Param("c") Channel channel);
 
+    @Update("update channel set height=#{height} where id=#{id}")
+    int updateHeight(@Param("id") int id, @Param("height") int height);
+
     @Select("select count(name) from channel where peer_id=#{id}")
     int count(@Param("id") int id);
 
@@ -81,14 +84,11 @@ public interface ChannelMapper {
     })
     List<Channel> list(@Param("id") int id);
 
-    @Select("select id,name,block_listener,callback_location,peer_id,date from channel")
+    @Select("select id,name,block_listener,callback_location,height,peer_id,date from channel")
     @Results({
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
             @Result(property = "blockListener", column = "block_listener"),
             @Result(property = "callbackLocation", column = "callback_location"),
-            @Result(property = "peerId", column = "peer_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "peerId", column = "peer_id")
     })
     List<Channel> listAll();
 
