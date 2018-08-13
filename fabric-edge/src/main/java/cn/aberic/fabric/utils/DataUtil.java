@@ -78,6 +78,9 @@ public class DataUtil {
         home.setBlockDaos(blockDaos);
         home.setDayStatistics(dayStatistics);
         home.setPlatform(platform);
+        home.setDayBlocks(blockService.get20CountList());
+        home.setDayTxs(blockService.get20TxCountList());
+        home.setDayRWs(blockService.get20RWCountList());
         CacheUtil.putHome(home);
         return home;
     }

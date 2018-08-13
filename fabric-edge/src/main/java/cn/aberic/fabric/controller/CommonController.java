@@ -22,6 +22,7 @@ import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DataUtil;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -86,6 +87,13 @@ public class CommonController {
         modelAndView.addObject("blockDaos", home.getBlockDaos());
         modelAndView.addObject("dayStatistics", home.getDayStatistics());
         modelAndView.addObject("platform", home.getPlatform());
+        modelAndView.addObject("dayBlocks", home.getDayBlocks());
+        modelAndView.addObject("dayTxs", home.getDayTxs());
+        modelAndView.addObject("dayRWs", home.getDayRWs());
+        modelAndView.addObject("dayBlocksJson", new JSONObject(home.getDayBlocks()));
+        modelAndView.addObject("dayTxsJson", new JSONObject(home.getDayTxs()));
+        modelAndView.addObject("dayRWsJson", new JSONObject(home.getDayRWs()));
+
         //中间统计模块结束
 
         return modelAndView;

@@ -167,4 +167,70 @@ public class BlockServiceImpl implements BlockService {
         return blocks.subList(0, 6);
     }
 
+    @Override
+    public Curve get20CountList() {
+        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd")) - 20;
+        List<Integer> integers = new LinkedList<>();
+        Curve curve = new Curve();
+        curve.setName("Block Count");
+        for (int i = 0; i < 20; i++) {
+            int blockCount = 0;
+            try {
+                blockCount = blockMapper.countByDate(today);
+            } catch (Exception ignored) {
+
+            }
+            today++;
+            integers.add(blockCount);
+        }
+        int ud = integers.get(19) - integers.get(18);
+        curve.setUpDown(ud == 0 ? "+" + ud : String.valueOf(ud));
+        curve.setIntegers(integers);
+        return curve;
+    }
+
+    @Override
+    public Curve get20TxCountList() {
+        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd")) - 20;
+        List<Integer> integers = new LinkedList<>();
+        Curve curve = new Curve();
+        curve.setName("TX Count");
+        for (int i = 0; i < 20; i++) {
+            int txCount = 0;
+            try {
+                txCount = blockMapper.countTxByDate(today);
+            } catch (Exception ignored) {
+
+            }
+            today++;
+            integers.add(txCount);
+        }
+        int ud = integers.get(19) - integers.get(18);
+        curve.setUpDown(ud == 0 ? "+" + ud : String.valueOf(ud));
+        curve.setIntegers(integers);
+        return curve;
+    }
+
+    @Override
+    public Curve get20RWCountList() {
+        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd")) - 20;
+        List<Integer> integers = new LinkedList<>();
+        Curve curve = new Curve();
+        curve.setName("RWSet Count");
+        for (int i = 0; i < 20; i++) {
+            int rwCount = 0;
+            try {
+                rwCount = blockMapper.countRWSetByDate(today);
+            } catch (Exception ignored) {
+
+            }
+            today++;
+            integers.add(rwCount);
+        }
+        int ud = integers.get(19) - integers.get(18);
+        curve.setUpDown(ud == 0 ? "+" + ud : String.valueOf(ud));
+        curve.setIntegers(integers);
+        return curve;
+    }
+
 }

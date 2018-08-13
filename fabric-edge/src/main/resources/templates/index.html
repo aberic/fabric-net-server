@@ -236,7 +236,6 @@
                         </div>
                     </div>
 
-
                     <div class="col-sm-6 col-lg-4">
                         <div class="card p-3">
                             <div class="d-flex align-items-center">
@@ -277,6 +276,50 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6 col-lg-12">
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-4">
+                                <div hidden th:dayBlockDatas="${dayBlocksJson}" id="dayBlockDatas"></div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-value float-right text-blue" th:text="${dayBlocks.upDown}"></div>
+                                        <h5 class="mb-1" th:text="#{platform_day_block_curve}"></h5>
+                                        <div class="text-muted" th:text="#{platform_day_block_curve_brief}" style="font-size: 10px"></div>
+                                    </div>
+                                    <div class="card-chart-bg">
+                                        <div id="chart-bg-users-1" style="height: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <div hidden th:dayTxDatas="${dayTxsJson}" id="dayTxDatas"></div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-value float-right text-green" th:text="${dayTxs.upDown}"></div>
+                                        <h5 class="mb-1" th:text="#{platform_day_tx_curve}"></h5>
+                                        <div class="text-muted" th:text="#{platform_day_tx_curve_brief}" style="font-size: 10px"></div>
+                                    </div>
+                                    <div class="card-chart-bg">
+                                        <div id="chart-bg-users-2" style="height: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <div hidden th:dayRWDatas="${dayRWsJson}" id="dayRWDatas"></div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-value float-right text-red" th:text="${dayRWs.upDown}"></div>
+                                        <h5 class="mb-1" th:text="#{platform_day_rw_curve}"></h5>
+                                        <div class="text-muted" th:text="#{platform_day_rw_curve_brief}" style="font-size: 10px"></div>
+                                    </div>
+                                    <div class="card-chart-bg">
+                                        <div id="chart-bg-users-3" style="height: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
@@ -304,7 +347,8 @@
                                         <td th:text="${block.calculatedBlockHash}">当前hash</td>
                                         <td th:text="${block.date}">日期</td>
                                         <td class="text-center">
-                                            <div class="mx-auto chart-circle chart-circle-xs" th:data-value="${block.percent}" data-thickness="3" data-color="blue">
+                                            <div class="mx-auto chart-circle chart-circle-xs"
+                                                 th:data-value="${block.percent}" data-thickness="3" data-color="blue">
                                                 <div class="chart-circle-value" th:text="${block.percentStr}"></div>
                                             </div>
                                         </td>
@@ -323,7 +367,6 @@
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
 <script>
-
     require(['c3', 'jquery'], function (c3, $) {
         $(document).ready(function () {
             //通道区块交易曲线
@@ -334,11 +377,11 @@
             var channelPercents = JSON.parse(channelPercentsStr);
             //区块通道比
             chart2(channelPercents)
-
-
             chart3(channelPercents)
 
-
+            dayBlocks()
+            dayTxs()
+            dayRWs()
         });
 
 
@@ -425,10 +468,206 @@
             });
         }
 
+        var dayRWs = function () {
+            var dayRWsList = $("#dayRWDatas").attr("dayRWDatas");
+            var dayRWsListJson = JSON.parse(dayRWsList);
 
-        //通道区块比
+            let array = []
+            let val = []
+            val.push(dayRWsListJson.name)
+            for (let d of dayRWsListJson.integers) {
+                val.push(d)
+            }
+            array.push(val)
+            var chart = c3.generate({
+                bindto: '#chart-bg-users-3',
+                padding: {
+                    bottom: -10,
+                    left: -1,
+                    right: -1
+                },
+                data: {
+                    names: {
+                        data1: dayRWsListJson.name
+                    },
+                    columns: array,
+                    type: 'area'
+                },
+                legend: {
+                    show: false
+                },
+                transition: {
+                    duration: 0
+                },
+                point: {
+                    show: false
+                },
+                tooltip: {
+                    format: {
+                        title: function (x) {
+                            return '';
+                        }
+                    }
+                },
+                axis: {
+                    y: {
+                        padding: {
+                            bottom: 0,
+                        },
+                        show: false,
+                        tick: {
+                            outer: false
+                        }
+                    },
+                    x: {
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                        show: false
+                    }
+                },
+                color: {
+                    pattern: ['#e74c3c']
+                }
+            });
+        }
+
+        var dayTxs = function () {
+            var dayTxsList = $("#dayTxDatas").attr("dayTxDatas");
+            var dayTxsListJson = JSON.parse(dayTxsList);
+
+            let array = []
+            let val = []
+            val.push(dayTxsListJson.name)
+            for (let d of dayTxsListJson.integers) {
+                val.push(d)
+            }
+            array.push(val)
+
+            var chart = c3.generate({
+                bindto: '#chart-bg-users-2',
+                padding: {
+                    bottom: -10,
+                    left: -1,
+                    right: -1
+                },
+                data: {
+                    names: {
+                        data1: dayTxsListJson.name
+                    },
+                    columns: array,
+                    type: 'area'
+                },
+                legend: {
+                    show: false
+                },
+                transition: {
+                    duration: 0
+                },
+                point: {
+                    show: false
+                },
+                tooltip: {
+                    format: {
+                        title: function (x) {
+                            return '';
+                        }
+                    }
+                },
+                axis: {
+                    y: {
+                        padding: {
+                            bottom: 0,
+                        },
+                        show: false,
+                        tick: {
+                            outer: false
+                        }
+                    },
+                    x: {
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                        show: false
+                    }
+                },
+                color: {
+                    pattern: ['#5eba00']
+                }
+            });
+        }
+
+        // 日区块曲线
+        var dayBlocks = function () {
+            var dayBlockList = $("#dayBlockDatas").attr("dayBlockDatas");
+            var dayBlockListJson = JSON.parse(dayBlockList);
+
+            let array = []
+            let val = []
+            val.push(dayBlockListJson.name)
+            for (let d of dayBlockListJson.integers) {
+                val.push(d)
+            }
+            array.push(val)
+
+            var chart = c3.generate({
+                bindto: '#chart-bg-users-1',
+                padding: {
+                    bottom: -10,
+                    left: -1,
+                    right: -1
+                },
+                data: {
+                    names: {
+                        data1: dayBlockListJson.name
+                    },
+                    columns: array,
+                    type: 'area'
+                },
+                legend: {
+                    show: false
+                },
+                transition: {
+                    duration: 0
+                },
+                point: {
+                    show: false
+                },
+                tooltip: {
+                    format: {
+                        title: function (x) {
+                            return '';
+                        }
+                    }
+                },
+                axis: {
+                    y: {
+                        padding: {
+                            bottom: 0,
+                        },
+                        show: false,
+                        tick: {
+                            outer: false
+                        }
+                    },
+                    x: {
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                        show: false
+                    }
+                },
+                color: {
+                    pattern: ['#467fcf']
+                }
+            });
+        }
+
+        // 通道区块比
         var chart2 = function (data) {
-
             let array = []
             for (let c of data) {
                 let val = []
@@ -436,7 +675,6 @@
                 val.push(c.blockPercent)
                 array.push(val)
             }
-
 
             var chart = c3.generate({
                 bindto: '#chart-donut', // id of chart wrapper

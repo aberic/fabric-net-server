@@ -16,36 +16,21 @@
 
 package cn.aberic.fabric.bean;
 
-import cn.aberic.fabric.dao.Channel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
 /**
- * 作者：Aberic on 2018/8/10 21:29
- * 邮箱：abericyang@gmail.com
+ * 描述：
+ *
+ * @author : Aberic 【2018-08-13 14:32】
  */
 @Setter
 @Getter
-public class Home {
+public class Curve {
 
-    int leagueCount;
-    int orgCount;
-    int ordererCount;
-    int peerCount;
-    int caCount;
-    int channelCount;
-    int chaincodeCount;
-    int appCount;
-    List<Channel> channels;
-    List<Block> blocks;
-    List<ChannelPercent> channelPercents;
-    List<ChannelBlockList> channelBlockLists;
-    List<cn.aberic.fabric.dao.Block> blockDaos;
-    DayStatistics dayStatistics;
-    Platform platform;
-    Curve dayBlocks;
-    Curve dayTxs;
-    Curve dayRWs;
+    private String name;
+    private List<Integer> integers;
+    private String upDown;
 }

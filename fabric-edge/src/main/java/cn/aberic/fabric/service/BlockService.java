@@ -43,4 +43,10 @@ public interface BlockService {
 
     List<Block> getLimit(int limit);
 
+    Curve get20CountList();
+
+    Curve get20TxCountList();
+
+    Curve get20RWCountList();
+
 }

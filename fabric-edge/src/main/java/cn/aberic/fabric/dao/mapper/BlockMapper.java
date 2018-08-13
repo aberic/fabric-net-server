@@ -59,8 +59,8 @@ public interface BlockMapper {
     @Select("select sum(r_w_set_count) from block")
     int countRWSet();
 
-    @Select("select sum(r_w_set_count) from block where channel_id=#{channelId}")
-    int countRWSetByChannelId(@Param("channelId") int channelId);
+    @Select("select sum(r_w_set_count) from block where calculate_date=#{calculateDate}")
+    int countRWSetByDate(@Param("calculateDate") int calculateDate);
 
     @Select("select channel_id,height,data_hash,calculated_hash,previous_hash,envelope_count,tx_count,r_w_set_count," +
             "timestamp,calculate_date,create_date from block where channel_id=#{channelId} order by id desc limit 1")
