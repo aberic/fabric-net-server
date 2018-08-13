@@ -184,7 +184,7 @@ public class BlockServiceImpl implements BlockService {
             integers.add(blockCount);
         }
         int ud = integers.get(19) - integers.get(18);
-        curve.setUpDown(ud == 0 ? "+" + ud : String.valueOf(ud));
+        curve.setUpDown(ud >= 0 ? "+" + ud : String.valueOf(ud));
         curve.setIntegers(integers);
         return curve;
     }
@@ -206,7 +206,7 @@ public class BlockServiceImpl implements BlockService {
             integers.add(txCount);
         }
         int ud = integers.get(19) - integers.get(18);
-        curve.setUpDown(ud == 0 ? "+" + ud : String.valueOf(ud));
+        curve.setUpDown(ud >= 0 ? "+" + ud : String.valueOf(ud));
         curve.setIntegers(integers);
         return curve;
     }
@@ -228,7 +228,7 @@ public class BlockServiceImpl implements BlockService {
             integers.add(rwCount);
         }
         int ud = integers.get(19) - integers.get(18);
-        curve.setUpDown(ud == 0 ? "+" + ud : String.valueOf(ud));
+        curve.setUpDown(ud >= 0 ? "+" + ud : String.valueOf(ud));
         curve.setIntegers(integers);
         return curve;
     }
