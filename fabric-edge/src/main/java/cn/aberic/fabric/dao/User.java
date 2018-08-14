@@ -32,5 +32,6 @@ public class User {
     private int id; // required
     private String username; // required
     private String password; // required
+    private String date;
 
 }

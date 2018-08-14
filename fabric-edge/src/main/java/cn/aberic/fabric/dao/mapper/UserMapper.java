@@ -35,19 +35,9 @@ public interface UserMapper {
     int update(@Param("u")User user);
 
     @Select("select id,username,password from user where username=#{username}")
-    @Results({
-            @Result(property = "id", column = "id"),
-            @Result(property = "username", column = "username"),
-            @Result(property = "password", column = "password")
-    })
     User get(@Param("username") String username);
 
-    @Select("select id,username,password from user")
-    @Results({
-            @Result(property = "id", column = "id"),
-            @Result(property = "username", column = "username"),
-            @Result(property = "password", column = "password")
-    })
+    @Select("select id,username,date from user")
     List<User> listAll();
 
 }

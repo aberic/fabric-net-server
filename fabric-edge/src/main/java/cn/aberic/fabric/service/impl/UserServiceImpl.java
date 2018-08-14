@@ -20,6 +20,7 @@ import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.UserService;
 import cn.aberic.fabric.utils.CacheUtil;
+import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> listAll() {
-        return userMapper.listAll();
+        List<User> users = userMapper.listAll();
+        for (User user: users) {
+            try {
+                user.setDate(DateUtil.strDateFormat(user.getDate(), "yyyyMMddHHmm", "yyyy/MM/dd HH:mm"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return users;
     }
 
     @Override

@@ -16,7 +16,7 @@
                         <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
                             <span class="ml-2 d-none d-lg-block">
                                         <span class="text-default">Fabric Net</span>
-                                        <small class="text-muted d-block mt-1">Administrator</small>
+                                        <small class="text-muted d-block mt-1">Server</small>
                                     </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
@@ -78,6 +78,12 @@
                                 <a href="/channel/list" class="dropdown-item " th:text="#{channel}"></a>
                                 <a href="/chaincode/list" class="dropdown-item " th:text="#{chaincode}"></a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/user/list" class="nav-link">
+                                <ion-icon name="people"></ion-icon>
+                                <span th:text="#{member}"></span>
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a href="https://github.com/aberic/fabric-net-server/wiki"
