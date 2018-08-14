@@ -34,6 +34,9 @@ public interface UserMapper {
     @Update("update user set password=#{u.password} where username=#{u.username}")
     int update(@Param("u")User user);
 
+    @Delete("delete from user where id=#{id}")
+    int delete(@Param("id") int id);
+
     @Select("select id,username,password from user where username=#{username}")
     User get(@Param("username") String username);
 

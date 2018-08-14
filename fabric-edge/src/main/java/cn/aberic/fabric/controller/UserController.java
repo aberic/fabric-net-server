@@ -21,8 +21,10 @@ import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -45,6 +47,12 @@ public class UserController {
         List<User> users = userService.listAll();
         modelAndView.addObject("users", users);
         return modelAndView;
+    }
+
+    @GetMapping(value = "delete")
+    public ModelAndView delete(@RequestParam("id") int id) {
+        userService.delete(id);
+        return new ModelAndView(new RedirectView("list"));
     }
 
 }

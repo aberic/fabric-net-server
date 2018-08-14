@@ -30,6 +30,8 @@ public interface UserService {
 
     int add(User user);
 
+    int delete(int id);
+
     int update(User user);
 
     List<User> listAll();
