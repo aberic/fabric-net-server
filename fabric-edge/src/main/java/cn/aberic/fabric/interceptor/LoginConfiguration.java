@@ -37,6 +37,7 @@ public class LoginConfiguration implements WebMvcConfigurer {
         loginRegistry.addPathPatterns("/chaincode/*");
         loginRegistry.addPathPatterns("/app/*");
         loginRegistry.addPathPatterns("/ca/*");
+        loginRegistry.addPathPatterns("/user/*");
         loginRegistry.addPathPatterns("/index");
 
     }
