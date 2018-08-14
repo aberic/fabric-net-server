@@ -74,6 +74,7 @@
                                     <tr>
                                         <th class="w-1">ID</th>
                                         <th th:text="#{username}"></th>
+                                        <th th:text="#{role}"></th>
                                         <th th:text="#{date}"></th>
                                         <th th:text="#{operate}"></th>
                                     </tr>
@@ -84,10 +85,13 @@
                                             <span class="text-muted" th:text="${user.id}">ID</span>
                                         </td>
                                         <td class="text-inherit" th:text="${user.username}">用户名称</td>
+                                        <td class="text-inherit" th:text="${user.roleName}">角色</td>
                                         <td th:text="${user.date}">时间</td>
                                         <td>
-                                            <a th:href="@{/user/edit(id=${user.id})}"
-                                               class="btn btn-secondary btn-sm" th:text="#{edit}"></a>
+                                            <a th:href="@{/user/password(id=${user.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{password}"></a>
+                                            <a th:href="@{/user/role(id=${user.id})}"
+                                               class="btn btn-secondary btn-sm" th:text="#{role}"></a>
                                             <a th:href="@{/user/delete(id=${user.id})}"
                                                onclick="return doDelete()"
                                                class="btn btn-secondary btn-sm" th:text="#{delete}"></a>

@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.service.impl;
 
+import cn.aberic.fabric.dao.Role;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.UserService;
@@ -88,16 +89,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int updatePassword(User user) {
+        if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
+            return 0;
+        }
+        user.setPassword(MD5Util.md5(user.getPassword()));
+        return userMapper.updatePassword(user);
+    }
+
+    @Override
+    public int updateRole(User user) {
+        return userMapper.updateRole(user);
+    }
+
+    @Override
+    public int setRole(User user) {
+        return userMapper.setRole(user);
+    }
+
+    @Override
     public List<User> listAll() {
         List<User> users = userMapper.listAll();
         for (User user: users) {
             try {
                 user.setDate(DateUtil.strDateFormat(user.getDate(), "yyyyMMddHHmmss", "yyyy/MM/dd HH:mm:ss"));
+                user.setRoleName(userMapper.getRoleById(user.getRoleId()).getName());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return users;
+    }
+
+    @Override
+    public List<Role> listRole() {
+        return userMapper.listRole();
     }
 
     @Override
@@ -122,6 +148,11 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public Role getRoleById(int id) {
+        return userMapper.getRoleById(id);
     }
 
 }

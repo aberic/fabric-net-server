@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.runner;
 
+import cn.aberic.fabric.dao.Role;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.service.UserService;
 import cn.aberic.fabric.utils.MD5Util;
@@ -60,6 +61,7 @@ public class FabricEdgeRunner implements ApplicationRunner {
         User user = new User();
         user.setUsername(username);
         user.setPassword(MD5Util.md5(password));
+        user.setRoleId(Role.SUPER_ADMIN);
         userService.init(user);
     }
 

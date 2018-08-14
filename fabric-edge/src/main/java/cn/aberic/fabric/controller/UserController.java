@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.dao.League;
+import cn.aberic.fabric.dao.Role;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.service.UserService;
 import cn.aberic.fabric.utils.SpringUtil;
@@ -42,13 +42,22 @@ public class UserController {
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute User user,
                                @RequestParam("intent") String intent,
-                               @RequestParam("id") int id) {
+                               @RequestParam("roleIdTmp") int roleIdTmp) {
         switch (intent) {
             case "add":
                 userService.create(user);
                 break;
-            case "edit":
-                userService.upgrade(user);
+            case "password":
+                if (roleIdTmp == Role.SUPER_ADMIN) {
+                    user.setRoleId(roleIdTmp);
+                }
+                userService.updatePassword(user);
+                break;
+            case "role":
+                if (roleIdTmp == Role.SUPER_ADMIN) {
+                    user.setRoleId(roleIdTmp);
+                }
+                userService.updateRole(user);
                 break;
         }
         return new ModelAndView(new RedirectView("list"));
@@ -68,17 +77,34 @@ public class UserController {
         modelAndView.addObject("intentLittle", SpringUtil.get("add"));
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
+        modelAndView.addObject("roles", userService.listRole());
         modelAndView.addObject("user", new User());
         return modelAndView;
     }
 
-    @GetMapping(value = "edit")
-    public ModelAndView edit(@RequestParam("id") int id) {
-        ModelAndView modelAndView = new ModelAndView("userSubmit");
+    @GetMapping(value = "password")
+    public ModelAndView password(@RequestParam("id") int id) {
+        ModelAndView modelAndView = new ModelAndView("userPassSubmit");
         modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
         modelAndView.addObject("submit", SpringUtil.get("modify"));
-        modelAndView.addObject("intent", "edit");
-        modelAndView.addObject("user", userService.get(id));
+        modelAndView.addObject("intent", "password");
+        User user = userService.get(id);
+        user.setPassword("");
+        modelAndView.addObject("user", user);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "role")
+    public ModelAndView role(@RequestParam("id") int id) {
+        ModelAndView modelAndView = new ModelAndView("userRoleSubmit");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
+        modelAndView.addObject("intent", "role");
+        User user = userService.get(id);
+        user.setPassword("");
+        modelAndView.addObject("roles", userService.listRole());
+        modelAndView.addObject("user", user);
+        modelAndView.addObject("roleIdTmp", user.getRoleId());
         return modelAndView;
     }
 

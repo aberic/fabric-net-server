@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.dao.mapper;
 
+import cn.aberic.fabric.dao.Role;
 import cn.aberic.fabric.dao.User;
 import org.apache.ibatis.annotations.*;
 
@@ -28,25 +29,49 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Insert("insert into user  (username,password,date) values (#{u.username},#{u.password},#{u.date})")
+    @Insert("insert into user (username,password,role_id,date) values (#{u.username},#{u.password},#{u.roleId},#{u.date})")
     int add(@Param("u")User user);
 
     @Update("update user set password=#{u.password} where username=#{u.username}")
     int update(@Param("u")User user);
 
-    @Update("update user set username=#{u.username},password=#{u.password} where id=#{u.id}")
+    @Update("update user set password=#{u.password},role_id=#{u.roleId} where id=#{u.id}")
     int upgrade(@Param("u")User user);
+
+    @Update("update user set password=#{u.password} where id=#{u.id}")
+    int updatePassword(@Param("u")User user);
+
+    @Update("update user set role_id=#{u.roleId} where id=#{u.id}")
+    int updateRole(@Param("u")User user);
+
+    @Update("update user set role_id=#{u.roleId} where id=#{u.id}")
+    int setRole(@Param("u")User user);
 
     @Delete("delete from user where id=#{id}")
     int delete(@Param("id") int id);
 
-    @Select("select id,username,password from user where username=#{username}")
+    @Select("select id,username,password,role_id,date from user where username=#{username}")
+    @Results({
+            @Result(property = "roleId", column = "role_id")
+    })
     User get(@Param("username") String username);
 
-    @Select("select id,username,date from user where id=#{id}")
+    @Select("select id,username,password,role_id,date from user where id=#{id}")
+    @Results({
+            @Result(property = "roleId", column = "role_id")
+    })
     User getById(@Param("id") int id);
 
-    @Select("select id,username,date from user")
+    @Select("select id,username,password,role_id,date from user")
+    @Results({
+            @Result(property = "roleId", column = "role_id")
+    })
     List<User> listAll();
+
+    @Select("select id,name from role where id>1")
+    List<Role> listRole();
+
+    @Select("select id,name from role where id=#{id}")
+    Role getRoleById(@Param("id") int id);
 
 }

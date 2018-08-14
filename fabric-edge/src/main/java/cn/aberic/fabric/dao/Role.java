@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Aberic - aberic@qq.com - All Rights Reserved.
+ * Copyright (c) 2018. Aberic - All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,20 +21,20 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 作者：Aberic on 2018/6/27 21:12
- * 邮箱：abericyang@gmail.com
+ * 描述：
+ *
+ * @author : Aberic 【2018-08-14 15:38】
  */
 @Setter
 @Getter
 @ToString
-public class User {
+public class Role {
 
-    private int id; // required
-    private String username; // required
-    private String password; // required
-    private int roleId; // 1-超级管理员、2-管理员、8-普通会员
-    private String date;
+    public final static int SUPER_ADMIN=1;
+    public final static int ADMIN=2;
+    public final static int MEMBER=8;
 
-    private String roleName;
+    private int id;
+    private String name;
 
 }
