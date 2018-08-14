@@ -19,11 +19,14 @@ package cn.aberic.fabric.service.impl;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.UserService;
+import cn.aberic.fabric.utils.CacheUtil;
+import cn.aberic.fabric.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -66,6 +69,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(String username) {
         return userMapper.get(username);
+    }
+
+    @Override
+    public String login(User user) {
+        try {
+            if (MD5Util.verify(user.getPassword(), userMapper.get(user.getUsername()).getPassword())) {
+                String token = UUID.randomUUID().toString();
+                CacheUtil.putString(user.getUsername(), token);
+                return token;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

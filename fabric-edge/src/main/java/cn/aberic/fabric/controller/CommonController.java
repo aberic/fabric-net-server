@@ -40,8 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 public class CommonController {
 
     @Resource
-    private CommonService commonService;
-    @Resource
     private LeagueService leagueService;
     @Resource
     private OrgService orgService;
@@ -59,6 +57,8 @@ public class CommonController {
     private AppService appService;
     @Resource
     private BlockService blockService;
+    @Resource
+    private UserService userService;
 
     @GetMapping(value = "index")
     public ModelAndView index() {
@@ -102,7 +102,7 @@ public class CommonController {
     @PostMapping(value = "login")
     public ModelAndView submit(@ModelAttribute User user, HttpServletRequest request) {
         try {
-            String token = commonService.login(user);
+            String token = userService.login(user);
             if (null != token) {
                 // 校验通过时，在session里放入一个标识
                 // 后续通过session里是否存在该标识来判断用户是否登录

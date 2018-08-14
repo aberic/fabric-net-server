@@ -35,4 +35,6 @@ public interface UserService {
     List<User> listAll();
 
     User get(String username);
+
+    String login(User user);
 }
