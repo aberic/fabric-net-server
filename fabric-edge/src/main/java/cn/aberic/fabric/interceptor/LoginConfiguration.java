@@ -27,18 +27,19 @@ public class LoginConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration loginRegistry = registry.addInterceptor(loginInterceptor());
+        LoginInterceptor loginInterceptor = loginInterceptor();
+        InterceptorRegistration loginRegistry = registry.addInterceptor(loginInterceptor);
         // 拦截路径
-        loginRegistry.addPathPatterns("/league/*");
-        loginRegistry.addPathPatterns("/org/*");
-        loginRegistry.addPathPatterns("/orderer/*");
-        loginRegistry.addPathPatterns("/peer/*");
-        loginRegistry.addPathPatterns("/channel/*");
-        loginRegistry.addPathPatterns("/chaincode/*");
-        loginRegistry.addPathPatterns("/app/*");
-        loginRegistry.addPathPatterns("/ca/*");
-        loginRegistry.addPathPatterns("/user/*");
-        loginRegistry.addPathPatterns("/index");
+        loginRegistry.addPathPatterns(loginInterceptor.LEAGUE);
+        loginRegistry.addPathPatterns(loginInterceptor.ORG);
+        loginRegistry.addPathPatterns(loginInterceptor.ORDERER);
+        loginRegistry.addPathPatterns(loginInterceptor.PEER);
+        loginRegistry.addPathPatterns(loginInterceptor.CHANNEL);
+        loginRegistry.addPathPatterns(loginInterceptor.CHAINCODE);
+        loginRegistry.addPathPatterns(loginInterceptor.APP);
+        loginRegistry.addPathPatterns(loginInterceptor.CA);
+        loginRegistry.addPathPatterns(loginInterceptor.USER);
+        loginRegistry.addPathPatterns(loginInterceptor.INDEX);
 
     }
 

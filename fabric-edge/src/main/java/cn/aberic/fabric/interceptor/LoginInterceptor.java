@@ -26,10 +26,23 @@ import java.io.IOException;
 
 public class LoginInterceptor implements HandlerInterceptor {
 
+    String LEAGUE = "/league/*";
+    String ORG = "/org/*";
+    String ORDERER = "/orderer/*";
+    String PEER = "/peer/*";
+    String CHANNEL = "/channel/*";
+    String CHAINCODE = "/chaincode/*";
+    String APP = "/app/*";
+    String CA = "/ca/*";
+    String USER = "/user/*";
+    String INDEX = "/index";
+
     /** 在请求被处理之前调用 */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         // 检查每个到来的请求对应的session域中是否有登录标识
+        String uri = request.getRequestURI();
+        System.out.print(uri);
         String token = (String) request.getSession().getAttribute("token");
         String username = (String) request.getSession().getAttribute("username");
         if (!StringUtils.equalsIgnoreCase(token, CacheUtil.getString(username))){
