@@ -30,13 +30,19 @@ public interface UserService {
 
     int add(User user);
 
+    int create(User user);
+
     int delete(int id);
 
     int update(User user);
 
+    int upgrade(User user);
+
     List<User> listAll();
 
     User get(String username);
+
+    User get(int id);
 
     String login(User user);
 }

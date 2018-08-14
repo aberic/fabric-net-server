@@ -28,17 +28,23 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Insert("insert into user  (username,password) values (#{u.username},#{u.password})")
+    @Insert("insert into user  (username,password,date) values (#{u.username},#{u.password},#{u.date})")
     int add(@Param("u")User user);
 
     @Update("update user set password=#{u.password} where username=#{u.username}")
     int update(@Param("u")User user);
+
+    @Update("update user set username=#{u.username},password=#{u.password} where id=#{u.id}")
+    int upgrade(@Param("u")User user);
 
     @Delete("delete from user where id=#{id}")
     int delete(@Param("id") int id);
 
     @Select("select id,username,password from user where username=#{username}")
     User get(@Param("username") String username);
+
+    @Select("select id,username,date from user where id=#{id}")
+    User getById(@Param("id") int id);
 
     @Select("select id,username,date from user")
     List<User> listAll();

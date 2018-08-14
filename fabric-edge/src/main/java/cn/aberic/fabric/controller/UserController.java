@@ -19,10 +19,8 @@ package cn.aberic.fabric.controller;
 import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import cn.aberic.fabric.utils.SpringUtil;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -41,11 +39,46 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @PostMapping(value = "submit")
+    public ModelAndView submit(@ModelAttribute User user,
+                               @RequestParam("intent") String intent,
+                               @RequestParam("id") int id) {
+        switch (intent) {
+            case "add":
+                userService.create(user);
+                break;
+            case "edit":
+                userService.upgrade(user);
+                break;
+        }
+        return new ModelAndView(new RedirectView("list"));
+    }
+
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("users");
         List<User> users = userService.listAll();
         modelAndView.addObject("users", users);
+        return modelAndView;
+    }
+
+    @GetMapping(value = "add")
+    public ModelAndView add() {
+        ModelAndView modelAndView = new ModelAndView("userSubmit");
+        modelAndView.addObject("intentLittle", SpringUtil.get("add"));
+        modelAndView.addObject("submit", SpringUtil.get("submit"));
+        modelAndView.addObject("intent", "add");
+        modelAndView.addObject("user", new User());
+        return modelAndView;
+    }
+
+    @GetMapping(value = "edit")
+    public ModelAndView edit(@RequestParam("id") int id) {
+        ModelAndView modelAndView = new ModelAndView("userSubmit");
+        modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
+        modelAndView.addObject("submit", SpringUtil.get("modify"));
+        modelAndView.addObject("intent", "edit");
+        modelAndView.addObject("user", userService.get(id));
         return modelAndView;
     }
 

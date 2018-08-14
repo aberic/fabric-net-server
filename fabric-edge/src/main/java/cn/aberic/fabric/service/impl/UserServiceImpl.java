@@ -40,11 +40,8 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
             return 0;
         }
-        List<User> users = listAll();
-        for (User user1 : users) {
-            if (StringUtils.equals(user.getUsername(), user1.getUsername())) {
-                return update(user);
-            }
+        if (null != userMapper.get(user.getUsername())) {
+            return update(user);
         }
         return add(user);
     }
@@ -54,7 +51,21 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
             return 0;
         }
+        user.setDate(DateUtil.getCurrent("yyyyMMddHHmmss"));
         return userMapper.add(user);
+    }
+
+    @Override
+    public int create(User user) {
+        if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
+            return 0;
+        }
+        if (null != userMapper.get(user.getUsername())) {
+            return 0;
+        }
+        user.setPassword(MD5Util.md5(user.getPassword()));
+        user.setDate(DateUtil.getCurrent("yyyyMMddHHmmss"));
+        return add(user);
     }
 
     @Override
@@ -68,11 +79,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int upgrade(User user) {
+        if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
+            return 0;
+        }
+        user.setPassword(MD5Util.md5(user.getPassword()));
+        return userMapper.upgrade(user);
+    }
+
+    @Override
     public List<User> listAll() {
         List<User> users = userMapper.listAll();
         for (User user: users) {
             try {
-                user.setDate(DateUtil.strDateFormat(user.getDate(), "yyyyMMddHHmm", "yyyy/MM/dd HH:mm"));
+                user.setDate(DateUtil.strDateFormat(user.getDate(), "yyyyMMddHHmmss", "yyyy/MM/dd HH:mm:ss"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -83,6 +103,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(String username) {
         return userMapper.get(username);
+    }
+
+    @Override
+    public User get(int id) {
+        return userMapper.getById(id);
     }
 
     @Override
