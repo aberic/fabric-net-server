@@ -16,6 +16,8 @@
 
 package cn.aberic.fabric.interceptor;
 
+import cn.aberic.fabric.dao.Role;
+import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.utils.CacheUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -41,13 +43,27 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         // 检查每个到来的请求对应的session域中是否有登录标识
-        String uri = request.getRequestURI();
-        System.out.print(uri);
         String token = (String) request.getSession().getAttribute("token");
-        String username = (String) request.getSession().getAttribute("username");
-        if (!StringUtils.equalsIgnoreCase(token, CacheUtil.getString(username))){
+        User user = CacheUtil.getUser(token);
+        if (null == user) {
             response.sendRedirect("/login");
             return false;
+        }
+        String uri = request.getRequestURI();
+        System.out.print(uri);
+        switch (user.getRoleId()) {
+            case Role.ADMIN:
+                if (StringUtils.contains(uri, USER.substring(0, USER.length() -2))) {
+                    response.sendRedirect("/index");
+                    return false;
+                }
+                break;
+            case Role.MEMBER:
+                if (!StringUtils.equals(uri, INDEX)) {
+                    response.sendRedirect("/index");
+                    return false;
+                }
+                break;
         }
         return true;
 

@@ -20,6 +20,7 @@ import cn.aberic.fabric.bean.App;
 import cn.aberic.fabric.bean.Home;
 import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.dao.User;
 import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.dao.mapper.CAMapper;
 import cn.aberic.fabric.dao.mapper.PeerMapper;
@@ -54,6 +55,9 @@ public class CacheUtil {
     /** 存储 channelId，fabric-manager*/
     private static Cache<String, Home> cacheHome = CacheBuilder.newBuilder().maximumSize(1)
             .expireAfterAccess(5, TimeUnit.MINUTES).build();
+
+    private static Cache<String, User> cacheUser = CacheBuilder.newBuilder().maximumSize(1000)
+            .expireAfterAccess(30, TimeUnit.MINUTES).build();
 
     public static void putString(String key, String value) {
         cacheString.put(key, value);
@@ -175,6 +179,22 @@ public class CacheUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static void putUser(String key, User value) {
+        cacheUser.put(key, value);
+    }
+
+    public static User getUser(String key) {
+        try {
+            return cacheUser.getIfPresent(key);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static void removeUser(String key) {
+        cacheUser.invalidate(key);
     }
 
 }

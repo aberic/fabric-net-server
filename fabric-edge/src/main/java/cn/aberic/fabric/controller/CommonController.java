@@ -126,7 +126,7 @@ public class CommonController {
 
     @GetMapping(value = "logout")
     public ModelAndView logout(HttpServletRequest request) {
-        CacheUtil.removeString((String) request.getSession().getAttribute("username"));
+        CacheUtil.removeUser((String) request.getSession().getAttribute("token"));
         request.getSession().invalidate();
         return new ModelAndView(new RedirectView("login"));
     }

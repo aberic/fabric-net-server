@@ -138,10 +138,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String login(User user) {
+        User userCache = userMapper.get(user.getUsername());
         try {
-            if (MD5Util.verify(user.getPassword(), userMapper.get(user.getUsername()).getPassword())) {
+            if (MD5Util.verify(user.getPassword(), userCache.getPassword())) {
                 String token = UUID.randomUUID().toString();
-                CacheUtil.putString(user.getUsername(), token);
+                // CacheUtil.putString(user.getUsername(), token);
+                CacheUtil.putUser(token, userCache);
                 return token;
             }
         } catch (Exception e) {
