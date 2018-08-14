@@ -56,6 +56,10 @@ public class DateUtil {
 		return sdf.parse(dateStr);
 	}
 
+	public static String strDateFormat(String dateStr, String formatBefore, String formatAfter) throws Exception {
+		return date2Str(str2Date(dateStr, formatBefore), formatAfter);
+	}
+
 	/**
 	 * 将日期转换为字符串
 	 *
