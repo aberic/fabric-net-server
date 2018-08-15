@@ -164,7 +164,7 @@ public class BlockServiceImpl implements BlockService {
                 return 0;
             }
         });
-        return blocks.subList(0, 6);
+        return blocks.size() != 0 ? blocks.subList(0, 6) : blocks;
     }
 
     @Override
