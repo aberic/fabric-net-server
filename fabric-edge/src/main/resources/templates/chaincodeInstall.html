@@ -66,7 +66,7 @@
                                             <select id="ca" class="form-control custom-select"
                                                     th:field="*{flag}">
                                                 <option th:each="ca: ${cas}" th:value="${ca.flag}"
-                                                        th:text="${ca.name}"></option>
+                                                        th:text="${ca.leagueName}+'-'+${ca.orgName}+'-'+${ca.peerName}+'-'+${ca.name}"></option>
                                             </select>
                                         </div>
                                         <div class="form-group">

@@ -55,6 +55,9 @@ public class ChannelServiceImpl implements ChannelService {
             log.debug("had the same channel in this peer");
             return 0;
         }
+        if (!channel.isBlockListener()) {
+            channel.setCallbackLocation("");
+        }
         channel.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         return channelMapper.add(channel);
     }
@@ -62,6 +65,9 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public int update(Channel channel) {
         FabricHelper.obtain().removeChaincodeManager(chaincodeMapper.list(channel.getId()));
+        if (!channel.isBlockListener()) {
+            channel.setCallbackLocation("");
+        }
         return channelMapper.update(channel);
     }
 

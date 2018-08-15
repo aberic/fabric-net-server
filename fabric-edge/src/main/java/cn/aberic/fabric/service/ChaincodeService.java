@@ -17,7 +17,11 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.bean.Api;
+import cn.aberic.fabric.bean.State;
+import cn.aberic.fabric.bean.Trace;
+import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.dao.Chaincode;
+import cn.aberic.fabric.dao.Channel;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,5 +56,33 @@ public interface ChaincodeService {
     int delete(int id);
 
     int deleteAll(int channelId);
+
+    Chaincode getInstantiateChaincode(Api api, int chaincodeId);
+
+    Chaincode getEditChaincode(int chaincodeId);
+
+    List<Channel> getEditChannels(Chaincode chaincode);
+
+    CA getCAByFlag(String flag);
+
+    List<Api> getApis();
+
+    List<CA> getCAs(int chaincodeId);
+
+    List<CA> getAllCAs();
+
+    List<Chaincode> getChaincodes();
+
+    List<Channel> getChannelFullList();
+
+    State getState(int id, Api api);
+
+    String formatState(State state);
+
+    Trace getTrace(Api api);
+
+    String formatTrace(Trace trace);
+
+    Chaincode resetChaincode(Chaincode chaincode);
 
 }
