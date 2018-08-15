@@ -75,11 +75,11 @@
                                             <div class="form-label" th:text="#{channel_block_listen}"></div>
                                             <label class="custom-switch" >
                                                 <input type="checkbox"
-                                                       onclick="switchBtnBind($(this))"
                                                        name="custom-switch-checkbox"
                                                        th:field="*{blockListener}"
-                                                       id="blockListener"
-                                                       class="custom-switch-input">
+                                                       class="custom-switch-input"
+                                                       onclick="switchBtnBind($(this))"
+                                                       id="blockListener">
                                                 <span class="custom-switch-indicator"></span>
                                                 <span class="custom-switch-description" th:text="#{open}"></span>
                                             </label>

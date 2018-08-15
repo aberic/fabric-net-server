@@ -74,6 +74,8 @@
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{chaincode_name_placeholder}"
+                                                   id="name"
+                                                   onblur="check('name')"
                                                    th:field="*{name}">
                                             <input type="hidden" name="intent" th:value="${intent}"/>
                                             <input type="hidden" name="id" th:value="${chaincode.id}"/>
@@ -82,6 +84,8 @@
                                             <label class="form-label" th:text="#{chaincode_version}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
+                                                   id="version"
+                                                   onblur="check('version')"
                                                    th:placeholder="#{chaincode_version_placeholder}"
                                                    th:field="*{version}">
                                         </div>
@@ -89,6 +93,8 @@
                                             <label class="form-label" th:text="#{chaincode_proposal_wait_time}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
+                                                   id="proposalWaitTime"
+                                                   onblur="check('proposalWaitTime')"
                                                    th:placeholder="#{chaincode_proposal_wait_time_placeholder}"
                                                    th:field="*{proposalWaitTime}">
                                         </div>
@@ -125,21 +131,24 @@
                                         <div class="form-group">
                                             <div class="form-label" th:text="#{chaincode_event_listen}"></div>
                                             <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox"
+                                                <input type="checkbox"
+                                                       name="custom-switch-checkbox"
                                                        th:field="*{chaincodeEventListener}"
-                                                       class="custom-switch-input">
+                                                       class="custom-switch-input"
+                                                       onclick="switchBtnBind($(this))"
+                                                       id="chaincodeEventListener">
                                                 <span class="custom-switch-indicator"></span>
                                                 <span class="custom-switch-description" th:text="#{open}"></span>
                                             </label>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="location_group" style="display: none">
                                             <label class="form-label" th:text="#{chaincode_callback_location}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
                                                    th:placeholder="#{chaincode_callback_location_placeholder}"
                                                    th:field="*{callbackLocation}">
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="event_group" style="display: none">
                                             <label class="form-label" th:text="#{chaincode_events}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
@@ -165,6 +174,55 @@
     <div th:include="fns_footer :: footer"></div>
 </div>
 <script src="https://unpkg.com/ionicons@4.2.4/dist/ionicons.js"></script>
+<script>
+    function check(idStr){
+        var that = $("#"+idStr)
+        var parent = that.parent()
+        if(that.val().trim()==""){
+            var msg;
+            if(idStr=="name"){
+                msg = "名称不能为空"
+            }else if(idStr=="version"){
+                msg="版本不能为空"
+            }else if(idStr=="proposalWaitTime"){
+                msg="提案超时时间不能为空"
+            }
+
+            that.addClass("is-invalid")
+            if(parent.children("[name='nameError']").length==0){
+                parent.append('<div name="nameError" class="invalid-feedback">'+msg+'</div>')
+            }
+            return false;
+        }else{
+            that.removeClass("is-invalid")
+            parent.children("[name='nameError']").remove();
+            return true
+        }
+    }
+
+    function switchBtnBind(that){
+        var checked = that.is(".custom-switch-input:checked")
+
+        //打开状态，此时显示
+        if (checked){
+            $("#location_group").attr("style","display:block;");
+            $("#event_group").attr("style","display:block;");
+        }else{
+            $("#location_group").attr("style","display:none;");
+            $("#event_group").attr("style","display:none;");
+        }
+    }
+
+    require(['c3', 'jquery'], function (c3, $) {
+
+        $(document).ready(function () {
+            $("#submitBtn").click(function(){
+                return check("name") && check("version")&& check("proposalWaitTime")
+            })
+            switchBtnBind($('#chaincodeEventListener'))
+        })
+    });
+</script>
 </body>
 
 </html>
