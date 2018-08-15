@@ -73,15 +73,18 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-label" th:text="#{channel_block_listen}"></div>
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="custom-switch-checkbox"
+                                            <label class="custom-switch" >
+                                                <input type="checkbox"
+                                                       onclick="switchBtnBind($(this))"
+                                                       name="custom-switch-checkbox"
                                                        th:field="*{blockListener}"
+                                                       id="blockListener"
                                                        class="custom-switch-input">
                                                 <span class="custom-switch-indicator"></span>
                                                 <span class="custom-switch-description" th:text="#{open}"></span>
                                             </label>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" id="location_group" style="display: none">
                                             <label class="form-label" th:text="#{channel_callback_location}"></label>
                                             <input type="text" class="form-control is-valid"
                                                    name="example-text-input-valid"
@@ -111,6 +114,8 @@
 
 
 <script>
+
+
     function check(idStr){
         var that = $("#"+idStr)
         var parent = that.parent()
@@ -131,12 +136,25 @@
         }
     }
 
+    function switchBtnBind(that){
+        var checked = that.is(".custom-switch-input:checked")
+
+        //打开状态，此时显示
+        if (checked){
+            $("#location_group").attr("style","display:block;");
+        }else{
+            $("#location_group").attr("style","display:none;");
+        }
+    }
+
     require(['c3', 'jquery'], function (c3, $) {
 
         $(document).ready(function () {
             $("#submitBtn").click(function(){
                 return check("name")
             })
+
+            switchBtnBind($('#blockListener'))
         })
     });
 </script>
