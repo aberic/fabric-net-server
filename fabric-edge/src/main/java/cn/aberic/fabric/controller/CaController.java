@@ -17,13 +17,7 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.League;
-import cn.aberic.fabric.dao.Org;
-import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.service.CAService;
-import cn.aberic.fabric.service.LeagueService;
-import cn.aberic.fabric.service.OrgService;
-import cn.aberic.fabric.service.PeerService;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +25,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 作者：Aberic on 2018/7/13 00:05
@@ -44,12 +37,6 @@ public class CaController {
 
     @Resource
     private CAService caService;
-    @Resource
-    private PeerService peerService;
-    @Resource
-    private OrgService orgService;
-    @Resource
-    private LeagueService leagueService;
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute CA ca,
@@ -74,14 +61,7 @@ public class CaController {
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("ca", new CA());
-        List<Peer> peers = peerService.listAll();
-        for (Peer peer : peers) {
-            Org org = orgService.get(peer.getOrgId());
-            peer.setOrgName(org.getMspId());
-            League league = leagueService.get(org.getLeagueId());
-            peer.setLeagueName(league.getName());
-        }
-        modelAndView.addObject("peers", peers);
+        modelAndView.addObject("peers", caService.getFullPeers());
         return modelAndView;
     }
 
@@ -91,31 +71,18 @@ public class CaController {
         modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
         modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
+
         CA ca = caService.get(id);
-        Org org = orgService.get(peerService.get(ca.getPeerId()).getOrgId());
-        List<Peer> peers = peerService.listById(org.getId());
-        League league = leagueService.get(orgService.get(org.getId()).getLeagueId());
-        for (Peer peer : peers) {
-            peer.setLeagueName(league.getName());
-            peer.setOrgName(org.getMspId());
-        }
         modelAndView.addObject("ca", ca);
-        modelAndView.addObject("peers", peers);
+        modelAndView.addObject("peers", caService.getPeersByCA(ca));
         return modelAndView;
     }
 
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("cas");
-        List<CA> cas = caService.listAll();
-        for (CA ca: cas) {
-            Peer peer = peerService.get(ca.getPeerId());
-            Org org = orgService.get(peer.getOrgId());
-            ca.setPeerName(peer.getName());
-            ca.setOrgName(org.getMspId());
-            ca.setLeagueName(leagueService.get(org.getLeagueId()).getName());
-        }
-        modelAndView.addObject("cas", cas);
+
+        modelAndView.addObject("cas", caService.listFullCA());
         return modelAndView;
     }
 

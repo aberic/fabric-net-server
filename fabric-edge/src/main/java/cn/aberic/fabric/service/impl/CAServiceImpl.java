@@ -125,6 +125,43 @@ public class CAServiceImpl implements CAService {
         return caMapper.delete(id);
     }
 
+    @Override
+    public List<Peer> getFullPeers() {
+        List<Peer> peers = peerMapper.listAll();
+        for (Peer peer : peers) {
+            Org org = orgMapper.get(peer.getOrgId());
+            peer.setOrgName(org.getMspId());
+            League league = leagueMapper.get(org.getLeagueId());
+            peer.setLeagueName(league.getName());
+        }
+        return peers;
+    }
+
+    @Override
+    public List<Peer> getPeersByCA(CA ca) {
+        Org org = orgMapper.get(peerMapper.get(ca.getPeerId()).getOrgId());
+        List<Peer> peers = peerMapper.list(org.getId());
+        League league = leagueMapper.get(orgMapper.get(org.getId()).getLeagueId());
+        for (Peer peer : peers) {
+            peer.setLeagueName(league.getName());
+            peer.setOrgName(org.getMspId());
+        }
+        return peers;
+    }
+
+    @Override
+    public List<CA> listFullCA() {
+        List<CA> cas = caMapper.listAll();
+        for (CA ca: cas) {
+            Peer peer = peerMapper.get(ca.getPeerId());
+            Org org = orgMapper.get(peer.getOrgId());
+            ca.setPeerName(peer.getName());
+            ca.setOrgName(org.getMspId());
+            ca.setLeagueName(leagueMapper.get(org.getLeagueId()).getName());
+        }
+        return cas;
+    }
+
     private boolean saveFileFail(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
         String caPath = String.format("%s%s%s%s%s%s%s%s%s%s",
                 env.getProperty("config.dir"),
