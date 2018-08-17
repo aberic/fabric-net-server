@@ -80,8 +80,8 @@ public class OrgManager {
         return this;
     }
 
-    public void addOrderer(String name, String location, String serverCrtPath) {
-        orgMap.get(cc).addOrderer(name, String.format("%s%s", "grpc://", location), serverCrtPath);
+    public void addOrderer(String name, String location, String serverCrtPath, String clientCertPath, String clientKeyPath) {
+        orgMap.get(cc).addOrderer(name, String.format("%s%s", "grpc://", location), serverCrtPath, clientCertPath, clientKeyPath);
     }
 
     public void addPeer(String peerName, String peerLocation, String peerEventHubLocation, String serverCrtPath) {

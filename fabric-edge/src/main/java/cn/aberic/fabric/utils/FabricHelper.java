@@ -142,7 +142,7 @@ public class FabricHelper {
                         null == chaincode ? "" : chaincode.getVersion(),
                         null == chaincode ? 0 : chaincode.getProposalWaitTime());
         for (Orderer orderer : orderers) {
-            orgManager.addOrderer(orderer.getName(), orderer.getLocation(), orderer.getServerCrtPath());
+            orgManager.addOrderer(orderer.getName(), orderer.getLocation(), orderer.getServerCrtPath(), orderer.getClientCertPath(), orderer.getClientKeyPath());
         }
         for (Peer peer : peers) {
             orgManager.addPeer(peer.getName(), peer.getLocation(), peer.getEventHubLocation(), peer.getServerCrtPath());

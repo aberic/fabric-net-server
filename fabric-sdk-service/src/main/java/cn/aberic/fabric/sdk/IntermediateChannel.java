@@ -75,20 +75,23 @@ class IntermediateChannel {
             Properties ordererProperties = new Properties();
             if (org.openTLS()) {
                 File ordererCert = new File(org.getOrderers().get(i).getServerCrtPath());
+                File ordererUserClientCert = new File(org.getOrderers().get(i).getClientCertPath());
+                File ordererUserClientKey = new File(org.getOrderers().get(i).getClientKeyPath());
                 if (!ordererCert.exists()) {
                     throw new RuntimeException(
                             String.format("Missing cert file for: %s. Could not find at location: %s", org.getOrderers().get(i).getOrdererName(), ordererCert.getAbsolutePath()));
                 }
                 ordererProperties.setProperty("pemFile", ordererCert.getAbsolutePath());
+                ordererProperties.setProperty("clientCertFile", ordererUserClientCert.getAbsolutePath());
+                ordererProperties.setProperty("clientKeyFile", ordererUserClientKey.getAbsolutePath());
             }
             ordererProperties.setProperty("hostnameOverride", org.getOrderers().get(i).getOrdererName());
             ordererProperties.setProperty("sslProvider", "openSSL");
             ordererProperties.setProperty("negotiationType", "TLS");
-            ordererProperties.put("grpc.ManagedChannelBuilderOption.maxInboundMessageSize", 9000000);
             // 设置keepAlive以避免在不活跃的http2连接上超时的例子。在5分钟内，需要对服务器端进行更改，以接受更快的ping速率。
             ordererProperties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[]{5L, TimeUnit.MINUTES});
             ordererProperties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[]{8L, TimeUnit.SECONDS});
-            ordererProperties.setProperty("ordererWaitTimeMilliSecs", "300000");
+            ordererProperties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
             channel.addOrderer(
                     client.newOrderer(org.getOrderers().get(i).getOrdererName(), org.getOrderers().get(i).getOrdererLocation(), ordererProperties));
         }

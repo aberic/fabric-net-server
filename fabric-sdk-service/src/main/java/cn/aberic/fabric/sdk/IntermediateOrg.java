@@ -83,8 +83,8 @@ class IntermediateOrg {
     }
 
     /** 新增排序服务器 */
-    void addOrderer(String name, String location, String serverCrtPath) {
-        orderers.add(new IntermediateOrderer(name, location, serverCrtPath));
+    void addOrderer(String name, String location, String serverCrtPath, String clientCertPath, String clientKeyPath) {
+        orderers.add(new IntermediateOrderer(name, location, serverCrtPath, clientCertPath, clientKeyPath));
     }
 
     /** 获取排序服务器集合 */
