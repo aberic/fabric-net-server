@@ -26,6 +26,7 @@ import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.VerifyUtil;
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +42,7 @@ import java.io.IOException;
  *
  * @author : Aberic 【2018/6/4 15:03】
  */
+@Slf4j
 @Service("traceService")
 public class TraceServiceImpl implements TraceService, BaseService {
 
@@ -129,7 +131,8 @@ public class TraceServiceImpl implements TraceService, BaseService {
                     ca, trace.getChannelId());
             return trace(manager, trace, intent);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.warn(String.format("Request failed： %s", e.getMessage()));
             return responseFail(String.format("Request failed： %s", e.getMessage()));
         }
     }
