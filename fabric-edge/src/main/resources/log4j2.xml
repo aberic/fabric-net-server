@@ -25,6 +25,7 @@
 
     <!-- 然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
     <loggers>
+        <!--<Logger name="cn.aberic.fabric" level="debug"/>-->
         <Logger name="cn.aberic.fabric" level="info"/>
         <!--<Logger name="cn.aberic.fabric" level="${env:LOG_LEVEL}"/>-->
         <!-- 建立一个默认的root的logger -->
