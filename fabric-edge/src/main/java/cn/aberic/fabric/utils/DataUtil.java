@@ -89,6 +89,9 @@ public class DataUtil {
         List<Block> blocks = new ArrayList<>();
         for (Channel channel : channels) {
             cn.aberic.fabric.dao.Block blockDao = blockService.getByChannelId(channel.getId());
+            if (null == blockDao) {
+                continue;
+            }
             double totalHeight = channel.getHeight() - 1;
             double nowHeight = blockDao.getHeight();
             double percent = nowHeight > totalHeight ? 2 : nowHeight/totalHeight;
