@@ -35,8 +35,8 @@ public interface PeerMapper {
     @Update("update peer set name=#{p.name}, location=#{p.location}" +
             ", event_hub_location=#{p.eventHubLocation}" +
             ", server_crt_path=#{p.serverCrtPath}, " +
-            "client_cert_path=#{o.clientCertPath}, " +
-            "client_key_path=#{o.clientKeyPath} where id=#{p.id}")
+            "client_cert_path=#{p.clientCertPath}, " +
+            "client_key_path=#{p.clientKeyPath} where id=#{p.id}")
     int update(@Param("p") Peer peer);
 
     @Update("update peer set name=#{p.name}, location=#{p.location}" +
