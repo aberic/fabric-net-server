@@ -128,8 +128,8 @@ public class FabricManager {
      * @param peerLocation         当前指定的组织节点访问地址
      * @param peerEventHubLocation 当前指定的组织节点事件监听访问地址
      */
-    public JSONObject joinPeer(String peerName, String peerLocation, String peerEventHubLocation, String serverCrtPath) throws ProposalException, InvalidArgumentException {
-        return org.getChannel().joinPeer(new IntermediatePeer(peerName, peerLocation, peerEventHubLocation, serverCrtPath));
+    public JSONObject joinPeer(String peerName, String peerLocation, String peerEventHubLocation, String serverCrtPath, String clientCertPath, String clientKeyPath) throws ProposalException, InvalidArgumentException {
+        return org.getChannel().joinPeer(new IntermediatePeer(peerName, peerLocation, peerEventHubLocation, serverCrtPath, clientCertPath, clientKeyPath));
     }
 
     /** 查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash */

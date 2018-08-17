@@ -101,11 +101,15 @@ class IntermediateChannel {
             Properties peerProperties = new Properties();
             if (org.openTLS()) {
                 File peerCert = new File(org.getPeers().get(i).getServerCrtPath());
+                File peerUserClientCert = new File(org.getPeers().get(i).getClientCertPath());
+                File peerUserClientKey = new File(org.getPeers().get(i).getClientKeyPath());
                 if (!peerCert.exists()) {
                     throw new RuntimeException(
                             String.format("Missing cert file for: %s. Could not find at location: %s", org.getPeers().get(i).getPeerName(), peerCert.getAbsolutePath()));
                 }
                 peerProperties.setProperty("pemFile", peerCert.getAbsolutePath());
+                peerProperties.setProperty("clientCertFile", peerUserClientCert.getAbsolutePath());
+                peerProperties.setProperty("clientKeyFile", peerUserClientKey.getAbsolutePath());
             }
             // ret.setProperty("trustServerCertificate", "true"); //testing
             // environment only NOT FOR PRODUCTION!
@@ -113,7 +117,7 @@ class IntermediateChannel {
             peerProperties.setProperty("sslProvider", "openSSL");
             peerProperties.setProperty("negotiationType", "TLS");
             // 在grpc的NettyChannelBuilder上设置特定选项
-            peerProperties.put("grpc.ManagedChannelBuilderOption.maxInboundMessageSize", 9000000);
+            peerProperties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
             // 如果未加入频道，该方法执行加入。如果已加入频道，则执行下一行方面新增Peer
             // channel.joinPeer(client.newPeer(peers.get().get(i).getPeerName(), fabricOrg.getPeerLocation(peers.get().get(i).getPeerName()), peerProperties));
             channel.addPeer(client.newPeer(org.getPeers().get(i).getPeerName(), org.getPeers().get(i).getPeerLocation(), peerProperties));

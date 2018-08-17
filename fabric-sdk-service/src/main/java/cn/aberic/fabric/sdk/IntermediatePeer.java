@@ -32,6 +32,8 @@ class IntermediatePeer {
     private String peerEventHubLocation; // grpc://110.131.116.21:7053
     /** tls请求证书 */
     private String serverCrtPath;
+    private String clientCertPath;
+    private String clientKeyPath;
 
     /**
      * 初始化中继Peer对象
@@ -40,11 +42,13 @@ class IntermediatePeer {
      * @param peerLocation         当前指定的组织节点访问地址
      * @param peerEventHubLocation 当前指定的组织节点事件监听访问地址
      */
-    IntermediatePeer(String peerName, String peerLocation, String peerEventHubLocation, String serverCrtPath) {
+    IntermediatePeer(String peerName, String peerLocation, String peerEventHubLocation, String serverCrtPath, String clientCertPath, String clientKeyPath) {
         this.peerName = peerName;
         this.peerLocation = peerLocation;
         this.peerEventHubLocation = peerEventHubLocation;
         this.serverCrtPath = serverCrtPath;
+        this.clientCertPath = clientCertPath;
+        this.clientKeyPath = clientKeyPath;
     }
 
     /**
@@ -94,5 +98,13 @@ class IntermediatePeer {
 
     String getServerCrtPath() {
         return serverCrtPath;
+    }
+
+    public String getClientCertPath() {
+        return clientCertPath;
+    }
+
+    public String getClientKeyPath() {
+        return clientKeyPath;
     }
 }
