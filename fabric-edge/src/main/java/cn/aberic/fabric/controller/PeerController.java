@@ -55,16 +55,18 @@ public class PeerController {
     public ModelAndView submit(@ModelAttribute Peer peer,
                                @RequestParam("intent") String intent,
                                @RequestParam("serverCrtFile") MultipartFile serverCrtFile,
+                               @RequestParam("clientCertFile") MultipartFile clientCertFile,
+                               @RequestParam("clientKeyFile") MultipartFile clientKeyFile,
                                @RequestParam("id") int id) {
         switch (intent) {
             case "add":
                 peer = resetPeer(peer);
-                peerService.add(peer, serverCrtFile);
+                peerService.add(peer, serverCrtFile, clientCertFile, clientKeyFile);
                 break;
             case "edit":
                 peer = resetPeer(peer);
                 peer.setId(id);
-                peerService.update(peer, serverCrtFile);
+                peerService.update(peer, serverCrtFile, clientCertFile, clientKeyFile);
                 break;
         }
         return new ModelAndView(new RedirectView("list"));

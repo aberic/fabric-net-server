@@ -28,13 +28,15 @@ import java.util.List;
 @Mapper
 public interface PeerMapper {
 
-    @Insert("insert into peer (name,location,event_hub_location,server_crt_path,org_id,date) " +
-            "values (#{p.name},#{p.location},#{p.eventHubLocation},#{p.serverCrtPath},#{p.orgId},#{p.date})")
+    @Insert("insert into peer (name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date) values" +
+            " (#{p.name},#{p.location},#{p.eventHubLocation},#{p.serverCrtPath},#{p.clientCertPath},#{p.clientKeyPath},#{p.orgId},#{p.date})")
     int add(@Param("p") Peer peer);
 
     @Update("update peer set name=#{p.name}, location=#{p.location}" +
             ", event_hub_location=#{p.eventHubLocation}" +
-            ", server_crt_path=#{p.serverCrtPath} where id=#{p.id}")
+            ", server_crt_path=#{p.serverCrtPath}, " +
+            "client_cert_path=#{o.clientCertPath}, " +
+            "client_key_path=#{o.clientKeyPath} where id=#{p.id}")
     int update(@Param("p") Peer peer);
 
     @Update("update peer set name=#{p.name}, location=#{p.location}" +
@@ -53,39 +55,33 @@ public interface PeerMapper {
     @Delete("delete from peer where org_id=#{orgId}")
     int deleteAll(@Param("orgId") int orgId);
 
-    @Select("select id,name,location,event_hub_location,server_crt_path,org_id,date from peer where id=#{id}")
+    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from peer where id=#{id}")
     @Results({
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "serverCrtPath", column = "server_crt_path"),
-            @Result(property = "orgId", column = "org_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "clientCertPath", column = "client_cert_path"),
+            @Result(property = "clientKeyPath", column = "client_key_path"),
+            @Result(property = "orgId", column = "org_id")
     })
     Peer get(@Param("id") int id);
 
-    @Select("select id,name,location,event_hub_location,server_crt_path,org_id,date from peer where org_id=#{id}")
+    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from peer where org_id=#{id}")
     @Results({
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "serverCrtPath", column = "server_crt_path"),
-            @Result(property = "orgId", column = "org_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "clientCertPath", column = "client_cert_path"),
+            @Result(property = "clientKeyPath", column = "client_key_path"),
+            @Result(property = "orgId", column = "org_id")
     })
     List<Peer> list(@Param("id") int id);
 
-    @Select("select id,name,location,event_hub_location,server_crt_path,org_id,date from peer")
+    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from peer")
     @Results({
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "location", column = "location"),
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "serverCrtPath", column = "server_crt_path"),
-            @Result(property = "orgId", column = "org_id"),
-            @Result(property = "date", column = "date")
+            @Result(property = "clientCertPath", column = "client_cert_path"),
+            @Result(property = "clientKeyPath", column = "client_key_path"),
+            @Result(property = "orgId", column = "org_id")
     })
     List<Peer> listAll();
 

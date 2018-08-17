@@ -104,6 +104,34 @@
                                                 </script>
                                             </div>
                                         </div>
+                                        <div class="form-group" >
+                                            <div class="form-label" th:text="#{peer_user_client_cert}"></div>
+                                            <div class="custom-file">
+                                                <input id="client-cert-file" type="file" class="custom-file-input"
+                                                       name="clientCertFile" onchange="getClientCertFileName()">
+                                                <label id="client-cert-file-label" class="custom-file-label"
+                                                       th:text="#{peer_user_client_cert_upload}"></label>
+                                                <script>
+                                                    function getClientCertFileName() {
+                                                        document.getElementById("client-cert-file-label").innerText = $("#client-cert-file").val();
+                                                    }
+                                                </script>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" >
+                                            <div class="form-label" th:text="#{peer_user_client_key}"></div>
+                                            <div class="custom-file">
+                                                <input id="client-key-file" type="file" class="custom-file-input"
+                                                       name="clientKeyFile" onchange="getClientKeyFileName()">
+                                                <label id="client-key-file-label" class="custom-file-label"
+                                                       th:text="#{peer_user_client_key_upload}"></label>
+                                                <script>
+                                                    function getClientKeyFileName() {
+                                                        document.getElementById("client-key-file-label").innerText = $("#client-key-file").val();
+                                                    }
+                                                </script>
+                                            </div>
+                                        </div>
                                         <div class="card-footer text-right">
                                             <div class="d-flex">
                                                 <button type="submit" class="btn btn-primary ml-auto"

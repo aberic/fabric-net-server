@@ -35,6 +35,8 @@ public class Peer {
     private String eventHubLocation; // required
     private int orgId; // required
     private String serverCrtPath;
+    private String clientCertPath;
+    private String clientKeyPath;
     private String orgName; // required
     private String leagueName; // optional
     private String date; // required

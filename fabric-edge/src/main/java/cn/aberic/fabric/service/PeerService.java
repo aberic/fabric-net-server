@@ -27,9 +27,9 @@ import java.util.List;
  */
 public interface PeerService {
     
-    int add(Peer peer, MultipartFile serverCrtFile);
+    int add(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile);
 
-    int update(Peer peer, MultipartFile serverCrtFile);
+    int update(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile);
 
     List<Peer> listAll();
 

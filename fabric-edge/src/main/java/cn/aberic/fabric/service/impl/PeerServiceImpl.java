@@ -49,14 +49,16 @@ public class PeerServiceImpl implements PeerService {
     private Environment env;
 
     @Override
-    public int add(Peer peer, MultipartFile serverCrtFile) {
+    public int add(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         if (StringUtils.isEmpty(peer.getName()) ||
                 StringUtils.isEmpty(peer.getLocation()) ||
                 StringUtils.isEmpty(peer.getEventHubLocation())) {
             return 0;
         }
-        if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename())) {
-            if (saveFileFail(peer, serverCrtFile)) {
+        if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename()) &&
+                StringUtils.isNotEmpty(clientCertFile.getOriginalFilename()) &&
+                StringUtils.isNotEmpty(clientKeyFile.getOriginalFilename())) {
+            if (saveFileFail(peer, serverCrtFile, clientCertFile, clientKeyFile)) {
                 return 0;
             }
         }
@@ -65,13 +67,13 @@ public class PeerServiceImpl implements PeerService {
     }
 
     @Override
-    public int update(Peer peer, MultipartFile serverCrtFile) {
+    public int update(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         FabricHelper.obtain().removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
         CacheUtil.removeFlagCA(peer.getId(), caMapper);
-        if (null == serverCrtFile) {
+        if (null == serverCrtFile || null == clientCertFile || null == clientKeyFile) {
             return peerMapper.updateWithNoFile(peer);
         }
-        if (saveFileFail(peer, serverCrtFile)) {
+        if (saveFileFail(peer, serverCrtFile, clientCertFile, clientKeyFile)) {
             return 0;
         }
         return peerMapper.update(peer);
@@ -107,7 +109,7 @@ public class PeerServiceImpl implements PeerService {
         return DeleteUtil.obtain().deletePeer(id, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
     }
 
-    private boolean saveFileFail(Peer peer, MultipartFile serverCrtFile) {
+    private boolean saveFileFail(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         String peerTlsPath = String.format("%s%s%s%s%s%s%s%s",
                 env.getProperty("config.dir"),
                 File.separator,
@@ -118,9 +120,13 @@ public class PeerServiceImpl implements PeerService {
                 peer.getName(),
                 File.separator);
         String serverCrtPath = String.format("%s%s", peerTlsPath, serverCrtFile.getOriginalFilename());
+        String clientCertPath = String.format("%s%s", peerTlsPath, clientCertFile.getOriginalFilename());
+        String clientKeyPath = String.format("%s%s", peerTlsPath, clientKeyFile.getOriginalFilename());
         peer.setServerCrtPath(serverCrtPath);
+        peer.setClientCertPath(clientCertPath);
+        peer.setClientKeyPath(clientKeyPath);
         try {
-            FileUtil.save(serverCrtFile, serverCrtPath);
+            FileUtil.save(serverCrtFile, clientCertFile, clientKeyFile, serverCrtPath, clientCertPath, clientKeyPath);
         } catch (IOException e) {
             e.printStackTrace();
             return true;
