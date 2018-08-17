@@ -129,7 +129,7 @@ public class TraceServiceImpl implements TraceService, BaseService {
                     ca, trace.getChannelId());
             return trace(manager, trace, intent);
         } catch (Exception e) {
-            // e.printStackTrace();
+            e.printStackTrace();
             return responseFail(String.format("Request failed： %s", e.getMessage()));
         }
     }
