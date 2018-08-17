@@ -50,7 +50,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
         String uri = request.getRequestURI();
-        System.out.print(uri);
+        // System.out.println(uri);
         switch (user.getRoleId()) {
             case Role.ADMIN:
                 if (StringUtils.contains(uri, USER.substring(0, USER.length() -2))) {
