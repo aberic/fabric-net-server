@@ -130,6 +130,7 @@ class IntermediateChannel {
         if (!channel.isInitialized()) {
             channel.initialize();
         }
+        log.info(String.format("channel.isInitialized() = %s", channel.isInitialized()));
         if (null != org.getBlockListener()) {
             // channel.registerBlockListener(org.getBlockListener());
             channel.registerBlockListener(blockEvent -> {
