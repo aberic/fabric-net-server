@@ -40,9 +40,7 @@ public class MD5Util {
      */
     public static String md5(String text) {
         //加密后的字符串
-        String encodeStr = DigestUtils.md5Hex(text);
-        System.out.println("MD5:encodeStr=" + encodeStr);
-        return encodeStr;
+        return DigestUtils.md5Hex(text);
     }
 
     /**
