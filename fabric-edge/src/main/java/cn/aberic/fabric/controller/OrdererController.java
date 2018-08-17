@@ -52,16 +52,18 @@ public class OrdererController {
     public ModelAndView submit(@ModelAttribute Orderer orderer,
                                @RequestParam("intent") String intent,
                                @RequestParam("serverCrtFile") MultipartFile serverCrtFile,
+                               @RequestParam("clientCertFile") MultipartFile clientCertFile,
+                               @RequestParam("clientKeyFile") MultipartFile clientKeyFile,
                                @RequestParam("id") int id) {
         switch (intent) {
             case "add":
                 orderer = resetOrderer(orderer);
-                ordererService.add(orderer, serverCrtFile);
+                ordererService.add(orderer, serverCrtFile, clientCertFile, clientKeyFile);
                 break;
             case "edit":
                 orderer = resetOrderer(orderer);
                 orderer.setId(id);
-                ordererService.update(orderer, serverCrtFile);
+                ordererService.update(orderer, serverCrtFile, clientCertFile, clientKeyFile);
                 break;
         }
         return new ModelAndView(new RedirectView("list"));

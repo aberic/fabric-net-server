@@ -98,6 +98,13 @@ public class FileUtil {
         save(certificateFile, certificatePath);
     }
 
+    public static void save(MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile,
+                            String serverCrtFilePath, String clientCertFilePath, String clientKeyFilePath) throws IOException {
+        save(serverCrtFile, serverCrtFilePath);
+        save(clientCertFile, clientCertFilePath);
+        save(clientKeyFile, clientKeyFilePath);
+    }
+
     public static void save(MultipartFile file, String path) throws IOException {
         File dest = new File(path);
         if (!dest.getParentFile().exists()) {

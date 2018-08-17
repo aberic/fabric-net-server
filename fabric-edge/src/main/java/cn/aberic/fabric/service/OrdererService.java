@@ -27,9 +27,9 @@ import java.util.List;
  */
 public interface OrdererService {
 
-     int add(Orderer orderer, MultipartFile serverCrtFile);
+     int add(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile);
 
-     int update(Orderer orderer, MultipartFile serverCrtFile);
+     int update(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile);
 
      List<Orderer> listAll();
 

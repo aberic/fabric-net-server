@@ -50,13 +50,15 @@ public class OrdererServiceImpl implements OrdererService {
     private Environment env;
 
     @Override
-    public int add(Orderer orderer, MultipartFile serverCrtFile) {
+    public int add(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         if (StringUtils.isEmpty(orderer.getName()) ||
                 StringUtils.isEmpty(orderer.getLocation())) {
             return 0;
         }
-        if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename())) {
-            if (saveFileFail(orderer, serverCrtFile)) {
+        if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename()) &&
+                StringUtils.isNotEmpty(clientCertFile.getOriginalFilename()) &&
+                StringUtils.isNotEmpty(clientKeyFile.getOriginalFilename())) {
+            if (saveFileFail(orderer, serverCrtFile, clientCertFile, clientKeyFile)) {
                 return 0;
             }
         }
@@ -65,12 +67,12 @@ public class OrdererServiceImpl implements OrdererService {
     }
 
     @Override
-    public int update(Orderer orderer, MultipartFile serverCrtFile) {
+    public int update(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         FabricHelper.obtain().removeChaincodeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
-        if (null == serverCrtFile) {
+        if (null == serverCrtFile || null == clientCertFile || null == clientKeyFile) {
             return ordererMapper.updateWithNoFile(orderer);
         }
-        if (saveFileFail(orderer, serverCrtFile)) {
+        if (saveFileFail(orderer, serverCrtFile, clientCertFile, clientKeyFile)) {
             return 0;
         }
         return ordererMapper.update(orderer);
@@ -106,7 +108,7 @@ public class OrdererServiceImpl implements OrdererService {
         return ordererMapper.delete(id);
     }
 
-    private boolean saveFileFail(Orderer orderer, MultipartFile serverCrtFile) {
+    private boolean saveFileFail(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         String ordererTlsPath = String.format("%s%s%s%s%s%s%s%s",
                 env.getProperty("config.dir"),
                 File.separator,
@@ -117,9 +119,13 @@ public class OrdererServiceImpl implements OrdererService {
                 orderer.getName(),
                 File.separator);
         String serverCrtPath = String.format("%s%s", ordererTlsPath, serverCrtFile.getOriginalFilename());
+        String clientCertPath = String.format("%s%s", ordererTlsPath, clientCertFile.getOriginalFilename());
+        String clientKeyPath = String.format("%s%s", ordererTlsPath, clientKeyFile.getOriginalFilename());
         orderer.setServerCrtPath(serverCrtPath);
+        orderer.setClientCertPath(clientCertPath);
+        orderer.setClientKeyPath(clientKeyPath);
         try {
-            FileUtil.save(serverCrtFile, serverCrtPath);
+            FileUtil.save(serverCrtFile, clientCertFile, clientKeyFile, serverCrtPath, clientCertPath, clientKeyPath);
         } catch (IOException e) {
             e.printStackTrace();
             return true;

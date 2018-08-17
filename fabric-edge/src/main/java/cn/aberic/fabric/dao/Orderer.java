@@ -33,6 +33,8 @@ public class Orderer {
     private String name; // required
     private String location; // required
     private String serverCrtPath;
+    private String clientCertPath;
+    private String clientKeyPath;
     private int orgId; // required
     private String leagueName;
     private String orgName; // required
