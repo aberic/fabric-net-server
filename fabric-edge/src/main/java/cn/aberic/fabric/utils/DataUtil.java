@@ -96,7 +96,7 @@ public class DataUtil {
             double nowHeight = blockDao.getHeight();
             double percent = nowHeight > totalHeight ? 2 : nowHeight/totalHeight;
             Block block = new Block();
-            block.setNum((int)nowHeight);
+            block.setNum((int)nowHeight + 1);
             block.setPeerName(peerService.get(channel.getPeerId()).getName());
             block.setChannelName(channel.getName());
             block.setCalculatedBlockHash(blockDao.getCalculatedHash());
