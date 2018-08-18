@@ -97,9 +97,14 @@ public class BlockServiceImpl implements BlockService {
     @Override
     public DayStatistics getDayStatistics() {
         int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd"));
-        int todayBlocks = blockMapper.countByDate(today);
+        int todayBlocks = 0;
         int todayTxs = 0;
         int allTxs = 0;
+        try {
+            todayBlocks = blockMapper.countByDate(today);
+        } catch (Exception ignored) {
+
+        }
         try {
             todayTxs = blockMapper.countTxByDate(today);
         } catch (Exception ignored) {
