@@ -95,7 +95,7 @@ public class DataUtil {
                 block.setPeerName(peerService.get(channel.getPeerId()).getName());
                 block.setChannelName(channel.getName());
                 block.setCalculatedBlockHash("-");
-                block.setDate("-");
+                block.setDate("2018/06/4 09:47:00");
                 block.setPercent(0);
                 block.setPercentStr("--");
             } else {
