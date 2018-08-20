@@ -86,6 +86,7 @@ public class DeleteUtil {
     public int deleteChaincode(int chaincodeId, ChaincodeMapper chaincodeMapper, AppMapper appMapper) {
         appMapper.deleteAll(chaincodeId);
         FabricHelper.obtain().removeChaincodeManager(chaincodeMapper.get(chaincodeId).getCc());
+        CacheUtil.removeHome();
         return chaincodeMapper.delete(chaincodeId);
     }
 

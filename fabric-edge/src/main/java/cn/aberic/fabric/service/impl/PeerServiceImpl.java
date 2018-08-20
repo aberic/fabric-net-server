@@ -63,12 +63,14 @@ public class PeerServiceImpl implements PeerService {
             }
         }
         peer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
+        CacheUtil.removeHome();
         return peerMapper.add(peer);
     }
 
     @Override
     public int update(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         FabricHelper.obtain().removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
+        CacheUtil.removeHome();
         CacheUtil.removeFlagCA(peer.getId(), caMapper);
         if (null == serverCrtFile || null == clientCertFile || null == clientKeyFile) {
             return peerMapper.updateWithNoFile(peer);

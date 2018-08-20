@@ -88,21 +88,28 @@ public class DataUtil {
     private List<Block> blocks(List<Channel> channels, PeerService peerService, BlockService blockService) {
         List<Block> blocks = new ArrayList<>();
         for (Channel channel : channels) {
+            Block block = new Block();
             cn.aberic.fabric.dao.Block blockDao = blockService.getByChannelId(channel.getId());
             if (null == blockDao) {
-                continue;
+                block.setNum(0);
+                block.setPeerName(peerService.get(channel.getPeerId()).getName());
+                block.setChannelName(channel.getName());
+                block.setCalculatedBlockHash("-");
+                block.setDate("-");
+                block.setPercent(0);
+                block.setPercentStr("--");
+            } else {
+                double totalHeight = channel.getHeight() - 1;
+                double nowHeight = blockDao.getHeight();
+                double percent = nowHeight > totalHeight ? 2 : nowHeight/totalHeight;
+                block.setNum((int)nowHeight + 1);
+                block.setPeerName(peerService.get(channel.getPeerId()).getName());
+                block.setChannelName(channel.getName());
+                block.setCalculatedBlockHash(blockDao.getCalculatedHash());
+                block.setDate(blockDao.getTimestamp());
+                block.setPercent(percent == 2 ? 0 : percent);
+                block.setPercentStr(percent == 2 ? "--" : String.valueOf((int)(percent * 100)) + "%");
             }
-            double totalHeight = channel.getHeight() - 1;
-            double nowHeight = blockDao.getHeight();
-            double percent = nowHeight > totalHeight ? 2 : nowHeight/totalHeight;
-            Block block = new Block();
-            block.setNum((int)nowHeight + 1);
-            block.setPeerName(peerService.get(channel.getPeerId()).getName());
-            block.setChannelName(channel.getName());
-            block.setCalculatedBlockHash(blockDao.getCalculatedHash());
-            block.setDate(blockDao.getTimestamp());
-            block.setPercent(percent == 2 ? 0 : percent);
-            block.setPercentStr(percent == 2 ? "--" : String.valueOf((int)(percent * 100)) + "%");
             blocks.add(block);
         }
         blocks.sort((t1, t2) -> {

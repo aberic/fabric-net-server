@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.mapper.BlockMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.service.ChannelService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.DeleteUtil;
 import cn.aberic.fabric.utils.FabricHelper;
@@ -59,12 +60,14 @@ public class ChannelServiceImpl implements ChannelService {
             channel.setCallbackLocation("");
         }
         channel.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
+        CacheUtil.removeHome();
         return channelMapper.add(channel);
     }
 
     @Override
     public int update(Channel channel) {
         FabricHelper.obtain().removeChaincodeManager(chaincodeMapper.list(channel.getId()));
+        CacheUtil.removeHome();
         if (!channel.isBlockListener()) {
             channel.setCallbackLocation("");
         }

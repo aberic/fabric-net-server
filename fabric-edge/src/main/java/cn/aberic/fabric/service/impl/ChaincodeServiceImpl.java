@@ -76,6 +76,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         }
         chaincode.setCc(createCC(chaincode));
         chaincode.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
+        CacheUtil.removeHome();
         return chaincodeMapper.add(chaincode);
     }
 
@@ -87,6 +88,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         if (!upload(chaincode, file)) {
             return responseFailJson("source unzip fail");
         }
+        CacheUtil.removeHome();
         chaincode.setCc(createCC(chaincode));
         if (chaincodeMapper.add(chaincode) <= 0) {
             return responseFailJson("chaincode add fail");
@@ -109,6 +111,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             return responseFailJson("source unzip fail");
         }
         FabricHelper.obtain().removeChaincodeManager(chaincode.getCc());
+        CacheUtil.removeHome();
         if (chaincodeMapper.updateForUpgrade(chaincode) <= 0) {
             return responseFailJson("chaincode updateForUpgrade fail");
         }
@@ -142,6 +145,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     public int update(Chaincode chaincode) {
         chaincode.setCc(createCC(chaincode));
         FabricHelper.obtain().removeChaincodeManager(chaincode.getCc());
+        CacheUtil.removeHome();
         return chaincodeMapper.update(chaincode);
     }
 

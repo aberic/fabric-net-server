@@ -72,12 +72,14 @@ public class CAServiceImpl implements CAService {
             return 0;
         }
         ca.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
+        CacheUtil.removeHome();
         return caMapper.add(ca);
     }
 
     @Override
     public int update(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
         FabricHelper.obtain().removeChaincodeManager(channelMapper.list(ca.getPeerId()), chaincodeMapper);
+        CacheUtil.removeHome();
         CacheUtil.removeFlagCA(ca.getFlag());
         ca = resetCa(ca);
         if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {

@@ -56,12 +56,14 @@ public class LeagueServiceImpl implements LeagueService {
             return 0;
         }
         leagueInfo.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
+        CacheUtil.removeHome();
         return leagueMapper.add(leagueInfo);
     }
 
     @Override
     public int update(League leagueInfo) {
         CacheUtil.removeFlagCA(leagueInfo.getId(), peerMapper, caMapper);
+        CacheUtil.removeHome();
         return leagueMapper.update(leagueInfo);
     }
 

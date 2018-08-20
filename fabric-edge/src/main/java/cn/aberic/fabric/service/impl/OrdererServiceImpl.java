@@ -22,6 +22,7 @@ import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.dao.mapper.OrdererMapper;
 import cn.aberic.fabric.dao.mapper.PeerMapper;
 import cn.aberic.fabric.service.OrdererService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.FabricHelper;
 import cn.aberic.fabric.utils.FileUtil;
@@ -63,12 +64,14 @@ public class OrdererServiceImpl implements OrdererService {
             }
         }
         orderer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
+        CacheUtil.removeHome();
         return ordererMapper.add(orderer);
     }
 
     @Override
     public int update(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         FabricHelper.obtain().removeChaincodeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
+        CacheUtil.removeHome();
         if (null == serverCrtFile || null == clientCertFile || null == clientKeyFile) {
             return ordererMapper.updateWithNoFile(orderer);
         }
@@ -105,6 +108,7 @@ public class OrdererServiceImpl implements OrdererService {
 
     @Override
     public int delete(int id) {
+        CacheUtil.removeHome();
         return ordererMapper.delete(id);
     }
 

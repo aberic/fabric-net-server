@@ -19,6 +19,7 @@ package cn.aberic.fabric.service.impl;
 import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.OrgService;
+import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.DeleteUtil;
 import cn.aberic.fabric.utils.FabricHelper;
@@ -55,12 +56,14 @@ public class OrgServiceImpl implements OrgService {
             return 0;
         }
         org.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
+        CacheUtil.removeHome();
         return orgMapper.add(org);
     }
 
     @Override
     public int update(Org org) {
         FabricHelper.obtain().removeChaincodeManager(peerMapper.list(org.getId()), channelMapper, chaincodeMapper);
+        CacheUtil.removeHome();
         return orgMapper.update(org);
     }
 
