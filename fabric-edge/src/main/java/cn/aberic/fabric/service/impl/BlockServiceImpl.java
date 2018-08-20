@@ -21,6 +21,7 @@ import cn.aberic.fabric.dao.Block;
 import cn.aberic.fabric.dao.Channel;
 import cn.aberic.fabric.dao.mapper.BlockMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
+import cn.aberic.fabric.dao.mapper.PeerMapper;
 import cn.aberic.fabric.service.BlockService;
 import cn.aberic.fabric.utils.DateUtil;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,8 @@ public class BlockServiceImpl implements BlockService {
     @Resource
     private BlockMapper blockMapper;
     @Resource
+    private PeerMapper peerMapper;
+    @Resource
     private ChannelMapper channelMapper;
 
     @Override
@@ -58,7 +61,7 @@ public class BlockServiceImpl implements BlockService {
 
             }
             ChannelPercent channelPercent = new ChannelPercent();
-            channelPercent.setName(channel.getName());
+            channelPercent.setName(String.format("%s-%s", peerMapper.get(channel.getPeerId()).getName(), channel.getName()));
             channelPercent.setBlockPercent(blockMapper.countByChannelId(channel.getId()));
             channelPercent.setTxPercent(txCount);
             channelPercents.add(channelPercent);
