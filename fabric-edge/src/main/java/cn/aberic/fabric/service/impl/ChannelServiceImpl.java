@@ -68,6 +68,7 @@ public class ChannelServiceImpl implements ChannelService {
     public int update(Channel channel) {
         FabricHelper.obtain().removeChaincodeManager(chaincodeMapper.list(channel.getId()));
         CacheUtil.removeHome();
+        blockMapper.deleteByChannelId(channel.getId());
         if (!channel.isBlockListener()) {
             channel.setCallbackLocation("");
         }

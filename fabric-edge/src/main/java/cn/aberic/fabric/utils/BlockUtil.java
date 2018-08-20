@@ -91,7 +91,13 @@ public class BlockUtil {
                 height = block.getHeight();
             }
             height = height == -1 ? 0 : height + 1;
-            CA ca = caService.listById(channelService.get(channelId).getPeerId()).get(0);
+            Channel channel = channelService.get(channelId);
+            CA ca = null;
+            if (null == channel) {
+                isAlive = false;
+            } else {
+                ca = caService.listById(channelService.get(channelId).getPeerId()).get(0);
+            }
             while (isAlive) {
                 if (!isInsert) {
                     if (execBlock(blockService, traceService, channelId, height, ca)) {

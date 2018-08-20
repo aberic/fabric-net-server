@@ -47,8 +47,12 @@ public class DeleteUtil {
                             OrdererMapper ordererMapper, PeerMapper peerMapper, CAMapper caMapper,
                             ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         List<Org> orgs = orgMapper.list(leagueId);
-        for (Org org : orgs) {
-            deleteOrg(org.getId(), orgMapper, ordererMapper, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
+        if (orgs.size() == 0) {
+            CacheUtil.removeHome();
+        } else {
+            for (Org org : orgs) {
+                deleteOrg(org.getId(), orgMapper, ordererMapper, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
+            }
         }
         return leagueMapper.delete(leagueId);
     }
@@ -57,8 +61,12 @@ public class DeleteUtil {
                          PeerMapper peerMapper, CAMapper caMapper, ChannelMapper channelMapper,
                          ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         List<Peer> peers = peerMapper.list(orgId);
-        for (Peer peer : peers) {
-            deletePeer(peer.getId(), peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
+        if (peers.size() == 0) {
+            CacheUtil.removeHome();
+        } else {
+            for (Peer peer : peers) {
+                deletePeer(peer.getId(), peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
+            }
         }
         ordererMapper.deleteAll(orgId);
         return orgMapper.delete(orgId);
@@ -67,8 +75,12 @@ public class DeleteUtil {
     public int deletePeer(int peerId, PeerMapper peerMapper, CAMapper caMapper, ChannelMapper channelMapper,
                           ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         List<Channel> channels = channelMapper.list(peerId);
-        for (Channel channel : channels) {
-            deleteChannel(channel.getId(), channelMapper, chaincodeMapper, appMapper, blockMapper);
+        if (channels.size() == 0) {
+            CacheUtil.removeHome();
+        } else {
+            for (Channel channel : channels) {
+                deleteChannel(channel.getId(), channelMapper, chaincodeMapper, appMapper, blockMapper);
+            }
         }
         caMapper.deleteAll(peerId);
         return peerMapper.delete(peerId);
@@ -77,8 +89,13 @@ public class DeleteUtil {
     public int deleteChannel(int channelId, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         blockMapper.deleteByChannelId(channelId);
         List<Chaincode> chaincodes = chaincodeMapper.list(channelId);
-        for (Chaincode chaincode : chaincodes) {
-            deleteChaincode(chaincode.getId(), chaincodeMapper, appMapper);
+        if (chaincodes.size() == 0) {
+            FabricHelper.obtain().removeChannelManager(channelId);
+            CacheUtil.removeHome();
+        } else {
+            for (Chaincode chaincode : chaincodes) {
+                deleteChaincode(chaincode.getId(), chaincodeMapper, appMapper);
+            }
         }
         return channelMapper.delete(channelId);
     }

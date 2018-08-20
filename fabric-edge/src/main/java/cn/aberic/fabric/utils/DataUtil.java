@@ -116,7 +116,7 @@ public class DataUtil {
             try {
                 long td1 = DateUtil.str2Date(t1.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
                 long td2 = DateUtil.str2Date(t2.getDate(), "yyyy/MM/dd HH:mm:ss").getTime();
-                return Math.toIntExact(td2 - td1);
+                return (int)(td2 - td1);
             } catch (Exception e) {
                 e.printStackTrace();
             }

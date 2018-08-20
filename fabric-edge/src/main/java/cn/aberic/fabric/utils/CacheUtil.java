@@ -182,7 +182,7 @@ public class CacheUtil {
     }
 
     public static void removeHome() {
-        cacheUser.invalidate("do-home-cache");
+        cacheHome.invalidate("do-home-cache");
     }
 
     public static void putUser(String key, User value) {

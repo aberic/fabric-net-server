@@ -73,7 +73,7 @@ public class FabricHelper {
         CacheUtil.removeStringFabric(cc);
     }
 
-    private void removeChannelManager(int channelId) {
+    void removeChannelManager(int channelId) {
         CacheUtil.removeIntegerFabric(channelId);
     }
 
