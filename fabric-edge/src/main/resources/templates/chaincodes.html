@@ -61,6 +61,7 @@
                                     <tr>
                                         <th class="w-1">ID</th>
                                         <th th:text="#{name}"></th>
+                                        <th th:text="#{peer_name}"></th>
                                         <th th:text="#{channel_name}"></th>
                                         <th th:text="#{chaincode_version}"></th>
                                         <th th:text="#{chaincode_proposal_wait_time}"></th>
@@ -72,6 +73,7 @@
                                     <tr th:each="chaincode : ${chaincodes}">
                                         <td th:text="${chaincode.id}">ID</td>
                                         <td th:text="${chaincode.name}">合约名称</td>
+                                        <td th:text="${chaincode.peerName}">节点名称</td>
                                         <td th:text="${chaincode.channelName}">通道名称</td>
                                         <td th:text="${chaincode.version}">版本号</td>
                                         <td th:text="${chaincode.proposalWaitTime}">提案超时时间</td>

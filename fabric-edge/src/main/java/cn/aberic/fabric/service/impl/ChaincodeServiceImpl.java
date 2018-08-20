@@ -268,7 +268,9 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
     public List<Chaincode> getChaincodes() {
         List<Chaincode> chaincodes = chaincodeMapper.listAll();
         for (Chaincode chaincode : chaincodes) {
-            chaincode.setChannelName(channelMapper.get(chaincode.getChannelId()).getName());
+            Channel channel = channelMapper.get(chaincode.getChannelId());
+            chaincode.setChannelName(channel.getName());
+            chaincode.setPeerName(peerMapper.get(channel.getPeerId()).getName());
         }
         return chaincodes;
     }
