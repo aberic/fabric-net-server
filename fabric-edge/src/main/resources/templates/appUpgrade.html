@@ -80,6 +80,13 @@
                                             <input type="hidden" name="id" th:value="${app.id}"/>
                                         </div>
                                         <div class="form-group">
+                                            <label class="form-label" th:text="#{app_key}"></label>
+                                            <input type="text" class="form-control is-valid"
+                                                   name="example-text-input-valid"
+                                                   th:placeholder="#{app_key_placeholder}"
+                                                   th:field="*{key}">
+                                        </div>
+                                        <div class="form-group">
                                             <div class="form-label" th:text="#{active}"></div>
                                             <label class="custom-switch">
                                                 <input type="checkbox" name="custom-switch-checkbox"

@@ -25,6 +25,7 @@ import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.MathUtil;
 import cn.aberic.fabric.utils.encryption.Utils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -65,6 +66,11 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public int update(App app) {
+        App appTmp = appMapper.get(app.getId());
+        if (!StringUtils.equals(appTmp.getKey(), app.getKey())) {
+            CacheUtil.removeString(appTmp.getKey());
+            CacheUtil.removeAppBool(appTmp.getKey());
+        }
         app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
         CacheUtil.removeAppBool(app.getKey());
         return appMapper.update(app);

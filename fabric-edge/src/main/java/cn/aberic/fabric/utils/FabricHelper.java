@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -90,7 +91,8 @@ public class FabricHelper {
                 Peer peer = peerMapper.get(channel.getPeerId());
                 log.debug(String.format("peer = %s", peer.toString()));
                 int orgId = peer.getOrgId();
-                List<Peer> peers = peerMapper.list(orgId);
+                List<Peer> peers = new ArrayList<>();
+                peers.add(peer);
                 List<Orderer> orderers = ordererMapper.list(orgId);
                 Org org = orgMapper.get(orgId);
                 log.debug(String.format("org = %s", org.toString()));

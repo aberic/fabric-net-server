@@ -32,7 +32,7 @@ public interface AppMapper {
             " values (#{a.name},#{a.key},#{a.chaincodeId},#{a.createDate},#{a.modifyDate},#{a.privateKey},#{a.publicKey},#{a.active})")
     int add(@Param("a") App app);
 
-    @Update("update app set name=#{a.name}, modify_date=#{a.modifyDate}, active=#{a.active} where id=#{a.id}")
+    @Update("update app set name=#{a.name}, key=#{a.key}, modify_date=#{a.modifyDate}, active=#{a.active} where id=#{a.id}")
     int update(@Param("a") App app);
 
     @Update("update app set key=#{a.key}, private_key=#{a.privateKey}, public_key=#{a.publicKey} where id=#{a.id}")

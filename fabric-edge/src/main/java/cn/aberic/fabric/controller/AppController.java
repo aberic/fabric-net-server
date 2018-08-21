@@ -65,13 +65,14 @@ public class AppController {
         modelAndView.addObject("intent", "add");
         App app = new App();
         app.setChaincodeId(chaincodeId);
+        app.setActive(true);
         modelAndView.addObject("app", app);
         return modelAndView;
     }
 
     @GetMapping(value = "edit")
     public ModelAndView edit(@RequestParam("id") int id) {
-        ModelAndView modelAndView = new ModelAndView("appSubmit");
+        ModelAndView modelAndView = new ModelAndView("appUpgrade");
         modelAndView.addObject("intentLittle", SpringUtil.get("edit"));
         modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
