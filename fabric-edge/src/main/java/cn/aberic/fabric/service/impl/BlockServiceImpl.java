@@ -162,7 +162,7 @@ public class BlockServiceImpl implements BlockService {
         for (Channel channel : channels) {
             List<Block> blockTmps = blockMapper.getLimit(channel.getId(), limit);
             for (Block block : blockTmps) {
-                block.setChannelName(channel.getName());
+                block.setPeerChannelName(String.format("%s-%s", peerMapper.get(channel.getPeerId()).getName(), channel.getName()));
                 block.setHeight(block.getHeight() + 1);
             }
             blocks.addAll(blockTmps);

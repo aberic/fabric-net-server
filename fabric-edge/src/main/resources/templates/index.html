@@ -168,7 +168,7 @@
                                     <tbody>
                                     <tr th:each="blockDao : ${blockDaos}">
                                         <td th:text="${blockDao.height}">blockHeight</td>
-                                        <td th:text="${blockDao.channelName}">channel_name</td>
+                                        <td th:text="${blockDao.peerChannelName}">channel_name</td>
                                         <td th:text="${blockDao.txCount}">tx_count</td>
                                         <td class="text-nowrap" th:text="${blockDao.timestamp}">date</td>
                                     </tr>
