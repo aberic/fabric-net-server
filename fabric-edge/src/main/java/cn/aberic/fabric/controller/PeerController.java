@@ -119,11 +119,7 @@ public class PeerController {
     }
 
     private List<Org> getForPeerAndOrderer() {
-        List<Org> orgs = orgService.listAll();
-        for (Org org : orgs) {
-            org.setLeagueName(leagueService.get(org.getLeagueId()).getName());
-        }
-        return orgs;
+        return orgService.listAll();
     }
 
     private Peer resetPeer(Peer peer) {

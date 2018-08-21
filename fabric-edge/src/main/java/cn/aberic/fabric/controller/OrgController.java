@@ -17,18 +17,13 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.dao.Org;
-import cn.aberic.fabric.service.LeagueService;
-import cn.aberic.fabric.service.OrdererService;
 import cn.aberic.fabric.service.OrgService;
-import cn.aberic.fabric.service.PeerService;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 描述：
@@ -42,12 +37,6 @@ public class OrgController {
 
     @Resource
     private OrgService orgService;
-    @Resource
-    private LeagueService leagueService;
-    @Resource
-    private OrdererService ordererService;
-    @Resource
-    private PeerService peerService;
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute Org org,
@@ -72,7 +61,7 @@ public class OrgController {
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("orgVO", new Org());
-        modelAndView.addObject("leagues", leagueService.listAll());
+        modelAndView.addObject("leagues", orgService.listAllLeague());
         return modelAndView;
     }
 
@@ -83,7 +72,7 @@ public class OrgController {
         modelAndView.addObject("submit", SpringUtil.get("modify"));
         modelAndView.addObject("intent", "edit");
         modelAndView.addObject("orgVO", orgService.get(id));
-        modelAndView.addObject("leagues", leagueService.listAll());
+        modelAndView.addObject("leagues", orgService.listAllLeague());
         return modelAndView;
     }
 
@@ -96,13 +85,7 @@ public class OrgController {
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("orgs");
-        List<Org> orgs = new ArrayList<>(orgService.listAll());
-        for (Org org : orgs) {
-            org.setOrdererCount(ordererService.countById(org.getId()));
-            org.setPeerCount(peerService.countById(org.getId()));
-            org.setLeagueName(leagueService.get(org.getLeagueId()).getName());
-        }
-        modelAndView.addObject("orgs", orgs);
+        modelAndView.addObject("orgs", orgService.listAll());
         return modelAndView;
     }
 

@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.service.impl;
 
+import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.OrgService;
@@ -27,11 +28,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("orgService")
 public class OrgServiceImpl implements OrgService {
 
+    @Resource
+    private LeagueMapper leagueMapper;
     @Resource
     private OrgMapper orgMapper;
     @Resource
@@ -69,7 +73,13 @@ public class OrgServiceImpl implements OrgService {
 
     @Override
     public List<Org> listAll() {
-        return orgMapper.listAll();
+        List<Org> orgs = new ArrayList<>(orgMapper.listAll());
+        for (Org org : orgs) {
+            org.setOrdererCount(ordererMapper.count(org.getId()));
+            org.setPeerCount(peerMapper.count(org.getId()));
+            org.setLeagueName(leagueMapper.get(org.getLeagueId()).getName());
+        }
+        return orgs;
     }
 
     @Override
@@ -95,6 +105,11 @@ public class OrgServiceImpl implements OrgService {
     @Override
     public int delete(int id) {
         return DeleteUtil.obtain().deleteOrg(id, orgMapper, ordererMapper, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
+    }
+
+    @Override
+    public List<League> listAllLeague() {
+        return leagueMapper.listAll();
     }
 
 }
