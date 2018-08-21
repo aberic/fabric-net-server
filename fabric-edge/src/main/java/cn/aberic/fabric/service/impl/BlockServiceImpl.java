@@ -163,6 +163,7 @@ public class BlockServiceImpl implements BlockService {
             List<Block> blockTmps = blockMapper.getLimit(channel.getId(), limit);
             for (Block block : blockTmps) {
                 block.setChannelName(channel.getName());
+                block.setHeight(block.getHeight() + 1);
             }
             blocks.addAll(blockTmps);
         }
