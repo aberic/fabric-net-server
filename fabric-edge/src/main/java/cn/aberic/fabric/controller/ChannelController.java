@@ -73,14 +73,7 @@ public class ChannelController {
         modelAndView.addObject("submit", SpringUtil.get("submit"));
         modelAndView.addObject("intent", "add");
         modelAndView.addObject("channel", new Channel());
-        List<Peer> peers = peerService.listAll();
-        for (Peer peer : peers) {
-            Org org = orgService.get(peer.getOrgId());
-            peer.setOrgName(org.getMspId());
-            League league = leagueService.get(org.getLeagueId());
-            peer.setLeagueName(league.getName());
-        }
-        modelAndView.addObject("peers", peers);
+        modelAndView.addObject("peers", peerService.listAll());
         return modelAndView;
     }
 

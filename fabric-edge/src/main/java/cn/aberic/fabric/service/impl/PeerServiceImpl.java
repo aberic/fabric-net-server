@@ -16,6 +16,8 @@
 
 package cn.aberic.fabric.service.impl;
 
+import cn.aberic.fabric.dao.League;
+import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.dao.Peer;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.PeerService;
@@ -28,11 +30,18 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("peerService")
 public class PeerServiceImpl implements PeerService {
 
+    @Resource
+    private LeagueMapper leagueMapper;
+    @Resource
+    private OrgMapper orgMapper;
+    @Resource
+    private OrdererMapper ordererMapper;
     @Resource
     private PeerMapper peerMapper;
     @Resource
@@ -83,7 +92,15 @@ public class PeerServiceImpl implements PeerService {
 
     @Override
     public List<Peer> listAll() {
-        return peerMapper.listAll();
+        List<Peer> peers = peerMapper.listAll();
+        for (Peer peer : peers) {
+            Org org = orgMapper.get(peer.getOrgId());
+            League league = leagueMapper.get(org.getLeagueId());
+            peer.setLeagueName(league.getName());
+            peer.setOrgName(org.getMspId());
+            peer.setChannelCount(channelMapper.count(peer.getId()));
+        }
+        return peers;
     }
 
     @Override
@@ -109,6 +126,36 @@ public class PeerServiceImpl implements PeerService {
     @Override
     public int delete(int id) {
         return DeleteUtil.obtain().deletePeer(id, peerMapper, caMapper, channelMapper, chaincodeMapper, appMapper, blockMapper);
+    }
+
+    @Override
+    public List<Org> listOrgByOrgId(int orgId) {
+        League league = leagueMapper.get(orgMapper.get(orgId).getLeagueId());
+        List<Org> orgs = orgMapper.list(league.getId());
+        for (Org org : orgs) {
+            org.setLeagueName(league.getName());
+        }
+        return orgs;
+    }
+
+    @Override
+    public List<Org> getForPeerAndOrderer() {
+        List<Org> orgs = new ArrayList<>(orgMapper.listAll());
+        for (Org org : orgs) {
+            org.setOrdererCount(ordererMapper.count(org.getId()));
+            org.setPeerCount(peerMapper.count(org.getId()));
+            org.setLeagueName(leagueMapper.get(org.getLeagueId()).getName());
+        }
+        return orgs;
+    }
+
+    @Override
+    public Peer resetPeer(Peer peer) {
+        Org org = orgMapper.get(peer.getOrgId());
+        League league = leagueMapper.get(org.getLeagueId());
+        peer.setLeagueName(league.getName());
+        peer.setOrgName(org.getMspId());
+        return peer;
     }
 
     private boolean saveFileFail(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
