@@ -30,9 +30,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 作者：Aberic on 2018/8/11 00:26
@@ -43,11 +41,9 @@ public class BlockUtil {
 
     private static BlockUtil instance;
 
-    private boolean isAlive = true;
-    private boolean isInsert = false;
-
     private final List<Channel> channels = new LinkedList<>();
     private final List<Block> blocks = new LinkedList<>();
+    private final Map<Integer, Boolean> channelRun = new HashMap<>();
 
     public static BlockUtil obtain() {
         if (null == instance) {
@@ -70,6 +66,7 @@ public class BlockUtil {
             }
             if (!hadOne) {
                 this.channels.add(channel);
+                this.channelRun.put(channel.getId(), true);
                 execChannel(channelService, caService, blockService, traceService, channel.getId());
             }
             CA ca = caService.listById(channel.getPeerId()).get(0);
@@ -91,27 +88,18 @@ public class BlockUtil {
                 height = block.getHeight();
             }
             height = height == -1 ? 0 : height + 1;
-            Channel channel = channelService.get(channelId);
-            CA ca = null;
-            if (null == channel) {
-                isAlive = false;
-            } else {
-                ca = caService.listById(channelService.get(channelId).getPeerId()).get(0);
-            }
-            while (isAlive) {
-                if (!isInsert) {
-                    if (execBlock(blockService, traceService, channelId, height, ca)) {
-                        height++;
-                    } else {
-                        synchronized (blocks) {
-                            isInsert = true;
-                            insert(blockService);
-                        }
-                        try {
-                            Thread.sleep(60000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+            CA ca = caService.listById(channelService.get(channelId).getPeerId()).get(0);
+            while (channelRun.get(channelId)) {
+                if (execBlock(blockService, traceService, channelId, height, ca)) {
+                    height++;
+                } else {
+                    synchronized (blocks) {
+                        insert(blockService);
+                    }
+                    try {
+                        Thread.sleep(60000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -119,18 +107,21 @@ public class BlockUtil {
     }
 
     private boolean execBlock(BlockService blockService, TraceService traceService, int channelId, int height, CA ca) {
-        try {
-            Trace trace = new Trace();
-            trace.setChannelId(channelId);
-            trace.setTrace(String.valueOf(height));
-            JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberWithCa(trace, ca));
+        Trace trace = new Trace();
+        trace.setChannelId(channelId);
+        trace.setTrace(String.valueOf(height));
+        JSONObject blockMessage = JSON.parseObject(traceService.queryBlockByNumberWithCa(trace, ca));
+        return execBlock(blockMessage, blockService, channelId, height);
+    }
 
-            int code = blockMessage.containsKey("code") ? blockMessage.getInteger("code") : 9999;
+    private boolean execBlock(JSONObject blockJson, BlockService blockService, int channelId, int height) {
+        try {
+            int code = blockJson.containsKey("code") ? blockJson.getInteger("code") : 9999;
             if (code != 200) {
                 return false;
             }
 
-            JSONArray envelopes = blockMessage.containsKey("data") ? blockMessage.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
+            JSONArray envelopes = blockJson.containsKey("data") ? blockJson.getJSONObject("data").getJSONArray("envelopes") : new JSONArray();
             int txCount = 0;
             int rwSetCount = 0;
             int size = envelopes.size();
@@ -153,9 +144,9 @@ public class BlockUtil {
             Block block = new Block();
             block.setChannelId(channelId);
             block.setHeight(height);
-            block.setDataHash(blockMessage.getJSONObject("data").getString("dataHash"));
-            block.setCalculatedHash(blockMessage.getJSONObject("data").getString("calculatedBlockHash"));
-            block.setPreviousHash(blockMessage.getJSONObject("data").getString("previousHashID"));
+            block.setDataHash(blockJson.getJSONObject("data").getString("dataHash"));
+            block.setCalculatedHash(blockJson.getJSONObject("data").getString("calculatedBlockHash"));
+            block.setPreviousHash(blockJson.getJSONObject("data").getString("previousHashID"));
             block.setEnvelopeCount(size);
             block.setTxCount(txCount);
             block.setRwSetCount(rwSetCount);
@@ -166,7 +157,6 @@ public class BlockUtil {
             synchronized (blocks) {
                 blocks.add(block);
                 if (blocks.size() >= 100) {
-                    isInsert = true;
                     insert(blockService);
                     Thread.sleep(1000);
                 }
@@ -185,10 +175,14 @@ public class BlockUtil {
             blockService.add(block);
         }
         blocks.clear();
-        isInsert = false;
     }
 
-    public void setAlive(boolean alive) {
-        isAlive = alive;
+    void removeChannel(int channelId) {
+        channelRun.put(channelId, false);
+        for (Channel channel : channels) {
+            if (channel.getId() == channelId) {
+                channels.remove(channel);
+            }
+        }
     }
 }

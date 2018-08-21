@@ -88,6 +88,7 @@ public class DeleteUtil {
 
     public int deleteChannel(int channelId, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper, AppMapper appMapper, BlockMapper blockMapper) {
         blockMapper.deleteByChannelId(channelId);
+        BlockUtil.obtain().removeChannel(channelId);
         List<Chaincode> chaincodes = chaincodeMapper.list(channelId);
         if (chaincodes.size() == 0) {
             FabricHelper.obtain().removeChannelManager(channelId);
