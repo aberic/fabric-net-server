@@ -18,11 +18,11 @@ package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.dao.Org;
 import cn.aberic.fabric.service.LeagueService;
+import cn.aberic.fabric.service.OrdererService;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.service.PeerService;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -44,6 +44,8 @@ public class OrgController {
     private OrgService orgService;
     @Resource
     private LeagueService leagueService;
+    @Resource
+    private OrdererService ordererService;
     @Resource
     private PeerService peerService;
 
@@ -96,7 +98,7 @@ public class OrgController {
         ModelAndView modelAndView = new ModelAndView("orgs");
         List<Org> orgs = new ArrayList<>(orgService.listAll());
         for (Org org : orgs) {
-            org.setOrdererCount(orgService.countById(org.getId()));
+            org.setOrdererCount(ordererService.countById(org.getId()));
             org.setPeerCount(peerService.countById(org.getId()));
             org.setLeagueName(leagueService.get(org.getLeagueId()).getName());
         }
