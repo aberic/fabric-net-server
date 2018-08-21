@@ -90,7 +90,7 @@ public class BlockServiceImpl implements BlockService {
                 channelBlocks.add(channelBlock);
             }
             ChannelBlockList channelBlockList = new ChannelBlockList();
-            channelBlockList.setName(channel.getName());
+            channelBlockList.setName(String.format("%s-%s", peerMapper.get(channel.getPeerId()).getName(), channel.getName()));
             channelBlockList.setChannelBlocks(channelBlocks);
             channelBlockList.setZeroCount(zeroCount);
             channelBlockLists.add(channelBlockList);
