@@ -44,6 +44,7 @@ public class BlockUtil {
     private final List<Channel> channels = new LinkedList<>();
     private final List<Block> blocks = new LinkedList<>();
     private final Map<Integer, Boolean> channelRun = new HashMap<>();
+    private final Map<Integer, Boolean> channelUpdata = new HashMap<>();
 
     public static BlockUtil obtain() {
         if (null == instance) {
@@ -67,6 +68,7 @@ public class BlockUtil {
             if (!hadOne) {
                 this.channels.add(channel);
                 this.channelRun.put(channel.getId(), true);
+                this.channelUpdata.put(channel.getId(), true);
                 execChannel(channelService, caService, blockService, traceService, channel.getId());
             }
             CA ca = caService.listById(channel.getPeerId()).get(0);
@@ -90,17 +92,21 @@ public class BlockUtil {
             height = height == -1 ? 0 : height + 1;
             CA ca = caService.listById(channelService.get(channelId).getPeerId()).get(0);
             while (channelRun.get(channelId)) {
+                if (!channelUpdata.get(channelId)) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    continue;
+                }
                 if (execBlock(blockService, traceService, channelId, height, ca)) {
                     height++;
                 } else {
                     synchronized (blocks) {
                         insert(blockService);
                     }
-                    try {
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    channelUpdata.put(channelId, false);
                 }
             }
         });
@@ -184,5 +190,9 @@ public class BlockUtil {
                 channels.remove(channel);
             }
         }
+    }
+
+    void updataChannelData(int channelId) {
+        channelUpdata.put(channelId, true);
     }
 }

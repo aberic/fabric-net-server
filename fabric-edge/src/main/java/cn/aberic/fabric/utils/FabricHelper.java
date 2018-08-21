@@ -147,15 +147,16 @@ public class FabricHelper {
         for (Peer peer : peers) {
             orgManager.addPeer(peer.getName(), peer.getLocation(), peer.getEventHubLocation(), peer.getServerCrtPath(), peer.getClientCertPath(), peer.getClientKeyPath());
         }
-        if (channel.isBlockListener() && StringUtils.isNotEmpty(channel.getCallbackLocation()) && null == chaincode) {
-            orgManager.setBlockListener(jsonObject -> {
-                try {
+        orgManager.setBlockListener(jsonObject -> {
+            try {
+                if (channel.isBlockListener() && StringUtils.isNotEmpty(channel.getCallbackLocation()) && null == chaincode) {
                     HttpUtil.post(channel.getCallbackLocation(), jsonObject.toJSONString());
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-            });
-        }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BlockUtil.obtain().updataChannelData(channel.getId());
+        });
         if (null != chaincode && chaincode.isChaincodeEventListener() && StringUtils.isNotEmpty(chaincode.getCallbackLocation())
                 && StringUtils.isNotEmpty(chaincode.getEvents())) {
             orgManager.setChaincodeEventListener(chaincode.getEvents(), (handle, jsonObject, eventName, chaincodeId, txId) -> {
