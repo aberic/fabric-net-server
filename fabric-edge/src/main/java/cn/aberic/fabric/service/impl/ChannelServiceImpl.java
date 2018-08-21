@@ -17,10 +17,9 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.Channel;
-import cn.aberic.fabric.dao.mapper.AppMapper;
-import cn.aberic.fabric.dao.mapper.BlockMapper;
-import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
-import cn.aberic.fabric.dao.mapper.ChannelMapper;
+import cn.aberic.fabric.dao.Org;
+import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.ChannelService;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
@@ -37,6 +36,12 @@ import java.util.List;
 @Service("channelService")
 public class ChannelServiceImpl implements ChannelService {
 
+    @Resource
+    private LeagueMapper leagueMapper;
+    @Resource
+    private OrgMapper orgMapper;
+    @Resource
+    private PeerMapper peerMapper;
     @Resource
     private ChannelMapper channelMapper;
     @Resource
@@ -82,7 +87,16 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public List<Channel> listAll() {
-        return channelMapper.listAll();
+        List<Channel> channels = channelMapper.listAll();
+        for (Channel channel : channels) {
+            Peer peer = peerMapper.get(channel.getPeerId());
+            Org org = orgMapper.get(peer.getOrgId());
+            channel.setLeagueName(leagueMapper.get(org.getLeagueId()).getName());
+            channel.setOrgName(org.getMspId());
+            channel.setPeerName(peer.getName());
+            channel.setChaincodeCount(chaincodeMapper.count(channel.getId()));
+        }
+        return channels;
     }
 
     @Override

@@ -55,7 +55,7 @@ public class DataUtil {
         int appCount = appService.count();
 
         List<Channel> channels = channelService.listAll();
-        List<Block> blocks = blocks(channels, peerService, blockService);
+        List<Block> blocks = blocks(channels, blockService);
         List<cn.aberic.fabric.dao.Block> blockDaos = blockService.getLimit(6);
         List<ChannelPercent> channelPercents = blockService.getChannelPercents(channels);
         List<ChannelBlockList> channelBlockLists = blockService.getChannelBlockLists(channels);
@@ -85,14 +85,14 @@ public class DataUtil {
         return home;
     }
 
-    private List<Block> blocks(List<Channel> channels, PeerService peerService, BlockService blockService) {
+    private List<Block> blocks(List<Channel> channels, BlockService blockService) {
         List<Block> blocks = new ArrayList<>();
         for (Channel channel : channels) {
             Block block = new Block();
             cn.aberic.fabric.dao.Block blockDao = blockService.getByChannelId(channel.getId());
             if (null == blockDao) {
                 block.setNum(0);
-                block.setPeerName(peerService.get(channel.getPeerId()).getName());
+                block.setPeerName(channel.getPeerName());
                 block.setChannelName(channel.getName());
                 block.setCalculatedBlockHash("-");
                 block.setDate("2018/06/4 09:47:00");
@@ -103,7 +103,7 @@ public class DataUtil {
                 double nowHeight = blockDao.getHeight();
                 double percent = nowHeight > totalHeight ? 2 : nowHeight/totalHeight;
                 block.setNum((int)nowHeight + 1);
-                block.setPeerName(peerService.get(channel.getPeerId()).getName());
+                block.setPeerName(channel.getPeerName());
                 block.setChannelName(channel.getName());
                 block.setCalculatedBlockHash(blockDao.getCalculatedHash());
                 block.setDate(blockDao.getTimestamp());

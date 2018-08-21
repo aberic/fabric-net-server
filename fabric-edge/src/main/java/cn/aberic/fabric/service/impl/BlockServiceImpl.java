@@ -62,7 +62,7 @@ public class BlockServiceImpl implements BlockService {
 
             }
             ChannelPercent channelPercent = new ChannelPercent();
-            channelPercent.setName(String.format("%s-%s", peerMapper.get(channel.getPeerId()).getName(), channel.getName()));
+            channelPercent.setName(String.format("%s-%s", channel.getPeerName(), channel.getName()));
             channelPercent.setBlockPercent(blockMapper.countByChannelId(channel.getId()));
             channelPercent.setTxPercent(txCount);
             channelPercents.add(channelPercent);
@@ -90,7 +90,7 @@ public class BlockServiceImpl implements BlockService {
                 channelBlocks.add(channelBlock);
             }
             ChannelBlockList channelBlockList = new ChannelBlockList();
-            channelBlockList.setName(String.format("%s-%s", peerMapper.get(channel.getPeerId()).getName(), channel.getName()));
+            channelBlockList.setName(String.format("%s-%s", channel.getPeerName(), channel.getName()));
             channelBlockList.setChannelBlocks(channelBlocks);
             channelBlockList.setZeroCount(zeroCount);
             channelBlockLists.add(channelBlockList);

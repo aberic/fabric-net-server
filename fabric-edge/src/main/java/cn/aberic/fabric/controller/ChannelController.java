@@ -47,8 +47,6 @@ public class ChannelController {
     private OrgService orgService;
     @Resource
     private LeagueService leagueService;
-    @Resource
-    private ChaincodeService chaincodeService;
 
     @PostMapping(value = "submit")
     public ModelAndView submit(@ModelAttribute Channel channel,
@@ -107,12 +105,7 @@ public class ChannelController {
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("channels");
-        List<Channel> channels = channelService.listAll();
-        for (Channel channel : channels) {
-            channel.setPeerName(peerService.get(channel.getPeerId()).getName());
-            channel.setChaincodeCount(chaincodeService.countById(channel.getId()));
-        }
-        modelAndView.addObject("channels", channels);
+        modelAndView.addObject("channels", channelService.listAll());
         return modelAndView;
     }
 
