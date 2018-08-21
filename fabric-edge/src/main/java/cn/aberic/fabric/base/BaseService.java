@@ -30,14 +30,14 @@ public interface BaseService {
     default String responseFail(String result) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", FAIL);
-        jsonObject.put("data", result);
+        jsonObject.put("error", result);
         return jsonObject.toString();
     }
 
     default JSONObject responseFailJson(String result) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", FAIL);
-        jsonObject.put("data", result);
+        jsonObject.put("error", result);
         return jsonObject;
     }
 

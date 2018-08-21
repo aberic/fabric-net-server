@@ -244,7 +244,7 @@ class IntermediateChaincodeID {
             log.error("Not enough endorsers for inspect:" + failed.size() + " endorser error: " + firstTransactionProposalResponse.getMessage() + ". Was verified: "
                     + firstTransactionProposalResponse.isVerified());
             jsonObject.put("code", BlockListener.ERROR);
-            jsonObject.put("data", firstTransactionProposalResponse.getMessage());
+            jsonObject.put("error", firstTransactionProposalResponse.getMessage());
             return jsonObject;
         } else {
             log.info("Successfully received transaction proposal responses.");
@@ -288,7 +288,7 @@ class IntermediateChaincodeID {
                         proposalResponse.getPeer().getName(), proposalResponse.getStatus(), proposalResponse.getMessage(), proposalResponse.isVerified());
                 log.debug(data);
                 jsonObject.put("code", BlockListener.ERROR);
-                jsonObject.put("data", data);
+                jsonObject.put("error", data);
             } else {
                 String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
                 log.debug("Install/Query payload from peer: " + proposalResponse.getPeer().getName());
