@@ -17,6 +17,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.dao.Orderer;
+import cn.aberic.fabric.dao.Org;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -42,4 +43,10 @@ public interface OrdererService {
      int count();
 
      int delete(int id);
+
+     List<Org> listOrgById(int ordererId);
+
+     List<Org> listAllOrg();
+
+     Orderer resetOrderer(Orderer orderer);
 }

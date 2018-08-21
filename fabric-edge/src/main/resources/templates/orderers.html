@@ -58,6 +58,7 @@
                                     <tr>
                                         <th class="w-1">ID</th>
                                         <th th:text="#{name}"></th>
+                                        <th th:text="#{league_name}"></th>
                                         <th th:text="#{org_name}"></th>
                                         <th th:text="#{location}"></th>
                                         <th th:text="#{date}"></th>
@@ -68,6 +69,7 @@
                                     <tr th:each="orderer : ${orderers}">
                                         <td th:text="${orderer.id}">ID</td>
                                         <td th:text="${orderer.name}">服务名称</td>
+                                        <td th:text="${orderer.leagueName}">联盟名称</td>
                                         <td th:text="${orderer.orgName}">组织名称</td>
                                         <td th:text="${orderer.location}">IP</td>
                                         <td th:text="${orderer.date}">时间</td>

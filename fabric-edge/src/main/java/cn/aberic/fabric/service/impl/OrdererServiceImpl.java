@@ -16,11 +16,10 @@
 
 package cn.aberic.fabric.service.impl;
 
+import cn.aberic.fabric.dao.League;
 import cn.aberic.fabric.dao.Orderer;
-import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
-import cn.aberic.fabric.dao.mapper.ChannelMapper;
-import cn.aberic.fabric.dao.mapper.OrdererMapper;
-import cn.aberic.fabric.dao.mapper.PeerMapper;
+import cn.aberic.fabric.dao.Org;
+import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.OrdererService;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
@@ -34,11 +33,16 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("ordererService")
 public class OrdererServiceImpl implements OrdererService {
 
+    @Resource
+    private LeagueMapper leagueMapper;
+    @Resource
+    private OrgMapper orgMapper;
     @Resource
     private OrdererMapper ordererMapper;
     @Resource
@@ -83,7 +87,13 @@ public class OrdererServiceImpl implements OrdererService {
 
     @Override
     public List<Orderer> listAll() {
-        return ordererMapper.listAll();
+        List<Orderer> orderers = ordererMapper.listAll();
+        for (Orderer orderer : orderers) {
+            Org org = orgMapper.get(orderer.getOrgId());
+            orderer.setLeagueName(leagueMapper.get(org.getLeagueId()).getName());
+            orderer.setOrgName(org.getMspId());
+        }
+        return orderers;
     }
 
     @Override
@@ -110,6 +120,34 @@ public class OrdererServiceImpl implements OrdererService {
     public int delete(int id) {
         CacheUtil.removeHome();
         return ordererMapper.delete(id);
+    }
+
+    @Override
+    public List<Org> listOrgById(int orgId) {
+        League league = leagueMapper.get(orgMapper.get(orgId).getLeagueId());
+        List<Org> orgs = orgMapper.list(league.getId());
+        for (Org org : orgs) {
+            org.setLeagueName(league.getName());
+        }
+        return orgs;
+    }
+
+    @Override
+    public List<Org> listAllOrg() {
+        List<Org> orgs = new ArrayList<>(orgMapper.listAll());
+        for (Org org : orgs) {
+            org.setLeagueName(leagueMapper.get(org.getLeagueId()).getName());
+        }
+        return orgs;
+    }
+
+    @Override
+    public Orderer resetOrderer(Orderer orderer) {
+        Org org = orgMapper.get(orderer.getOrgId());
+        League league = leagueMapper.get(org.getLeagueId());
+        orderer.setLeagueName(league.getName());
+        orderer.setOrgName(org.getMspId());
+        return orderer;
     }
 
     private boolean saveFileFail(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
