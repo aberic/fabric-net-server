@@ -74,6 +74,8 @@
                                     <tr>
                                         <th class="w-1">ID</th>
                                         <th th:text="#{name}"></th>
+                                        <th th:text="#{league_name}"></th>
+                                        <th th:text="#{org_name}"></th>
                                         <th th:text="#{peer_name}"></th>
                                         <th th:text="#{date}"></th>
                                         <th th:text="#{operate}"></th>
@@ -83,6 +85,8 @@
                                     <tr th:each="ca : ${cas}">
                                         <td th:text="${ca.id}">ID</td>
                                         <td th:text="${ca.name}">CA名称</td>
+                                        <td th:text="${ca.leagueName}">联盟名称</td>
+                                        <td th:text="${ca.orgName}">组织名称</td>
                                         <td th:text="${ca.peerName}">节点名称</td>
                                         <td th:text="${ca.date}">时间</td>
                                         <td>

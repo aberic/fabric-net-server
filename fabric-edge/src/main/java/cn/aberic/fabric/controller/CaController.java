@@ -81,7 +81,6 @@ public class CaController {
     @GetMapping(value = "list")
     public ModelAndView list() {
         ModelAndView modelAndView = new ModelAndView("cas");
-
         modelAndView.addObject("cas", caService.listFullCA());
         return modelAndView;
     }
