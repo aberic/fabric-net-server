@@ -27,6 +27,7 @@ import cn.aberic.fabric.utils.DateUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -71,13 +72,14 @@ public class BlockServiceImpl implements BlockService {
 
     @Override
     public List<ChannelBlockList> getChannelBlockLists(List<Channel> channels) {
-        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd"));
         List<ChannelBlockList> channelBlockLists = new LinkedList<>();
         for (Channel channel : channels) {
             List<ChannelBlock> channelBlocks = new LinkedList<>();
             int zeroCount = 0;
-            for (int i = 0; i < 20; i++) {
-                int date = today - i;
+            for (int i = 14; i >= 0; i--) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, 0 - i);
+                int date = Integer.valueOf(DateUtil.date2Str(calendar.getTime(), "yyyyMMdd"));
                 int blockCount = blockMapper.countByChannelIdAndDate(channel.getId(), date);
                 if (blockCount == 0) {
                     zeroCount++;
@@ -94,7 +96,7 @@ public class BlockServiceImpl implements BlockService {
             channelBlockLists.add(channelBlockList);
         }
         channelBlockLists.sort((t1, t2) -> Math.toIntExact(t2.getZeroCount() - t1.getZeroCount()));
-        return channelBlockLists;
+        return channelBlockLists.size() >= 3 ? channelBlockLists.subList(0, 3) : channelBlockLists;
     }
 
     @Override
@@ -177,18 +179,19 @@ public class BlockServiceImpl implements BlockService {
 
     @Override
     public Curve get20CountList() {
-        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd")) - 20;
         List<Integer> integers = new LinkedList<>();
         Curve curve = new Curve();
         curve.setName("Block Count");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 19; i >= 0; i--) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, 0 - i);
+            int date = Integer.valueOf(DateUtil.date2Str(calendar.getTime(), "yyyyMMdd"));
             int blockCount = 0;
             try {
-                blockCount = blockMapper.countByDate(today);
+                blockCount = blockMapper.countByDate(date);
             } catch (Exception ignored) {
 
             }
-            today++;
             integers.add(blockCount);
         }
         int ud = integers.get(19) - integers.get(18);
@@ -199,18 +202,19 @@ public class BlockServiceImpl implements BlockService {
 
     @Override
     public Curve get20TxCountList() {
-        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd")) - 20;
         List<Integer> integers = new LinkedList<>();
         Curve curve = new Curve();
         curve.setName("TX Count");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 19; i >= 0; i--) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, 0 - i);
+            int date = Integer.valueOf(DateUtil.date2Str(calendar.getTime(), "yyyyMMdd"));
             int txCount = 0;
             try {
-                txCount = blockMapper.countTxByDate(today);
+                txCount = blockMapper.countTxByDate(date);
             } catch (Exception ignored) {
 
             }
-            today++;
             integers.add(txCount);
         }
         int ud = integers.get(19) - integers.get(18);
@@ -221,18 +225,19 @@ public class BlockServiceImpl implements BlockService {
 
     @Override
     public Curve get20RWCountList() {
-        int today = Integer.valueOf(DateUtil.getCurrent("yyyyMMdd")) - 20;
         List<Integer> integers = new LinkedList<>();
         Curve curve = new Curve();
         curve.setName("RWSet Count");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 19; i >= 0; i--) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, 0 - i);
+            int date = Integer.valueOf(DateUtil.date2Str(calendar.getTime(), "yyyyMMdd"));
             int rwCount = 0;
             try {
-                rwCount = blockMapper.countRWSetByDate(today);
+                rwCount = blockMapper.countRWSetByDate(date);
             } catch (Exception ignored) {
 
             }
-            today++;
             integers.add(rwCount);
         }
         int ud = integers.get(19) - integers.get(18);
