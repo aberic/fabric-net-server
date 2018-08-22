@@ -162,7 +162,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int addRoleList(List<Role> roles) {
-        return roleMapper.addList(roles);
+        if (roles.size() > 0) {
+            return roleMapper.addList(roles);
+        }
+        return 0;
     }
 
     @Override

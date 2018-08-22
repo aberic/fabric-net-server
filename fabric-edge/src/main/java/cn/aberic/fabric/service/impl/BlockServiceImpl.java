@@ -53,7 +53,10 @@ public class BlockServiceImpl implements BlockService {
 
     @Override
     public int addBlockList(List<Block> blocks) {
-        return blockMapper.addList(blocks);
+        if (blocks.size() > 0) {
+            return blockMapper.addList(blocks);
+        }
+        return 0;
     }
 
     @Override
