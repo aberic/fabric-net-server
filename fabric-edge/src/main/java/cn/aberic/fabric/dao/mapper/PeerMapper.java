@@ -28,34 +28,34 @@ import java.util.List;
 @Mapper
 public interface PeerMapper {
 
-    @Insert("insert into peer (name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date) values" +
+    @Insert("insert into fns_peer (name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date) values" +
             " (#{p.name},#{p.location},#{p.eventHubLocation},#{p.serverCrtPath},#{p.clientCertPath},#{p.clientKeyPath},#{p.orgId},#{p.date})")
     int add(@Param("p") Peer peer);
 
-    @Update("update peer set name=#{p.name}, location=#{p.location}" +
+    @Update("update fns_peer set name=#{p.name}, location=#{p.location}" +
             ", event_hub_location=#{p.eventHubLocation}" +
             ", server_crt_path=#{p.serverCrtPath}, " +
             "client_cert_path=#{p.clientCertPath}, " +
             "client_key_path=#{p.clientKeyPath} where id=#{p.id}")
     int update(@Param("p") Peer peer);
 
-    @Update("update peer set name=#{p.name}, location=#{p.location}" +
+    @Update("update fns_peer set name=#{p.name}, location=#{p.location}" +
             ", event_hub_location=#{p.eventHubLocation} where id=#{p.id}")
     int updateWithNoFile(@Param("p") Peer peer);
 
-    @Select("select count(name) from peer where org_id=#{id}")
+    @Select("select count(name) from fns_peer where org_id=#{id}")
     int count(@Param("id") int id);
 
-    @Select("select count(name) from peer")
+    @Select("select count(name) from fns_peer")
     int countAll();
 
-    @Delete("delete from peer where id=#{id}")
+    @Delete("delete from fns_peer where id=#{id}")
     int delete(@Param("id") int id);
 
-    @Delete("delete from peer where org_id=#{orgId}")
+    @Delete("delete from fns_peer where org_id=#{orgId}")
     int deleteAll(@Param("orgId") int orgId);
 
-    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from peer where id=#{id}")
+    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from fns_peer where id=#{id}")
     @Results({
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "serverCrtPath", column = "server_crt_path"),
@@ -65,7 +65,7 @@ public interface PeerMapper {
     })
     Peer get(@Param("id") int id);
 
-    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from peer where org_id=#{id}")
+    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from fns_peer where org_id=#{id}")
     @Results({
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "serverCrtPath", column = "server_crt_path"),
@@ -75,7 +75,7 @@ public interface PeerMapper {
     })
     List<Peer> list(@Param("id") int id);
 
-    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from peer")
+    @Select("select id,name,location,event_hub_location,server_crt_path,client_cert_path,client_key_path,org_id,date from fns_peer")
     @Results({
             @Result(property = "eventHubLocation", column = "event_hub_location"),
             @Result(property = "serverCrtPath", column = "server_crt_path"),

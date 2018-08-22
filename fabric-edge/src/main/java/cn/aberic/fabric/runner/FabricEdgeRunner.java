@@ -44,6 +44,7 @@ public class FabricEdgeRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        initRola();
         addUser();
         System.out.println();
         System.out.println(" _____   _   _   ____    ");
@@ -55,6 +56,15 @@ public class FabricEdgeRunner implements ApplicationRunner {
         System.out.println("===================== please make your fabric net work ===================== ");
         System.out.println();
         System.out.println("================================= read logs ================================ ");
+    }
+
+    private void initRola() {
+        Role roleSuperAdmin = new Role(1, "超级管理员");
+        Role roleAdmin = new Role(2, "管理员");
+        Role roleMember = new Role(8, "普通会员");
+        userService.addRole(roleSuperAdmin);
+        userService.addRole(roleAdmin);
+        userService.addRole(roleMember);
     }
 
     private void addUser() {

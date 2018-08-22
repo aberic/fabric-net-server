@@ -16,6 +16,9 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,20 +31,34 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "fns_block")
 public class Block {
 
+    @Column(name = "id",type = MySqlTypeConstant.INT,length = 9,isKey = true,isAutoIncrement = true)
     private int id;
+    @Column(name = "channel_id",type = MySqlTypeConstant.INT,length = 9)
     private int channelId;
-    private String peerChannelName;
+    @Column(name = "height",type = MySqlTypeConstant.INT,length = 9)
     private int height;
+    @Column(name = "data_hash",type = MySqlTypeConstant.VARCHAR,length = 256)
     private String dataHash;
+    @Column(name = "calculated_hash",type = MySqlTypeConstant.VARCHAR,length = 256)
     private String calculatedHash;
+    @Column(name = "previous_hash",type = MySqlTypeConstant.VARCHAR,length = 256)
     private String previousHash;
+    @Column(name = "envelope_count",type = MySqlTypeConstant.INT,length = 4)
     private int envelopeCount;
+    @Column(name = "tx_count",type = MySqlTypeConstant.INT,length = 5)
     private int txCount;
+    @Column(name = "r_w_set_count",type = MySqlTypeConstant.INT,length = 5)
     private int rwSetCount;
+    @Column(name = "timestamp",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String timestamp;
+    @Column(name = "calculate_date",type = MySqlTypeConstant.INT,length = 8)
     private int calculateDate;
+    @Column(name = "create_date",type = MySqlTypeConstant.VARCHAR,length = 14)
     private String createDate;
+
+    private String peerChannelName;
 
 }

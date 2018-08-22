@@ -16,6 +16,9 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,21 +30,36 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "fns_chaincode")
 public class Chaincode {
 
+    @Column(name = "id",type = MySqlTypeConstant.INT,length = 9,isKey = true,isAutoIncrement = true)
     private int id; // required
+    @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String name; // required
+    @Column(name = "source",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String source; // optional
+    @Column(name = "path",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String path; // optional
+    @Column(name = "policy",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String policy; // optional
+    @Column(name = "version",type = MySqlTypeConstant.VARCHAR,length = 45)
     private String version; // required
+    @Column(name = "proposal_wait_time",type = MySqlTypeConstant.INT,length = 9)
     private int proposalWaitTime = 90000; // required
+    @Column(name = "channel_id",type = MySqlTypeConstant.INT,length = 9)
     private int channelId; // required
+    @Column(name = "cc",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String cc; // optional
+    @Column(name = "chaincode_event_listener",type = MySqlTypeConstant.INT,length = 1)
     private boolean chaincodeEventListener; // required
+    @Column(name = "callback_location",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String callbackLocation; // required
+    @Column(name = "events",type = MySqlTypeConstant.VARCHAR,length = 512)
     private String events;
+    @Column(name = "date",type = MySqlTypeConstant.VARCHAR,length = 14)
     private String date; // optional
+
     private String flag;
     private String channelName; // optional
     private String peerName; // optional

@@ -16,6 +16,9 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,15 +30,24 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "fns_channel")
 public class Channel {
 
+    @Column(name = "id",type = MySqlTypeConstant.INT,length = 9,isKey = true,isAutoIncrement = true)
     private int id; // required
+    @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String name; // required
+    @Column(name = "block_listener",type = MySqlTypeConstant.INT,length = 1)
     private boolean blockListener; // required
+    @Column(name = "callback_location",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String callbackLocation; // required
+    @Column(name = "peer_id",type = MySqlTypeConstant.INT,length = 9)
     private int peerId; // required
+    @Column(name = "height",type = MySqlTypeConstant.INT,length = 9)
     private int height;
+    @Column(name = "date",type = MySqlTypeConstant.VARCHAR,length = 14)
     private String date; // optional
+
     private String peerName; // optional
     private String orgName; // optional
     private String leagueName; // optional

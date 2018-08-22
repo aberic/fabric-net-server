@@ -28,29 +28,29 @@ import java.util.List;
 @Mapper
 public interface CAMapper {
 
-    @Insert("insert into ca (name,sk_path,certificate_path,flag,peer_id,date) values " +
+    @Insert("insert into fns_ca (name,sk_path,certificate_path,flag,peer_id,date) values " +
             "(#{c.name},#{c.skPath},#{c.certificatePath},#{c.flag},#{c.peerId},#{c.date})")
     int add(@Param("c") CA ca);
 
-    @Update("update ca set name=#{c.name},sk_path=#{c.skPath},certificate_path=#{c.certificatePath},flag=#{c.flag} where id=#{c.id}")
+    @Update("update fns_ca set name=#{c.name},sk_path=#{c.skPath},certificate_path=#{c.certificatePath},flag=#{c.flag} where id=#{c.id}")
     int update(@Param("c") CA ca);
 
-    @Update("update ca set name=#{c.name},flag=#{c.flag} where id=#{c.id}")
+    @Update("update fns_ca set name=#{c.name},flag=#{c.flag} where id=#{c.id}")
     int updateWithNoFile(@Param("c") CA ca);
 
-    @Select("select count(name) from ca where peer_id=#{id}")
+    @Select("select count(name) from fns_ca where peer_id=#{id}")
     int count(@Param("id") int id);
 
-    @Select("select count(name) from ca")
+    @Select("select count(name) from fns_ca")
     int countAll();
 
-    @Delete("delete from ca where id=#{id}")
+    @Delete("delete from fns_ca where id=#{id}")
     int delete(@Param("id") int id);
 
-    @Delete("delete from ca where peer_id=#{peerId}")
+    @Delete("delete from fns_ca where peer_id=#{peerId}")
     int deleteAll(@Param("peerId") int peerId);
 
-    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from ca where name=#{c.name} and peer_id=#{c.peerId}")
+    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from fns_ca where name=#{c.name} and peer_id=#{c.peerId}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -62,7 +62,7 @@ public interface CAMapper {
     })
     CA check(@Param("c") CA ca);
 
-    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from ca where id=#{id}")
+    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from fns_ca where id=#{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -74,7 +74,7 @@ public interface CAMapper {
     })
     CA get(@Param("id") int id);
 
-    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from ca where flag=#{flag}")
+    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from fns_ca where flag=#{flag}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -86,7 +86,7 @@ public interface CAMapper {
     })
     CA getByFlag(@Param("flag") String flag);
 
-    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from ca where peer_id=#{id}")
+    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from fns_ca where peer_id=#{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -98,7 +98,7 @@ public interface CAMapper {
     })
     List<CA> list(@Param("id") int id);
 
-    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from ca")
+    @Select("select id,name,sk_path,certificate_path,flag,peer_id,date from fns_ca")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),

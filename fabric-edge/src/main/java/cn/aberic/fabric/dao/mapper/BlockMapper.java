@@ -28,42 +28,42 @@ import java.util.List;
 @Mapper
 public interface BlockMapper {
 
-    @Insert("insert into block (channel_id,height,data_hash,calculated_hash,previous_hash," +
+    @Insert("insert into fns_block (channel_id,height,data_hash,calculated_hash,previous_hash," +
             "envelope_count,tx_count,r_w_set_count,timestamp,calculate_date,create_date) " +
             "values " +
             "(#{b.channelId},#{b.height},#{b.dataHash},#{b.calculatedHash},#{b.previousHash},#{b.envelopeCount}," +
             "#{b.txCount},#{b.rwSetCount},#{b.timestamp},#{b.calculateDate},#{b.createDate})")
     int add(@Param("b")Block block);
 
-    @Select("select count(id) from block")
+    @Select("select count(id) from fns_block")
     int count();
 
-    @Select("select count(id) from block where channel_id=#{channelId}")
+    @Select("select count(id) from fns_block where channel_id=#{channelId}")
     int countByChannelId(@Param("channelId") int channelId);
 
-    @Select("select count(id) from block where calculate_date=#{calculateDate}")
+    @Select("select count(id) from fns_block where calculate_date=#{calculateDate}")
     int countByDate(@Param("calculateDate") int calculateDate);
 
-    @Select("select count(id) from block where channel_id=#{channelId} and calculate_date=#{calculateDate}")
+    @Select("select count(id) from fns_block where channel_id=#{channelId} and calculate_date=#{calculateDate}")
     int countByChannelIdAndDate(@Param("channelId") int channelId, @Param("calculateDate") int calculateDate);
 
-    @Select("select sum(tx_count) from block")
+    @Select("select sum(tx_count) from fns_block")
     int countTx();
 
-    @Select("select sum(tx_count) from block where calculate_date=#{calculateDate}")
+    @Select("select sum(tx_count) from fns_block where calculate_date=#{calculateDate}")
     int countTxByDate(@Param("calculateDate") int calculateDate);
 
-    @Select("select sum(tx_count) from block where channel_id=#{channelId}")
+    @Select("select sum(tx_count) from fns_block where channel_id=#{channelId}")
     int countTxByChannelId(@Param("channelId") int channelId);
 
     @Select("select sum(r_w_set_count) from block")
     int countRWSet();
 
-    @Select("select sum(r_w_set_count) from block where calculate_date=#{calculateDate}")
+    @Select("select sum(r_w_set_count) from fns_block where calculate_date=#{calculateDate}")
     int countRWSetByDate(@Param("calculateDate") int calculateDate);
 
     @Select("select channel_id,height,data_hash,calculated_hash,previous_hash,envelope_count,tx_count,r_w_set_count," +
-            "timestamp,calculate_date,create_date from block where channel_id=#{channelId} order by id desc limit 1")
+            "timestamp,calculate_date,create_date from fns_block where channel_id=#{channelId} order by id desc limit 1")
     @Results({
             @Result(property = "channelId", column = "channel_id"),
             @Result(property = "dataHash", column = "data_hash"),
@@ -78,7 +78,7 @@ public interface BlockMapper {
     Block getByChannelId(@Param("channelId") int channelId);
 
     @Select("select channel_id,height,data_hash,calculated_hash,previous_hash,envelope_count,tx_count,r_w_set_count," +
-            "timestamp,calculate_date,create_date from block where channel_id=#{channelId} order by id desc limit #{limit}")
+            "timestamp,calculate_date,create_date from fns_block where channel_id=#{channelId} order by id desc limit #{limit}")
     @Results({
             @Result(property = "channelId", column = "channel_id"),
             @Result(property = "dataHash", column = "data_hash"),
@@ -92,7 +92,7 @@ public interface BlockMapper {
     })
     List<Block> getLimit(@Param("channelId") int channelId, @Param("limit") int limit);
 
-    @Delete("delete from block where channel_id=#{channelId}")
+    @Delete("delete from fns_block where channel_id=#{channelId}")
     int deleteByChannelId(@Param("channelId") int channelId);
 
 }

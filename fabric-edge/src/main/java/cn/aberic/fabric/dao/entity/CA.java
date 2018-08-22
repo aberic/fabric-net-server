@@ -16,6 +16,9 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,15 +30,24 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "fns_ca")
 public class CA {
 
+    @Column(name = "id",type = MySqlTypeConstant.INT,length = 9,isKey = true,isAutoIncrement = true)
     private int id;
+    @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String name;
+    @Column(name = "sk_path",type = MySqlTypeConstant.VARCHAR,length = 512)
     private String skPath;
+    @Column(name = "certificate_path",type = MySqlTypeConstant.VARCHAR,length = 512)
     private String certificatePath;
+    @Column(name = "flag",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String flag; // optional
+    @Column(name = "peer_id",type = MySqlTypeConstant.INT,length = 9)
     private int peerId;
+    @Column(name = "date",type = MySqlTypeConstant.VARCHAR,length = 14)
     private String date; // optional
+
     private String peerName; // optional
     private String orgName; // optional
     private String leagueName; // optional

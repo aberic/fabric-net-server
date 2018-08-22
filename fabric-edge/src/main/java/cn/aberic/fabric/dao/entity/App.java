@@ -16,7 +16,10 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
 import com.gitee.sunchenbin.mybatis.actable.command.BaseModel;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,14 +32,22 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "fns_app")
 public class App extends BaseModel {
 
+    @Column(name = "id",type = MySqlTypeConstant.INT,length = 9,isKey = true,isAutoIncrement = true)
     private int id;
+    @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String name;
+    @Column(name = "key",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String key;
+    @Column(name = "chaincode_id",type = MySqlTypeConstant.INT,length = 9)
     private int chaincodeId;
+    @Column(name = "create_date",type = MySqlTypeConstant.VARCHAR,length = 20)
     private String createDate;
+    @Column(name = "modify_date",type = MySqlTypeConstant.VARCHAR,length = 20)
     private String modifyDate;
+    @Column(name = "active",type = MySqlTypeConstant.INT,length = 1)
     private boolean active;
 
 }

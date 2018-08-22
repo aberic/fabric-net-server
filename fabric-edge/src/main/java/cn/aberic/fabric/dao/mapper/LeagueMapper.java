@@ -28,16 +28,16 @@ import java.util.List;
 @Mapper
 public interface LeagueMapper {
 
-    @Insert("insert into league  (name,date) values (#{l.name},#{l.date})")
+    @Insert("insert into fns_league  (name,date) values (#{l.name},#{l.date})")
     int add(@Param("l") League league);
 
-    @Update("update league set name=#{l.name} where id=#{l.id}")
+    @Update("update fns_league set name=#{l.name} where id=#{l.id}")
     int update(@Param("l") League league);
 
-    @Delete("delete from league where id=#{id}")
+    @Delete("delete from fns_league where id=#{id}")
     int delete(@Param("id") int id);
 
-    @Select("select id,name,date from league where id=#{id}")
+    @Select("select id,name,date from fns_league where id=#{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -45,7 +45,7 @@ public interface LeagueMapper {
     })
     League get(@Param("id") int id);
 
-    @Select("select id,name,date from league")
+    @Select("select id,name,date from fns_league")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),

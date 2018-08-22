@@ -16,6 +16,9 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,17 +30,27 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "fns_orderer")
 public class Orderer {
 
+    @Column(name = "id",type = MySqlTypeConstant.INT,length = 9,isKey = true,isAutoIncrement = true)
     private int id; // required
+    @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String name; // required
+    @Column(name = "location",type = MySqlTypeConstant.VARCHAR,length = 256)
     private String location; // required
+    @Column(name = "server_crt_path",type = MySqlTypeConstant.VARCHAR,length = 512)
     private String serverCrtPath;
+    @Column(name = "client_cert_path",type = MySqlTypeConstant.VARCHAR,length = 512)
     private String clientCertPath;
+    @Column(name = "client_key_path",type = MySqlTypeConstant.VARCHAR,length = 512)
     private String clientKeyPath;
+    @Column(name = "org_id",type = MySqlTypeConstant.INT,length = 9)
     private int orgId; // required
+    @Column(name = "date",type = MySqlTypeConstant.VARCHAR,length = 14)
+    private String date; // required
+
     private String leagueName;
     private String orgName; // required
-    private String date; // required
 
 }

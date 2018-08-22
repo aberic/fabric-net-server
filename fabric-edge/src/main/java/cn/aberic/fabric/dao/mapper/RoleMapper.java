@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Aberic - aberic@qq.com - All Rights Reserved.
+ * Copyright (c) 2018. Aberic - All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,48 +14,28 @@
  * limitations under the License.
  */
 
-package cn.aberic.fabric.service;
+package cn.aberic.fabric.dao.mapper;
 
 import cn.aberic.fabric.dao.entity.Role;
 import cn.aberic.fabric.dao.entity.User;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 /**
- * 作者：Aberic on 2018/6/27 22:11
+ * 作者：Aberic on 2018/6/9 13:53
  * 邮箱：abericyang@gmail.com
  */
-public interface UserService {
+@Mapper
+public interface RoleMapper {
 
-    int init(User user);
+    @Insert("insert into fns_role (id,name) values (#{r.id},#{r.name})")
+    int add(@Param("r") Role role);
 
-    int add(User user);
-
-    int create(User user);
-
-    int delete(int id);
-
-    int update(User user);
-
-    int upgrade(User user);
-
-    int updatePassword(User user);
-
-    int updateRole(User user);
-
-    int setRole(User user);
-
-    List<User> listAll();
-
+    @Select("select id,name from fns_role where id>1")
     List<Role> listRole();
 
-    User get(String username);
+    @Select("select id,name from fns_role where id=#{id}")
+    Role getRoleById(@Param("id") int id);
 
-    User get(int id);
-
-    String login(User user);
-
-    int addRole(Role role);
-
-    Role getRoleById(int id);
 }

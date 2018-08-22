@@ -28,37 +28,37 @@ import java.util.List;
 @Mapper
 public interface ChaincodeMapper {
 
-    @Insert("insert into chaincode (name,path,version,proposal_wait_time,channel_id,cc,date,source,policy," +
+    @Insert("insert into fns_chaincode (name,path,version,proposal_wait_time,channel_id,cc,date,source,policy," +
             "chaincode_event_listener,callback_location,events) values " +
             "(#{c.name},#{c.path},#{c.version},#{c.proposalWaitTime},#{c.channelId},#{c.cc},#{c.date},#{c.source},#{c.policy}," +
             "#{c.chaincodeEventListener},#{c.callbackLocation},#{c.events})")
     int add(@Param("c") Chaincode chaincode);
 
-    @Update("update chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
+    @Update("update fns_chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
             "proposal_wait_time=#{c.proposalWaitTime}, chaincode_event_listener=#{c.chaincodeEventListener}, " +
             "callback_location=#{c.callbackLocation}, events=#{c.events} where id=#{c.id}")
     int update(@Param("c") Chaincode chaincode);
 
-    @Update("update chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
+    @Update("update fns_chaincode set name=#{c.name}, path=#{c.path}, version=#{c.version}, " +
             "proposal_wait_time=#{c.proposalWaitTime}, source=#{c.source}, policy=#{c.policy}, " +
             "chaincode_event_listener=#{c.chaincodeEventListener}, callback_location=#{c.callbackLocation}, " +
             "events=#{c.events} where id=#{c.id}")
     int updateForUpgrade(@Param("c") Chaincode chaincode);
 
-    @Select("select count(name) from chaincode where channel_id=#{id}")
+    @Select("select count(name) from fns_chaincode where channel_id=#{id}")
     int count(@Param("id") int id);
 
-    @Select("select count(name) from chaincode")
+    @Select("select count(name) from fns_chaincode")
     int countAll();
 
-    @Delete("delete from chaincode where id=#{id}")
+    @Delete("delete from fns_chaincode where id=#{id}")
     int delete(@Param("id") int id);
 
-    @Delete("delete from chaincode where channel_id=#{channelId}")
+    @Delete("delete from fns_chaincode where channel_id=#{channelId}")
     int deleteAll(@Param("channelId") int channelId);
 
     @Select("select id,name,path,version,proposal_wait_time,channel_id,cc,date,source,policy," +
-            "chaincode_event_listener,callback_location,events from chaincode " +
+            "chaincode_event_listener,callback_location,events from fns_chaincode " +
             "where name=#{c.name} and path=#{c.path} and version=#{c.version} and channel_id=#{c.channelId}")
     @Results({
             @Result(property = "id", column = "id"),
@@ -78,7 +78,7 @@ public interface ChaincodeMapper {
     Chaincode check(@Param("c") Chaincode chaincode);
 
     @Select("select id,name,path,version,proposal_wait_time,channel_id,cc,date,source,policy," +
-            "chaincode_event_listener,callback_location,events from chaincode where id=#{id}")
+            "chaincode_event_listener,callback_location,events from fns_chaincode where id=#{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -97,7 +97,7 @@ public interface ChaincodeMapper {
     Chaincode get(@Param("id") int id);
 
     @Select("select id,name,path,version,proposal_wait_time,channel_id,cc,date,source,policy," +
-            "chaincode_event_listener,callback_location,events from chaincode where cc=#{cc}")
+            "chaincode_event_listener,callback_location,events from fns_chaincode where cc=#{cc}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -116,7 +116,7 @@ public interface ChaincodeMapper {
     Chaincode getByCC(@Param("cc") String cc);
 
     @Select("select id,name,path,version,proposal_wait_time,channel_id,cc,date,source,policy," +
-            "chaincode_event_listener,callback_location,events from chaincode where channel_id=#{id}")
+            "chaincode_event_listener,callback_location,events from fns_chaincode where channel_id=#{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -135,7 +135,7 @@ public interface ChaincodeMapper {
     List<Chaincode> list(@Param("id") int id);
 
     @Select("select id,name,path,version,proposal_wait_time,channel_id,cc,date,source,policy," +
-            "chaincode_event_listener,callback_location,events from chaincode")
+            "chaincode_event_listener,callback_location,events from fns_chaincode")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),

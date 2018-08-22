@@ -16,6 +16,9 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.Column;
+import com.gitee.sunchenbin.mybatis.actable.annotation.Table;
+import com.gitee.sunchenbin.mybatis.actable.constants.MySqlTypeConstant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,13 +31,23 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Table(name = "fns_role")
 public class Role {
 
     public final static int SUPER_ADMIN=1;
     public final static int ADMIN=2;
     public final static int MEMBER=8;
 
+    @Column(name = "id",type = MySqlTypeConstant.INT,length = 9,isKey = true)
     private int id;
+    @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String name;
+
+    public Role(){}
+
+    public Role(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
 }

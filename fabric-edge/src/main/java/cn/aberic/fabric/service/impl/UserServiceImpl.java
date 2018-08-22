@@ -18,6 +18,7 @@ package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.entity.Role;
 import cn.aberic.fabric.dao.entity.User;
+import cn.aberic.fabric.dao.mapper.RoleMapper;
 import cn.aberic.fabric.dao.mapper.UserMapper;
 import cn.aberic.fabric.service.UserService;
 import cn.aberic.fabric.utils.CacheUtil;
@@ -35,6 +36,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RoleMapper roleMapper;
 
     @Override
     public int init(User user) {
@@ -113,7 +116,7 @@ public class UserServiceImpl implements UserService {
         for (User user: users) {
             try {
                 user.setDate(DateUtil.strDateFormat(user.getDate(), "yyyyMMddHHmmss", "yyyy/MM/dd HH:mm:ss"));
-                user.setRoleName(userMapper.getRoleById(user.getRoleId()).getName());
+                user.setRoleName(roleMapper.getRoleById(user.getRoleId()).getName());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -123,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Role> listRole() {
-        return userMapper.listRole();
+        return roleMapper.listRole();
     }
 
     @Override
@@ -153,8 +156,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int addRole(Role role) {
+        return roleMapper.add(role);
+    }
+
+    @Override
     public Role getRoleById(int id) {
-        return userMapper.getRoleById(id);
+        return roleMapper.getRoleById(id);
     }
 
 }

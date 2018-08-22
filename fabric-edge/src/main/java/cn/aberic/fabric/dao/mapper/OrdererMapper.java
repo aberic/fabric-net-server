@@ -28,30 +28,30 @@ import java.util.List;
 @Mapper
 public interface OrdererMapper {
 
-    @Insert("insert into orderer (name,location,server_crt_path,client_cert_path,client_key_path,org_id,date) values " +
+    @Insert("insert into fns_orderer (name,location,server_crt_path,client_cert_path,client_key_path,org_id,date) values " +
             "(#{o.name},#{o.location},#{o.serverCrtPath},#{o.clientCertPath},#{o.clientKeyPath},#{o.orgId},#{o.date})")
     int add(@Param("o") Orderer orderer);
 
-    @Update("update orderer set name=#{o.name}, location=#{o.location}, server_crt_path=#{o.serverCrtPath}, " +
+    @Update("update fns_orderer set name=#{o.name}, location=#{o.location}, server_crt_path=#{o.serverCrtPath}, " +
             "client_cert_path=#{o.clientCertPath}, client_key_path=#{o.clientKeyPath} where id=#{o.id}")
     int update(@Param("o") Orderer orderer);
 
-    @Update("update orderer set name=#{o.name}, location=#{o.location} where id=#{o.id}")
+    @Update("update fns_orderer set name=#{o.name}, location=#{o.location} where id=#{o.id}")
     int updateWithNoFile(@Param("o") Orderer orderer);
 
-    @Select("select count(name) from orderer where org_id=#{id}")
+    @Select("select count(name) from fns_orderer where org_id=#{id}")
     int count(@Param("id") int id);
 
-    @Select("select count(name) from orderer")
+    @Select("select count(name) from fns_orderer")
     int countAll();
 
-    @Delete("delete from orderer where id=#{id}")
+    @Delete("delete from fns_orderer where id=#{id}")
     int delete(@Param("id") int id);
 
-    @Delete("delete from orderer where org_id=#{orgId}")
+    @Delete("delete from fns_orderer where org_id=#{orgId}")
     int deleteAll(@Param("orgId") int orgId);
 
-    @Select("select id,name,location,server_crt_path,client_cert_path,client_key_path,org_id,date from orderer where id=#{id}")
+    @Select("select id,name,location,server_crt_path,client_cert_path,client_key_path,org_id,date from fns_orderer where id=#{id}")
     @Results({
             @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "clientCertPath", column = "client_cert_path"),
@@ -60,7 +60,7 @@ public interface OrdererMapper {
     })
     Orderer get(@Param("id") int id);
 
-    @Select("select id,name,location,server_crt_path,client_cert_path,client_key_path,org_id,date from orderer where org_id=#{id}")
+    @Select("select id,name,location,server_crt_path,client_cert_path,client_key_path,org_id,date from fns_orderer where org_id=#{id}")
     @Results({
             @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "clientCertPath", column = "client_cert_path"),
@@ -69,7 +69,7 @@ public interface OrdererMapper {
     })
     List<Orderer> list(@Param("id") int id);
 
-    @Select("select id,name,location,server_crt_path,client_cert_path,client_key_path,org_id,date from orderer")
+    @Select("select id,name,location,server_crt_path,client_cert_path,client_key_path,org_id,date from fns_orderer")
     @Results({
             @Result(property = "serverCrtPath", column = "server_crt_path"),
             @Result(property = "clientCertPath", column = "client_cert_path"),

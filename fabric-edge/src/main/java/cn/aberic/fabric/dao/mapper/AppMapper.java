@@ -28,23 +28,23 @@ import java.util.List;
 @Mapper
 public interface AppMapper {
 
-    @Insert("insert into app (name, key, chaincode_id, create_date, modify_date, active)" +
+    @Insert("insert into fns_app (name, key, chaincode_id, create_date, modify_date, active)" +
             " values (#{a.name},#{a.key},#{a.chaincodeId},#{a.createDate},#{a.modifyDate},#{a.active})")
     int add(@Param("a") App app);
 
-    @Update("update app set name=#{a.name}, key=#{a.key}, modify_date=#{a.modifyDate}, active=#{a.active} where id=#{a.id}")
+    @Update("update fns_app set name=#{a.name}, key=#{a.key}, modify_date=#{a.modifyDate}, active=#{a.active} where id=#{a.id}")
     int update(@Param("a") App app);
 
-    @Update("update app set key=#{a.key} where id=#{a.id}")
+    @Update("update fns_app set key=#{a.key} where id=#{a.id}")
     int updateKey(@Param("a") App app);
 
-    @Select("select count(name) from app where chaincode_id=#{id}")
+    @Select("select count(name) from fns_app where chaincode_id=#{id}")
     int countById(@Param("id") int id);
 
-    @Select("select count(name) from app")
+    @Select("select count(name) from fns_app")
     int count();
 
-    @Select("select key from app where name=#{a.name} and chaincode_id=#{a.chaincodeId}")
+    @Select("select key from fns_app where name=#{a.name} and chaincode_id=#{a.chaincodeId}")
     @Results({
             @Result(property = "name", column = "name"),
             @Result(property = "key", column = "key"),
@@ -52,7 +52,7 @@ public interface AppMapper {
     })
     App check(@Param("a") App app);
 
-    @Select("select id, name, key, chaincode_id, create_date, modify_date, active from app where chaincode_id=#{id}")
+    @Select("select id, name, key, chaincode_id, create_date, modify_date, active from fns_app where chaincode_id=#{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -64,7 +64,7 @@ public interface AppMapper {
     })
     List<App> list(@Param("id") int id);
 
-    @Select("select id, name, key, chaincode_id, create_date, modify_date, active from app where id=#{id}")
+    @Select("select id, name, key, chaincode_id, create_date, modify_date, active from fns_app where id=#{id}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -76,7 +76,7 @@ public interface AppMapper {
     })
     App get(@Param("id") int id);
 
-    @Select("select id, name, key, chaincode_id, create_date, modify_date, active from app where key=#{key}")
+    @Select("select id, name, key, chaincode_id, create_date, modify_date, active from fns_app where key=#{key}")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "name"),
@@ -88,10 +88,10 @@ public interface AppMapper {
     })
     App getByKey(@Param("key") String key);
 
-    @Delete("delete from app where id=#{id}")
+    @Delete("delete from fns_app where id=#{id}")
     int delete(@Param("id") int id);
 
-    @Delete("delete from app where chaincode_id=#{id}")
+    @Delete("delete from fns_app where chaincode_id=#{id}")
     int deleteAll(@Param("id") int id);
 
 }
