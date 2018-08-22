@@ -166,9 +166,9 @@ class IntermediateOrg {
         return openTLS;
     }
 
-    void addUser(IntermediateUser user, FabricStore fabricStore) {
+    void addUser(String leagueName, String orgName, String peerName, IntermediateUser user, FabricStore fabricStore) {
         try {
-            userMap.put(user.getName(), fabricStore.getMember(user.getName(), orgMSPID, user.getSkPath(), user.getCertificatePath()));
+            userMap.put(user.getName(), fabricStore.getMember(leagueName, orgName, peerName, user.getName(), orgMSPID, user.getSkPath(), user.getCertificatePath()));
         } catch (IOException e) {
             e.printStackTrace();
         }

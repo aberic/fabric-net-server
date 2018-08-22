@@ -69,11 +69,11 @@ class IntermediateUser implements User, Serializable {
      * @param skPath          带有节点签名密钥的PEM文件——sk路径
      * @param certificatePath 带有节点的X.509证书的PEM文件——certificate路径
      */
-    IntermediateUser(String name, String skPath, String certificatePath) {
+    IntermediateUser(String leagueName, String orgName, String peerName, String name, String skPath, String certificatePath) {
         this.name = name;
         this.skPath = skPath;
         this.certificatePath = certificatePath;
-        this.keyForFabricStoreName = getKeyForFabricStoreName(this.name, skPath, certificatePath);
+        this.keyForFabricStoreName = getKeyForFabricStoreName(leagueName, orgName, peerName, this.name);
     }
 
     void setFabricStore(FabricStore fabricStore) {
@@ -278,16 +278,18 @@ class IntermediateUser implements User, Serializable {
     /**
      * 得到联盟存储配置对象key
      *
-     * @param name            用户名称（User1）
-     * @param skPath          带有节点签名密钥的PEM文件——sk路径
-     * @param certificatePath 带有节点的X.509证书的PEM文件——certificate路径
+     * @param leagueName 联盟名称
+     * @param orgName    组织名称
+     * @param peerName   节点名称
+     * @param name       用户名称（User1）
      *
      * @return 类似user.Org1User1.Org1
      */
-    static String getKeyForFabricStoreName(String name, String skPath, String certificatePath) {
+    static String getKeyForFabricStoreName(String leagueName, String orgName, String peerName, String name) {
         // System.out.println(String.format("toKeyValStoreName = user.%s%s%s", name, skPath, certificatePath));
-        log.info(String.format("toKeyValStoreName = user.%s%s%s", name, skPath, certificatePath));
-        return String.format("user.%s%s%s", name, skPath, certificatePath);
+        String key = String.format("toKeyValStoreName = user.%s%s%s%s", leagueName, orgName, peerName, name);
+        log.info(key);
+        return key;
     }
 
 }

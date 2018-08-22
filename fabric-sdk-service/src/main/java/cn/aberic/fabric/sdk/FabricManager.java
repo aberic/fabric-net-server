@@ -38,15 +38,15 @@ public class FabricManager {
         this.org = org;
     }
 
-    public void setUser(String username, String skPath, String certificatePath) throws InvalidArgumentException {
+    public void setUser(String leagueName, String orgName, String peerName, String username, String skPath, String certificatePath) throws InvalidArgumentException {
         if (StringUtils.equals(username, org.getUsername())) {
             return;
         }
         User user = org.getUser(username);
         if (null == user) {
-            IntermediateUser intermediateUser = new IntermediateUser(username, skPath, certificatePath);
+            IntermediateUser intermediateUser = new IntermediateUser(leagueName, orgName, peerName, username, skPath, certificatePath);
             org.setUsername(username);
-            org.addUser(intermediateUser, org.getFabricStore());
+            org.addUser(leagueName, orgName, peerName, intermediateUser, org.getFabricStore());
         }
         org.getClient().setUserContext(org.getUser(username));
     }

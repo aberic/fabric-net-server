@@ -100,22 +100,22 @@ class FabricStore {
      * @param certificatePath 带有节点的X.509证书的PEM文件——certificate路径
      * @return user 用户
      */
-    IntermediateUser getMember(String name, String mspId, String skPath, String certificatePath) throws IOException {
+    IntermediateUser getMember(String leagueName, String orgName, String peerName, String name, String mspId, String skPath, String certificatePath) throws IOException {
         // 尝试从缓存中获取User状态
-        IntermediateUser user = members.get(IntermediateUser.getKeyForFabricStoreName(name, skPath, certificatePath));
+        IntermediateUser user = members.get(IntermediateUser.getKeyForFabricStoreName(leagueName, orgName, peerName, name));
         if (null != user) {
             System.out.println("尝试从缓存中获取User状态 User = " + user);
             return user;
         }
         // 创建User，并尝试从键值存储中恢复它的状态(如果找到的话)
-        user = new IntermediateUser(name, skPath, certificatePath);
+        user = new IntermediateUser(leagueName, orgName, peerName, name, skPath, certificatePath);
         user.setFabricStore(this);
         user.setMspId(mspId);
         String certificate = new String(IOUtils.toByteArray(new FileInputStream(new File(certificatePath))), "UTF-8");
         PrivateKey privateKey = getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(new File(skPath))));
         user.setEnrollment(new StoreEnrollment(privateKey, certificate));
         user.saveState();
-        members.put(IntermediateUser.getKeyForFabricStoreName(name, skPath, certificatePath), user);
+        members.put(IntermediateUser.getKeyForFabricStoreName(leagueName, orgName, peerName, name), user);
         return user;
     }
 

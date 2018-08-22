@@ -47,6 +47,8 @@ import java.io.IOException;
 public class TraceServiceImpl implements TraceService, BaseService {
 
     @Resource
+    private LeagueMapper leagueMapper;
+    @Resource
     private AppMapper appMapper;
     @Resource
     private OrgMapper orgMapper;
@@ -116,7 +118,7 @@ public class TraceServiceImpl implements TraceService, BaseService {
             return responseFail("Request failed：app key is invalid");
         }
         try {
-            FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
+            FabricManager manager = FabricHelper.obtain().get(leagueMapper, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
                     ca, cc);
             return trace(manager, trace, intent);
         } catch (Exception e) {
@@ -127,7 +129,7 @@ public class TraceServiceImpl implements TraceService, BaseService {
 
     private String trace(Trace trace, TraceIntent intent, CA ca) {
         try {
-            FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, ordererMapper, peerMapper,
+            FabricManager manager = FabricHelper.obtain().get(leagueMapper, orgMapper, channelMapper, ordererMapper, peerMapper,
                     ca, trace.getChannelId());
             return trace(manager, trace, intent);
         } catch (Exception e) {

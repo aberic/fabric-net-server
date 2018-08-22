@@ -78,10 +78,10 @@ public class FabricHelper {
         CacheUtil.removeIntegerFabric(channelId);
     }
 
-    public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
+    public FabricManager get(LeagueMapper leagueMapper, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chaincodeMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, String cc) throws Exception {
         // 尝试从缓存中获取fabricManager
-        FabricManager fabricManager = CacheUtil.getStringFabric(cc);
+        FabricManager fabricManager = CacheUtil.getStringFabric(cc + ca.getName());
         if (null == fabricManager) { // 如果不存在fabricManager则尝试新建一个并放入缓存
             synchronized (CacheUtil.class) {
                 Chaincode chaincode = chaincodeMapper.getByCC(cc);
@@ -95,20 +95,19 @@ public class FabricHelper {
                 peers.add(peer);
                 List<Orderer> orderers = ordererMapper.list(orgId);
                 Org org = orgMapper.get(orgId);
+                League league = leagueMapper.get(org.getLeagueId());
                 log.debug(String.format("org = %s", org.toString()));
                 if (orderers.size() != 0 && peers.size() != 0 && null != ca) {
-                    fabricManager = createFabricManager(org, channel, chaincode, orderers, peers, ca, cc);
-                    CacheUtil.putStringFabric(cc, fabricManager);
+                    fabricManager = createFabricManager(league, org, channel, chaincode, orderers, peers, ca, cc);
+                    fabricManager.setUser(league.getName(), org.getMspId(), peer.getName(), ca.getName(), ca.getSkPath(), ca.getCertificatePath());
+                    CacheUtil.putStringFabric(cc + ca.getName(), fabricManager);
                 }
             }
         }
-        assert ca != null;
-        assert fabricManager != null;
-        fabricManager.setUser(ca.getName(), ca.getSkPath(), ca.getCertificatePath());
         return fabricManager;
     }
 
-    public FabricManager get(OrgMapper orgMapper, ChannelMapper channelMapper,
+    public FabricManager get(LeagueMapper leagueMapper, OrgMapper orgMapper, ChannelMapper channelMapper,
                              OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, int channelId) throws Exception {
         // 尝试从缓存中获取fabricManager
         FabricManager fabricManager = CacheUtil.getIntegerFabric(channelId);
@@ -119,11 +118,13 @@ public class FabricHelper {
                 Peer peer = peerMapper.get(channel.getPeerId());
                 log.debug(String.format("peer = %s", peer.toString()));
                 int orgId = peer.getOrgId();
-                List<Peer> peers = peerMapper.list(orgId);
+                List<Peer> peers = new ArrayList<>();
+                peers.add(peerMapper.list(orgId).get(0));
                 List<Orderer> orderers = ordererMapper.list(orgId);
                 Org org = orgMapper.get(orgId);
+                League league = leagueMapper.get(org.getLeagueId());
                 if (orderers.size() != 0 && peers.size() != 0) {
-                    fabricManager = createFabricManager(org, channel, null, orderers, peers, ca, String.valueOf(channelId));
+                    fabricManager = createFabricManager(league, org, channel, null, orderers, peers, ca, String.valueOf(channelId));
                     CacheUtil.putIntegerFabric(channelId, fabricManager);
                 }
             }
@@ -131,11 +132,11 @@ public class FabricHelper {
         return fabricManager;
     }
 
-    private FabricManager createFabricManager(Org org, Channel channel, Chaincode chaincode, List<Orderer> orderers, List<Peer> peers, CA ca, String cacheName) throws Exception {
+    private FabricManager createFabricManager(League league, Org org, Channel channel, Chaincode chaincode, List<Orderer> orderers, List<Peer> peers, CA ca, String cacheName) throws Exception {
         OrgManager orgManager = new OrgManager();
         orgManager
                 .init(cacheName, org.getMspId(), org.isTls())
-                .setUser(ca.getName(), ca.getSkPath(), ca.getCertificatePath())
+                .setUser(league.getName(), org.getMspId(), peers.get(0).getName(), ca.getName(), ca.getSkPath(), ca.getCertificatePath())
                 .setChannel(channel.getName())
                 .setChainCode(null == chaincode ? "" : chaincode.getName(),
                         null == chaincode ? "" : chaincode.getPath(),

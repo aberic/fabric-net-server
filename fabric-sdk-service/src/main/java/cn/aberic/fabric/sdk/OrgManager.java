@@ -74,9 +74,9 @@ public class OrgManager {
      *
      * @return self
      */
-    public OrgManager setUser(@Nonnull String username, @Nonnull String skPath, @Nonnull String certificatePath) {
-        IntermediateUser user = new IntermediateUser(username, skPath, certificatePath);
-        orgMap.get(cc).addUser(user, fabricStore);
+    public OrgManager setUser(@Nonnull String leagueName, @Nonnull String orgName, @Nonnull String peerName, @Nonnull String username, @Nonnull String skPath, @Nonnull String certificatePath) {
+        IntermediateUser user = new IntermediateUser(leagueName, orgName, peerName, username, skPath, certificatePath);
+        orgMap.get(cc).addUser(leagueName, orgName, peerName, user, fabricStore);
         return this;
     }
 

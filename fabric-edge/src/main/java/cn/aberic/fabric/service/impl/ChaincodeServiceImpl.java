@@ -94,7 +94,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             return responseFailJson("chaincode add fail");
         }
         chaincode.setId(chaincodeMapper.check(chaincode).getId());
-        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, caMapper.getByFlag(chaincode.getFlag()), ChainCodeIntent.INSTALL, new String[]{});
+        JSONObject jsonResult = chainCode(chaincode.getId(), caMapper.getByFlag(chaincode.getFlag()), ChainCodeIntent.INSTALL, new String[]{});
         if (jsonResult.getInteger("code") == BaseService.FAIL) {
             delete(chaincode.getId());
             return jsonResult;
@@ -116,7 +116,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             return responseFailJson("chaincode updateForUpgrade fail");
         }
         CA ca = caMapper.getByFlag(chaincode.getFlag());
-        JSONObject jsonResult = chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ca, ChainCodeIntent.INSTALL, new String[]{});
+        JSONObject jsonResult = chainCode(chaincode.getId(), ca, ChainCodeIntent.INSTALL, new String[]{});
         if (jsonResult.getInteger("code") == BaseService.FAIL) {
             delete(chaincode.getId());
             return jsonResult;
@@ -127,7 +127,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         for (int i = 0; i < size; i++) {
             args[i] = strArray.get(i);
         }
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, ca, ChainCodeIntent.UPGRADE, args);
+        return chainCode(chaincode.getId(), ca, ChainCodeIntent.UPGRADE, args);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
             args[i] = strArray.get(i);
         }
         // TODO
-        return chainCode(chaincode.getId(), orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper, caMapper.getByFlag(chaincode.getFlag()), ChainCodeIntent.INSTANTIATE, args);
+        return chainCode(chaincode.getId(), caMapper.getByFlag(chaincode.getFlag()), ChainCodeIntent.INSTANTIATE, args);
     }
 
     @Override
@@ -355,12 +355,11 @@ public class ChaincodeServiceImpl implements ChaincodeService, BaseService {
         INSTALL, INSTANTIATE, UPGRADE
     }
 
-    private JSONObject chainCode(int chaincodeId, OrgMapper orgMapper, ChannelMapper channelMapper, ChaincodeMapper chainCodeMapper,
-                                 OrdererMapper ordererMapper, PeerMapper peerMapper, CA ca, ChainCodeIntent intent, String[] args) {
+    private JSONObject chainCode(int chaincodeId, CA ca, ChainCodeIntent intent, String[] args) {
         JSONObject jsonObject = null;
         try {
-            FabricManager manager = FabricHelper.obtain().get(orgMapper, channelMapper, chainCodeMapper, ordererMapper, peerMapper,
-                    ca, chainCodeMapper.get(chaincodeId).getCc());
+            FabricManager manager = FabricHelper.obtain().get(leagueMapper, orgMapper, channelMapper, chaincodeMapper, ordererMapper, peerMapper,
+                    ca, chaincodeMapper.get(chaincodeId).getCc());
             switch (intent) {
                 case INSTALL:
                     jsonObject = manager.install();
