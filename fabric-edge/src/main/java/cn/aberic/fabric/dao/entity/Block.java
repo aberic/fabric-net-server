@@ -56,7 +56,7 @@ public class Block {
     private String timestamp;
     @Column(name = "calculate_date",type = MySqlTypeConstant.INT,length = 8)
     private int calculateDate;
-    @Column(name = "create_date",type = MySqlTypeConstant.VARCHAR,length = 14)
+    @Column(name = "create_date",type = MySqlTypeConstant.VARCHAR,length = 20)
     private String createDate;
 
     private String peerChannelName;
