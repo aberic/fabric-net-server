@@ -65,7 +65,8 @@ public class MybatisTableConfig {
         dataSource.setMaxActive(30);
         dataSource.setInitialSize(10);
         dataSource.setValidationQuery("SELECT 1");
-        dataSource.setTestOnBorrow(true);
+        dataSource.setTestWhileIdle(true);
+        dataSource.setPoolPreparedStatements(false);
         return dataSource;
     }
 
