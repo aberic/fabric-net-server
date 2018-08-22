@@ -18,7 +18,6 @@ package cn.aberic.fabric.dao.mapper;
 
 import cn.aberic.fabric.dao.entity.Block;
 import cn.aberic.fabric.dao.provider.BlockDAOProvider;
-import cn.aberic.fabric.dao.provider.RoleDAOProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -61,7 +60,7 @@ public interface BlockMapper {
     @Select("select sum(tx_count) from fns_block where channel_id=#{channelId}")
     int countTxByChannelId(@Param("channelId") int channelId);
 
-    @Select("select sum(r_w_set_count) from block")
+    @Select("select sum(r_w_set_count) from fns_block")
     int countRWSet();
 
     @Select("select sum(r_w_set_count) from fns_block where calculate_date=#{calculateDate}")
