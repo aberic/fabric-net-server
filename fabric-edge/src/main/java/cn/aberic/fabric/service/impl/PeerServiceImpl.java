@@ -81,7 +81,9 @@ public class PeerServiceImpl implements PeerService {
         FabricHelper.obtain().removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
         CacheUtil.removeHome();
         CacheUtil.removeFlagCA(peer.getId(), caMapper);
-        if (null == serverCrtFile || null == clientCertFile || null == clientKeyFile) {
+        if (StringUtils.isEmpty(serverCrtFile.getOriginalFilename()) ||
+                StringUtils.isEmpty(clientCertFile.getOriginalFilename()) ||
+                StringUtils.isEmpty(clientKeyFile.getOriginalFilename())) {
             return peerMapper.updateWithNoFile(peer);
         }
         if (saveFileFail(peer, serverCrtFile, clientCertFile, clientKeyFile)) {
