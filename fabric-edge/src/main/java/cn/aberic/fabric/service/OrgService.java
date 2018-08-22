@@ -16,9 +16,8 @@
 
 package cn.aberic.fabric.service;
 
-import cn.aberic.fabric.dao.League;
-import cn.aberic.fabric.dao.Org;
-import org.springframework.web.multipart.MultipartFile;
+import cn.aberic.fabric.dao.entity.League;
+import cn.aberic.fabric.dao.entity.Org;
 
 import java.util.List;
 

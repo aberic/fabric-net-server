@@ -17,7 +17,7 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.bean.Home;
-import cn.aberic.fabric.dao.User;
+import cn.aberic.fabric.dao.entity.User;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DataUtil;

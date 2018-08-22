@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Aberic - aberic@qq.com - All Rights Reserved.
+ * Copyright (c) 2018. Aberic - All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.aberic.fabric.dao;
+package cn.aberic.fabric.dao.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,17 +27,17 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class Orderer {
+public class Channel {
 
     private int id; // required
     private String name; // required
-    private String location; // required
-    private String serverCrtPath;
-    private String clientCertPath;
-    private String clientKeyPath;
-    private int orgId; // required
-    private String leagueName;
-    private String orgName; // required
-    private String date; // required
-
+    private boolean blockListener; // required
+    private String callbackLocation; // required
+    private int peerId; // required
+    private int height;
+    private String date; // optional
+    private String peerName; // optional
+    private String orgName; // optional
+    private String leagueName; // optional
+    private int chaincodeCount; // optional
 }

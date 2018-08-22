@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.service.impl;
 
-import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.dao.entity.App;
 import cn.aberic.fabric.bean.Key;
 import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;

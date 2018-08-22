@@ -20,7 +20,7 @@ import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.bean.Api;
 import cn.aberic.fabric.bean.State;
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.dao.*;
+import cn.aberic.fabric.dao.entity.*;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.ChaincodeService;

@@ -17,7 +17,6 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.bean.State;
-import cn.aberic.fabric.dao.CA;
 
 /**
  * 作者：Aberic on 2018/6/27 22:02

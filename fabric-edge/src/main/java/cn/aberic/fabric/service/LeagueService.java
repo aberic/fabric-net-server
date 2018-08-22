@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.service;
 
-import cn.aberic.fabric.dao.League;
+import cn.aberic.fabric.dao.entity.League;
 
 import java.util.List;
 

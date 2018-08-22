@@ -19,7 +19,7 @@ package cn.aberic.fabric.controller;
 import cn.aberic.fabric.bean.Api;
 import cn.aberic.fabric.bean.State;
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.dao.Chaincode;
+import cn.aberic.fabric.dao.entity.Chaincode;
 import cn.aberic.fabric.service.ChaincodeService;
 import cn.aberic.fabric.service.StateService;
 import cn.aberic.fabric.service.TraceService;

@@ -17,7 +17,7 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.dao.CA;
+import cn.aberic.fabric.dao.entity.CA;
 
 /**
  * 作者：Aberic on 2018/6/27 21:59

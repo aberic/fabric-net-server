@@ -16,8 +16,8 @@
 
 package cn.aberic.fabric.service.impl;
 
-import cn.aberic.fabric.dao.League;
-import cn.aberic.fabric.dao.Org;
+import cn.aberic.fabric.dao.entity.League;
+import cn.aberic.fabric.dao.entity.Org;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.CacheUtil;

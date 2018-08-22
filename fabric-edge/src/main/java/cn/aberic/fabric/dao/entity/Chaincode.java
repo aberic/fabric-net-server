@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018. Aberic - aberic@qq.com - All Rights Reserved.
+ * Copyright (c) 2018. Aberic - All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.aberic.fabric.dao;
+package cn.aberic.fabric.dao.entity;
 
 import lombok.Getter;
 import lombok.Setter;

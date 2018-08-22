@@ -14,28 +14,31 @@
  * limitations under the License.
  */
 
-package cn.aberic.fabric.bean;
+package cn.aberic.fabric.dao.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
- * 描述：
- *
- * @author : Aberic 【2018-07-05 17:02】
+ * 作者：Aberic on 2018/6/27 21:15
+ * 邮箱：abericyang@gmail.com
  */
 @Setter
 @Getter
-public class App {
+@ToString
+public class Peer {
 
-    private int id;
-    private String name;
-    private String key;
-    private int chaincodeId;
-    private String createDate;
-    private String modifyDate;
-    private String privateKey;
-    private String publicKey;
-    private boolean active;
-
+    private int id; // required
+    private String name; // required
+    private String location; // required
+    private String eventHubLocation; // required
+    private int orgId; // required
+    private String serverCrtPath;
+    private String clientCertPath;
+    private String clientKeyPath;
+    private String orgName; // required
+    private String leagueName; // optional
+    private String date; // required
+    private int channelCount; // required
 }

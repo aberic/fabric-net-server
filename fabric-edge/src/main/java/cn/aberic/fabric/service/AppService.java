@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.service;
 
-import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.dao.entity.App;
 
 import java.util.List;
 

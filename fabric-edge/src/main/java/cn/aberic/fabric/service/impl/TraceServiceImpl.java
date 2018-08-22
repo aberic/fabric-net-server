@@ -18,7 +18,7 @@ package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.base.BaseService;
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.dao.CA;
+import cn.aberic.fabric.dao.entity.CA;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.service.TraceService;

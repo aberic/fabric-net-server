@@ -16,8 +16,8 @@
 
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.dao.Role;
-import cn.aberic.fabric.dao.User;
+import cn.aberic.fabric.dao.entity.Role;
+import cn.aberic.fabric.dao.entity.User;
 import cn.aberic.fabric.service.UserService;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;

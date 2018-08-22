@@ -17,9 +17,9 @@
 package cn.aberic.fabric.utils;
 
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.dao.Block;
-import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.entity.Block;
+import cn.aberic.fabric.dao.entity.CA;
+import cn.aberic.fabric.dao.entity.Channel;
 import cn.aberic.fabric.service.BlockService;
 import cn.aberic.fabric.service.CAService;
 import cn.aberic.fabric.service.ChannelService;

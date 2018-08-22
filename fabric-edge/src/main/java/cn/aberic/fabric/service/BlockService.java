@@ -17,8 +17,8 @@
 package cn.aberic.fabric.service;
 
 import cn.aberic.fabric.bean.*;
-import cn.aberic.fabric.dao.Block;
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.entity.Block;
+import cn.aberic.fabric.dao.entity.Channel;
 
 import java.util.List;
 

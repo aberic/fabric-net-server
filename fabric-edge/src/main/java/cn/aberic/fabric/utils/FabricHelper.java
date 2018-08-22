@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.utils;
 
-import cn.aberic.fabric.dao.*;
+import cn.aberic.fabric.dao.entity.*;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.sdk.FabricManager;
 import cn.aberic.fabric.sdk.OrgManager;

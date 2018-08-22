@@ -16,10 +16,10 @@
 
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.dao.Channel;
-import cn.aberic.fabric.dao.League;
-import cn.aberic.fabric.dao.Org;
-import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.dao.entity.Channel;
+import cn.aberic.fabric.dao.entity.League;
+import cn.aberic.fabric.dao.entity.Org;
+import cn.aberic.fabric.dao.entity.Peer;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;

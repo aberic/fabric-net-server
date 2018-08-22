@@ -19,9 +19,9 @@ package cn.aberic.fabric.service;
 import cn.aberic.fabric.bean.Api;
 import cn.aberic.fabric.bean.State;
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.Chaincode;
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.entity.CA;
+import cn.aberic.fabric.dao.entity.Chaincode;
+import cn.aberic.fabric.dao.entity.Channel;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 

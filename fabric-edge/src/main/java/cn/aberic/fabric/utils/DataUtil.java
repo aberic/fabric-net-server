@@ -17,7 +17,7 @@
 package cn.aberic.fabric.utils;
 
 import cn.aberic.fabric.bean.*;
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.entity.Channel;
 import cn.aberic.fabric.service.*;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class DataUtil {
 
         List<Channel> channels = channelService.listAll();
         List<Block> blocks = blocks(channels, blockService);
-        List<cn.aberic.fabric.dao.Block> blockDaos = blockService.getLimit(6);
+        List<cn.aberic.fabric.dao.entity.Block> blockDaos = blockService.getLimit(6);
         List<ChannelPercent> channelPercents = blockService.getChannelPercents(channels);
         List<ChannelBlockList> channelBlockLists = blockService.getChannelBlockLists(channels);
         DayStatistics dayStatistics = blockService.getDayStatistics();
@@ -89,7 +89,7 @@ public class DataUtil {
         List<Block> blocks = new ArrayList<>();
         for (Channel channel : channels) {
             Block block = new Block();
-            cn.aberic.fabric.dao.Block blockDao = blockService.getByChannelId(channel.getId());
+            cn.aberic.fabric.dao.entity.Block blockDao = blockService.getByChannelId(channel.getId());
             if (null == blockDao) {
                 block.setNum(0);
                 block.setPeerName(channel.getPeerName());

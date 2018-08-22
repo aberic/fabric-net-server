@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.dao.League;
+import cn.aberic.fabric.dao.entity.League;
 import cn.aberic.fabric.service.LeagueService;
 import cn.aberic.fabric.service.OrgService;
 import cn.aberic.fabric.utils.SpringUtil;

@@ -16,8 +16,8 @@
 
 package cn.aberic.fabric.service;
 
-import cn.aberic.fabric.dao.Role;
-import cn.aberic.fabric.dao.User;
+import cn.aberic.fabric.dao.entity.Role;
+import cn.aberic.fabric.dao.entity.User;
 
 import java.util.List;
 

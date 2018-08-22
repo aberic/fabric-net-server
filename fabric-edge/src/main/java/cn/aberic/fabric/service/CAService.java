@@ -16,8 +16,8 @@
 
 package cn.aberic.fabric.service;
 
-import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.dao.entity.CA;
+import cn.aberic.fabric.dao.entity.Peer;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

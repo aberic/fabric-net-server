@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.bean;
 
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.entity.Channel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,7 +42,7 @@ public class Home {
     List<Block> blocks;
     List<ChannelPercent> channelPercents;
     List<ChannelBlockList> channelBlockLists;
-    List<cn.aberic.fabric.dao.Block> blockDaos;
+    List<cn.aberic.fabric.dao.entity.Block> blockDaos;
     DayStatistics dayStatistics;
     Platform platform;
     Curve dayBlocks;

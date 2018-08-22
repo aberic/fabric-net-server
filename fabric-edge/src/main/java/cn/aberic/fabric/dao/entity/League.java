@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package cn.aberic.fabric.dao;
+package cn.aberic.fabric.dao.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 描述：
- *
- * @author : Aberic 【2018-08-14 15:38】
+ * 作者：Aberic on 2018/6/27 21:12
+ * 邮箱：abericyang@gmail.com
  */
 @Setter
 @Getter
 @ToString
-public class Role {
+public class League {
 
-    public final static int SUPER_ADMIN=1;
-    public final static int ADMIN=2;
-    public final static int MEMBER=8;
-
-    private int id;
-    private String name;
+    private int id; // required
+    private String name; // required
+    private String date; // required
+    private int orgCount; // required
 
 }

@@ -17,7 +17,7 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.bean.Trace;
-import cn.aberic.fabric.dao.CA;
+import cn.aberic.fabric.dao.entity.CA;
 import cn.aberic.fabric.service.TraceService;
 import org.springframework.web.bind.annotation.*;
 

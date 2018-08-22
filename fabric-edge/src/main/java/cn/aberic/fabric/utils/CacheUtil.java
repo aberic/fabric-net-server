@@ -16,11 +16,11 @@
 
 package cn.aberic.fabric.utils;
 
-import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.dao.entity.App;
 import cn.aberic.fabric.bean.Home;
-import cn.aberic.fabric.dao.CA;
-import cn.aberic.fabric.dao.Peer;
-import cn.aberic.fabric.dao.User;
+import cn.aberic.fabric.dao.entity.CA;
+import cn.aberic.fabric.dao.entity.Peer;
+import cn.aberic.fabric.dao.entity.User;
 import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.dao.mapper.CAMapper;
 import cn.aberic.fabric.dao.mapper.PeerMapper;

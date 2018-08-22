@@ -16,10 +16,10 @@
 
 package cn.aberic.fabric.utils;
 
-import cn.aberic.fabric.dao.Chaincode;
-import cn.aberic.fabric.dao.Channel;
-import cn.aberic.fabric.dao.Org;
-import cn.aberic.fabric.dao.Peer;
+import cn.aberic.fabric.dao.entity.Chaincode;
+import cn.aberic.fabric.dao.entity.Channel;
+import cn.aberic.fabric.dao.entity.Org;
+import cn.aberic.fabric.dao.entity.Peer;
 import cn.aberic.fabric.dao.mapper.*;
 
 import java.util.List;

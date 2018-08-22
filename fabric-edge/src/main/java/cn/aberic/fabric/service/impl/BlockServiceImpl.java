@@ -17,8 +17,8 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.bean.*;
-import cn.aberic.fabric.dao.Block;
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.entity.Block;
+import cn.aberic.fabric.dao.entity.Channel;
 import cn.aberic.fabric.dao.mapper.BlockMapper;
 import cn.aberic.fabric.dao.mapper.ChannelMapper;
 import cn.aberic.fabric.dao.mapper.PeerMapper;

@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.dao.mapper;
 
-import cn.aberic.fabric.dao.Channel;
+import cn.aberic.fabric.dao.entity.Channel;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

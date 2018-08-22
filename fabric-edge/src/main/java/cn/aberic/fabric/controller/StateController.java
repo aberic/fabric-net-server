@@ -17,7 +17,6 @@
 package cn.aberic.fabric.controller;
 
 import cn.aberic.fabric.bean.State;
-import cn.aberic.fabric.dao.CA;
 import cn.aberic.fabric.service.StateService;
 import org.springframework.web.bind.annotation.*;
 

@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.dao.mapper;
 
-import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.dao.entity.App;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

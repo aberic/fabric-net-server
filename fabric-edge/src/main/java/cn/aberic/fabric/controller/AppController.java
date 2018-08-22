@@ -16,7 +16,7 @@
 
 package cn.aberic.fabric.controller;
 
-import cn.aberic.fabric.bean.App;
+import cn.aberic.fabric.dao.entity.App;
 import cn.aberic.fabric.service.AppService;
 import cn.aberic.fabric.utils.SpringUtil;
 import org.springframework.web.bind.annotation.*;
