@@ -177,9 +177,7 @@ public class BlockUtil {
 
     private void insert(BlockService blockService) {
         log.info(String.format("insert block data now blockList %s", blocks.size()));
-        for (Block block : blocks) {
-            blockService.add(block);
-        }
+        blockService.addBlockList(blocks);
         blocks.clear();
     }
 

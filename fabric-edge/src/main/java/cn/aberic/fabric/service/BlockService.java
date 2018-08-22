@@ -31,6 +31,8 @@ public interface BlockService {
 
     int add(Block block);
 
+    int addBlockList(List<Block> blocks);
+
     List<ChannelPercent> getChannelPercents(List<Channel> channels);
 
     List<ChannelBlockList> getChannelBlockLists(List<Channel> channels);

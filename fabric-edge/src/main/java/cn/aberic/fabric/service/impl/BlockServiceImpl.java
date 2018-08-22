@@ -52,6 +52,11 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
+    public int addBlockList(List<Block> blocks) {
+        return blockMapper.addList(blocks);
+    }
+
+    @Override
     public List<ChannelPercent> getChannelPercents(List<Channel> channels) {
         List<ChannelPercent> channelPercents = new LinkedList<>();
         for (Channel channel : channels) {

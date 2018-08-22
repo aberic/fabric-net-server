@@ -17,6 +17,8 @@
 package cn.aberic.fabric.dao.mapper;
 
 import cn.aberic.fabric.dao.entity.Block;
+import cn.aberic.fabric.dao.provider.BlockDAOProvider;
+import cn.aberic.fabric.dao.provider.RoleDAOProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -34,6 +36,9 @@ public interface BlockMapper {
             "(#{b.channelId},#{b.height},#{b.dataHash},#{b.calculatedHash},#{b.previousHash},#{b.envelopeCount}," +
             "#{b.txCount},#{b.rwSetCount},#{b.timestamp},#{b.calculateDate},#{b.createDate})")
     int add(@Param("b")Block block);
+
+    @InsertProvider(type = BlockDAOProvider.class, method = "insertAll")
+    int addList(@Param("list") List<Block> blocks);
 
     @Select("select count(id) from fns_block")
     int count();
