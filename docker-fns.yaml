@@ -13,7 +13,12 @@ services:
     environment:
       - USERNAME=admin
       - PASSWORD=password
+
       - LOG_LEVEL=error
+
+      - MYSQL_DATA_SOURCE_URL=jdbc:mysql://localhost:3306/fns?serverTimezone=UTC&useSSL=false
+      - MYSQL_DATA_SOURCE_USERNAME=root
+      - MYSQL_DATA_SOURCE_PASSWORD=admin123
     command: bash /home/fns.sh
     ports:
       - 8080:8080
