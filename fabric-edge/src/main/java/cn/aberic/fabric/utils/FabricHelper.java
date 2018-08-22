@@ -99,7 +99,7 @@ public class FabricHelper {
                 log.debug(String.format("org = %s", org.toString()));
                 if (orderers.size() != 0 && peers.size() != 0 && null != ca) {
                     fabricManager = createFabricManager(league, org, channel, chaincode, orderers, peers, ca, cc);
-                    fabricManager.setUser(league.getName(), org.getMspId(), peer.getName(), ca.getName(), ca.getSkPath(), ca.getCertificatePath());
+                    fabricManager.setUser(league.getName(), org.getMspId(), peer.getName(), ca.getName(), ca.getSk(), ca.getCertificate());
                     CacheUtil.putStringFabric(cc + ca.getName(), fabricManager);
                 }
             }
@@ -136,7 +136,7 @@ public class FabricHelper {
         OrgManager orgManager = new OrgManager();
         orgManager
                 .init(cacheName, org.getMspId(), org.isTls())
-                .setUser(league.getName(), org.getMspId(), peers.get(0).getName(), ca.getName(), ca.getSkPath(), ca.getCertificatePath())
+                .setUser(league.getName(), org.getMspId(), peers.get(0).getName(), ca.getName(), ca.getSk(), ca.getCertificate())
                 .setChannel(channel.getName())
                 .setChainCode(null == chaincode ? "" : chaincode.getName(),
                         null == chaincode ? "" : chaincode.getPath(),

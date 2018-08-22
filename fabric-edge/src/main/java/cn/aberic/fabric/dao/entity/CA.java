@@ -37,10 +37,10 @@ public class CA {
     private int id;
     @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String name;
-    @Column(name = "sk_path",type = MySqlTypeConstant.VARCHAR,length = 512)
-    private String skPath;
-    @Column(name = "certificate_path",type = MySqlTypeConstant.VARCHAR,length = 512)
-    private String certificatePath;
+    @Column(name = "sk",type = MySqlTypeConstant.TEXT)
+    private String sk;
+    @Column(name = "certificate",type = MySqlTypeConstant.TEXT)
+    private String certificate;
     @Column(name = "flag",type = MySqlTypeConstant.VARCHAR,length = 128)
     private String flag; // optional
     @Column(name = "peer_id",type = MySqlTypeConstant.INT,length = 9)

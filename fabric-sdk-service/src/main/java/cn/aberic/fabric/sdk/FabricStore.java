@@ -111,9 +111,9 @@ class FabricStore {
         user = new IntermediateUser(leagueName, orgName, peerName, name, skPath, certificatePath);
         user.setFabricStore(this);
         user.setMspId(mspId);
-        String certificate = new String(IOUtils.toByteArray(new FileInputStream(new File(certificatePath))), "UTF-8");
-        PrivateKey privateKey = getPrivateKeyFromBytes(IOUtils.toByteArray(new FileInputStream(new File(skPath))));
-        user.setEnrollment(new StoreEnrollment(privateKey, certificate));
+        // String certificate = new String(IOUtils.toByteArray(new FileInputStream(new File(certificatePath))), "UTF-8");
+        PrivateKey privateKey = getPrivateKeyFromBytes(skPath);
+        user.setEnrollment(new StoreEnrollment(privateKey, certificatePath));
         user.saveState();
         members.put(IntermediateUser.getKeyForFabricStoreName(leagueName, orgName, peerName, name), user);
         return user;
@@ -125,8 +125,8 @@ class FabricStore {
      * @param data 字节数组
      * @return 私钥
      */
-    private PrivateKey getPrivateKeyFromBytes(byte[] data) throws IOException {
-        final Reader pemReader = new StringReader(new String(data));
+    private PrivateKey getPrivateKeyFromBytes(String data) throws IOException {
+        final Reader pemReader = new StringReader(data);
         final PrivateKeyInfo pemPair;
         try (PEMParser pemParser = new PEMParser(pemReader)) {
             pemPair = (PrivateKeyInfo) pemParser.readObject();

@@ -24,6 +24,7 @@ import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.CAService;
 import cn.aberic.fabric.utils.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -68,8 +69,14 @@ public class CAServiceImpl implements CAService {
             return 0;
         }
         ca = resetCa(ca);
-        if (saveFileFail(ca, skFile, certificateFile)) {
-            return 0;
+//        if (saveFileFail(ca, skFile, certificateFile)) {
+//            return 0;
+//        }
+        try {
+            ca.setSk(new String(IOUtils.toByteArray(skFile.getInputStream())));
+            ca.setCertificate(new String(IOUtils.toByteArray(certificateFile.getInputStream()), "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         ca.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
         CacheUtil.removeHome();
@@ -82,7 +89,7 @@ public class CAServiceImpl implements CAService {
         CacheUtil.removeHome();
         CacheUtil.removeFlagCA(ca.getFlag());
         ca = resetCa(ca);
-        if (StringUtils.isEmpty(ca.getCertificatePath()) || StringUtils.isEmpty(ca.getSkPath())) {
+        if (StringUtils.isEmpty(ca.getCertificate()) || StringUtils.isEmpty(ca.getSk())) {
             return caMapper.updateWithNoFile(ca);
         }
         if (saveFileFail(ca, skFile, certificateFile)) {
@@ -178,8 +185,8 @@ public class CAServiceImpl implements CAService {
                 File.separator);
         String skPath = String.format("%s%s", caPath, skFile.getOriginalFilename());
         String certificatePath = String.format("%s%s", caPath, certificateFile.getOriginalFilename());
-        ca.setSkPath(skPath);
-        ca.setCertificatePath(certificatePath);
+        ca.setSk(skPath);
+        ca.setCertificate(certificatePath);
         try {
             FileUtil.save(skFile, certificateFile, skPath, certificatePath);
         } catch (IOException e) {
