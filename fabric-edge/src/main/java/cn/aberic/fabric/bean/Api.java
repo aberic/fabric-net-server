@@ -70,7 +70,7 @@ public class Api {
     private int index = 0;
     /** CA 标志*/
     private String flag = "";
-    /** 请求app key */
+    /** 请求app appKey */
     private String key = "";
     /** 请求Fabric版本号 */
     private String version = "";

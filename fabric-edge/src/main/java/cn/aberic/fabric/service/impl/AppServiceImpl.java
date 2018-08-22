@@ -47,11 +47,11 @@ public class AppServiceImpl implements AppService {
         if (null != appMapper.check(app)) {
             return 0;
         }
-        app.setKey(MathUtil.getRandom8());
+        app.setAppKey(MathUtil.getRandom8());
         app.setCreateDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
         app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
         if (app.isActive()) {
-            CacheUtil.putString(app.getKey(), chaincodeMapper.get(app.getChaincodeId()).getCc());
+            CacheUtil.putString(app.getAppKey(), chaincodeMapper.get(app.getChaincodeId()).getCc());
         }
         return appMapper.add(app);
     }
@@ -59,12 +59,12 @@ public class AppServiceImpl implements AppService {
     @Override
     public int update(App app) {
         App appTmp = appMapper.get(app.getId());
-        if (!StringUtils.equals(appTmp.getKey(), app.getKey())) {
-            CacheUtil.removeString(appTmp.getKey());
-            CacheUtil.removeAppBool(appTmp.getKey());
+        if (!StringUtils.equals(appTmp.getAppKey(), app.getAppKey())) {
+            CacheUtil.removeString(appTmp.getAppKey());
+            CacheUtil.removeAppBool(appTmp.getAppKey());
         }
         app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
-        CacheUtil.removeAppBool(app.getKey());
+        CacheUtil.removeAppBool(app.getAppKey());
         return appMapper.update(app);
     }
 
@@ -72,12 +72,12 @@ public class AppServiceImpl implements AppService {
     public int updateKey(int id) {
         App app = new App();
         app.setId(id);
-        CacheUtil.removeString(appMapper.get(id).getKey());
-        app.setKey(MathUtil.getRandom8());
+        CacheUtil.removeString(appMapper.get(id).getAppKey());
+        app.setAppKey(MathUtil.getRandom8());
         if (app.isActive()) {
-            CacheUtil.putString(app.getKey(), chaincodeMapper.get(app.getChaincodeId()).getCc());
+            CacheUtil.putString(app.getAppKey(), chaincodeMapper.get(app.getChaincodeId()).getCc());
         } else {
-            CacheUtil.removeString(app.getKey());
+            CacheUtil.removeString(app.getAppKey());
         }
         return appMapper.updateKey(app);
     }

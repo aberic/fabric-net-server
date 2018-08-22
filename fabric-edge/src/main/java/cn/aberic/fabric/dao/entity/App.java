@@ -39,8 +39,8 @@ public class App extends BaseModel {
     private int id;
     @Column(name = "name",type = MySqlTypeConstant.VARCHAR,length = 32)
     private String name;
-    @Column(name = "key",type = MySqlTypeConstant.VARCHAR,length = 32)
-    private String key;
+    @Column(name = "app_key",type = MySqlTypeConstant.VARCHAR,length = 32)
+    private String appKey;
     @Column(name = "chaincode_id",type = MySqlTypeConstant.INT,length = 9)
     private int chaincodeId;
     @Column(name = "create_date",type = MySqlTypeConstant.VARCHAR,length = 20)
