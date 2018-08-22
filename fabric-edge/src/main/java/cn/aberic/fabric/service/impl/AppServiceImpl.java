@@ -17,14 +17,12 @@
 package cn.aberic.fabric.service.impl;
 
 import cn.aberic.fabric.dao.entity.App;
-import cn.aberic.fabric.bean.Key;
 import cn.aberic.fabric.dao.mapper.AppMapper;
 import cn.aberic.fabric.dao.mapper.ChaincodeMapper;
 import cn.aberic.fabric.service.AppService;
 import cn.aberic.fabric.utils.CacheUtil;
 import cn.aberic.fabric.utils.DateUtil;
 import cn.aberic.fabric.utils.MathUtil;
-import cn.aberic.fabric.utils.encryption.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -47,10 +45,6 @@ public class AppServiceImpl implements AppService {
     @Override
     public int add(App app) {
         if (null != appMapper.check(app)) {
-            return 0;
-        }
-        Key key = Utils.obtain().createECCDSAKeyPair();
-        if (null == key) {
             return 0;
         }
         app.setKey(MathUtil.getRandom8());
@@ -84,10 +78,6 @@ public class AppServiceImpl implements AppService {
             CacheUtil.putString(app.getKey(), chaincodeMapper.get(app.getChaincodeId()).getCc());
         } else {
             CacheUtil.removeString(app.getKey());
-        }
-        Key key = Utils.obtain().createECCDSAKeyPair();
-        if (null == key) {
-            return 0;
         }
         return appMapper.updateKey(app);
     }
