@@ -53,8 +53,6 @@ public class AppServiceImpl implements AppService {
         if (null == key) {
             return 0;
         }
-        app.setPublicKey(key.getPublicKey());
-        app.setPrivateKey(key.getPrivateKey());
         app.setKey(MathUtil.getRandom8());
         app.setCreateDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
         app.setModifyDate(DateUtil.getCurrent("yyyy-MM-dd HH:mm:ss"));
@@ -91,8 +89,6 @@ public class AppServiceImpl implements AppService {
         if (null == key) {
             return 0;
         }
-        app.setPublicKey(key.getPublicKey());
-        app.setPrivateKey(key.getPrivateKey());
         return appMapper.updateKey(app);
     }
 

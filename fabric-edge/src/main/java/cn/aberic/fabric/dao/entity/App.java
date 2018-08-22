@@ -16,6 +16,7 @@
 
 package cn.aberic.fabric.dao.entity;
 
+import com.gitee.sunchenbin.mybatis.actable.command.BaseModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,7 +29,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class App {
+public class App extends BaseModel {
 
     private int id;
     private String name;
@@ -36,8 +37,6 @@ public class App {
     private int chaincodeId;
     private String createDate;
     private String modifyDate;
-    private String privateKey;
-    private String publicKey;
     private boolean active;
 
 }
