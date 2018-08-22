@@ -36,7 +36,6 @@ public class CA {
     private String flag; // optional
     private int peerId;
     private String date; // optional
-    private boolean tls; // required
     private String peerName; // optional
     private String orgName; // optional
     private String leagueName; // optional
