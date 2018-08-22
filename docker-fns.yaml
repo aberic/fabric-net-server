@@ -11,11 +11,14 @@ services:
     container_name: edge
     image: aberic/fabric-edge
     environment:
+      # 初始化超级管理员账号密码
       - USERNAME=admin
       - PASSWORD=password
-
+      # 日志打印级别
       - LOG_LEVEL=error
-
+      # 证书等文件存储路径（若非自定义本项目，请勿改）
+      - CONFIG_DIR=/home/data/config
+      # MySQL数据库连接信息
       - MYSQL_DATA_SOURCE_URL=jdbc:mysql://localhost:3306/fns?serverTimezone=UTC&useSSL=false
       - MYSQL_DATA_SOURCE_USERNAME=root
       - MYSQL_DATA_SOURCE_PASSWORD=admin123
