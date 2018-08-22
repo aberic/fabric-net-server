@@ -177,7 +177,7 @@ public class BlockServiceImpl implements BlockService {
         }
         blocks.sort((o1, o2) -> {
             try {
-                return (int) DateUtil.str2Date(o2.getTimestamp(), "yyyy/MM/dd HH:mm:ss").getTime() - (int) DateUtil.str2Date(o1.getTimestamp(), "yyyy/MM/dd HH:mm:ss").getTime();
+                return DateUtil.str2Date(o2.getTimestamp(), "yyyy/MM/dd HH:mm:ss").compareTo(DateUtil.str2Date(o1.getTimestamp(), "yyyy/MM/dd HH:mm:ss"));
             } catch (Exception e) {
                 e.printStackTrace();
                 return 0;
