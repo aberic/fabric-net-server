@@ -22,16 +22,17 @@ import cn.aberic.fabric.dao.entity.Org;
 import cn.aberic.fabric.dao.entity.Peer;
 import cn.aberic.fabric.dao.mapper.*;
 import cn.aberic.fabric.service.CAService;
-import cn.aberic.fabric.utils.*;
+import cn.aberic.fabric.utils.CacheUtil;
+import cn.aberic.fabric.utils.DateUtil;
+import cn.aberic.fabric.utils.FabricHelper;
+import cn.aberic.fabric.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -55,8 +56,6 @@ public class CAServiceImpl implements CAService {
     private ChannelMapper channelMapper;
     @Resource
     private ChaincodeMapper chaincodeMapper;
-    @Resource
-    private Environment env;
 
     @Override
     public int add(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
@@ -69,9 +68,6 @@ public class CAServiceImpl implements CAService {
             return 0;
         }
         ca = resetCa(ca);
-//        if (saveFileFail(ca, skFile, certificateFile)) {
-//            return 0;
-//        }
         try {
             ca.setSk(new String(IOUtils.toByteArray(skFile.getInputStream())));
             ca.setCertificate(new String(IOUtils.toByteArray(certificateFile.getInputStream()), "UTF-8"));
@@ -92,8 +88,11 @@ public class CAServiceImpl implements CAService {
         if (StringUtils.isEmpty(ca.getCertificate()) || StringUtils.isEmpty(ca.getSk())) {
             return caMapper.updateWithNoFile(ca);
         }
-        if (saveFileFail(ca, skFile, certificateFile)) {
-            return 0;
+        try {
+            ca.setSk(new String(IOUtils.toByteArray(skFile.getInputStream())));
+            ca.setCertificate(new String(IOUtils.toByteArray(certificateFile.getInputStream()), "UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return caMapper.update(ca);
     }
@@ -169,31 +168,6 @@ public class CAServiceImpl implements CAService {
             ca.setLeagueName(leagueMapper.get(org.getLeagueId()).getName());
         }
         return cas;
-    }
-
-    private boolean saveFileFail(CA ca, MultipartFile skFile, MultipartFile certificateFile) {
-        String caPath = String.format("%s%s%s%s%s%s%s%s%s%s",
-                env.getProperty("config.dir"),
-                File.separator,
-                ca.getLeagueName(),
-                File.separator,
-                ca.getOrgName(),
-                File.separator,
-                ca.getPeerName(),
-                File.separator,
-                ca.getName(),
-                File.separator);
-        String skPath = String.format("%s%s", caPath, skFile.getOriginalFilename());
-        String certificatePath = String.format("%s%s", caPath, certificateFile.getOriginalFilename());
-        ca.setSk(skPath);
-        ca.setCertificate(certificatePath);
-        try {
-            FileUtil.save(skFile, certificateFile, skPath, certificatePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return true;
-        }
-        return false;
     }
 
     private CA resetCa(CA ca) {
