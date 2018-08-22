@@ -18,6 +18,7 @@ package cn.aberic.fabric.dao.mapper;
 
 import cn.aberic.fabric.dao.entity.Role;
 import cn.aberic.fabric.dao.entity.User;
+import cn.aberic.fabric.dao.provider.RoleDAOProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -31,6 +32,9 @@ public interface RoleMapper {
 
     @Insert("insert into fns_role (id,name) values (#{r.id},#{r.name})")
     int add(@Param("r") Role role);
+
+    @InsertProvider(type = RoleDAOProvider.class, method = "insertAll")
+    int addList(@Param("list") List<Role> roles);
 
     @Select("select id,name from fns_role where id>1")
     List<Role> listRole();

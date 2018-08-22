@@ -161,6 +161,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int addRoleList(List<Role> roles) {
+        return roleMapper.addList(roles);
+    }
+
+    @Override
     public Role getRoleById(int id) {
         return roleMapper.getRoleById(id);
     }

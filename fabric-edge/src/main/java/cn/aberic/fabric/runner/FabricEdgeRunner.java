@@ -26,6 +26,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 作者：Aberic on 2018/6/22 21:36
@@ -62,9 +64,11 @@ public class FabricEdgeRunner implements ApplicationRunner {
         Role roleSuperAdmin = new Role(1, "超级管理员");
         Role roleAdmin = new Role(2, "管理员");
         Role roleMember = new Role(8, "普通会员");
-        userService.addRole(roleSuperAdmin);
-        userService.addRole(roleAdmin);
-        userService.addRole(roleMember);
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleSuperAdmin);
+        roles.add(roleAdmin);
+        roles.add(roleMember);
+        userService.addRoleList(roles);
     }
 
     private void addUser() {

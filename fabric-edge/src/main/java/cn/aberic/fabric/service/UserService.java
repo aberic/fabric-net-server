@@ -57,5 +57,7 @@ public interface UserService {
 
     int addRole(Role role);
 
+    int addRoleList(List<Role> roles);
+
     Role getRoleById(int id);
 }
