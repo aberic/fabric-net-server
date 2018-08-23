@@ -10,6 +10,11 @@
 <br><br>
 以下项目部分视图基本上都是跟随上一版或当前master的，参考更准确的界面视图需进入对应的Branch或Tags中查阅。
 <br><br>
+演示地址（不定期失效）：<br>
+http://123.207.138.131:8080/index<br>
+帐号密码组：[test1:123456, test2:123456, test3:123456, test4:123456, test5:123456, test6:123456, test7:123456, test8:123456, test9:123456]<br>
+该演示仅开放了普通会员权限，即查看区块链网络状况，后续有修订会扩大浏览范围。
+<br><br>
 ## 项目部分视图
 
 ![项目简览](https://raw.githubusercontent.com/aberic/fabric-net-server/master/img/home.jpg "Fabric Net Server")
