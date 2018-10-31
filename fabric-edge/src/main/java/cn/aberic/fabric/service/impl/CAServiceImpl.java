@@ -34,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -69,8 +70,8 @@ public class CAServiceImpl implements CAService {
         }
         ca = resetCa(ca);
         try {
-            ca.setSk(new String(IOUtils.toByteArray(skFile.getInputStream())));
-            ca.setCertificate(new String(IOUtils.toByteArray(certificateFile.getInputStream()), "UTF-8"));
+            ca.setSk(new String(IOUtils.toByteArray(skFile.getInputStream()), Charset.forName("UTF-8")));
+            ca.setCertificate(new String(IOUtils.toByteArray(certificateFile.getInputStream()), Charset.forName("UTF-8")));
         } catch (IOException e) {
             e.printStackTrace();
         }
