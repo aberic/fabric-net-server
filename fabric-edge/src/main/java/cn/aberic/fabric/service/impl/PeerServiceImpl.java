@@ -62,13 +62,13 @@ public class PeerServiceImpl implements PeerService {
         if (StringUtils.isEmpty(peer.getName()) ||
                 StringUtils.isEmpty(peer.getLocation()) ||
                 StringUtils.isEmpty(peer.getEventHubLocation())) {
-            return 0;
+            throw new RuntimeException("peer name and location and eventHubLocation can not be null");
         }
         if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename()) &&
                 StringUtils.isNotEmpty(clientCertFile.getOriginalFilename()) &&
                 StringUtils.isNotEmpty(clientKeyFile.getOriginalFilename())) {
             if (saveFileFail(peer, serverCrtFile, clientCertFile, clientKeyFile)) {
-                return 0;
+                throw new RuntimeException("tls file save fail");
             }
         }
         peer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
@@ -78,17 +78,20 @@ public class PeerServiceImpl implements PeerService {
 
     @Override
     public int update(Peer peer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
-        FabricHelper.obtain().removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
-        CacheUtil.removeHome();
-        CacheUtil.removeFlagCA(peer.getId(), caMapper);
         if (StringUtils.isEmpty(serverCrtFile.getOriginalFilename()) ||
                 StringUtils.isEmpty(clientCertFile.getOriginalFilename()) ||
                 StringUtils.isEmpty(clientKeyFile.getOriginalFilename())) {
+            FabricHelper.obtain().removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
+            CacheUtil.removeHome();
+            CacheUtil.removeFlagCA(peer.getId(), caMapper);
             return peerMapper.updateWithNoFile(peer);
         }
         if (saveFileFail(peer, serverCrtFile, clientCertFile, clientKeyFile)) {
-            return 0;
+            throw new RuntimeException("tls file save fail");
         }
+        FabricHelper.obtain().removeChaincodeManager(channelMapper.list(peer.getId()), chaincodeMapper);
+        CacheUtil.removeHome();
+        CacheUtil.removeFlagCA(peer.getId(), caMapper);
         return peerMapper.update(peer);
     }
 

@@ -58,13 +58,13 @@ public class OrdererServiceImpl implements OrdererService {
     public int add(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
         if (StringUtils.isEmpty(orderer.getName()) ||
                 StringUtils.isEmpty(orderer.getLocation())) {
-            return 0;
+            throw new RuntimeException("orderer name and location can not be null");
         }
         if (StringUtils.isNotEmpty(serverCrtFile.getOriginalFilename()) &&
                 StringUtils.isNotEmpty(clientCertFile.getOriginalFilename()) &&
                 StringUtils.isNotEmpty(clientKeyFile.getOriginalFilename())) {
             if (saveFileFail(orderer, serverCrtFile, clientCertFile, clientKeyFile)) {
-                return 0;
+                throw new RuntimeException("tls file save fail");
             }
         }
         orderer.setDate(DateUtil.getCurrent("yyyy-MM-dd"));
@@ -74,14 +74,16 @@ public class OrdererServiceImpl implements OrdererService {
 
     @Override
     public int update(Orderer orderer, MultipartFile serverCrtFile, MultipartFile clientCertFile, MultipartFile clientKeyFile) {
-        FabricHelper.obtain().removeChaincodeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
-        CacheUtil.removeHome();
         if (null == serverCrtFile || null == clientCertFile || null == clientKeyFile) {
+            FabricHelper.obtain().removeChaincodeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
+            CacheUtil.removeHome();
             return ordererMapper.updateWithNoFile(orderer);
         }
         if (saveFileFail(orderer, serverCrtFile, clientCertFile, clientKeyFile)) {
-            return 0;
+            throw new RuntimeException("tls file save fail");
         }
+        FabricHelper.obtain().removeChaincodeManager(peerMapper.list(orderer.getOrgId()), channelMapper, chaincodeMapper);
+        CacheUtil.removeHome();
         return ordererMapper.update(orderer);
     }
 
