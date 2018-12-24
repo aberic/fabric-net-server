@@ -7,8 +7,8 @@ version: '2'
 
 services:
 
-  fns:
-    container_name: fns
+  db:
+    container_name: db
     image: mariadb
     expose:
       - 3306
