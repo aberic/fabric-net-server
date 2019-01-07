@@ -225,6 +225,7 @@ class IntermediateChaincodeID {
      */
     private JSONObject toOrdererResponse(Collection<ProposalResponse> proposalResponses, IntermediateOrg org) throws InvalidArgumentException, UnsupportedEncodingException {
         JSONObject jsonObject = new JSONObject();
+        ProposalResponse first = null;
         Collection<ProposalResponse> successful = new LinkedList<>();
         Collection<ProposalResponse> failed = new LinkedList<>();
         for (ProposalResponse response : proposalResponses) {
@@ -240,13 +241,14 @@ class IntermediateChaincodeID {
             log.error("Expected only one set of consistent proposal responses but got " + proposalConsistencySets.size());
         }
         if (failed.size() > 0) {
-            ProposalResponse firstTransactionProposalResponse = failed.iterator().next();
-            log.error("Not enough endorsers for inspect:" + failed.size() + " endorser error: " + firstTransactionProposalResponse.getMessage() + ". Was verified: "
-                    + firstTransactionProposalResponse.isVerified());
-            jsonObject.put("code", BlockListener.ERROR);
-            jsonObject.put("error", firstTransactionProposalResponse.getMessage());
-            return jsonObject;
-        } else {
+            for (ProposalResponse fail : failed) {
+                log.error("Not enough endorsers for instantiate :" + successful.size() + "endorser failed with " + fail.getMessage() + ", on peer" + fail.getPeer());
+            }
+            first = failed.iterator().next();
+            log.error("Not enough endorsers for inspect:" + failed.size() + " endorser error: " + first.getMessage() + ". Was verified: "
+                    + first.isVerified());
+        }
+        if (successful.size() > 0) {
             log.info("Successfully received transaction proposal responses.");
             ProposalResponse resp = proposalResponses.iterator().next();
             log.debug("TransactionID: " + resp.getTransactionID());
@@ -261,6 +263,10 @@ class IntermediateChaincodeID {
             jsonObject = parseResult(resultAsString);
             jsonObject.put("code", BlockListener.SUCCESS);
             jsonObject.put("txid", resp.getTransactionID());
+            return jsonObject;
+        } else {
+            jsonObject.put("code", BlockListener.ERROR);
+            jsonObject.put("error", null != first ? first.getMessage() : "error unknown");
             return jsonObject;
         }
 //        channel.sendTransaction(successful).thenApply(transactionEvent -> {
