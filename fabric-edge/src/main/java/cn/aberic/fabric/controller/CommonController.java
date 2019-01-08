@@ -85,7 +85,7 @@ public class CommonController {
         modelAndView.addObject("channelPercents", new JSONArray(home.getChannelPercents()).toString());
         modelAndView.addObject("channelBlockLists", new JSONArray(home.getChannelBlockLists()).toString());
         modelAndView.addObject("blockDaos", home.getBlockDaos());
-        modelAndView.addObject("dayStatistics", home.getDayStatistics());
+        modelAndView.addObject("dayStatistics", home.getDayStatistics() != null ? home.getDayStatistics() : 0);
         modelAndView.addObject("platform", home.getPlatform());
         modelAndView.addObject("dayBlocks", home.getDayBlocks());
         modelAndView.addObject("dayTxs", home.getDayTxs());

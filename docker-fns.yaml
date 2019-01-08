@@ -7,6 +7,16 @@ version: '2'
 
 services:
 
+  db:
+    container_name: db
+    image: mariadb
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: fns
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
   edge:
     container_name: edge
     image: aberic/fabric-edge
@@ -17,7 +27,7 @@ services:
       # 日志打印级别
       - LOG_LEVEL=error
       # MySQL数据库连接信息
-      - MYSQL_DATA_SOURCE_URL=jdbc:mysql://localhost:3306/fns?serverTimezone=UTC&useSSL=false
+      - MYSQL_DATA_SOURCE_URL=jdbc:mysql://db:3306/fns?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
       - MYSQL_DATA_SOURCE_USERNAME=root
       - MYSQL_DATA_SOURCE_PASSWORD=admin123
     command: bash /home/fns.sh
