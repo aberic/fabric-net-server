@@ -85,7 +85,9 @@ public class OrgManager {
     }
 
     public void addPeer(String peerName, String peerLocation, String peerEventHubLocation, String serverCrtPath, String clientCertPath, String clientKeyPath) {
-        orgMap.get(cc).addPeer(peerName, String.format("%s%s", "grpc://", peerLocation), String.format("%s%s", "grpc://", peerEventHubLocation), serverCrtPath, clientCertPath, clientKeyPath);
+        orgMap.get(cc).addPeer(peerName, String.format("%s%s", "grpc://", peerLocation),
+                null == peerEventHubLocation || peerEventHubLocation.isEmpty() ? null : String.format("%s%s", "grpc://", peerEventHubLocation),
+                serverCrtPath, clientCertPath, clientKeyPath);
     }
 
     /**
