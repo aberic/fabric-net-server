@@ -30,6 +30,7 @@ services:
       - MYSQL_DATA_SOURCE_URL=jdbc:mysql://db:3306/fns?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
       - MYSQL_DATA_SOURCE_USERNAME=root
       - MYSQL_DATA_SOURCE_PASSWORD=admin123
+      # - WORKING_DIR=/data
     command: bash /home/fns.sh
     ports:
       - 8080:8080
