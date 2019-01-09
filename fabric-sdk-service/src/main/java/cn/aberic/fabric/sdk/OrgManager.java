@@ -23,7 +23,6 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * 描述：组织生成器

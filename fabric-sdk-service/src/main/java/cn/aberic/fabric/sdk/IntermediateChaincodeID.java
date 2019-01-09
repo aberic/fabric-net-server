@@ -24,6 +24,7 @@ import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.ChaincodeEndorsementPolicyParseException;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
+import org.hyperledger.fabric.sdk.exception.TransactionException;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,7 +92,7 @@ class IntermediateChaincodeID {
      *
      * @param org 中继组织对象
      */
-    JSONObject install(IntermediateOrg org) throws ProposalException, InvalidArgumentException {
+    JSONObject install(IntermediateOrg org) throws ProposalException, InvalidArgumentException, TransactionException {
         /// Send transaction proposal to all peers
         InstallProposalRequest installProposalRequest = org.getClient().newInstallProposalRequest();
         installProposalRequest.setChaincodeName(chaincodeName);
@@ -113,7 +114,7 @@ class IntermediateChaincodeID {
      * @param org  中继组织对象
      * @param args 初始化参数数组
      */
-    JSONObject instantiate(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException {
+    JSONObject instantiate(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException, TransactionException {
         /// Send transaction proposal to all peers
         InstantiateProposalRequest instantiateProposalRequest = org.getClient().newInstantiationProposalRequest();
         instantiateProposalRequest.setChaincodeID(chaincodeID);
@@ -142,7 +143,7 @@ class IntermediateChaincodeID {
      * @param org  中继组织对象
      * @param args 初始化参数数组
      */
-    JSONObject upgrade(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException {
+    JSONObject upgrade(IntermediateOrg org, String[] args) throws ProposalException, InvalidArgumentException, IOException, ChaincodeEndorsementPolicyParseException, TransactionException {
         /// Send transaction proposal to all peers
         UpgradeProposalRequest upgradeProposalRequest = org.getClient().newUpgradeProposalRequest();
         upgradeProposalRequest.setChaincodeID(chaincodeID);
@@ -172,7 +173,7 @@ class IntermediateChaincodeID {
      * @param fcn  方法名
      * @param args 参数数组
      */
-    JSONObject invoke(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException, IOException {
+    JSONObject invoke(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException, IOException, TransactionException {
         /// Send transaction proposal to all peers
         TransactionProposalRequest transactionProposalRequest = org.getClient().newTransactionProposalRequest();
         transactionProposalRequest.setChaincodeID(chaincodeID);
@@ -199,7 +200,7 @@ class IntermediateChaincodeID {
      * @param fcn     方法名
      * @param args    参数数组
      */
-    JSONObject query(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException {
+    JSONObject query(IntermediateOrg org, String fcn, String[] args) throws InvalidArgumentException, ProposalException, TransactionException {
         QueryByChaincodeRequest queryByChaincodeRequest = org.getClient().newQueryProposalRequest();
         queryByChaincodeRequest.setArgs(args);
         queryByChaincodeRequest.setFcn(fcn);
@@ -223,7 +224,7 @@ class IntermediateChaincodeID {
      * @param proposalResponses 请求返回集合
      * @param org               中继组织对象
      */
-    private JSONObject toOrdererResponse(Collection<ProposalResponse> proposalResponses, IntermediateOrg org) throws InvalidArgumentException, UnsupportedEncodingException {
+    private JSONObject toOrdererResponse(Collection<ProposalResponse> proposalResponses, IntermediateOrg org) throws InvalidArgumentException, UnsupportedEncodingException, TransactionException {
         JSONObject jsonObject = new JSONObject();
         ProposalResponse first = null;
         Collection<ProposalResponse> successful = new LinkedList<>();

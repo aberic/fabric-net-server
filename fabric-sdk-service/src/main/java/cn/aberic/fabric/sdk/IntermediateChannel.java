@@ -59,12 +59,12 @@ class IntermediateChannel {
     private IntermediateOrg org;
     private Channel channel;
 
-    void init(IntermediateOrg org) throws TransactionException, InvalidArgumentException {
+    void init(IntermediateOrg org) throws InvalidArgumentException {
         this.org = org;
         setChannel(org.getClient());
     }
 
-    private void setChannel(HFClient client) throws InvalidArgumentException, TransactionException {
+    private void setChannel(HFClient client) throws InvalidArgumentException {
         client.setUserContext(org.getUser(org.getUsername()));
         // client.setUserContext(org.getUser());
         channel = client.newChannel(channelName);
@@ -125,7 +125,9 @@ class IntermediateChannel {
                 channel.addEventHub(client.newEventHub(org.getPeers().get(i).getPeerName(), org.getPeers().get(i).getPeerEventHubLocation(), peerProperties));
             }
         }
+    }
 
+    private void initChannel() throws TransactionException, InvalidArgumentException {
         log.info("channel.isInitialized() = " + channel.isInitialized());
         if (!channel.isInitialized()) {
             channel.initialize();
@@ -158,7 +160,10 @@ class IntermediateChannel {
     }
 
     /** 获取Fabric Channel */
-    Channel get() {
+    Channel get() throws InvalidArgumentException, TransactionException {
+        if (!channel.isInitialized()) {
+            initChannel();
+        }
         return channel;
     }
 
@@ -190,13 +195,7 @@ class IntermediateChannel {
         peerProperties.put("grpc.ManagedChannelBuilderOption.maxInboundMessageSize", 9000000);
         // 如果未加入频道，该方法执行加入。如果已加入频道，则执行下一行方面新增Peer
         // channel.joinPeer(client.newPeer(peers.get().get(i).getPeerName(), fabricOrg.getPeerLocation(peers.get().get(i).getPeerName()), peerProperties));
-        Peer fabricPeer = org.getClient().newPeer(peer.getPeerName(), peer.getPeerLocation(), peerProperties);
-        for (Peer peerNow : channel.getPeers()) {
-            if (peerNow.getUrl().equals(fabricPeer.getUrl())) {
-                return getFailFromString("peer has already in channel");
-            }
-        }
-        channel.joinPeer(fabricPeer);
+        channel.joinPeer(org.getClient().newPeer(peer.getPeerName(), peer.getPeerLocation(), peerProperties));
         if (null != peer.getPeerEventHubLocation() && !peer.getPeerEventHubLocation().isEmpty()) {
             channel.addEventHub(org.getClient().newEventHub(peer.getPeerName(), peer.getPeerEventHubLocation(), peerProperties));
         }
@@ -225,7 +224,10 @@ class IntermediateChannel {
     }
 
     /** 查询当前频道的链信息，包括链长度、当前最新区块hash以及当前最新区块的上一区块hash */
-    JSONObject getBlockchainInfo() throws InvalidArgumentException, ProposalException {
+    JSONObject queryBlockChainInfo() throws InvalidArgumentException, ProposalException, TransactionException {
+        if (!channel.isInitialized()) {
+            initChannel();
+        }
         JSONObject blockchainInfo = new JSONObject();
         blockchainInfo.put("height", channel.queryBlockchainInfo().getHeight());
         blockchainInfo.put("currentBlockHash", Hex.encodeHexString(channel.queryBlockchainInfo().getCurrentBlockHash()));
@@ -238,7 +240,10 @@ class IntermediateChannel {
      *
      * @param txID transactionID
      */
-    JSONObject queryBlockByTransactionID(String txID) throws InvalidArgumentException, ProposalException, IOException {
+    JSONObject queryBlockByTransactionID(String txID) throws InvalidArgumentException, ProposalException, IOException, TransactionException {
+        if (!channel.isInitialized()) {
+            initChannel();
+        }
         return execBlockInfo(channel.queryBlockByTransactionID(txID));
     }
 
@@ -247,7 +252,10 @@ class IntermediateChannel {
      *
      * @param blockHash hash
      */
-    JSONObject queryBlockByHash(byte[] blockHash) throws InvalidArgumentException, ProposalException, IOException {
+    JSONObject queryBlockByHash(byte[] blockHash) throws InvalidArgumentException, ProposalException, IOException, TransactionException {
+        if (!channel.isInitialized()) {
+            initChannel();
+        }
         return execBlockInfo(channel.queryBlockByHash(blockHash));
     }
 
@@ -256,7 +264,10 @@ class IntermediateChannel {
      *
      * @param blockNumber 区块高度
      */
-    JSONObject queryBlockByNumber(long blockNumber) throws InvalidArgumentException, ProposalException, IOException {
+    JSONObject queryBlockByNumber(long blockNumber) throws InvalidArgumentException, ProposalException, IOException, TransactionException {
+        if (!channel.isInitialized()) {
+            initChannel();
+        }
         return execBlockInfo(channel.queryBlockByNumber(blockNumber));
     }
 
