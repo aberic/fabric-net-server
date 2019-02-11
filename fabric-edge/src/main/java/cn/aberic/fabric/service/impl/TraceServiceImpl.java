@@ -32,6 +32,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
+import org.hyperledger.fabric.sdk.exception.TransactionException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -139,7 +140,7 @@ public class TraceServiceImpl implements TraceService, BaseService {
         }
     }
 
-    private String trace(FabricManager manager, Trace trace, TraceIntent intent) throws ProposalException, IOException, InvalidArgumentException, DecoderException {
+    private String trace(FabricManager manager, Trace trace, TraceIntent intent) throws ProposalException, IOException, InvalidArgumentException, DecoderException, TransactionException {
         JSONObject jsonObject = null;
         switch (intent) {
             case TRANSACTION:
@@ -152,7 +153,7 @@ public class TraceServiceImpl implements TraceService, BaseService {
                 jsonObject = manager.queryBlockByNumber(Long.valueOf(trace.getTrace()));
                 break;
             case INFO:
-                jsonObject = manager.getBlockchainInfo();
+                jsonObject = manager.queryBlockChainInfo();
                 break;
         }
         return jsonObject.toJSONString();
