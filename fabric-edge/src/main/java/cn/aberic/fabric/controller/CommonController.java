@@ -16,7 +16,9 @@
 
 package cn.aberic.fabric.controller;
 
+import cn.aberic.fabric.bean.DayStatistics;
 import cn.aberic.fabric.bean.Home;
+import cn.aberic.fabric.bean.Platform;
 import cn.aberic.fabric.dao.entity.User;
 import cn.aberic.fabric.service.*;
 import cn.aberic.fabric.utils.CacheUtil;
@@ -67,8 +69,8 @@ public class CommonController {
         Home home = CacheUtil.getHome();
         if (null == home) {
             home = DataUtil.obtain().home(leagueService, orgService, ordererService,
-                    peerService, caService, channelService, chaincodeService,
-                    appService, blockService);
+                peerService, caService, channelService, chaincodeService,
+                appService, blockService);
             CacheUtil.putHome(home);
         }
 
@@ -85,7 +87,7 @@ public class CommonController {
         modelAndView.addObject("channelPercents", new JSONArray(home.getChannelPercents()).toString());
         modelAndView.addObject("channelBlockLists", new JSONArray(home.getChannelBlockLists()).toString());
         modelAndView.addObject("blockDaos", home.getBlockDaos());
-        modelAndView.addObject("dayStatistics", home.getDayStatistics() != null ? home.getDayStatistics() : 0);
+        modelAndView.addObject("dayStatistics", home.getDayStatistics());
         modelAndView.addObject("platform", home.getPlatform());
         modelAndView.addObject("dayBlocks", home.getDayBlocks());
         modelAndView.addObject("dayTxs", home.getDayTxs());
